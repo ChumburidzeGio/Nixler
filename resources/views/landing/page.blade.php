@@ -58,9 +58,9 @@
                                     </div>
                                     <button class="_btn _bg4 _ml5 _c5 _left _left _pt5 _pb5 _fs15">{{ trans('landing.subscribe.button') }}</button>
                                 </div>
-                                <small class="_clear _fs12 _cg _mt15">
+                                <!--small class="_clear _fs12 _cg _mt15">
                                     {!! trans('landing.subscribe.help') !!}
-                                </small>
+                                </small-->
 
                             </div>
                         </div>
@@ -137,15 +137,15 @@
 
 
 
-        <div id="footer" class="_clear _bg2 _cwt9 _tal _pb15">
+        <!--div id="footer" class="_clear _bg2 _cwt9 _tal _pb15">
 
             <div class="container">
                 <p class="_p15 _m0 _pb5 _mt5">
-                    © Nixler 2016. {!! trans('landing.footer.text') !!}
+                   Nixler © 2016. {{--!! trans('landing.footer.text') !!--}}
                 </p>
             </div>
 
-        </div>
+        </div-->
 
 
     </div>
