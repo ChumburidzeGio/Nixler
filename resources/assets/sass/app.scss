@@ -1,0 +1,18 @@
+@import "variables";
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+@import "underscore/core";
+
+
+@media (max-width: 768px){
+	.container {
+	    padding: 0!important;
+	}
+}
+
+@media (max-width: 768px){
+	#app {
+	    margin-top: 50px;
+	}
+}
