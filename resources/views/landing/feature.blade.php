@@ -1,4 +1,4 @@
-<div class="{{ is_integer($key) ? 'col-sm-4 col-xs-6' : 'col-sm-6' }}">
+<div class="{{ is_integer($key) ? 'col-sm-4' : 'col-sm-6' }}">
         <div class="_lim _clear _pl0 _m15 _bcg _pt15" style="min-height: 200px">
             <i class=" material-icons _mt15 _fs70 _c4">{{ $feature['icon'] }}</i>
             <div class="_pl15 _pr15 _pb10 _oh _mt10">
