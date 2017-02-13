@@ -52,7 +52,11 @@
                                 {{ trans('landing.subscribe.title') }}
                             </h3>
                             <div class="_p15 _mb15 _pb15">
-                                <form class="_fjcc _df" action="/subscribe">
+                                <form class="_fjcc _df" 
+                                    action="{{ url('/marketing/subscribe') }}" method="POST">
+                                    
+                                    {{ csrf_field() }}
+
                                     <div class="_left _dib">
                                         <input type="email" required="" name="email" class="_fe _b1 _brds3 _cb _bcg" placeholder="{{ trans('landing.subscribe.placeholder') }}">
                                     </div>

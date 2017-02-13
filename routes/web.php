@@ -1,5 +1,7 @@
 <?php
 
+use Newsletter;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,15 +27,4 @@ Route::get('/policy', function(){
 	return view('policy.page');
 });
 
-Route::get('/subscribe', function(){
-	if(request()->email && !DB::table('users')->where('email', request()->email)->exists()){
-		DB::table('users')->insert([
-			'name' => 'bla',
-			'email' =>request()->email,
-			'password' => '12'
-		]);
-	}
-	
-	return redirect('/')->with('subscribe', 'Thank you, we will notice you soon !');
-		
-});
+Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');

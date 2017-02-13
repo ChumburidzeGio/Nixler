@@ -91,7 +91,7 @@ return [
             [
                 'icon' => 'weekend',
                 'title' => 'Easy',
-                'description' => 'Nixler is easy to use, its as simple as buying froots in local shop.',
+                'description' => 'Nixler is easy to use, it\'s as simple as buying fruits in local shop.',
             ],
             [
                 'icon' => 'all_inclusive',
