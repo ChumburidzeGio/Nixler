@@ -9,10 +9,10 @@
 
         <div class="col-md-8">
             <div class="_bgw _b1 _bs011 _brds3 _clear _mb15">
-                <img src="{{ $product->photo('resize:600x800') }}" class="_clear _w100">
+                <img src="https://images.unsplash.com/photo-1444881421460-d838c3b98f95?dpr=1&auto=format&fit=crop&w=767&h=431&q=80&cs=tinysrgb&crop=" class="_clear _w100">
                 <div class="_pl15 _pr10 _pt10 _pb10 _bb1">
                     <span class="_cbl _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs16">
-                        Braided 8-Pin USB Cable Charger from
+                        Brand Luxury full stainless steel watch for men
                     </span>
                     <span class="_cb _clear _fs13  _telipsis _w100 _oh _pr10">$345</span>
                     <span class="_cg _clear _fs12  _telipsis _w100 _oh _pr10">D&M Store</span>

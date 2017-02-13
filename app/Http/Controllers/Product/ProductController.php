@@ -15,10 +15,10 @@ class ProductController extends Controller
     public function find()
     {
         return view('product.item', ['product' => auth()->user(),'user' => auth()->user(), 'photos' => [
-        	'https://thingd-media-ec5.thefancy.com/default/1343516017304797699_2fe8c0cdcd4d.jpg',
-        	'https://resize-ec3.thefancy.com/resize/crop/952/thingd/default/163906907386420176_c872f9138bc9.jpg',
-        	'https://resize-ec3.thefancy.com/resize/crop/952/thingd/default/1280451873878318097_a3764df1c69e.jpg',
-        	'https://thefancy-media-ec4.thefancy.com/310/20160602/1169742302369811513_ac1d181c9eb8.jpg',
+        	'https://images.unsplash.com/photo-1466684921455-ee202d43c1aa?dpr=1&auto=format&fit=crop&w=1000&h=1000&q=80&cs=tinysrgb&crop=',
+        	'https://images.unsplash.com/photo-1457168722771-cbf2d6281ff5?dpr=1&auto=format&fit=crop&w=1000&h=1000&q=80&cs=tinysrgb&crop=',
+        	'https://images.unsplash.com/photo-1483118714900-540cf339fd46?dpr=1&auto=format&fit=crop&w=1000&h=1000&q=80&cs=tinysrgb&crop=',
+        	'https://images.unsplash.com/1/irish-hands.jpg?dpr=1&auto=format&fit=crop&w=1000&h=1000&q=80&cs=tinysrgb&crop=',
         ]]);
     }
 }
