@@ -19,7 +19,7 @@ return [
         'title' => 'პირველმა გაიგეთ როდის გავიხსნებით.',
         'placeholder' => 'ელ. ფოსტა',
         'button' => 'შემატყობინე',
-        'help' => 'By clicking "Notify me" I agree to Nixler\'s <a href="" class="_c4">Terms of service</a>',
+        'help' => 'By clicking "Notify me" I agree to Nixler\'s <span class="_c4">Terms of service</span>',
     ],
     'what' => [
         'title' => 'რისი გაკეთება შეგიძლია ნიქსლერით ?',
@@ -119,8 +119,5 @@ return [
     'contact' => [
         'title' => 'გაქვთ კითხვები ან გსურთ თანამშრომლობა? დაგვირეკეთ ან მოგვწერეთ წერილი.',
         'phone' => 'Phone: +48 574 711 504'
-    ],
-    'footer' => [
-        'text' => 'The Apple, Google Play, and Windows logos are trademarks of their respective owners. View our <a href="" class="_cw">Data Policy</a> and <a href="" class="_cw">Terms</a>.'
-    ],
+    ]
 ];

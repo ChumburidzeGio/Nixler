@@ -52,15 +52,18 @@
                                 {{ trans('landing.subscribe.title') }}
                             </h3>
                             <div class="_p15 _mb15 _pb15">
-                                <div class="_fjcc _df">
+                                <form class="_fjcc _df" action="/subscribe">
                                     <div class="_left _dib">
-                                        <input type="" name="" class="_fe _b1 _brds3 _cb _bcg" placeholder="{{ trans('landing.subscribe.placeholder') }}">
+                                        <input type="email" required="" name="email" class="_fe _b1 _brds3 _cb _bcg" placeholder="{{ trans('landing.subscribe.placeholder') }}">
                                     </div>
                                     <button class="_btn _bg4 _ml5 _c5 _left _left _pt5 _pb5 _fs15">{{ trans('landing.subscribe.button') }}</button>
-                                </div>
-                                <small class="_clear _fs12 _cg _mt15">
+                                </form>
+                                <a href="{{ url('policy') }}" class="_clear _fs12 _cg _mt15">
                                     {!! trans('landing.subscribe.help') !!}
-                                </small>
+                                </a>
+                                @if (session('subscribe'))
+                                    <span class="_c2 _mt10 _clear _p5 _bg5">{{ session('subscribe') }}</span>
+                                @endif
                             </div>
                         </div>
                         <div class="col-sm-7">
@@ -136,15 +139,15 @@
 
 
 
-        <!--div id="footer" class="_clear _bg2 _cwt9 _tal _pb15">
+        <div id="footer" class="_clear _bg2 _cwt9 _tal _pb15">
 
             <div class="container">
                 <p class="_p15 _m0 _pb5 _mt5">
-                   Nixler © 2016. {{--!! trans('landing.footer.text') !!--}}
+                   Nixler © 2016 <a href="{{ url('policy') }}" class="_right">{{ trans('landing.footer.policy') }}</a>
                 </p>
             </div>
 
-        </div-->
+        </div>
 
 
     </div>

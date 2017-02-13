@@ -18,7 +18,7 @@ return [
         'title' => 'Be the first to know when we launch.',
         'placeholder' => 'email address',
         'button' => 'Notify me',
-        'help' => 'By clicking "Notify me" I agree to Nixler\'s <a href="" class="_c4">Terms of service</a>',
+        'help' => 'By clicking "Notify me" I agree to Nixler\'s <span class="_c4">Terms of service</span>',
     ],
     'what' => [
         'title' => 'What can you do with Nixler ?',
@@ -120,6 +120,6 @@ return [
         'phone' => 'Phone: +48 574 711 504'
     ],
     'footer' => [
-        'text' => 'The Apple, Google Play, and Windows logos are trademarks of their respective owners. View our <a href="" class="_cw">Data Policy</a> and <a href="" class="_cw">Terms</a>.'
+        'policy' => 'View our Data Policy'
     ],
 ];
