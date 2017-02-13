@@ -64,11 +64,13 @@
                             </div>
                         </div>
                         <div class="col-sm-7">
-                            <img src="/img/landing.png" class="_w100 _z3">
+                            <img src="/img/landing.png" class="_w100">
                         </div>
                     </div>
                 </div>
             </div>
+            <br>
+            <br>
         </div>
 
 
