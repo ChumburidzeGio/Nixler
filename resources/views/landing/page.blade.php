@@ -17,7 +17,7 @@
 
 
 
-        <div id="header" class="_clear _mhwmax _bgw _c2 _tac">
+        <div id="header" class="_clear _bgw _c2 _tac">
 
             <div class="container">
 
@@ -58,20 +58,17 @@
                                     </div>
                                     <button class="_btn _bg4 _ml5 _c5 _left _left _pt5 _pb5 _fs15">{{ trans('landing.subscribe.button') }}</button>
                                 </div>
-                                <!--small class="_clear _fs12 _cg _mt15">
+                                <small class="_clear _fs12 _cg _mt15">
                                     {!! trans('landing.subscribe.help') !!}
-                                </small-->
-
+                                </small>
                             </div>
                         </div>
                         <div class="col-sm-7">
-                            <img src="https://static.xx.fbcdn.net/rsrc.php/v3/yc/r/xFmW1tcxsyL.png" class="_w100">
+                            <img src="/img/landing.png" class="_w100 _z3">
                         </div>
                     </div>
                 </div>
             </div>
-            <br>
-            <br>
         </div>
 
 

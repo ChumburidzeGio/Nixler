@@ -19,3 +19,8 @@ Route::get('/home', 'HomeController@index');
 
 Route::get('/@{id}', 'User\UserController@find');
 Route::get('/product/{id}', 'Product\ProductController@find');
+
+
+Route::get('/policy', function(){
+	return view('policy.page');
+});
