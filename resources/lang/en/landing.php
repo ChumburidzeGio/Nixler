@@ -106,12 +106,12 @@ return [
             [
                 'photo' => 'https://media.licdn.com/media/AAEAAQAAAAAAAAhgAAAAJGJlNDE1ZmZjLTVlZDgtNGQ0YS05NDQyLWRjNWUyM2E5ZmVjOQ.jpg',
                 'name' => 'Giorgi Chumburidze',
-                'headline' => 'Web Developer • Created nixler, worked on various e-commerce projects'
+                'headline' => 'Computer programmer and Internet entrepreneur • experienced in creating world class web applications'
             ],
             [
                 'photo' => 'https://media.licdn.com/mpr/mpr/shrinknp_400_400/AAEAAQAAAAAAAAY4AAAAJDc0NjQ3NmYwLTBmNjUtNDBhMy04MWRjLTQyM2I3N2E2YmI4ZQ.jpg',
                 'name' => 'Maria Niemir',
-                'headline' => 'A team-oriented project manager •   experienced in sales departments and trade marketing'
+                'headline' => 'A team-oriented project manager • experienced in sales departments and trade marketing'
             ]
         ]
     ],
