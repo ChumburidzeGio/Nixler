@@ -4,9 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e4193a757ec71c247dc2ec83c687f957",
-    "content-hash": "2da2ed6e6bec18974c6ae58335e998fe",
+    "hash": "49305f03088cbfbc87270235fd359575",
+    "content-hash": "8b5373a79e1fc4c04d6d9b228e38dca1",
     "packages": [
+        {
+            "name": "artesaos/seotools",
+            "version": "0.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/artesaos/seotools.git",
+                "reference": "6cdd1787aa36ac0c1a63155fb84a27934f426c93"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/artesaos/seotools/zipball/6cdd1787aa36ac0c1a63155fb84a27934f426c93",
+                "reference": "6cdd1787aa36ac0c1a63155fb84a27934f426c93",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/config": "~5",
+                "illuminate/support": "~5",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.4",
+                "orchestra/testbench": "~3.0",
+                "phpspec/phpspec": "2.1.x",
+                "phpunit/phpunit": "^4.0|^5.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Artesaos\\SEOTools\\": "src/SEOTools/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vinicius",
+                    "email": "luiz.vinicius73@gmail.com"
+                }
+            ],
+            "description": "SEO Tools for Laravel and Lumen",
+            "keywords": [
+                "laravel5",
+                "lumen",
+                "metatags",
+                "opengraph",
+                "seo",
+                "seotools",
+                "webmaster"
+            ],
+            "time": "2016-10-27 03:03:45"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",

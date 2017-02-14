@@ -25,6 +25,8 @@ class HomeController extends Controller
      */
     public function welcome()
     {   
+        //$this->seo()->setTitle('Welcome');
+
         $what = collect(trans('landing.what.items'))->chunk(2);
 
         $why = collect(trans('landing.why.items'))->chunk(3);

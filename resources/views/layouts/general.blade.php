@@ -14,7 +14,9 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name') }}</title>
+    {!! app('seotools')->generate() !!}
+
+    
 
     <!-- Browser theme styling -->
     <meta content="#ffffff" name="msapplication-TileColor" />
