@@ -34,7 +34,7 @@ return [
             'url'         => false, // Set null for using Url::current(), set false to total remove
             'type'        => false,
             'site_name'   => false,
-            'images'      => false//[url('/img/meta.png')],
+            'images'      => []//[url('/img/meta.png')],
         ],
     ],
     'twitter' => [
