@@ -38,7 +38,7 @@ return [
     'facebook' => [
         'client_id' => '1859317274325590',
         'client_secret' => '872336b089e99b7d5324a9e9528d68cc',
-        'redirect' => 'http://localhost',
+        'redirect' => 'http://nixler.pl/goo',
     ],
 
 ];
