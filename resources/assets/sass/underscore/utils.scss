@@ -358,7 +358,7 @@
          HEIGHT
 ==================================*/
 
-._hf { height: 100%; }
+._hf { height: 100%!important; }
 ._h100 { height: 100px; }
 ._h110 { height: 110px; }
 ._mih150 { min-height: 150px; }
@@ -613,7 +613,9 @@
     transition: border-color ease-in-out .5s;
 }
 
-
+._fe._fes {
+    height: 33px;
+}
 
 ._fe:not(select){
     -webkit-appearance: none;

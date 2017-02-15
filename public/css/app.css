@@ -9230,7 +9230,7 @@ input:focus {
 ==================================*/
 
 ._hf {
-  height: 100%;
+  height: 100% !important;
 }
 
 ._h100 {
@@ -9664,6 +9664,10 @@ input:focus {
   -webkit-transition: border-color ease-in-out .15s;
   -webkit-transition: border-color ease-in-out .5s;
   transition: border-color ease-in-out .5s;
+}
+
+._fe._fes {
+  height: 33px;
 }
 
 ._fe:not(select) {

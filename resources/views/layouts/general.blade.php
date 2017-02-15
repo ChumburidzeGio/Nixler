@@ -23,9 +23,6 @@
     {{--<meta content="assets/brand/touch-icons/ms-icon-144x144.png" name="msapplication-TileImage" />--}}
     <meta content="#ffffff" name="theme-color" />
 
-    <!-- Canonical -->
-    <link rel="canonical" href="{{ request()->fullUrl() }}"/>
-
     <!-- Stylesheets -->
     <link href="/css/app.css" rel="stylesheet">
     @yield('styles')

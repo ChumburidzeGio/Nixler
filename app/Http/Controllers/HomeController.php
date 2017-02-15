@@ -25,7 +25,10 @@ class HomeController extends Controller
      */
     public function welcome()
     {   
-        //$this->seo()->setTitle('Welcome');
+        $this->seo()->setTitle('Welcome to Nixler');
+        $this->seo()->setDescription('E-commerce platform focused on simplicity and sociality. Buy and sell, its free just join us.');
+        $this->seo()->opengraph()->setUrl(request()->fullUrl());
+        $this->seo()->opengraph()->addProperty('type', 'website');
 
         $what = collect(trans('landing.what.items'))->chunk(2);
 

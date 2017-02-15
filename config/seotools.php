@@ -7,10 +7,10 @@ return [
          */
         'defaults'       => [
             'title'        => "Nixler", // set false to total remove
-            'description'  => 'E-commerce platform with focus on simplicity and sociality.', // set false to total remove
+            'description'  => 'E-commerce platform focused on simplicity and sociality.', // set false to total remove
             'separator'    => ' - ',
             'keywords'     => [],
-            'canonical'    => false, // Set null for using Url::current(), set false to total remove
+            'canonical'    => null, // Set null for using Url::current(), set false to total remove
         ],
 
         /*
@@ -34,7 +34,7 @@ return [
             'url'         => false, // Set null for using Url::current(), set false to total remove
             'type'        => false,
             'site_name'   => false,
-            'images'      => [url('/img/meta.png')],
+            'images'      => false//[url('/img/meta.png')],
         ],
     ],
     'twitter' => [
@@ -42,8 +42,7 @@ return [
          * The default values to be used by the twitter cards generator.
          */
         'defaults' => [
-          //'card'        => 'summary',
-          //'site'        => '@LuizVinicius73',
+          'site'        => '@nixler',
         ],
     ],
 ];

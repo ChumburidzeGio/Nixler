@@ -26,3 +26,12 @@ Route::get('/policy', function(){
 });
 
 Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
+
+
+Route::get('/management/dashboard', function(){
+	return view('admin.dashboard');
+});
+
+Route::get('/management/users', function(){
+	return view('admin.users');
+});
