@@ -178,6 +178,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Spatie\Newsletter\NewsletterServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
+        Nixler\People\PeopleServiceProvider::class,
 
     ],
 

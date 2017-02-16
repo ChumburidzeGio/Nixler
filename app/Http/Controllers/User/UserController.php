@@ -4,6 +4,8 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Mail\OrderShipped;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {

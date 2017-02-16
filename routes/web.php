@@ -35,19 +35,3 @@ Route::get('/management/dashboard', function(){
 Route::get('/management/users', function(){
 	return view('admin.users');
 });
-
-Route::get('/foo', function(){
-	$socialite = new \Overtrue\Socialite\SocialiteManager(config('services'));
-	return $socialite->driver('facebook')->fields([
-                'first_name', 'last_name', 'email', 'gender', 'birthday'
-            ])->scopes(['email', 'user_birthday'])->redirect();
-});
-
-Route::get('/goo', function(){
-	$socialite = new \Overtrue\Socialite\SocialiteManager(config('services'));
-	$socialUser = Socialite::driver($provider)->fields([
-                'first_name', 'last_name', 'email', 'gender', 'birthday'
-            ])->user();
-
-	dd($socialUser);
-});
