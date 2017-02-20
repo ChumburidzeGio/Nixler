@@ -147,7 +147,7 @@
 
             <div class="container">
                 <p class="_p15 _m0 _pb5 _mt5">
-                   Nixler © 2016 <a href="{{ url('policy') }}" class="_right">{{ trans('landing.footer.policy') }}</a>
+                   Nixler © 2017 <a href="{{ url('policy') }}" class="_right">{{ trans('landing.footer.policy') }}</a>
                 </p>
             </div>
 

@@ -20,7 +20,7 @@
 
            @if(auth()->check())
             <a class="_tb" href="{{ auth()->check() ? url('/users/'.auth()->id()) : url('/login') }}">
-                <img src="{{ auth()->user()->photo('resize:26x26') }}" height="25px" class="_va2 _brds50">
+                <img src="{{ auth()->user()->avatar('nav') }}" height="25px" class="_va2 _brds50">
             </a>
         @endif
     </div>
@@ -40,23 +40,23 @@
                 <div class="_mt30">
                     <a href="{{ Auth::check() ? auth()->user()->url : url('/login') }}" 
                         class="_lh1 _et2 _cw _thvrw _fw600">
-                        <img src="{{  Auth::check() ? auth()->user()->photo('resize:60x60') : '' }}" 
+                        <img src="{{  Auth::check() ? auth()->user()->avatar('aside') : '' }}" 
                         class="_mb10 _clear _brds50" height="60" width="60">
                         {{ Auth::check() ? auth()->user()->name : 'Sign In to access account' }}
                     </a>
                     <a href="{{ Auth::check() ? auth()->user()->url : url('/register') }}">
                         <small class="_clear _cw">
-                            {{ Auth::check() ? auth()->user()->email : 'Or Sign up now' }}
+                            {{ Auth::check() ? (auth()->user()->email) : 'Or Sign up now' }}
                         </small>
                     </a>
                 </div>
-                <img src="{{ Auth::check() ? auth()->user()->photo('resize:200x300') : '' }}" class="_af _posa _zi-1 _w100">
+                <img src="{{ url('img/aside.jpg') }}" class="_af _posa _zi-1 _w100">
                 <div class="_bgbt2 _af _posa _zi-1"></div>
             </span>
 
             @if(auth()->check())
 
-            <a href="{{ auth()->user()->url }}" class="_li _hvrd _cg">
+            <a href="/" class="_li _hvrd _cg">
                 <xi class="_mr15">person</xi> Profile
             </a>
             <a href="{{ url('/settings') }}" class="_li _hvrd _cg _bb1">
@@ -65,12 +65,19 @@
             <a href="{{ url('/pages/help') }}" class="_li _hvrd _cg">
                 <xi class="_mr15">help</xi> Help
             </a>
-            <a href="{{ url('/pages/terms') }}" class="_li _hvrd _cg _bb1">
-                <xi class="_mr15">accessibility</xi> Terms of Service
+            <a href="{{ url('/policy') }}" class="_li _hvrd _cg _bb1">
+                <xi class="_mr15">accessibility</xi> Privacy
             </a>
-            <a href="{{ url('/logout') }}" class="_li _hvrd _cg">
-                <xi class="_mr15">exit_to_app</xi> Logout
-            </a>
+            <li class="_li">
+                <a href="{{ url('/logout') }}"
+                        onclick="event.preventDefault();
+                        document.getElementById('logout-form').submit();">
+                        <xi class="_mr15">exit_to_app</xi> Logout
+                </a>
+                <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="_d0">
+                    {{ csrf_field() }}
+                </form>
+            </li>
 
             @endif
 

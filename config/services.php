@@ -36,9 +36,9 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '1859317274325590',
-        'client_secret' => '872336b089e99b7d5324a9e9528d68cc',
-        'redirect' => 'https://www.nixler.pl/auth/facebook/callback',
+        'client_id' => env('FACEBOOK_APP_ID'),
+        'client_secret' => env('FACEBOOK_APP_SECRET'),
+        'redirect' => env('FACEBOOK_APP_REDIRECT'),
         'scopes' => ['user_birthday'],
         'fields' => ['first_name', 'last_name', 'email', 'gender', 'birthday']
     ],

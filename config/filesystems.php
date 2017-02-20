@@ -65,4 +65,22 @@ return [
 
     ],
 
+
+    'media' => [
+        'avatar' => [
+            'default' => public_path('img/person.jpg'),
+            'sizes' => [
+                'profile' => [100, 100],
+                'nav' => [25, 25],
+                'aside' => [60, 60],
+            ]
+        ],
+        'cover' => [
+            'default' => public_path('img/image.jpg'),
+            'sizes' => [
+                'profile' => [800, 150],
+            ]
+        ]
+    ]
+
 ];

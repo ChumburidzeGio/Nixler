@@ -26,26 +26,4 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
-    public function photo($params){
-
-        $names = [
-            'citystreet', 'raspberries', 'bridge'
-        ];
-
-        $endpoint = 'https://assets.imgix.net/unsplash/'.$names[array_rand($names)].'.jpg?fm=pjpg&q=80&usm=10';
-
-        if(starts_with($params, 'resize')){
-
-            $sizes = explode('x', substr($params, strpos($params, ":") + 1));
-
-            return url($endpoint.http_build_query([
-                'crop' => 'faces',
-                'fit' => 'crop',
-                'h' => $sizes[0],
-                'w' => $sizes[1],
-            ]));
-        }
-
-    }
 }

@@ -14,10 +14,13 @@
         "php": ">=5.6.4",
         "artesaos/seotools": "^0.10.0",
         "guzzlehttp/guzzle": "^6.2",
+        "intervention/imagecache": "^2.3",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
         "nixler/people": "dev-master",
         "overtrue/socialite": "~1.0",
+        "plank/laravel-mediable": "^2.4",
+        "plank/laravel-metable": "^1.0",
         "spatie/laravel-newsletter": "^3.4"
     },
     "require-dev": {
