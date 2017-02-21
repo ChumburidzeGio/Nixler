@@ -28,6 +28,7 @@ Route::get('/policy', function(){
 
 	return [
 		'ip' => request()->ip(),
+		'updateDatabase' => $service->updateDatabase(),
 		'get' => $service->get(),
 		'getTLD' => $service->getTLD(),
 	];
