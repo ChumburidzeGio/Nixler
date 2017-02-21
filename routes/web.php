@@ -27,13 +27,8 @@ Route::get('/policy', function(){
 	$service = new Nixler\People\Services\LocationService;
 
 	return [
-		'getLocation' => $service->getLocation()->toArray(),
-		'setGeoData' => $service->setGeoData(request()),
-		'setLocale' => $service->setLocale('pl'),
-		'getAvailableLocaleKeys' => $service->getAvailableLocaleKeys(),
-		'getAvailableLocales' => $service->getAvailableLocales(),
 		'get' => $service->get(),
-		'getLocale' => $service->getLocale(),
+		'getTLD' => $service->getTLD(),
 	];
 
 	return view('policy.page');
