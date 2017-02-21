@@ -7,6 +7,10 @@ return [
     | Landing page language Lines
     |--------------------------------------------------------------------------
     */
+    'meta' => [
+        'title' => 'Nixler • Twój sklep do zakupów z przyjaciółmi',
+        'description' => 'Platforma e-commerce skoncentrowana na prostocie i społeczności. To nic nie kosztuje tylko dołącz do nas, kupuj i sprzedawaj.'
+    ],
     'menu' => [
         'features' => 'Poznaj Nixler',
         'about' => 'O nas',

@@ -12,7 +12,9 @@
 |
 */
 
-Route::get('/', 'HomeController@welcome')->middleware('lastLoginTracker');
+Route::group(['prefix' => (new Nixler\People\Services\LocationService)->segment()], function() {
+	Route::get('/', 'HomeController@welcome')->middleware('lastLoginTracker');
+});
 
 Auth::routes();
 
@@ -21,6 +23,19 @@ Route::get('/product/{id}', 'Product\ProductController@find')->middleware('lastL
 
 
 Route::get('/policy', function(){
+
+	$service = new Nixler\People\Services\LocationService;
+
+	return [
+		'getLocation' => $service->getLocation()->toArray(),
+		'setGeoData' => $service->setGeoData(request()),
+		'setLocale' => $service->setLocale('pl'),
+		'getAvailableLocaleKeys' => $service->getAvailableLocaleKeys(),
+		'getAvailableLocales' => $service->getAvailableLocales(),
+		'get' => $service->get(),
+		'getLocale' => $service->getLocale(),
+	];
+
 	return view('policy.page');
 });
 
@@ -54,6 +69,10 @@ Route::get('/settings/emails/{id}/delete', '\Nixler\People\Controllers\SettingsC
 Route::post('/settings/emails', '\Nixler\People\Controllers\SettingsController@createEmail');
 
 Route::post('/settings/password', '\Nixler\People\Controllers\SettingsController@updatePassword');
+
+Route::post('/settings/locale', '\Nixler\People\Controllers\SettingsController@updateLocale');
+
+
 
 Route::get('/avatars/{id}/{place}', '\Nixler\People\Controllers\PhotosController@avatar');
 Route::get('/media/{id}/{type}/{place}.jpg', '\Nixler\People\Controllers\PhotosController@photo');

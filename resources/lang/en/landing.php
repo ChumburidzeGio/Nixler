@@ -7,6 +7,10 @@ return [
     | Landing page language Lines
     |--------------------------------------------------------------------------
     */
+    'meta' => [
+        'title' => 'Nixler • Your shop to go with friends',
+        'description' => 'Nixler is an e-commerce platform focused on simplicity and sociality. It’s free just join us, buy and sell.'
+    ],
     'menu' => [
         'features' => 'Features',
         'about' => 'About us',

@@ -21,7 +21,7 @@
 
             <div class="container">
 
-                <div class="_tbs _mt15">
+                <div class="_tbs _mt15 _ml15 _dib">
                     <a href="{{ url('/') }}#features" class="_tb _fs14">
                         {{ trans('landing.menu.features') }}
                     </a>
@@ -33,6 +33,26 @@
                     </a>
                     <a href="https://github.com/nixler" target="_blank" class="_tb _fs14 hidden-xs">
                         {{ trans('landing.menu.open_source') }}
+                    </a>
+                </div>
+
+                <div class="_tbs _mt15 _right _dib">
+                    <a onclick="event.preventDefault();
+                        document.getElementById('setlcl813').submit();" href="/" class="_tb _fs14">
+                        English
+                        <form id="setlcl813" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="locale" value="en">
+                        </form>
+                    </a>
+
+                    <a onclick="event.preventDefault();
+                        document.getElementById('setlcl814').submit();" href="/" class="_tb _fs14 _cp">
+                        polski
+                        <form id="setlcl814" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="locale" value="pl">
+                        </form>
                     </a>
                 </div>
             </div>
