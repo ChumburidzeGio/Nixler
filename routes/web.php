@@ -27,6 +27,7 @@ Route::get('/policy', function(){
 	$service = new Nixler\People\Services\LocationService;
 
 	return [
+		'ip' => request()->ip(),
 		'get' => $service->get(),
 		'getTLD' => $service->getTLD(),
 	];
