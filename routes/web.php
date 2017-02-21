@@ -23,16 +23,6 @@ Route::get('/product/{id}', 'Product\ProductController@find')->middleware('lastL
 
 
 Route::get('/policy', function(){
-
-	$service = new Nixler\People\Services\LocationService;
-
-	return [
-		'ip' => request()->ip(),
-		'updateDatabase' => $service->updateDatabase(),
-		'get' => $service->get(),
-		'getTLD' => $service->getTLD(),
-	];
-
 	return view('policy.page');
 });
 
