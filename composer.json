@@ -8,19 +8,30 @@
         {
             "url": "git@gitlab.com:nixler/People.git",
             "type": "git"
+        },
+        {
+            "url": "git@gitlab.com:nixler/Sellable.git",
+            "type": "git"
         }
     ],
     "require": {
         "php": ">=5.6.4",
         "artesaos/seotools": "^0.10.0",
+        "barryvdh/laravel-debugbar": "^2.3",
+        "cviebrock/eloquent-sluggable": "^4.2",
         "guzzlehttp/guzzle": "^6.2",
         "intervention/imagecache": "^2.3",
         "laravel/framework": "5.4.*",
         "laravel/tinker": "~1.0",
+        "mobiledetect/mobiledetectlib": "^2.8",
         "nixler/people": "dev-master",
+        "nixler/sellable": "dev-master",
+        "overtrue/laravel-follow": "^1.0",
         "overtrue/socialite": "~1.0",
         "plank/laravel-mediable": "^2.4",
         "plank/laravel-metable": "^1.0",
+        "rap2hpoutre/laravel-log-viewer": "^0.8.0",
+        "silber/bouncer": "v1.0.0-beta.2",
         "spatie/laravel-newsletter": "^3.4"
     },
     "require-dev": {

@@ -73,12 +73,29 @@ return [
                 'profile' => [100, 100],
                 'nav' => [25, 25],
                 'aside' => [60, 60],
+                'product' => [80, 80],
             ]
         ],
         'cover' => [
             'default' => public_path('img/image.jpg'),
             'sizes' => [
                 'profile' => [800, 150],
+                'product' => [400, 75],
+            ]
+        ],
+        'media' => [
+            'default' => public_path('img/image.jpg'),
+            'sizes' => [
+                'user_photos' => [300, 150],
+                'thumb' => [100, 100],
+                'thumb_s' => [50, 50],
+            ] 
+        ],
+        'product' => [
+            'default' => public_path('img/image.jpg'),
+            'sizes' => [
+                'full' => [null, 600],
+                'short-card' => [300, 300],
             ]
         ]
     ]

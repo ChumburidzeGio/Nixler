@@ -2,13 +2,6 @@
 
 @section('styles')
 <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,600" rel="stylesheet" type="text/css">
-<style type="text/css">
-    ._c1{color: #E7E247;}._bg1{background: #E7E247;}
-    ._c2{color: #3D3B30;}._bg2{background: #3D3B30;}
-    ._c3{color: #4D5061;}._bg3{background: #4D5061;}
-    ._c4{color: #5C80BC;}._bg4{background: #5C80BC;}
-    ._c5{color: #E9EDDE;}._bg5{background: #E9EDDE;}
-</style>
 @endsection
 
 @section('app')

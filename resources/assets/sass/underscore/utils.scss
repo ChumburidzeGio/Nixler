@@ -362,6 +362,7 @@
 ._hf { height: 100%!important; }
 ._h100 { height: 100px; }
 ._h110 { height: 110px; }
+._mih70 { min-height: 70px; }
 ._mih150 { min-height: 150px; }
 ._mih200 { min-height: 200px; }
 ._mih250 { min-height: 250px; }
@@ -637,3 +638,33 @@ select._fe{
     line-height: 22px;
     height: 50px;
 }
+
+
+/*=================================
+        BRICKS
+==================================*/
+
+._brick {
+    display: inline-block;
+    overflow: hidden;
+    box-sizing: border-box;
+    height: 80px;
+    margin-right: 10px;
+    width: 80px;
+}
+
+._brick.m{
+    height: 42px;
+    width: 42px;
+}
+
+
+/*=================================
+        TRANSACTIONS
+==================================*/
+
+._trans800{ transition: all 800ms ease; }
+._trans300{ transition: all 300ms ease; }
+._trans200{ transition: all 200ms ease; }
+._trans5{ transition: all 5s ease; }
+._trans2{ transition: all 2s ease; }

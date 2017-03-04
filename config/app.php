@@ -92,7 +92,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'pl',
+    'fallback_locale' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -181,8 +181,13 @@ return [
         Spatie\Newsletter\NewsletterServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Nixler\People\PeopleServiceProvider::class,
+        Nixler\Sellable\MerchantServiceProvider::class,
         Plank\Mediable\MediableServiceProvider::class,
         Plank\Metable\MetableServiceProvider::class,
+        Silber\Bouncer\BouncerServiceProvider::class,
+        Overtrue\LaravelFollow\FollowServiceProvider::class,
+        Cviebrock\EloquentSluggable\ServiceProvider::class,
+        Barryvdh\Debugbar\ServiceProvider::class,
 
     ],
 
@@ -234,7 +239,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Newsletter' => Spatie\Newsletter\NewsletterFacade::class,
         'MediaUploader' => Plank\Mediable\MediaUploaderFacade::class,
-
+        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
+        'Debugbar' => Barryvdh\Debugbar\Facade::class,
     ],
 
 ];

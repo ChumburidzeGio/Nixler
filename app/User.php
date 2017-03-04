@@ -4,10 +4,11 @@ namespace App;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Nixler\People\Person;
+use Nixler\Sellable\Merchantable;
 
 class User extends Authenticatable
 {
-    use Person;
+    use Person, Merchantable;
 
     /**
      * The attributes that are mass assignable.

@@ -8,37 +8,32 @@ class HomeController extends Controller
 {
 
     /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $this->middleware('auth');
-        return view('home');
-    }
-
-    /**
      * Show the application welcome page.
      *
      * @return \Illuminate\Http\Response
      */
     public function welcome()
     {   
-        $this->seo()->setTitle(trans('landing.meta.title'));
+        if(auth()->guest()){
 
-        $this->seo()->setDescription(trans('landing.meta.description'));
+            $this->seo()->setTitle(trans('landing.meta.title'));
 
-        $this->seo()->opengraph()->setUrl(request()->fullUrl());
-        
-        $this->seo()->opengraph()->addProperty('type', 'website');
+            $this->seo()->setDescription(trans('landing.meta.description'));
 
-        $what = collect(trans('landing.what.items'))->chunk(2);
+            $this->seo()->opengraph()->setUrl(request()->fullUrl());
+            
+            $this->seo()->opengraph()->addProperty('type', 'website');
 
-        $why = collect(trans('landing.why.items'))->chunk(3);
+            $what = collect(trans('landing.what.items'))->chunk(2);
 
-        $who = collect(trans('landing.who.items'))->chunk(3);
+            $why = collect(trans('landing.why.items'))->chunk(3);
 
-        return view('landing.page', compact('what', 'why', 'who'));
+            $who = collect(trans('landing.who.items'))->chunk(3);
+
+            return view('landing.page', compact('what', 'why', 'who'));
+
+        } else {
+            return view('home');
+        }
     }
 }
