@@ -74,6 +74,8 @@ return [
                 'nav' => [25, 25],
                 'aside' => [60, 60],
                 'product' => [80, 80],
+                'comments' => [40, 40],
+                'message' => [33, 33],
             ]
         ],
         'cover' => [

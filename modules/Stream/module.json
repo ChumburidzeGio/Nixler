@@ -1,0 +1,16 @@
+{
+    "name": "Stream",
+    "alias": "stream",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Stream\\Providers\\StreamServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

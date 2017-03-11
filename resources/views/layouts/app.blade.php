@@ -3,7 +3,7 @@
 @section('app')
 <body>
 
-    <div id="app" class="_mt70 _pb15 _clear" ng-app="nx">
+    <div id="app" class="_mt70 _pb15 _db" ng-app="nx">
 
         <nav class="_at _b0 _zi999 _bgw _z013 _cb _pl15 _pr15 _ma" ng-controller="NavCtrl as vm">
 
@@ -16,7 +16,12 @@
 
                 <a href="{{ url('search') }}" class="_tb"><i class="material-icons _cinherit _fs20 _mt10">search</i> </a>
 
-                <a href="{{ url('nt/latest') }}" class="_tb"><i class="material-icons _cinherit _fs20 _mt10">notifications</i> </a>
+                <a href="{{ route('threads') }}" class="_tb _posr">
+                    <i class="material-icons _cinherit _fs20 _mt10">message</i> 
+                    @if(auth()->check() && auth()->user()->getMeta('has_messages'))
+                    <span class="_p5 _brds50 _bgr _a2 _posa _mt15 _mr5"></span>
+                    @endif
+                </a>
 
                 @if(auth()->check())
                 <a class="_tb" href="{{ auth()->check() ? url('/users/'.auth()->id()) : url('/login') }}">

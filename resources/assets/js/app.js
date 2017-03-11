@@ -6,20 +6,44 @@
  */
 
  window.Angular = require('angular');
- require('ng-currency')
- require('angular-elastic')
- require('ng-tags-input')
- require('confirm-click')
- require('angular-sortable-view')
- require('angular-selector')
+ require('angular-elastic');
+ require('ng-tags-input');
+ require('confirm-click');
+ require('ng-currency');
+ require('angular-sortable-view');
+ require('angular-selector');
+ require('angular-sanitize');
+ require('angular-timeago');
+ require('ng-dialog');
+ require('angularjs-scroll-glue');
+ require('angular-numeric-input');
 
  require('./utils/core');
  require('./product/core');
+ require('./comments/core');
+ require('./messages/core');
  require('./nav/nav.ctrl');
+ require('./address/core');
 
- var app = angular.module('nx', ['utils','products', 'nav', 
- 	'ng-currency', 'monospaced.elastic', 'ngTagsInput', 'confirm-click', 'angular-sortable-view', 'selector']);
-
+ var app = angular.module('nx', [
+ 	'utils',
+    'products', 
+ 	'address', 
+ 	'nav', 
+ 	'ng-currency', 
+ 	'monospaced.elastic', 
+ 	'ngTagsInput', 
+ 	'confirm-click', 
+ 	'angular-sortable-view', 
+ 	'selector', 
+ 	'comments', 
+ 	'ngSanitize', 
+ 	'yaru22.angular-timeago', 
+ 	'ngDialog',
+ 	'messages',
+ 	'luegg.directives',
+    'ui.numericInput'
+   ]);
 
  app.factory('httpRequestInterceptor', function () {
  	return {
@@ -45,3 +69,20 @@
     $httpProvider.interceptors.push('httpRequestInterceptor');
 
 }]);
+
+
+
+if (!Array.prototype.last){
+    Array.prototype.last = function(){
+        return this[this.length - 1];
+    };
+};
+
+if (!Array.prototype.inArray){
+    Array.prototype.inArray = function(comparer) { 
+        for(var i=0; i < this.length; i++) { 
+            if(comparer(this[i])) return true; 
+        }
+        return false; 
+    }; 
+};

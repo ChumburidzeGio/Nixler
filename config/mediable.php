@@ -6,7 +6,7 @@ return [
      *
      * Should extend `Plank\Mediable\Media`
      */
-    'model' => App\Media::class,
+    'model' => Modules\Media\Entities\Media::class,
 
     /*
      * Filesystem disk to use if none is specified

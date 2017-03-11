@@ -14,8 +14,6 @@ class HomeController extends Controller
      */
     public function welcome()
     {   
-        if(auth()->guest()){
-
             $this->seo()->setTitle(trans('landing.meta.title'));
 
             $this->seo()->setDescription(trans('landing.meta.description'));
@@ -28,12 +26,9 @@ class HomeController extends Controller
 
             $why = collect(trans('landing.why.items'))->chunk(3);
 
-            $who = collect(trans('landing.who.items'))->chunk(3);
+            $who = collect(trans('landing.who.items'))->chunk(4);
 
             return view('landing.page', compact('what', 'why', 'who'));
 
-        } else {
-            return view('home');
-        }
     }
 }

@@ -1,0 +1,17 @@
+{
+    "name": "Comment",
+    "alias": "comment",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 0,
+    "providers": [
+        "Modules\\Comment\\Providers\\CommentServiceProvider",
+        "Modules\\Comment\\Providers\\CommentAuthServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

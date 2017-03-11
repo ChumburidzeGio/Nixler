@@ -43,4 +43,10 @@ return [
         'fields' => ['first_name', 'last_name', 'email', 'gender', 'birthday']
     ],
 
+    'vk' => [
+        'client_id' => '5068245',
+        'client_secret' => '3FC9QzKS17sUkbCiFGoE',
+        'version' => '5.62',
+    ],
+
 ];

@@ -1,0 +1,15 @@
+{
+    "name": "nixler/media",
+    "description": "",
+    "authors": [
+        {
+            "name": "Giorgi Chumburidze",
+            "email": "chumburidze.giorgi@outlook.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Media\\": ""
+        }
+    }
+}
