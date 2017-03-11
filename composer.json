@@ -34,8 +34,7 @@
         "silber/bouncer": "v1.0.0-beta.2",
         "spatie/laravel-newsletter": "^3.4",
         "torann/geoip": "^1.0",
-        "watson/validating": "^3.0",
-        "nixler/user": "*"
+        "watson/validating": "^3.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
