@@ -14,7 +14,7 @@
 Auth::routes();
 
 Route::group(['prefix' => (new Modules\Address\Services\LocationService)->segment()], function() {
-	Route::get('/', 'HomeController@welcome')->middleware('guest');
+	Route::get('/', 'HomeController@welcome');
 });
 
 

@@ -14,6 +14,7 @@ class HomeController extends Controller
      */
     public function welcome()
     {   
+        if(auth()->guest()){
             $this->seo()->setTitle(trans('landing.meta.title'));
 
             $this->seo()->setDescription(trans('landing.meta.description'));
@@ -30,5 +31,8 @@ class HomeController extends Controller
 
             return view('landing.page', compact('what', 'why', 'who'));
 
+        } else {
+            return redirect()->route('feed');
+        }
     }
 }
