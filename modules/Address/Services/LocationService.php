@@ -223,13 +223,13 @@ class LocationService
      *
      * @return array
      */
-	public function get($request = null){
+	public function get($ip = null){
 
-		if(is_null($request)){
-			$request = request();
+		if(is_null($ip)){
+			$ip = request()->ip();
 		}
 
-		$data = $this->provider->getLocation($request->ip());
+		$data = $this->provider->getLocation($ip);
 		$currency = array_get($data, 'currency');
 		$country = array_get($data, 'iso_code');
 		$timezone = array_get($data, 'timezone');
