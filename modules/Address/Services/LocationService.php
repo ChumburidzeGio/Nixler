@@ -230,7 +230,10 @@ class LocationService
 		}
 
 		$data = $this->provider->getLocation($ip);
-		$currency = array_get($data, 'currency');
+
+		$country = (new \Modules\Address\Entities\City)->where('iso_code', array_get($data, 'iso_code'))->first();
+
+		$currency = $country->currency;
 		$country = array_get($data, 'iso_code');
 		$timezone = array_get($data, 'timezone');
 		$city = array_get($data, 'city');
