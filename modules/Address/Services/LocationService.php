@@ -231,7 +231,7 @@ class LocationService
 
 		$data = $this->provider->getLocation($ip);
 
-		$country = (new \Modules\Address\Entities\City)->where('iso_code', array_get($data, 'iso_code'))->first();
+		$country = (new \Modules\Address\Entities\Country)->where('iso_code', array_get($data, 'iso_code'))->first();
 
 		$currency = $country->currency;
 		$country = array_get($data, 'iso_code');
