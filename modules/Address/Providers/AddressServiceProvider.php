@@ -4,6 +4,7 @@ namespace Modules\Address\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Modules\Address\Console\CreateGeoDatabase;
+use Modules\Address\Console\DownloadCountryData;
 
 class AddressServiceProvider extends ServiceProvider
 {
@@ -98,6 +99,7 @@ class AddressServiceProvider extends ServiceProvider
         if ($this->app->runningInConsole()) {
             $this->commands([
                 CreateGeoDatabase::class,
+                DownloadCountryData::class,
             ]);
         }
     }

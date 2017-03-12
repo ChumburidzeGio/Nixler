@@ -1,8 +1,8 @@
 <?php
 
-namespace Modules\Address\Database\Seeders;
+namespace Modules\Address\Console;
 
-use Illuminate\Database\Seeder;
+use Illuminate\Console\Command;
 use Illuminate\Database\Eloquent\Model;
 use GuzzleHttp\Client as GuzzleHttp;
 use Modules\Address\Entities\Country;
@@ -10,21 +10,33 @@ use Modules\Address\Entities\Region;
 use Modules\Address\Entities\City;
 use MenaraSolutions\Geographer\Country as GCountry;
 
-class AddressDatabaseSeeder extends Seeder
+class DownloadCountryData extends Command
 {
     /**
-     * Run the database seeds.
+     * The name and signature of the console command.
      *
-     * @return void
+     * @var string
      */
-    public function run()
+    protected $signature = 'countries:download {iso_code}';
+
+    /**
+     * The console command description.
+     *
+     * @var string
+     */
+    protected $description = 'Download data, regions and cities for particular country';
+
+
+    /**
+     * Execute the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
     {
         Model::unguard();
 
-        $this->updateTables('GE');
-        $this->updateTables('PL');
-        $this->updateTables('UA');
-        
+        $this->updateTables($this->argument('iso_code'));
     }
 
     /**
@@ -164,5 +176,4 @@ class AddressDatabaseSeeder extends Seeder
         }
 
     }
-
 }
