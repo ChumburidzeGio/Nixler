@@ -45,7 +45,7 @@ class ProductController extends Controller
     public function create()
     {
         $user = auth()->user();
-        return $product = $user->createProduct(auth()->user()->currency);
+        $product = $user->createProduct(auth()->user()->currency);
         return redirect('/products/'.$product->id.'/edit');
     }
 
