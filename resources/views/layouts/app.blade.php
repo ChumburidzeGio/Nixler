@@ -23,7 +23,7 @@
                     @endif
                 </a>
 
-                <a class="_tb" href="{{ auth()->check() ? url('/users/'.auth()->id()) : url('/login') }}">
+                <a class="_tb" href="{{ auth()->user()->link() }}">
                     <img src="{{ auth()->user()->avatar('nav') }}" height="25px" class="_va2 _brds50">
                 </a>
                 @endif
