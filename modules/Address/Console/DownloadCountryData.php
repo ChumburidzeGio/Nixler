@@ -77,11 +77,8 @@ class DownloadCountryData extends Command
             'currency_symbol' => collect($rcData->currencies)->where('code', $lcData->currency)->first()->symbol
         ]);
 
-        $country->fill([
-            'en'  => ['name' => $rcData->name],
-            "{$lcData->language}"  => ['name' => $this->geonamesGetName($lcData->geonamesCode, $lcData->language)],
-        ]);
-
+        $country->translateOrNew('en')->name = $rcData->name;
+        $country->translateOrNew($lcData->language)->name = $this->geonamesGetName($lcData->geonamesCode, $lcData->language);
         $country->save();
 
         return compact('country', 'lcData');
@@ -132,10 +129,9 @@ class DownloadCountryData extends Command
                 'population' => $geRegion->population,
             ]);
 
-            $region->fill([
-                'en'  => ['name' => $lcRegion->name],
-                "{$lcData->language}"  => ['name' => $this->geonamesGetName($lcRegion->geonamesCode, $lcData->language, $geRegion)],
-            ]);
+            $translation = $this->geonamesGetName($lcRegion->geonamesCode, $lcData->language, $geRegion);
+            $region->translateOrNew('en')->name = $lcRegion->name;
+            $region->translateOrNew($lcData->language)->name = $translation;
 
             $region->save();
 
@@ -145,7 +141,7 @@ class DownloadCountryData extends Command
     }
 
     /**
-     * Add regions for country
+     * Add cities for region
      *
      * @return void
      */
@@ -157,7 +153,7 @@ class DownloadCountryData extends Command
             
             $geCity = $this->geonamesGet($lcCity->geonamesCode, $lcData->language);
 
-            if($geCity->fcodeName == 'populated place') continue;
+            if(!isset($geCity->fcodeName) || $geCity->fcodeName == 'populated place') continue;
 
             $city = City::updateOrCreate([
                 'geonames_id' => $lcCity->geonamesCode
@@ -167,10 +163,9 @@ class DownloadCountryData extends Command
                 'population' => $geCity->population,
             ]);
 
-            $city->fill([
-                'en'  => ['name' => $geCity->asciiName],
-                "{$lcData->language}"  => ['name' => $this->geonamesGetName($lcCity->geonamesCode, $lcData->language, $geCity)],
-            ]);
+            $translation = $this->geonamesGetName($lcCity->geonamesCode, $lcData->language, $geCity);
+            $city->translateOrNew('en')->name = $geCity->asciiName;
+            $city->translateOrNew($lcData->language)->name = $translation;
 
             $city->save();
         }

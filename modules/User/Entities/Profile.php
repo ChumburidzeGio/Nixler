@@ -33,8 +33,13 @@ class Profile extends Model
 
     public function attachToUser($name, $email, $gender, $birthday, $photo){
         //fixme, saving of bd and gender needed
-        $model = app()->make(config('auth.providers.users.model'));
-        $user = $email ? $model->whereEmail($email)->first() : null;
+        if($this->user_id){
+            $user = User::find($this->user_id);
+        }
+
+        if(!$user){
+            $user = $email ? User::whereEmail($email)->first() : null;
+        }
 
         if (!$user) {
 

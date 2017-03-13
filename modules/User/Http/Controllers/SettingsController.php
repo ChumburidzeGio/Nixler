@@ -10,6 +10,7 @@ use Illuminate\Validation\Rule;
 use Modules\Address\Services\LocationService;
 use Modules\Address\Entities\Country;
 use Modules\Address\Entities\ShippingPrice;
+use stdClass;
 
 class SettingsController extends Controller
 {
@@ -196,14 +197,15 @@ class SettingsController extends Controller
     {
         $user = auth()->user()->where('id', auth()->user()->id)->with('meta')->first();
 
-        $facebook = $user->getMeta('facebook');
-        $twitter = $user->getMeta('twitter');
-        $window_from = $user->getMeta('linkedin');
-        $vk = $user->getMeta('vk');
-        $blog = $user->getMeta('blog');
-        $website = $user->getMeta('website');
+        $links = new stdClass();
+        $links->facebook = $user->getMeta('facebook');
+        $links->twitter = $user->getMeta('twitter');
+        $links->linkedin = $user->getMeta('linkedin');
+        $links->vk = $user->getMeta('vk');
+        $links->blog = $user->getMeta('blog');
+        $links->website = $user->getMeta('website');
 
-        return view('user::settings.social', compact('facebook', 'twitter', 'linkedin', 'vk', 'blog', 'website'));
+        return view('user::settings.social', compact('links'));
     }
 
     public function updateSocial(Request $request)

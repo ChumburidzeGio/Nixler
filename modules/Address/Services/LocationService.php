@@ -233,6 +233,10 @@ class LocationService
 
 		$country = (new \Modules\Address\Entities\Country)->where('iso_code', array_get($data, 'iso_code'))->first();
 
+		if(!$country) {
+			$country = (new \Modules\Address\Entities\Country)->where('iso_code', 'GE')->first();
+		}
+		
 		$currency = $country->currency;
 		$country = array_get($data, 'iso_code');
 		$timezone = array_get($data, 'timezone');

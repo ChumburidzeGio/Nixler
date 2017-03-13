@@ -85,11 +85,15 @@ class Install extends Command
             $this->writeNewEnvironmentFileWith('DB_DATABASE', $db_name);
         }
 
-        if($db_user = $this->ask('Username for database?')){
+        if($db_port = $this->ask('Port?')){
+            $this->writeNewEnvironmentFileWith('DB_PORT', $db_port);
+        }
+
+        if($db_user = $this->ask('Username?')){
             $this->writeNewEnvironmentFileWith('DB_USERNAME', $db_user);
         }
 
-        if($db_pass = $this->ask('Password for database?')){
+        if($db_pass = $this->secret('Password?')){
             $this->writeNewEnvironmentFileWith('DB_PASSWORD', $db_pass);
         }
 

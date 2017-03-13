@@ -15,7 +15,7 @@
 		</label>
 
 		<div class="col-md-6">
-			<input id="facebook" type="text" class="form-control" name="facebook" value="{{ $facebook }}" placeholder="{{ trans('user::settings.social.facebook_plac')}}">
+			<input id="facebook" type="text" class="form-control" name="facebook" value="{{ $links->facebook }}" placeholder="{{ trans('user::settings.social.facebook_plac')}}">
 
 			@if ($errors->has('facebook'))
 			<span class="help-block">
@@ -31,7 +31,7 @@
 		</label>
 
 		<div class="col-md-6">
-			<input id="linkedin" type="text" class="form-control" name="linkedin" value="{{ $linkedin }}" placeholder="{{ trans('user::settings.social.linkedin_plac')}}">
+			<input id="linkedin" type="text" class="form-control" name="linkedin" value="{{ $links->linkedin }}" placeholder="{{ trans('user::settings.social.linkedin_plac')}}">
 
 			@if ($errors->has('linkedin'))
 			<span class="help-block">
@@ -48,7 +48,7 @@
 		</label>
 
 		<div class="col-md-6">
-			<input id="twitter" type="text" class="form-control" name="twitter" value="{{ $twitter }}" placeholder="{{ trans('user::settings.social.twitter_plac')}}">
+			<input id="twitter" type="text" class="form-control" name="twitter" value="{{ $links->twitter }}" placeholder="{{ trans('user::settings.social.twitter_plac')}}">
 
 			@if ($errors->has('twitter'))
 			<span class="help-block">
@@ -65,7 +65,7 @@
 		</label>
 
 		<div class="col-md-6">
-			<input id="vk" type="text" class="form-control" name="vk" value="{{ $vk }}" placeholder="{{ trans('user::settings.social.vk_plac')}}">
+			<input id="vk" type="text" class="form-control" name="vk" value="{{ $links->vk }}" placeholder="{{ trans('user::settings.social.vk_plac')}}">
 
 			@if ($errors->has('vk'))
 			<span class="help-block">
@@ -82,7 +82,7 @@
 		</label>
 
 		<div class="col-md-6">
-			<input id="blog" type="text" class="form-control" name="blog" value="{{ $blog }}" placeholder="{{ trans('user::settings.social.blog_plac')}}">
+			<input id="blog" type="text" class="form-control" name="blog" value="{{ $links->blog }}" placeholder="{{ trans('user::settings.social.blog_plac')}}">
 
 			@if ($errors->has('blog'))
 			<span class="help-block">
@@ -98,7 +98,7 @@
 		</label>
 
 		<div class="col-md-6">
-			<input id="website" type="text" class="form-control" name="website" value="{{ $website }}" placeholder="{{ trans('user::settings.social.website_plac')}}">
+			<input id="website" type="text" class="form-control" name="website" value="{{ $links->website }}" placeholder="{{ trans('user::settings.social.website_plac')}}">
 
 			@if ($errors->has('website'))
 			<span class="help-block">

@@ -23,3 +23,9 @@ Route::get('/policy', function(){
 });
 
 Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
+
+
+Route::get('qw', function(){
+
+        
+});
