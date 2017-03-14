@@ -71,7 +71,7 @@ class ProductDatabaseSeeder extends Seeder
     {
         if($faker->boolean(95)){
             for ($i=0; $i < rand(1,4); $i++) { 
-                $product->uploadPhoto($faker->image('/tmp', 400, 400), 'photo');
+                $product->uploadPhoto($faker->image('/tmp', 400, 500), 'photo');
             }
         }
     }
