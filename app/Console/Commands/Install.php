@@ -46,7 +46,6 @@ class Install extends Command
         
         if ($this->confirm('Do you want to reset database ?')) {
             $this->setDB();
-            $this->info('Database is almost clean!');
         }
 
         //if ($this->confirm('Do you want to clean all storage?')) {
@@ -55,12 +54,10 @@ class Install extends Command
 
         if ($this->confirm('Do you want to update MaxMind IP database and download countries data?')) {
             $this->setGeo();
-            $this->info('Geo data updated and added to database');
         }
 
         if ($this->confirm('Do you want to seed data to database for testing?')) {
             $this->setFakeData();
-            $this->info('Fake data added to database');
         }
 
         $this->call('optimize');
@@ -107,6 +104,10 @@ class Install extends Command
 
         if($fb_secret = $this->ask('Facebook APP secret?')){
             $this->writeNewEnvironmentFileWith('FACEBOOK_APP_SECRET', $fb_secret);
+        }
+
+        if($fb_url = $this->ask('Facebook APP redirect link?')){
+            $this->writeNewEnvironmentFileWith('FACEBOOK_APP_REDIRECT', $fb_url);
         }
 
         if($mc_key = $this->ask('Mailchimp API key?')){

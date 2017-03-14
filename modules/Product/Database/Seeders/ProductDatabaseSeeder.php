@@ -53,7 +53,7 @@ class ProductDatabaseSeeder extends Seeder
 
         $product->setMeta('variants', $faker->words);
 
-        $product->setMeta('category', key($product->categories()[rand(1,13)]['items']));
+        $product->setMeta('category', collect(['FSCL', 'ELPH', 'FSSB'])->random());
 
         $product->markAsActive();
 
