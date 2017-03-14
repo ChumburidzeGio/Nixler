@@ -23,6 +23,8 @@ class StreamController extends Controller
                 ->orderBy('id', 'desc')->take(20)->pluck('id');
 
             auth()->user()->pushInStream($popular, 'popular');
+
+            $products = auth()->user()->stream()->take(20)->get();
         }
 
         return view('stream::index', compact('products'));
