@@ -50,7 +50,7 @@
                             </a>
                             <a href="{{ Auth::check() ? auth()->user()->url : url('/register') }}">
                                 <small class="_clear _cw">
-                                    {{ Auth::check() ? (auth()->user()->email) : 'Or Sign up now' }}
+                                    {{ Auth::check() ? ('@'.auth()->user()->username) : 'Or Sign up now' }}
                                 </small>
                             </a>
                         </div>
