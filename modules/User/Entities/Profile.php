@@ -32,6 +32,9 @@ class Profile extends Model
 
 
     public function attachToUser($name, $email, $gender, $birthday, $photo){
+
+        $user = null;
+        
         //fixme, saving of bd and gender needed
         if($this->user_id){
             $user = User::find($this->user_id);
