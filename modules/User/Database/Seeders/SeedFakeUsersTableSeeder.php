@@ -38,11 +38,16 @@ class SeedFakeUsersTableSeeder extends Seeder
      */
     public function createUser($faker)
     {
-        return User::create([
+        $user = User::create([
             'name' => $faker->name,
             'email' => $faker->email,
             'password' => bcrypt('test')
         ]);
+
+        $user->currency = collect(['USD', 'GEL', 'PLN', 'UAH'])->random();
+        $user->save();
+
+        return $user;
     }
 
 
