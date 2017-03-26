@@ -175,7 +175,7 @@ class Install extends Command
     private function setFakeData()
     {
         $this->call('db:seed', [ '--class' => 'Modules\User\Database\Seeders\SeedFakeUsersTableSeeder' ]);
-        $this->call('db:seed', [ '--class' => 'Modules\User\Database\Seeders\CategoryDatabaseSeeder' ]);
+        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\CategoryDatabaseSeeder' ]);
         $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\ProductDatabaseSeeder' ]);
     }
 
