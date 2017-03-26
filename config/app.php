@@ -192,6 +192,12 @@ return [
         DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         Dimsav\Translatable\TranslatableServiceProvider::class,
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        Dawson\AmazonECS\AmazonECSServiceProvider::class,
+        Cviebrock\EloquentTaggable\ServiceProvider::class,
+        Jenssegers\Agent\AgentServiceProvider::class,
+        Spatie\CookieConsent\CookieConsentServiceProvider::class,
+
 
     ],
 
@@ -246,6 +252,8 @@ return [
         //'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Module' => Nwidart\Modules\Facades\Module::class,
+        'Amazon' => Dawson\AmazonECS\AmazonECSFacade::class,
+        'Agent' => Jenssegers\Agent\Facades\Agent::class,
     ],
 
 ];

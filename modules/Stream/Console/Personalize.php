@@ -1,9 +1,10 @@
 <?php
 
-namespace Modules\Stream\Http\Console;
+namespace Modules\Stream\Console;
 
 use Illuminate\Console\Command;
-use Bouncer;
+use Modules\User\Entities\User;
+use Modules\Product\Entities\Product;
 
 class Personalize extends Command
 {
@@ -21,6 +22,7 @@ class Personalize extends Command
      */
     protected $description = 'Create personalized list of products for particular user';
 
+    protected $user = null;
 
     /**
      * Execute the console command.
@@ -37,6 +39,7 @@ class Personalize extends Command
      * 9. Religious and political affiliations
      * 10. Education and work history
      * 11. Books user wants to read and showes/movies wants to watch
+     * 12. Languages that user knows (to show just products in known languages)
      *
      * Things to define based on this data:
      * 1. Gender
@@ -51,17 +54,89 @@ class Personalize extends Command
      */
     public function handle()
     {
-        
+        $this->setUser();
+
+        return $this->getProducts();
     }
 
     /**
-     * Get the gender of user
+     * List of products for user based on preferences
      *
      * @return string|null
      */
-    public function getPreferedCategories($model)
+    public function setUser()
     {
-        
+        if(auth()->check()){
+            $this->user = auth()->user();
+        } else {
+            $this->user = User::with('liked', 'liked.meta', 'followings', 'products', 'products.meta')->whereId($this->argument('user'))->firstOrFail();
+        }
+    }
+
+    /**
+     * List of products for user based on preferences
+     *
+     * @return string|null
+     */
+    public function getProducts()
+    {
+        $categories = $this->getCategories();
+
+        $accounts = $this->getAccounts();
+
+        $tags = $this->getTags();
+
+        $by_cat = Product::whereMetaIn('category', $categories)->take(20)->get();
+
+        $by_acc = Product::whereIn('owner_id', $accounts)->take(30)->get();
+
+        $by_tags = Product::withAnyTags($tags)->take(30)->get();
+
+        return $by_cat->merge($by_acc, $by_tags);
+    }
+
+    /**
+     * Get the list of interesting categories for model - categories of products user likes, categories of products user published
+     *
+     * @return string|null
+     */
+    public function getCategories()
+    {
+        $from_likes = $this->user->liked->map(function($item){
+            return $item->getMeta('category');
+        });
+
+        $from_products = $this->user->products->map(function($item){
+            return $item->getMeta('category');
+        });
+
+        return $from_products->merge($from_likes)->unique()->toArray();
+    }
+
+    /**
+     * Get list of interesting people for model - owners of products that user likes, people who user follows
+     *
+     * @return string|null
+     */
+    public function getAccounts()
+    {
+        $from_likes = $this->user->liked->map(function($item){
+            return $item->owner_id;
+        });
+
+        $from_followings = $this->user->followings->pluck('id');
+
+        return $from_likes->merge($from_followings)->unique()->toArray();
+    }
+
+    /**
+     * Get list of interesting tags for model
+     *
+     * @return string|null
+     */
+    public function getTags()
+    {
+        return $this->user->tags()->with('tag')->orderBy('score', 'desc')->get()->pluck('tag.name')->toArray();
     }
 
     /**

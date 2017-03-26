@@ -28,20 +28,6 @@ trait Merchant {
     {   
         return $this->hasMany(ProductStats::class, 'actor');
     }
-    
-    /**
-     *  Relationships
-     */
-    public function createProduct($currency)
-    {   
-        $product = new Product;
-        $product->status = 'inactive';
-        $product->currency = $currency;
-        $product->owner_id = $this->id;
-        $product->owner_username = $this->username;
-        $product->save();
-        return $product;
-    }
 
     
     /**
@@ -78,7 +64,7 @@ trait Merchant {
      */
     public function followCallback($target)
     {   
-        $products = $target->products()->take(10)->latest()->pluck('id');
+        $products = $target->products()->take(10)->orderBy('likes_count', 'desc')->pluck('id');
         $this->pushInStream($products, 'user:'.$target->id);
     }
 

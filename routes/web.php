@@ -1,5 +1,9 @@
 <?php
 
+use \NlpTools\Tokenizers\WhitespaceTokenizer;
+use \NlpTools\Tokenizers\WhitespaceAndPunctuationTokenizer;
+use \NlpTools\Tokenizers\ClassifierBasedTokenizer;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -24,8 +28,6 @@ Route::get('/policy', function(){
 
 Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
-
 Route::get('qw', function(){
 
-        
 });

@@ -6,29 +6,46 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\Product\Entities\Product;
+use Modules\Stream\Repositories\StreamRepository;
 
 class StreamController extends Controller
 {
+
+    /**
+     * @var PostRepository
+     */
+    protected $repository;
+
+    public function __construct(StreamRepository $repository){
+        $this->repository = $repository;
+    }
+
+
     /**
      * Display a listing of the resource.
      * @return Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = auth()->user()->stream()->take(20)->get();
-
-        if($products->count() < 20){
-            $popular = Product::where('status', 'active')
-                ->orderBy('likes_count', 'desc')
-                ->orderBy('id', 'desc')->take(20)->pluck('id');
-
-            auth()->user()->pushInStream($popular, 'popular');
-
-            $products = auth()->user()->stream()->take(20)->get();
+        if($request->has('query')){
+            $products = $this->repository->search($request->input('query'));
+        } else {
+            $products = $this->repository->all();
         }
 
-        return view('stream::index', compact('products'));
+        return $request->isMethod('post') ? $products : view('stream::index', compact('products'));
     }
+
+
+    /**
+     * Display a listing of the resource.
+     * @return Response
+     */
+    public function discover(Request $request)
+    {
+         return $this->repository->discover();
+    }
+
 
     /**
      * Show the form for creating a new resource.

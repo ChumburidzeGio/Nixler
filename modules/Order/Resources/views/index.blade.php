@@ -1,9 +1,18 @@
-@extends('order::layouts.master')
+@extends('layouts.app')
 
 @section('content')
-    <h1>Hello World</h1>
+<div class="container">
 
-    <p>
-        This view is loaded from module: {!! config('order.name') !!}
-    </p>
-@stop
+    <div class="row">
+
+        <div class="col-sm-6 col-sm-offset-2">
+
+            <div class="_brds3 _bgw _clear">
+            You don't have orders yet
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@endsection

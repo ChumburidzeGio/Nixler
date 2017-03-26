@@ -8,8 +8,6 @@ use App\Http\Controllers\Controller;
 use Modules\User\Events\UsernameChanged;
 use Illuminate\Validation\Rule;
 use Modules\Address\Services\LocationService;
-use Modules\Address\Entities\Country;
-use Modules\Address\Entities\ShippingPrice;
 use stdClass;
 
 class SettingsController extends Controller
@@ -232,40 +230,4 @@ class SettingsController extends Controller
                         trans('user::settings.social.updated_status'));
     }
 
-
-
-
-    public function editShipping(Request $request)
-    {
-        $country = Country::where('iso_code', auth()->user()->country)->with('cities')->first();
-
-        $prices = ShippingPrice::where('user_id', auth()->id())->where('type', 'city')->with('city')->get();
-
-        return view('address::settings.shipping', compact('prices', 'country'));
-    }
-
-
-
-    public function saveShipping(Request $request)
-    {
-        $this->validate($request, [
-              'location_id' => 'required',
-              'price' => 'required|numeric|between:0,150000',
-              'window_from' => 'required|numeric|between:0,99',
-              'window_to' => 'required|numeric|min:'.$request->input('window_from').'|max:99',
-        ]);
-
-        $country = ShippingPrice::updateOrCreate([
-            'user_id' => auth()->id(),
-            'location_id' => $request->input('location_id'),
-            'type' => 'city'
-        ], [
-            'price' => $request->input('price'),
-            'window_from' => $request->input('window_from'),
-            'window_to' => $request->input('window_to'),
-        ]);
-
-        return redirect()->route('shipping.settings');
-    }
-    
 }

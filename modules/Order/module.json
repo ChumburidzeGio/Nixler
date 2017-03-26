@@ -6,7 +6,8 @@
     "active": 1,
     "order": 0,
     "providers": [
-        "Modules\\Order\\Providers\\OrderServiceProvider"
+        "Modules\\Order\\Providers\\OrderServiceProvider",
+        "Modules\\Order\\Providers\\OrderAuthServiceProvider"
     ],
     "aliases": {},
     "files": [

@@ -16,6 +16,9 @@ use MediaUploader;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Contracts\Events\Dispatcher;
 use Cviebrock\EloquentSluggable\Sluggable;
+use Modules\Address\Entities\UserAddress;
+use Modules\Stream\Entities\UserTag;
+use Modules\User\Entities\Session;
 
 class User extends Authenticatable
 {
@@ -73,6 +76,24 @@ class User extends Authenticatable
     public function phones()
     {   
         return $this->hasMany(Phone::class, 'user_id');
+    }
+
+
+    public function addresses()
+    {   
+        return $this->hasMany(UserAddress::class, 'user_id');
+    }
+
+
+    public function tags()
+    {   
+        return $this->hasMany(UserTag::class, 'user_id');
+    }
+
+
+    public function sessions()
+    {   
+        return $this->hasMany(Session::class, 'user_id');
     }
 
 

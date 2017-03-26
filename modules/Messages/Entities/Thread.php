@@ -37,7 +37,7 @@ class Thread extends Model
      */
     public function latestMessage()
     {
-        return $this->messages()->orderBy('id','desc')->nPerGroup('thread_id', 1);
+        return $this->messages()->orderBy('id','desc')->nPerGroup(null, 'thread_id', 1);
     }
     
     /**

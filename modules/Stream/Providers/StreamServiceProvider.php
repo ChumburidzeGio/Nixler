@@ -3,6 +3,7 @@
 namespace Modules\Stream\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Stream\Console\Personalize;
 
 class StreamServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,7 @@ class StreamServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
+        $this->registerCommands();
     }
 
     /**
@@ -83,6 +85,21 @@ class StreamServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, 'stream');
         } else {
             $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'stream');
+        }
+    }
+
+
+    /**
+     * Register commands.
+     *
+     * @return void
+     */
+    public function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                Personalize::class,
+            ]);
         }
     }
 

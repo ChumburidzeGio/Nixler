@@ -36,23 +36,23 @@
                     You can manage this product
                     </small>
                     
-                    <a class="_tb _crp _anim1 _fs13 _ls5 _c4" href="{{ route('product:edit', ['id' => $product->id]) }}">
+                    <a class="_tb _crp _anim1 _fs13 _ls5 _c4" href="{{ route('product.edit', ['id' => $product->id]) }}">
                         Edit or Delete
                     </a>
                 </div>
                 @endcan
 
                 <div class="_pl15 _pr10 _pt10 _pb10 _bb1 _posr">
-                    <span class="_c4 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs16">
+                    <span class="_c4 _lh1 _mb0 _telipsis _w80 _clear _pr10 _fs16 _pr15 _mr15">
                         {{ $product->title }}
                     </span>
                     <span class="_cb _clear _fs13  _telipsis _w100 _oh _pr10">
                        {{ $product->currency }} {{ $product->price }}
                     </span>
                     <div class="_a3 _posa _mr15">
-                        <div class="_btn _bga _cb">
+                        <a class="_btn _bga _cb" href="{{ route('order') }}?product_id={{ $product->id }}">
                             BUY NOW
-                        </div>
+                        </a>
                     </div>
                 </div>
 

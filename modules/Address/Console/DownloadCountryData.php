@@ -86,17 +86,16 @@ class DownloadCountryData extends Command
 
 
     private function restCountriesGet($code) {
-
-        return json_decode(((new GuzzleHttp)->request('GET', 'https://restcountries.eu/rest/v2/alpha/'.$code))->getBody());
-
+        $guzzle = new GuzzleHttp;
+        $req = $guzzle->request('GET', 'https://restcountries.eu/rest/v2/alpha/'.$code);
+        return json_decode($req->getBody());
     }
 
 
     private function geonamesGet($id, $locale) {
-
-        $url = 'http://api.geonames.org/getJSON?geonameId='.$id.'&username=nixler';
-        return json_decode(((new GuzzleHttp)->request('GET', $url))->getBody());
-
+        $guzzle = new GuzzleHttp;
+        $req = $guzzle->request('GET', 'http://api.geonames.org/getJSON?geonameId='.$id.'&username=nixler');
+        return json_decode($req->getBody());
     }
 
 

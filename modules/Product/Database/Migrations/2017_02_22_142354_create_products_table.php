@@ -28,6 +28,9 @@ class CreateProductsTable extends Migration
 
             $table->decimal('price', 8, 2)->default(0);
             $table->string('currency', 5)->default('usd');
+            $table->integer('in_stock')->default(0);
+
+            $table->integer('category')->unsigned()->nullable();
 
             $table->integer('likes_count')->default(0);
             $table->timestamps();

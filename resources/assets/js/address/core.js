@@ -1,9 +1,25 @@
-angular.module('address', []).controller('ShipSettingsCtrl', [
+angular.module('address', [])
+
+.controller('ShipSettingsCtrl', [
 	'$http', '$scope', function ($http, $scope) {
 
 		var vm = this;
 		vm.cities = window.cities;
 
-		//temp
+	}])
+
+.controller('AddressSettingsCtrl', [
+	'$http', '$scope', function ($http, $scope) {
+
+		var vm = this;
+		vm.cities = window.cities;
+		vm.location_id = null;
+
+		vm.delete = function(url){
+
+			$http.delete(url).then(function(){
+				window.location.reload(); 
+			});
+		}
 
 	}]);

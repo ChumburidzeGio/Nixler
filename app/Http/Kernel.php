@@ -35,6 +35,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \Modules\User\Http\Middleware\SetUserGeoDataMiddleware::class,
+            \Modules\User\Http\Middleware\UserLastLoginMiddleware::class,
         ],
 
         'api' => [

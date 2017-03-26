@@ -10,15 +10,18 @@ use Plank\Metable\Metable;
 use MediaUploader;
 use Laravel\Scout\Searchable;
 use Modules\Comment\Traits\HasComments;
+use Modules\User\Entities\User;
+use App\Traits\NPerGroup;
+use Cviebrock\EloquentTaggable\Taggable;
 
 class Product extends Model
 {
-	use Mediable, Metable, Sluggable, HasComments, Searchable;
+	use Mediable, Metable, Sluggable, HasComments, Searchable, NPerGroup, Taggable;
 	
     public $table = 'products';
     
     protected $fillable  = [
-        'title', 'description',  'price'
+        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category', 'in_stock'
     ];
 
     /**
@@ -60,6 +63,26 @@ class Product extends Model
         return url('@'.$this->owner_username.'/'.$this->slug.'/'.$ending);
     }
 
+
+    /**
+     * Get first media relation for product
+     *
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function firstPhoto()
+    {
+        return $this->belongsToMany(config('mediable.model'), 'mediables', 'mediable_id', 'media_id')->latest()->nPerGroup('mediables', 'media_id', 1);
+    }
+
+    
+    /**
+     *  Relationships
+     */
+    public function owner()
+    {   
+        return $this->hasOne(User::class,'id', 'owner_id');
+    }
+
     
     /**
      *  Relationships
@@ -69,23 +92,6 @@ class Product extends Model
         return $this->hasMany(ProductLike::class, 'object');
     }
 
-    
-    /**
-     *  Relationships
-     */
-    public function stats()
-    {   
-        return $this->hasMany(ProductStats::class, 'object');
-    }
-
-    
-    /**
-     *  Relationships
-     */
-    public function statistics()
-    {   
-        return (new ProductStats)->calculate($this->stats()->get());
-    }
     
     /**
      *  Relationships
@@ -155,25 +161,6 @@ class Product extends Model
     }
 
 
-    public function like($data, $actor = null){
-
-        if(is_null($actor)) $actor = auth()->user();
-
-        $like = $this->likes()->firstOrCreate([
-            'actor' => $actor->id
-        ]);
-
-        if($like->wasRecentlyCreated){
-            $data['actor'] = $actor->id;
-            $data['action'] = 'like';
-            $this->stats()->create($data);
-            return true;
-        }
-
-        return !$like->delete();
-    }
-
-
 
     public function isLiked($actor = null){
 
@@ -213,7 +200,6 @@ class Product extends Model
             $media = MediaUploader::fromString($image)
             ->toDirectory('users/'.$prop)
             ->useHashForFilename()
-            ->onDuplicateReplace()
             ->setAllowedAggregateTypes(['image'])
             ->setStrictTypeChecking(true)
             ->upload();
@@ -230,8 +216,6 @@ class Product extends Model
 
 
 
-    
-
     /**
      *  Upload photo to model
      */
@@ -239,6 +223,19 @@ class Product extends Model
 
         return config('data.product_categories');
 
+    }
+
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        return array_intersect_key($array, array_flip(['title']));
     }
     
 }

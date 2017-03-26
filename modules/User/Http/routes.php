@@ -38,10 +38,6 @@ Route::group(['middleware' => 'web', 'namespace' => 'Modules\User\Http\Controlle
 		//Locale
 		Route::post('locale', 'SettingsController@updateLocale');
 
-		//Shipping
-		Route::get('shipping', 'SettingsController@editShipping')->name('shipping.settings');
-		Route::post('shipping/locations', 'SettingsController@saveShipping')->name('shipping.settings.locations.create');
-
 	});
 
 });

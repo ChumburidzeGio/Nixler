@@ -7,10 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use Faker\Factory;
 use Faker\Generator;
 use Modules\Product\Entities\Product;
+use Modules\Product\Entities\Category;
 use Modules\User\Entities\User;
+use Modules\Product\Repositories\ProductRepository;
 
 class ProductDatabaseSeeder extends Seeder
 {
+    /**
+     * @var PostRepository
+     */
+    protected $repository;
+
+    protected $categories;
+
+    public function __construct(ProductRepository $repository){
+        $this->repository = $repository;
+    }
+
+    
     /**
      * Run the database seeds.
      *
@@ -20,11 +34,17 @@ class ProductDatabaseSeeder extends Seeder
     {
         Model::unguard();
         
+        if(!Category::count()){
+            $this->call(CategoryDatabaseSeeder::class);
+        }
+
+        $this->categories = Category::pluck('id');
+
         foreach (config('test.locales') as $locale) {
            
             $faker = Factory::create($locale);
 
-            for ($i=0; $i < config('test.models_per_locale.products'); $i++) { 
+            for ($i=0; $i < 3000; $i++) { 
                 $product = $this->createProduct($faker);
                 $this->uploadPhotos($product, $faker);
             }
@@ -39,21 +59,21 @@ class ProductDatabaseSeeder extends Seeder
      */
     public function createProduct($faker)
     {
-        $user = User::inRandomOrder()->first();
+        $user = User::inRandomOrder()->whereNotNull('currency')->first();
 
         auth()->login($user);
 
-        $product = $user->createProduct($faker->currencyCode);
+        $product = $this->repository->create();
 
         $product->update([
             'title' => $faker->sentence(),
             'description' => $faker->paragraph(),
-            'price' => $faker->randomFloat(2, 2, 500)
+            'price' => $faker->randomFloat(2, 2, 500),
+            'category' => $this->categories->random(),
+            'in_stock' => $faker->randomDigit()
         ]);
 
         $product->setMeta('variants', $faker->words);
-
-        $product->setMeta('category', collect(['FSCL', 'ELPH', 'FSSB'])->random());
 
         $product->markAsActive();
 

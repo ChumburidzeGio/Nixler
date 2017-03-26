@@ -4,6 +4,7 @@ namespace Modules\User\Http\Middleware;
 
 use Closure;
 use Carbon\Carbon;
+use Modules\User\Entities\UserSession;
 
 class UserLastLoginMiddleware
 {
@@ -16,9 +17,7 @@ class UserLastLoginMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->check()){
-            auth()->user()->setMeta('last_activity', Carbon::now());
-        }
+        UserSession::log();
 
         return $next($request);
     }

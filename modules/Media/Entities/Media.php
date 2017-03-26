@@ -3,10 +3,12 @@
 namespace Modules\Media\Entities;
 
 use Plank\Mediable\Media as PlankMedia;
+use App\Traits\NPerGroup;
 
 class Media extends PlankMedia
 {
-
+	use NPerGroup;
+	
     /**
      *  Get the avatar
      */

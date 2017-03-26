@@ -91,6 +91,7 @@ return [
                 'user_photos' => [300, 150],
                 'thumb' => [100, 100],
                 'thumb_s' => [50, 50],
+                'order_cover' => [460, 460],
             ] 
         ],
         'product' => [

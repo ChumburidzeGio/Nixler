@@ -49,4 +49,13 @@ return [
         'version' => '5.62',
     ],
 
+    'yandex' => [
+        'trans' => [
+            'key' => 'trnsl.1.1.20170324T084419Z.393a0035a180df56.a7710ae0ada5061c0935fd67bb9dc8f639754dc2',
+        ],
+        'dict' => [
+            'key' => 'dict.1.1.20170324T084937Z.34c2244ec10e0112.e7294451e83ac7e1fdb892bddaed91318b4f220a',
+        ],
+    ],
+
 ];

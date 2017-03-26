@@ -22,4 +22,7 @@ class ShippingPrice extends Model
         return $this->hasOne(City::class, 'id', 'location_id');
     }
 
+    public function getSidAttribute(){
+        return $this->attributes['type'].$this->attributes['location_id'].$this->attributes['id'];
+    }
 }

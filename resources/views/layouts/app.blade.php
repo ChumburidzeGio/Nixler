@@ -14,7 +14,6 @@
 
             <div class="_dib _right _tbs">
                 @if(auth()->check())
-                <a href="{{ url('search') }}" class="_tb"><i class="material-icons _cinherit _fs20 _mt10">search</i> </a>
 
                 <a href="{{ route('threads') }}" class="_tb _posr">
                     <i class="material-icons _cinherit _fs20 _mt10">message</i> 
@@ -63,6 +62,9 @@
                     <a href="{{ auth()->user()->link() }}" class="_li _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">person</i> Profile
                     </a>
+                    <a href="{{ route('orders') }}" class="_li _hvrd _cg">
+                        <i class="material-icons _fs20 _mr15">shopping_basket</i> Orders
+                    </a>
                     <a href="{{ url('/new-product') }}" class="_li _hvrd _cg _bb1">
                         <i class="material-icons _fs20 _mr15">add</i> Add Product
                     </a>
@@ -97,6 +99,7 @@
 
 <!-- Scripts -->
 <script src="{{ url('js/app.js') }}"></script>
+@include('cookieConsent::index')
 
 </body>
 

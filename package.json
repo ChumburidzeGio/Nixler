@@ -16,6 +16,7 @@
     "angular-selector": "^1.5.0",
     "angular-sortable-view": "0.0.15",
     "angular-timeago": "^0.4.4",
+    "angular-tooltips": "^1.1.10",
     "angularjs-scroll-glue": "^2.2.0",
     "bootstrap-sass": "^3.3.7",
     "confirm-click": "^0.7.0",

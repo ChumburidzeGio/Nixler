@@ -17,6 +17,7 @@
  require('ng-dialog');
  require('angularjs-scroll-glue');
  require('angular-numeric-input');
+ require('angular-tooltips');
 
  require('./utils/core');
  require('./product/core');
@@ -24,6 +25,8 @@
  require('./messages/core');
  require('./nav/nav.ctrl');
  require('./address/core');
+ require('./order/core');
+ require('./stream/core');
 
  var app = angular.module('nx', [
  	'utils',
@@ -42,7 +45,10 @@
  	'ngDialog',
  	'messages',
  	'luegg.directives',
-    'ui.numericInput'
+    'ui.numericInput',
+    'order',
+    '720kb.tooltips',
+    'stream'
    ]);
 
  app.factory('httpRequestInterceptor', function () {
@@ -70,6 +76,12 @@
 
 }]);
 
+
+app.filter('boolean', function() {
+    return function(input) {
+        return input ? 1 : 0;
+    }
+});
 
 
 if (!Array.prototype.last){
