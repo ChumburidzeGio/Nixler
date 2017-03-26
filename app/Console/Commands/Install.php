@@ -94,8 +94,31 @@ class Install extends Command
             $this->writeNewEnvironmentFileWith('DB_PASSWORD', $db_pass);
         }
 
-        if($mg_sec = $this->ask('Mailgun secret?')){
-            $this->writeNewEnvironmentFileWith('MAILGUN_SECRET', $mg_sec);
+        if($env != 'production'){
+
+            $this->writeNewEnvironmentFileWith('MAIL_DRIVER', 'mailtrap');
+            $this->writeNewEnvironmentFileWith('MAIL_HOST', 'smtp.mailtrap.io');
+            $this->writeNewEnvironmentFileWith('MAIL_PORT', '2525');
+
+            if($mt_user = $this->ask('Mailtrap username?')){
+                $this->writeNewEnvironmentFileWith('MAIL_USERNAME', $mt_user);
+            }
+
+            if($mt_pass = $this->ask('Mailtrap password?')){
+                $this->writeNewEnvironmentFileWith('MAIL_PASSWORD', $mt_pass);
+            }
+
+        } else {
+
+            $this->writeNewEnvironmentFileWith('MAIL_DRIVER', 'mailgun');
+            $this->writeNewEnvironmentFileWith('MAIL_HOST', 'smtp.mailgun.org');
+            $this->writeNewEnvironmentFileWith('MAIL_PORT', '587');
+            $this->writeNewEnvironmentFileWith('MAILGUN_DOMAIN', 'mail.nixler.pl');
+
+            if($mg_sec = $this->ask('Mailgun secret?')){
+                $this->writeNewEnvironmentFileWith('MAILGUN_SECRET', $mg_sec);
+            }
+
         }
 
         if($fb_id = $this->ask('Facebook APP ID?')){
