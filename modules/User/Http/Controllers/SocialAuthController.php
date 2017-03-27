@@ -44,8 +44,8 @@ class SocialAuthController extends Controller
         $id = $socialUser->getId();
         $name = $socialUser->getName();
         $email = $socialUser->getEmail();
-        $gender = $socialUser['original']['gender'];
-        $birthday = $socialUser['original']['birthday'];
+        $gender = $socialUser->offsetExists('gender') ? $socialUser->offsetGet('gender') : null;
+        $birthday = $socialUser->offsetExists('birthday') ? $socialUser->offsetGet('birthday') : null;
         $photo =  $socialUser->getAvatar();
 
         if($provider == 'facebook'){
