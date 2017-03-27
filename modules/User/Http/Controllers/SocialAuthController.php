@@ -7,16 +7,10 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 
 use Modules\User\Entities\Profile;
-use Overtrue\Socialite\SocialiteManager;
+use Socialite;
 
 class SocialAuthController extends Controller
 {
-
-    protected $socialite;
-
-    public function __construct(){
-        $this->socialite = new SocialiteManager(config('services'));
-    }
 
     public function redirect($provider)
     {
@@ -24,7 +18,7 @@ class SocialAuthController extends Controller
             return redirect()->back();
         }
 
-        $socialite = $this->socialite->driver($provider);
+        $socialite = Socialite::driver($provider);
         $fields = config('services.'.$provider.'.fields');
         $scopes = config('services.'.$provider.'.scopes');
 
@@ -40,7 +34,7 @@ class SocialAuthController extends Controller
             return [];
         }
 
-        $socialUser = $this->socialite->driver($provider);
+        $socialUser = Socialite::driver($provider);
         $fields = config('services.'.$provider.'.fields');
 
         if($fields) $socialUser = $socialUser->fields($fields);

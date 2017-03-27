@@ -197,6 +197,7 @@ return [
         Cviebrock\EloquentTaggable\ServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Spatie\CookieConsent\CookieConsentServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
 
     ],
@@ -254,6 +255,7 @@ return [
         'Module' => Nwidart\Modules\Facades\Module::class,
         'Amazon' => Dawson\AmazonECS\AmazonECSFacade::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
     ],
 
 ];
