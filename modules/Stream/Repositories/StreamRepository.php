@@ -98,7 +98,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
-        //return (new RecommService)->recommendations(auth()->id(), 5);
+        return (new RecommService)->recommendations(28, 5);
 
         return (new RecommService)->similar(211, 5, auth()->id());
 
