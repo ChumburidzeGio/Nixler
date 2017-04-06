@@ -104,6 +104,9 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
+        $product = Product::first();
+
+        return (new RecommService)->addProduct($product);
         //return request()->has('user_id') ? (new RecommService)->recommendations(request()->input('user_id'), 5) : 
            // (new RecommService)->similar(request()->input('pid'), 5);
 

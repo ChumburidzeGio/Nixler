@@ -165,13 +165,7 @@ class Install extends Command
      */
     private function setRecomm()
     {
-        (new RecommService)->addProp('price', 'double');
-        (new RecommService)->addProp('title', 'string');
-        (new RecommService)->addProp('description', 'string');
-        (new RecommService)->addProp('likes_count', 'int');
-        (new RecommService)->addProp('updated_at', 'timestamp');
-        (new RecommService)->addProp('created_at', 'timestamp');
-        (new RecommService)->addProp('user_id', 'int');
+        (new RecommService)->addProductProps();
     }
 
     /**

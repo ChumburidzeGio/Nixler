@@ -3,6 +3,8 @@
 namespace Modules\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Product\Observers\ProductObserver;
+use Modules\Product\Entities\Product;
 
 class ProductServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,8 @@ class ProductServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Product::observe(ProductObserver::class);
+        
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();

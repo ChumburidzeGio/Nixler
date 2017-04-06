@@ -16,7 +16,7 @@ class RecommService {
      */
     public function __construct()
     {	
-    	$this->client = new Client('nixler', 'DaLxkWAdffLwmeU2orojf6s2ua6gMLdubZh2RGvDdA8Q062mf9je9o5Rk7KgVGOE');
+    	$this->client = new Client('nixler', 'DaLxkWAdffLwmeU2orojf6s2ua6gMLdubZh2RGvDdA8Q062mf9je9o5Rk7KgVGOE', 'https');
     }
 
 
@@ -109,12 +109,71 @@ class RecommService {
      * @return string
      */
     public function recommendations($actor, $count, $params = [])
-    {	
+    {   
         $params = array_merge($params, [
             'allowNonexistent' => 1
         ]);
 
-        return $this->client->send(new Reqs\UserBasedRecommendation($actor, $count, $params));
+        $request = new Reqs\UserBasedRecommendation($actor, $count, $params);
+
+        $request->setTimeout(1);
+
+        try {
+            return $this->client->send($request);
+        } catch(\Exception $e) {
+            return [];
+        }
+    }
+
+
+    /**
+     * Add activity to Keen
+     *
+     * @return string
+     */
+    public function addProduct($product)
+    {   
+        $addItem = new Reqs\AddItem($product->id);
+
+        $setValues = new Reqs\SetItemValues($product->id, [
+            'price' => $product->price,
+            'title' => $product->title,
+            'likes_count' => $product->likes_count,
+            'updated_at' => $product->updated_at,
+            'created_at' => $product->created_at,
+            'user_id' => $product->owner_id
+        ], [
+          'cascadeCreate' => true
+        ]);
+
+        return $this->client->send(new Reqs\Batch([$addItem, $setValues]));
+    }
+
+
+    /**
+     * Add activity to Keen
+     *
+     * @return string
+     */
+    public function removeProduct($product)
+    {   
+        return $this->client->send(new Reqs\DeleteItem($product->id));
+    }
+
+
+    /**
+     * Add activity to Keen
+     *
+     * @return string
+     */
+    public function addProductProps()
+    {	
+        $this->addProp('price', 'double');
+        $this->addProp('title', 'string');
+        $this->addProp('likes_count', 'int');
+        $this->addProp('updated_at', 'timestamp');
+        $this->addProp('created_at', 'timestamp');
+        $this->addProp('user_id', 'int');
     }
 
 }
