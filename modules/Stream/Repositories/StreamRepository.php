@@ -98,17 +98,8 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
-        return (new RecommService)->recommendations(28, 5);
-
-        return (new RecommService)->similar(211, 5, auth()->id());
-
-        (new RecommService)->addProp('price', 'double');
-        (new RecommService)->addProp('title', 'string');
-        (new RecommService)->addProp('description', 'string');
-        (new RecommService)->addProp('likes_count', 'int');
-        (new RecommService)->addProp('updated_at', 'timestamp');
-        (new RecommService)->addProp('created_at', 'timestamp');
-        (new RecommService)->addProp('user_id', 'int');
+        return request()->has('user_id') ? (new RecommService)->recommendations(request()->input('user_id'), 5) : 
+            (new RecommService)->similar(request()->input('pid'), 5);
 
         $verb = ['product:liked', 'product:purchased', 'product:viewed'];
 

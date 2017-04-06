@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use Modules\Stream\Services\RecommService;
 use DB;
 
 class Install extends Command
@@ -54,6 +55,10 @@ class Install extends Command
 
         if ($this->confirm('Do you want to update MaxMind IP database and download countries data?')) {
             $this->setGeo();
+        }
+
+        if ($this->confirm('Set Recommender props')) {
+            $this->setRecomm();
         }
 
         if ($this->confirm('Do you want to seed data to database for testing?')) {
@@ -151,6 +156,22 @@ class Install extends Command
         $this->call('migrate');
         $this->call('module:migrate');
         $this->call('scout:mysql-index', [ 'model' => 'Modules\\Product\\Entities\\Product' ]);
+    }
+
+    /**
+     * Remove all tables from database
+     *
+     * @return mixed
+     */
+    private function setRecomm()
+    {
+        (new RecommService)->addProp('price', 'double');
+        (new RecommService)->addProp('title', 'string');
+        (new RecommService)->addProp('description', 'string');
+        (new RecommService)->addProp('likes_count', 'int');
+        (new RecommService)->addProp('updated_at', 'timestamp');
+        (new RecommService)->addProp('created_at', 'timestamp');
+        (new RecommService)->addProp('user_id', 'int');
     }
 
     /**
