@@ -110,6 +110,10 @@ class RecommService {
      */
     public function recommendations($actor, $count, $params = [])
     {	
+        $params = array_merge($params, [
+            'allowNonexistent' => 1
+        ]);
+
         return $this->client->send(new Reqs\UserBasedRecommendation($actor, $count, $params));
     }
 
