@@ -168,6 +168,8 @@ class RecommService {
      */
     public function addProductProps()
     {	
+        $this->client->send(new Reqs\ResetDatabase());
+        
         $this->addProp('price', 'double');
         $this->addProp('title', 'string');
         $this->addProp('likes_count', 'int');
