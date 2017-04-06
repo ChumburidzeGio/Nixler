@@ -42,7 +42,7 @@
 							<div class="col-sm-7 _mb15">
 								<small class="_clear _pb5">Product name</small>
 
-								<input name="title" type="text" required name="title" minlength="2" maxlength="90" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ $product->title }}"> 
+								<input id="title" type="text" required name="title" minlength="2" maxlength="90" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ $product->title }}"> 
 
 								@if ($errors->has('title'))
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('title') }}</span>
@@ -52,6 +52,7 @@
 							<div class="col-sm-5 _mb15">
 								<small class="_clear _pb5">Category</small>
 
+								<div id="category">
 								<select selector
 									model="vm.category"
 									value-attr="value"
@@ -69,6 +70,8 @@
 									@endforeach
 									
 								</select>
+								</div>
+
 								<input type="hidden" name="category" ng-value="vm.category">
 
 								@if ($errors->has('category'))
@@ -83,7 +86,7 @@
 
 						<small class="_clear _pb5">Product description</small>
 
-						<textarea name="description" type="text" name="description" class="_b1 _bcg _fe _brds3 _mih70" msd-elastic ng-model="vm.description" rows="8" ng-init="vm.description='{{ addslashes($product->description) }}'"></textarea>
+						<textarea type="text" class="_b1 _bcg _fe _brds3 _mih70" msd-elastic ng-model="vm.description" rows="8" ng-init="vm.description='{{ addslashes($product->description) }}'" id="description" name="description"></textarea>
 
 						@if ($errors->has('decription'))
 						<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('decription') }}</span>
@@ -93,7 +96,7 @@
 							<div class="col-sm-3 _mb15">
 								<small class="_clear _pb5">Price</small>
 
-								<input placeholder="" class="_b1 _bcg _fe _brds3 _fes" name="price" type="text" ng-currency min="1" ng-required="true" currency-symbol="{{ $product->currency }} " ng-model="vm.price" ng-init="vm.price={{ $product->price }}">
+								<input placeholder="" class="_b1 _bcg _fe _brds3 _fes" id="price" type="text" ng-currency min="1" ng-required="true" currency-symbol="{{ $product->currency }} " ng-model="vm.price" ng-init="vm.price={{ $product->price }}" name="price">
 
 								@if ($errors->has('price'))
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('price') }}</span>
@@ -102,7 +105,7 @@
 							<div class="col-sm-3 _mb15">
 								<small class="_clear _pb5">In stock</small>
 
-								<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="12" ui-numeric-input min="0" max="500" max-length="3" ng-init="vm.in_stock={{ $product->in_stock }}" name="in_stock">
+								<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="12" ui-numeric-input min="0" max="500" max-length="3" ng-init="vm.in_stock={{ $product->in_stock }}" id="in_stock" name="in_stock">
 
 								@if ($errors->has('in_stock'))
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('in_stock') }}</span>
@@ -170,11 +173,11 @@
 				@endif
 
 				@if($product->is_inactive)
-				<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish"> 
+				<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish" id="publish"> 
 					<i class="material-icons _mr5 _va5 _fs20">store</i> Publish
 				</button>
 				@else
-				<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish"> 
+				<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish" id="publish"> 
 					<i class="material-icons _mr5 _va5 _fs20">update</i> Update
 				</button>
 				@endif

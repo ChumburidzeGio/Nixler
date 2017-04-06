@@ -4,6 +4,8 @@ namespace Modules\Stream\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Modules\Stream\Console\Personalize;
+use Modules\Stream\Observers\ActivityObserver;
+use Modules\Stream\Entities\Activity;
 
 class StreamServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,8 @@ class StreamServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Activity::observe(ActivityObserver::class);
+        
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();

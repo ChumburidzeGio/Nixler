@@ -5,13 +5,9 @@
 
     <div class="row">
 
-        <div class="col-sm-6 col-sm-offset-2">
-
-            <div class="_brds3 _bgw _clear">
-            You don't have orders yet
+            <div class="_brds3 _bgw _clear _p15 _b1 _tac _mih150 _posr">
+            <span class="_a0 _posa">You don't have orders yet</span>
             </div>
-
-        </div>
     </div>
 </div>
 

@@ -15,6 +15,7 @@
 
 
                 <div class="_lim _clear _mt5 _mb5">
+                    @if($order->product)
                     <img src="{{ $order->product->firstMedia('photo')->photo('thumb') }}" class="_left _dib" height="100" width="100">
                     <div class="_pl15 _pr15 _pb10 _oh">
                         <a class="_cbt8 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs18" href="{{ $order->product->url() }}">
@@ -27,6 +28,7 @@
                             {{ $order->currency }} {{ $order->product->price }}
                         </span>
                     </div>
+                    @endif
                 </div>
 
                 <div class="_p15 _pt2 _cb _bb1 _bt1">
@@ -65,7 +67,7 @@
                     <li class="_clear">
                         <span class="_cg">Total</span>:  
                         <span>
-                            {{ $order->product->currency }} {{ $order->amount }}
+                            {{ $order->currency }} {{ $order->amount }}
                         </span>
                     </li>
 
@@ -175,11 +177,13 @@
                         <i class="material-icons _mr15 _va7 _fs18 _left _mt5">
                             {{ $item->user_id == auth()->id() ? 'call_made' : 'call_received'}}
                         </i> 
-                        Order #{{ $item->id }} ({{ $item->product->currency }} {{ $item->amount }})
+                        Order #{{ $item->id }} ({{ $item->currency }} {{ $item->amount }})
                         <span class="_pl5 _pr5 _c2 _fs13 _brds3 _mr5 _dib _m5 {{ $order->id == $item->id ? '_bgw' :'_bg5' }}">
                             {{ $item->status }}
                         </span>
+                        @if($item->product)
                         <div class="_clear _fs13"> {{ $item->product->title }} </div>
+                        @endif
                         <div class="_clear _fs13 _c2">
                             Delivery at {{ $item->shipping_window_from->format('F jS') }} - {{ $item->shipping_window_to->format('F jS') }} for {{ $item->currency }} {{ $item->shipping_cost }}
                         </div>

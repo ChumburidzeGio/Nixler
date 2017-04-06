@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserTagsTable extends Migration
+class CreateActivitiesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,14 @@ class CreateUserTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_tags', function (Blueprint $table) {
+        Schema::create('activities', function (Blueprint $table) {
 
             $table->bigIncrements('id');
-            $table->integer('user_id')->index();
-            $table->integer('tag_id');
-            $table->integer('score')->default(0);
+            $table->string('verb')->index();
+            $table->integer('actor')->index();
+            $table->integer('object')->index();
+            $table->string('object_type')->index();
+            $table->boolean('new')->default(1);
             $table->timestamps();
 
         });
@@ -31,6 +33,6 @@ class CreateUserTagsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_tags');
+        Schema::dropIfExists('activities');
     }
 }

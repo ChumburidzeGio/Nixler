@@ -14,6 +14,10 @@ use Modules\Product\Entities\Product;
 use Modules\Stream\Console\Personalize;
 use DB;
 use Cviebrock\EloquentTaggable\Models\Tag;
+use Modules\Stream\Entities\Activity;
+use Carbon\Carbon;
+use Modules\Stream\Services\KeenService;
+use Modules\Stream\Services\RecommService;
 
 class StreamRepository extends BaseRepository implements CacheableInterface {
 
@@ -43,8 +47,12 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
         $products = $user->stream()->with('firstPhoto', 'owner')->paginate(20);
 
         if($products->count() < 9){
+
             $popular = Product::where('status', 'active')
                 ->orderBy('likes_count', 'desc')
+                ->whereHas('owner', function($q){
+                    $q->where('country', auth()->user()->country);
+                })
                 ->orderBy('id', 'desc')->take(20)->pluck('id');
 
             $user->pushInStream($popular, 'popular');
@@ -58,7 +66,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
         $resource->setPaginator(new IlluminatePaginatorAdapter($products));
 
-        return $manager->createData($resource)->toJson();
+        return $manager->createData($resource);
     }
 
 
@@ -79,7 +87,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
         $resource->setPaginator(new IlluminatePaginatorAdapter($products));
 
-        return $manager->createData($resource)->toJson();
+        return $manager->createData($resource);
     }
 
 
@@ -90,10 +98,58 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
-        $user = auth()->user();
+        //return (new RecommService)->recommendations(auth()->id(), 5);
 
-        $products = (new Personalize)->handle();
+        return (new RecommService)->similar(211, 5, auth()->id());
 
-        return compact('products');
+        (new RecommService)->addProp('price', 'double');
+        (new RecommService)->addProp('title', 'string');
+        (new RecommService)->addProp('description', 'string');
+        (new RecommService)->addProp('likes_count', 'int');
+        (new RecommService)->addProp('updated_at', 'timestamp');
+        (new RecommService)->addProp('created_at', 'timestamp');
+        (new RecommService)->addProp('user_id', 'int');
+
+        $verb = ['product:liked', 'product:purchased', 'product:viewed'];
+
+        $activities = Activity::where('new', 1)->whereIn('verb', $verb)->get();
+
+        return (new RecommService)->push($activities);
+
+        $activities->load('mobject', 'mactor');
+
+        $activities = $activities->map(function($item){
+            return [
+                'id' => $item->id,
+                'verb' => $item->verb,
+                'actor_id' => $item->mactor->id,
+                'actor_country' => $item->mactor->country,
+                'actor_locale' => $item->mactor->locale,
+                'object_id' => $item->mobject->id,
+                'object_price' => $item->mobject->price,
+                'object_currency' => $item->mobject->currency,
+                'object_category' => $item->mobject->category,
+                'object_likes_count' => $item->mobject->likes_count,
+            ];
+        })->groupBy('verb')->toArray();
+
+
+        Activity::where('new', 0)->whereIn('verb', $verb)->update([
+          'new' => 0
+        ]);
+
+        return ;
+
+        $query = Activity::select('object', DB::raw('count(activities.object) as total'))
+                    ->whereIn('verb', ['product:viewed', 'product:liked'])
+                    ->groupBy('object')
+                    ->orderBy('total','desc')
+                    ->whereBetween('activities.created_at', [Carbon::now()->subWeek(), Carbon::now()]);
+
+        return [
+            'products' => $query->pluck('object'),
+            'users' => $query->join('products as p', 'activities.object', 'p.id')->addSelect('p.owner_id')
+                    ->groupBy('owner_id')->get()
+        ];
     }
 }

@@ -10,27 +10,17 @@ use Modules\Product\Entities\Product;
 use Modules\Product\Entities\Category;
 use Modules\User\Entities\User;
 use Modules\Product\Repositories\ProductRepository;
+use Amazon, DB;
 
 class ProductDatabaseSeeder extends Seeder
 {
-    /**
-     * @var PostRepository
-     */
-    protected $repository;
-
-    protected $categories;
-
-    public function __construct(ProductRepository $repository){
-        $this->repository = $repository;
-    }
-
     
     /**
      * Run the database seeds.
      *
      * @return void
      */
-    public function run()
+    public function run(ProductRepository $repository)
     {
         Model::unguard();
         
@@ -38,61 +28,49 @@ class ProductDatabaseSeeder extends Seeder
             $this->call(CategoryDatabaseSeeder::class);
         }
 
-        $this->categories = Category::pluck('id');
+        $iphone = array_get(Amazon::search('iphone')->json(), 'Items.Item');
+        $samsung = array_get(Amazon::search('samsung')->json(), 'Items.Item');
+        $iphone6 = array_get(Amazon::search('iphone 6')->json(), 'Items.Item');
+        $macbook = array_get(Amazon::search('macbook')->json(), 'Items.Item');
+        $nikon = array_get(Amazon::search('nikon')->json(), 'Items.Item');
+        $canon = array_get(Amazon::search('canon')->json(), 'Items.Item');
+        $lexar = array_get(Amazon::search('lexar')->json(), 'Items.Item');
+        $items = array_merge($iphone, $samsung, $iphone6, $macbook, $nikon, $canon, $lexar);
 
-        foreach (config('test.locales') as $locale) {
-           
-            $faker = Factory::create($locale);
+        DB::transaction(function () use ($items, $repository) {
 
-            for ($i=0; $i < 3000; $i++) { 
-                $product = $this->createProduct($faker);
-                $this->uploadPhotos($product, $faker);
-            }
-        }
+            collect($items)->map(function($item) use ($repository) {
+
+                auth()->login(User::inRandomOrder()->whereNotNull('currency')->first());
+
+                $product = $repository->create();
+
+                $features = array_get($item, 'ItemAttributes.Feature');
+
+                $product->fill([
+                    'title' => str_limit(array_get($item, 'ItemAttributes.Title'), 180),
+                    'description' => is_array($features) ? implode(' ', $features) : $features,
+                    'price' => array_get($item, 'ItemAttributes.ListPrice.FormattedPrice'),
+                    'category' => Category::inRandomOrder()->whereNotNull('parent_id')->pluck('id')->first(),
+                    'in_stock' => rand(1,50)
+                ]);
+
+                $product->save();
+
+                print("\nCreated ".$product->title);
+
+                $colors = collect(['Black', 'Indigo', 'Red', 'Blue', 'Yellow', 'Orange', 'Cyan', 'Aero']);
+
+                $product->setMeta('variants', $colors->random(rand(1,4)));
+
+                $product->markAsActive();
+
+                if(array_get($item, 'LargeImage.URL')) $product->uploadPhoto(array_get($item, 'LargeImage.URL'), 'photo');
+
+            });
+
+        });
+
     }
 
-
-    /**
-     * Create product
-     *
-     * @return void
-     */
-    public function createProduct($faker)
-    {
-        $user = User::inRandomOrder()->whereNotNull('currency')->first();
-
-        auth()->login($user);
-
-        $product = $this->repository->create();
-
-        $product->update([
-            'title' => $faker->sentence(),
-            'description' => $faker->paragraph(),
-            'price' => $faker->randomFloat(2, 2, 500),
-            'category' => $this->categories->random(),
-            'in_stock' => $faker->randomDigit()
-        ]);
-
-        $product->setMeta('variants', $faker->words);
-
-        $product->markAsActive();
-
-        return $product;
-
-    }
-
-
-    /**
-     * Upload photos
-     *
-     * @return void
-     */
-    public function uploadPhotos($product, $faker)
-    {
-        if($faker->boolean(95)){
-            for ($i=0; $i < rand(1,4); $i++) { 
-                $product->uploadPhoto($faker->image('/tmp', 400, 500), 'photo');
-            }
-        }
-    }
 }

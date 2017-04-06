@@ -27,6 +27,7 @@ class CreateGeosTable extends Migration
             $table->string('currency', 3);
             $table->string('currency_symbol', 20);
             $table->string('language', 2);
+            $table->text('zip_format');
 
             $table->integer('geonames_id');
             $table->timestamps();

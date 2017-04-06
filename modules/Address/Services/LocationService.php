@@ -2,57 +2,11 @@
 
 namespace Modules\Address\Services;
 
-use Torann\GeoIP\GeoIP;
-use Torann\GeoIP\Services\MaxMindDatabase;
 use PeterColes\Languages\Maker as Languages;
-use Illuminate\Support\Facades\Cache;
-use Session;
+use Session, Cache;
 
 class LocationService
 {
-    
-	private $provider;
-
-
-    /**
-     * Create a Location Service instance
-     *
-     * @return void
-     */
-	public function __construct()
-	{
-		
-		$dd_path = storage_path('app/geoip.mmdb');
-    	$du_url = 'https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz';
-
-    	$config = [
-    		'service' => 'maxmind_database',
-    		'services' => [
-    			'maxmind_database' => [
-				    'class' => MaxMindDatabase::class,
-				    'database_path' => config('services.maxmind.database_path') ? : $dd_path,
-				    'update_url' => config('services.maxmind.update_url') ? : $du_url,
-				    'locales' => ['en'],
-				]
-			],
-			'cache' => 'none'
-    	];
-
-    	$this->provider = new GeoIP($config, app()['cache']);
-
-	}
-
-
-    /**
-     * Update MaxMind database file
-     *
-     * @return void
-     */
-	public function updateDatabase(){
-		return $this->provider->getService()->update();
-	}
-
-
 
     /**
      * Check all possible ways to find locale for user and return its key as a string
@@ -78,7 +32,7 @@ class LocationService
 			$locale = Session::get('locale');
 		}
 
-		if(is_null($locale)){
+		if(is_null($locale) || (auth()->check() && !auth()->user()->country)){
 			$locale = $this->setLocaleByGeo();
 		}
 
@@ -225,22 +179,18 @@ class LocationService
      */
 	public function get($ip = null){
 
-		if(is_null($ip)){
-			$ip = request()->ip();
-		}
+		$data = geoip($ip)->getLocation();
 
-		$data = $this->provider->getLocation($ip);
-
-		$country = (new \Modules\Address\Entities\Country)->where('iso_code', array_get($data, 'iso_code'))->first();
+		$country = (new \Modules\Address\Entities\Country)->where('iso_code', $data->iso_code)->first();
 
 		if(!$country) {
 			$country = (new \Modules\Address\Entities\Country)->where('iso_code', 'GE')->first();
 		}
 		
 		$currency = $country->currency;
-		$country = array_get($data, 'iso_code');
-		$timezone = array_get($data, 'timezone');
-		$city = array_get($data, 'city');
+		$country = $data->iso_code;
+		$timezone =$data->timezone;
+		$city = $data->city;
 		$locale = array_first($this->getCountryParamByCode($country, 'languages'));
 
 		return compact('currency', 'country', 'locale', 'timezone', 'city');

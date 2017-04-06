@@ -22,8 +22,8 @@ class CreateUserAddressesTable extends Migration
             $table->integer('country_id')->unsigned()->index();
             $table->integer('city_id')->unsigned()->index();
             $table->string('street');
-            $table->string('post_code', 10)->nullable();
-            $table->integer('phone')->unsigned()->index();
+            $table->string('post_code', 20)->nullable();
+            $table->bigInteger('phone')->unsigned()->index();
             $table->text('note')->nullable();
             $table->float('lat', 10, 6)->nullable();
             $table->float('lng', 10, 6)->nullable();

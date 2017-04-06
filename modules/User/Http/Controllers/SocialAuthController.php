@@ -5,8 +5,8 @@ namespace Modules\User\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
-
 use Modules\User\Entities\Profile;
+use Modules\User\Entities\User;
 use Socialite;
 
 class SocialAuthController extends Controller
@@ -41,18 +41,45 @@ class SocialAuthController extends Controller
 
         $socialUser = $socialUser->user();
 
-        $id = $socialUser->getId();
-        $name = $socialUser->getName();
-        $email = $socialUser->getEmail();
-        $gender = $socialUser->offsetExists('gender') ? $socialUser->offsetGet('gender') : null;
-        $birthday = $socialUser->offsetExists('birthday') ? $socialUser->offsetGet('birthday') : null;
+        $name = sprintf("%s %s", $socialUser->offsetGet('first_name'), $socialUser->offsetGet('last_name'));
         $photo =  $socialUser->getAvatar();
 
-        if($provider == 'facebook'){
-            $photo = 'http://graph.facebook.com/'.$id.'/picture?type=large&width=800';
+        $account = Profile::firstOrCreate([
+            'provider' => $provider,
+            'external_id' => $socialUser->getId()
+        ]);
+
+        $user = $account->user_id ? User::find($account->user_id) : null;
+
+        if (is_null($user)) {
+
+            $user = User::whereEmail($socialUser->getEmail())->first();
+
+            if(is_null($user)){
+                $user = $account->user()->create([
+                    'email' => $socialUser->getEmail(),
+                    'name' => $name
+                ]);
+            }
+
+            if($account->wasRecentlyCreated && !$user->firstMedia('avatar')){
+                $user->changeAvatar($socialUser->getAvatar());
+            }
+
+            $account->update([
+                'user_id' => $user->id
+            ]);
         }
 
-        $user = (new Profile)->findBySocialAccount($provider, $id, $name, $email, $gender, $birthday, $photo);
+        if($socialUser->offsetExists('birthday') && !$user->hasMeta('birthday')){
+            $carbon = new \Carbon\Carbon;
+            list($month,$day,$year) = explode('/', $socialUser->offsetGet('birthday'));
+            $user->setMeta('birthday', $carbon->createFromDate($year, $month, $day));
+        }
+
+        if($socialUser->offsetExists('gender') && !$user->hasMeta('gender')){
+            $user->setMeta('gender', $socialUser->offsetGet('gender'));
+        }
 
         auth()->login($user, true);
 

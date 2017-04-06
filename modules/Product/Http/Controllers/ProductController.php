@@ -31,8 +31,15 @@ class ProductController extends Controller
     {
         $merchant = User::whereUsername($uid)->firstOrFail();
         $product = $merchant->products()->whereSlug($id)->firstOrFail();
+
+        if(!$product->is_active && auth()->id() !== $merchant->id){
+            abort(404);
+        }
+
         $product->setRelation('media', $product->media('photo')->take(10)->get());
         $product->setRelation('comments', $product->comments()->sortBy('most_recent')->paginate());
+
+        $product->trackActivity('product:viewed');
 
         $jComments = $product->comments->map(function($comment){
             return [
@@ -79,7 +86,7 @@ class ProductController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, [
-              'title' => 'required|string|max:150',
+              'title' => 'required|string|max:180',
               'description' => 'string|nullable',
               'variants' => 'json',
               'action' => 'required|in:schedule,publish',

@@ -4,7 +4,7 @@
 
 <div class="container" ng-controller="StreamCtrl as vm">
 
-<script>window.stream = {!! $products !!};</script>
+<script>window.stream = {!! $products->toJson() !!};</script>
 
 		<div class="row">
 
@@ -12,12 +12,13 @@
 
 				<div class="_clear _bgw _z013 _brds3">
 
-					<form class="_fg" action="{{ url('feed') }}" ng-init="vm.query='{{ request()->input('query') }}'">
-						<input ng-model="vm.query" class="_fe _brds3" placeholder="Start typing name of product or account" style="padding-left: 45px;" autofocus="on" name="query" minlength="3" required="" value="{{ request()->input('query') }}">
+					<form class="_fg" action="{{ url('feed') }}">
+						<input class="_fe _brds3" placeholder="Start typing name of product or account" style="padding-left: 45px;" autofocus="on" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
 						<i class="material-icons _a8 _mt10 _fs20 _ml22">search</i>
 					</form>
-
 				</div>
+
+				<span class="_c3 _mt10 _clear">{{-- array_get($products->toArray(), 'meta.pagination.total', 0) --}}</span>
 
 				<div class="row _mt15">
 

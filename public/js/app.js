@@ -47807,6 +47807,7 @@ angular.module('order', []).controller('OrderCtrl', ['$http', '$scope', '$timeou
 	vm.address = vm.addresses[0];
 	vm.variant = vm.variants[0];
 	vm.quantity = 1;
+	vm.max_quantity = window.max_quantity;
 
 	vm.product_price_total = function () {
 		return parseFloat(vm.product_price) * vm.quantity;
@@ -47817,7 +47818,7 @@ angular.module('order', []).controller('OrderCtrl', ['$http', '$scope', '$timeou
 	};
 
 	vm.more = function () {
-		if (vm.quantity < 99) vm.quantity += 1;
+		if (vm.quantity < vm.max_quantity) vm.quantity += 1;
 	};
 
 	vm.less = function () {

@@ -160,7 +160,7 @@ class Install extends Command
      */
     private function setGeo()
     {
-        $this->call('address:install');
+        $this->call('geoip:update');
 
         foreach (config('app.countries') as $country) {
             $this->call('countries:download', [ 'iso_code' => $country]);

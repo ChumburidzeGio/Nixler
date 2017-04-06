@@ -3,8 +3,9 @@
 namespace Modules\Address\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Modules\User\Entities\User;
 use GuzzleHttp\Client as GuzzleHttp;
+use Modules\User\Entities\User;
+use Exception;
 
 class UserAddress extends Model
 {
@@ -75,13 +76,19 @@ class UserAddress extends Model
 
         $url = 'https://maps.google.com/maps/api/geocode/json?address='.$query.'&sensor=false';
 
-        $geocode = json_decode(((new GuzzleHttp(['timeout' => 5]))->request('GET', $url))->getBody());
+        try {
 
-        if ( $geocode && count($geocode->results) && isset($geocode->results[0]) ) {
-            if ( $geo = $geocode->results[0]->geometry ) {
-                $this->lat = $geo->location->lat;
-                $this->lng = $geo->location->lng;
+            $geocode = json_decode(((new GuzzleHttp(['timeout' => 2]))->request('GET', $url))->getBody());
+
+            if ( $geocode && count($geocode->results) && isset($geocode->results[0]) ) {
+                if ( $geo = $geocode->results[0]->geometry ) {
+                    $this->lat = $geo->location->lat;
+                    $this->lng = $geo->location->lng;
+                }
             }
+
+        } catch (Exception $e){
+
         }
 
         return $this;

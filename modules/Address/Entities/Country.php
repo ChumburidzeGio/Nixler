@@ -12,7 +12,7 @@ class Country extends Model
     public $table = 'geo_countries';
     
     protected $fillable  = [
-        'code', 'currency'
+        'code', 'currency',
     ];
     
     

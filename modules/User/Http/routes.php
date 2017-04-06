@@ -2,6 +2,7 @@
 
 Route::group(['middleware' => 'web', 'namespace' => 'Modules\User\Http\Controllers'], function()
 {
+	
 	Route::get('/@{id}', 'UserController@find')->name('user');
 	Route::post('@{id}/follow', 'UserController@follow');
 	Route::post('@{id}/photos', 'UserController@uploadPhoto');

@@ -2,9 +2,11 @@
 
 namespace Modules\Address\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Modules\Address\Console\CreateGeoDatabase;
 use Modules\Address\Console\DownloadCountryData;
+use Modules\Address\Console\CreateGeoDatabase;
+use Illuminate\Support\ServiceProvider;
+use Modules\Address\Repositories\AddressRepository;
+use Validator;
 
 class AddressServiceProvider extends ServiceProvider
 {
@@ -23,9 +25,13 @@ class AddressServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerTranslations();
+        $this->registerCommands();
         $this->registerConfig();
         $this->registerViews();
-        $this->registerCommands();
+
+        Validator::extend('postcode', function ($attribute, $value, $parameters) {
+            return AddressRepository::validatePostCode($value);
+        });
     }
 
     /**
@@ -98,7 +104,6 @@ class AddressServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-                CreateGeoDatabase::class,
                 DownloadCountryData::class,
             ]);
         }

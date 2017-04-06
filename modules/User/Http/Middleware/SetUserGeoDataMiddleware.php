@@ -4,6 +4,7 @@ namespace Modules\User\Http\Middleware;
 
 use Closure, Auth;
 use Modules\Address\Services\LocationService;
+use Modules\User\Entities\UserSession;
 
 class SetUserGeoDataMiddleware
 {
@@ -18,6 +19,8 @@ class SetUserGeoDataMiddleware
     {
         $service = new LocationService;
         $service->findLocale();
+        
+        UserSession::log();
 
         return $next($request);
 

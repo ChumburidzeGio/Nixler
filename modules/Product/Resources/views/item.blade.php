@@ -49,12 +49,20 @@
                     <span class="_cb _clear _fs13  _telipsis _w100 _oh _pr10">
                        {{ $product->currency }} {{ $product->price }}
                     </span>
+                    @if($product->in_stock)
                     <div class="_a3 _posa _mr15">
                         <a class="_btn _bga _cb" href="{{ route('order') }}?product_id={{ $product->id }}">
                             BUY NOW
                         </a>
                     </div>
+                    @endif
                 </div>
+
+                @if(!$product->in_stock)
+                <div class="_c3 _bg5 _p5 _pl15">
+                    Product is out of stock, please contact owner or check comments for more information.
+                </div>
+                @endif
 
                 <p class="_p15 _pt10 _pb10 _fs13 _cbt8 _bb1 _mb0">
                 <span class="_p3 _clear ">{{ $product->description }}</span>
@@ -97,11 +105,11 @@
                      <img src="{{ $merchant->avatar('product') }}" class="_brds50 _dib _ma _mb5 _b1 _bcg _bw2 _clear _mt-50" height="80" width="80">
                      <a href="{{ $merchant->link() }}" class="_lh1 _et2 _fs18 _clear">{{ $merchant->name }}</a>
                      <small class="_clear _mb5">{{ $merchant->followers()->count() }} Followers</small>
-                     <!--div class="_clear _mt10">
-                        <div class="_btn _bgw _cg _mt5 _b1 _bcg">Follow</div>
-                        <div class="_btn _bgw _cg _mt5 _b1 _bcg">Message</div>
-                     </div-->
-                     
+                     <div class="_clear _mt10 _pr10 _mb5">
+                        <!--div class="_btn _bgw _cg _mt5 _b1 _bcg">Follow</div-->
+                        <a class="_btn _bgw _cg _mt5 _b1 _bcg _w100" href="{{ route('find-thread', ['id' => $merchant->id]) }}">Message</a>
+                     </div>
+
                      {{--<div class="_pr15 _pb0 _bt1 _tal _mt10 _mb0">
                         <span class="_fs12">
                             More items from this seller

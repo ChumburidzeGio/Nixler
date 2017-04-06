@@ -58,4 +58,10 @@ return [
         ],
     ],
 
+    'keen' => [
+        'projectId' => env('KEEN_PROJECT_ID', ''),
+        'writeKey'  => env('KEEN_WRITE_KEY', ''),
+        'readKey'   => env('KEEN_READ_KEY', ''),
+    ],
+
 ];

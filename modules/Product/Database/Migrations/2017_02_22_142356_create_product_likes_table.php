@@ -21,6 +21,9 @@ class CreateProductLikesTable extends Migration
             $table->integer('object')->unsigned();
             $table->timestamps();
 
+            $table->foreign('object')->references('id')->on('products')
+                ->onDelete('cascade');
+
         });
         
     }

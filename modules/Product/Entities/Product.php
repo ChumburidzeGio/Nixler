@@ -13,16 +13,19 @@ use Modules\Comment\Traits\HasComments;
 use Modules\User\Entities\User;
 use App\Traits\NPerGroup;
 use Cviebrock\EloquentTaggable\Taggable;
+use Modules\Stream\Entities\Activity;
+use Modules\Stream\Traits\Actable;
 
 class Product extends Model
 {
-	use Mediable, Metable, Sluggable, HasComments, Searchable, NPerGroup, Taggable;
+	use Mediable, Metable, Sluggable, HasComments, Searchable, NPerGroup, Taggable, Actable;
 	
     public $table = 'products';
     
     protected $fillable  = [
         'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category', 'in_stock'
     ];
+
 
     /**
      *  Get the avatar
@@ -83,28 +86,9 @@ class Product extends Model
         return $this->hasOne(User::class,'id', 'owner_id');
     }
 
-    
-    /**
-     *  Relationships
-     */
-    public function likes()
-    {   
-        return $this->hasMany(ProductLike::class, 'object');
-    }
-
-    
-    /**
-     *  Relationships
-     */
-    public function likers()
-    {   
-        $table = (new ProductLike)->getTable();
-        return $this->belongsToMany(config('auth.providers.users.model'), $table, 'object', 'actor');
-    }
-
 
     public function setPriceAttribute($value){
-        $this->attributes['price'] = preg_replace('/[^0-9.]+/', '', $value);
+        $this->attributes['price'] = floatval(ltrim($value, '$'));
     }
 
 
@@ -166,7 +150,7 @@ class Product extends Model
 
         if(is_null($actor)) $actor = auth()->user();
  
-        return $actor ? $this->likes()->where('actor', $actor->id)->exists() : false;
+        return $actor ? $this->getActivities('product:liked')->where('actor', $actor->id)->exists() : false;
     }
 
 
@@ -211,17 +195,6 @@ class Product extends Model
         } catch (\Exception $e){
             return null;
         }
-
-    }
-
-
-
-    /**
-     *  Upload photo to model
-     */
-    public function categories(){
-
-        return config('data.product_categories');
 
     }
 

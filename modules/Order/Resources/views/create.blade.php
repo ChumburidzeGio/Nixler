@@ -2,9 +2,12 @@
 
 @section('content')
 <div class="container" ng-controller="OrderCtrl as vm">
-<script>window.addresses = <?php echo json_encode($addresses); ?></script>
-<script>window.variants = <?php echo json_encode($variants); ?></script>
-<script>window.price = <?php echo $product->price; ?></script>
+<script>
+window.addresses = <?php echo json_encode($addresses); ?>;
+window.variants = <?php echo $variants->flatten()->toJson(); ?>;
+window.price = <?php echo $product->price; ?>;
+window.max_quantity = <?php echo $product->in_stock > 99 ? 99 : $product->in_stock; ?>;
+</script>
 
     <div class="row">
         <div class="col-md-6 col-md-offset-3">

@@ -1,8 +1,5 @@
 <?php
 
-use \NlpTools\Tokenizers\WhitespaceTokenizer;
-use \NlpTools\Tokenizers\WhitespaceAndPunctuationTokenizer;
-use \NlpTools\Tokenizers\ClassifierBasedTokenizer;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,19 +12,14 @@ use \NlpTools\Tokenizers\ClassifierBasedTokenizer;
 |
 */
 
-Auth::routes();
+Auth::routes(); 
 
 Route::group(['prefix' => (new Modules\Address\Services\LocationService)->segment()], function() {
 	Route::get('/', 'HomeController@welcome');
 });
-
 
 Route::get('/policy', function(){
 	return view('policy.page');
 });
 
 Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
-
-Route::get('qw', function(){
-
-});

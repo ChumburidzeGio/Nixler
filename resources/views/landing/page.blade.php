@@ -24,7 +24,7 @@
                             <br>
 
                             <div class="_p15 _bb1 _pt0">
-                                <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+                                <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}" id="login-form">
                                     {{ csrf_field() }}
 
                                     <div class="form-group _m0 _mb10 {{ $errors->has('email') ? ' has-error' : '' }}">
@@ -66,7 +66,7 @@
 
                                 <p class="_clear _fw600 _fs14 _p10 _cb _pb15 _mt15">
                                     Don't have account yet?
-                                    <a class="_cbl" href="{{ url('register') }}">Join us</a>
+                                    <a class="_cbl" href="{{ url('register') }}" id="register">Join us</a>
                                 </p>
 
                             </div>

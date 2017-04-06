@@ -107,7 +107,7 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         $media = $product->getMedia('photo');
         $media = $media->sortBy(function ($photo, $key) use ($media_sorted) {
             foreach ($media_sorted as $key => $value) {
-                if($value->id == $photo->id){
+                if(isset($value->id) && $value->id == $photo->id){
                     return $key;
                 }
             }
@@ -178,30 +178,13 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
     public function like($id)
     {
         $product = $this->model->findOrFail($id);
+
         $user = auth()->user();
 
-        $like = $product->likes()->firstOrCreate([
-            'actor' => $user->id
-        ]);
+        $liked = $product->toggleActivity('product:liked');
 
-        $liked = $like->wasRecentlyCreated ? true : !$like->delete();
-
-        $product->tags()->get()->map(function($item) use ($liked, $user) {
-
-            $tag = $user->tags()->firstOrCreate([
-                'tag_id' => $item->tag_id
-            ]);
-
-            if($liked){
-                $tag->increment('score');
-            } else {
-                $tag->decrement('score');
-            }
-            
-            $tag->save();
-        });
-
-        $product->likes_count = $product->likes()->count();
+        $product->likes_count = $product->getActivities('product:liked')->count();
+        
         $product->save();
         
         return $liked;

@@ -8,7 +8,7 @@
         <nav class="_at _b0 _zi999 _bgw _z013 _cb _pl15 _pr15 _ma" ng-controller="NavCtrl as vm">
 
             <span class="_logo _left _fs18 _cinherit _ml0 _mr0">
-                <i class="material-icons _fs20 _mr15 _crp _va4 _cinherit" ng-click="vm.openAside()">menu</i> 
+                <i class="material-icons _fs20 _mr15 _crp _va4 _cinherit" ng-click="vm.openAside()" id="menu">menu</i> 
                 <a href="{{ url('/') }}" class="_cinherit _thvrb">{{ config('app.name')}}</a>
             </span>
 
@@ -65,7 +65,7 @@
                     <a href="{{ route('orders') }}" class="_li _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">shopping_basket</i> Orders
                     </a>
-                    <a href="{{ url('/new-product') }}" class="_li _hvrd _cg _bb1">
+                    <a href="{{ url('/new-product') }}" class="_li _hvrd _cg _bb1" id="new-product">
                         <i class="material-icons _fs20 _mr15">add</i> Add Product
                     </a>
                     <a href="{{ url('/settings') }}" class="_li _hvrd _cg">
@@ -80,7 +80,7 @@
                     <li class="_li">
                         <a href="{{ url('/logout') }}"
                         onclick="event.preventDefault();
-                        document.getElementById('logout-form').submit();">
+                        document.getElementById('logout-form').submit();" id="logout">
                         <i class="material-icons _fs20 _mr15">exit_to_app</i> Logout
                     </a>
                     <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="_d0">

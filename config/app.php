@@ -198,6 +198,8 @@ return [
         Jenssegers\Agent\AgentServiceProvider::class,
         Spatie\CookieConsent\CookieConsentServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Torann\GeoIP\GeoIPServiceProvider::class,
+        Laravel\Dusk\DuskServiceProvider::class,
 
 
     ],
@@ -256,6 +258,7 @@ return [
         'Amazon' => Dawson\AmazonECS\AmazonECSFacade::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
+        'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
     ],
 
 ];
