@@ -24,6 +24,19 @@ class CreateCommentsTable extends Migration
             $table->timestamps();
 
         });
+
+
+        Schema::create('comment_likes', function (Blueprint $table) {
+
+            $table->bigIncrements('id');
+            $table->integer('user_id')->unsigned();
+            $table->bigInteger('comment_id')->unsigned();
+            $table->timestamps();
+
+            $table->foreign('comment_id')->references('id')->on('comments')
+                ->onDelete('cascade');
+
+        });
     }
 
     /**
@@ -34,5 +47,6 @@ class CreateCommentsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('comments');
+        Schema::dropIfExists('comment_likes');
     }
 }
