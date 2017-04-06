@@ -48,14 +48,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
         if($products->count() < 9){
 
-            $popular = Product::where('status', 'active')
-                ->orderBy('likes_count', 'desc')
-                ->whereHas('owner', function($q){
-                    $q->where('country', auth()->user()->country);
-                })
-                ->orderBy('id', 'desc')->take(20)->pluck('id');
-
-            $user->pushInStream($popular, 'popular');
+            $this->recommend($user);
 
             $products = $user->stream()->with('firstPhoto', 'owner')->paginate(20);
         }
@@ -96,10 +89,23 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      *
      * @return \Illuminate\Http\Response
      */
+    public function recommend($user)
+    {
+        $recommendations = (new RecommService)->recommendations($user->id, 30);
+
+        $user->pushInStream($recommendations, 'recs');
+    }
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function discover()
     {
-        return request()->has('user_id') ? (new RecommService)->recommendations(request()->input('user_id'), 5) : 
-            (new RecommService)->similar(request()->input('pid'), 5);
+        //return request()->has('user_id') ? (new RecommService)->recommendations(request()->input('user_id'), 5) : 
+           // (new RecommService)->similar(request()->input('pid'), 5);
 
         $verb = ['product:liked', 'product:purchased', 'product:viewed'];
 
