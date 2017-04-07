@@ -199,7 +199,7 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
      */
     public function similar($id)
     {
-        $ids = (new RecommService)->similar($id, 5);
+        $ids = (new RecommService)->similar($id, 5, auth()->id());
         
         return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
     }
