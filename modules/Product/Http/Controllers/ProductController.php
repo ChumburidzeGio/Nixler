@@ -52,7 +52,7 @@ class ProductController extends Controller
             ];
         })->toJson();
 
-        $similar = $this->repository->similar($id);
+        return $similar = $this->repository->similar($id);
 
         return view('product::item', compact('product', 'merchant', 'jComments', 'similar'));
     }
