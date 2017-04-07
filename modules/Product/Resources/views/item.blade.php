@@ -121,7 +121,7 @@
 
                      <div class="_pr15 _pl15 _tal _mb0 _p10">
                         <span class="_fs12 _ttu _mb5 _clear">
-                            Similar products
+                            More products
                         </span>
 
                         @each('product::short-li', $similar, 'product')
