@@ -37,4 +37,9 @@ class UserSession extends Model
     		'country_code' => auth()->user()->country
     	])->touch();
     }
+
+    public function user()
+    {   
+        return $this->belongsTo(config('auth.providers.users.model'));
+    }
 }

@@ -18,6 +18,7 @@ use Modules\Stream\Entities\Activity;
 use Carbon\Carbon;
 use Modules\Stream\Services\KeenService;
 use Modules\Stream\Services\RecommService;
+use Modules\User\Entities\User;
 
 class StreamRepository extends BaseRepository implements CacheableInterface {
 
@@ -45,13 +46,6 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
         $user = auth()->user();
 
         $products = $user->stream()->with('firstPhoto', 'owner')->paginate(20);
-
-        if($products->count() < 9){
-
-            $this->recommend($user);
-
-            $products = $user->stream()->with('firstPhoto', 'owner')->paginate(20);
-        }
 
         $manager = new Manager();
 
@@ -93,7 +87,26 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
     {
         $recommendations = (new RecommService)->recommendations($user->id, 30);
 
+        $user->streamRemoveBySource('recs');
+        
         $user->pushInStream($recommendations, 'recs');
+    }
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function refreshStreams()
+    {
+        $models = User::whereHas('sessions', function($q){
+            return $q->whereBetween('updated_at', [Carbon::now()->subDay(), Carbon::now()]);
+        })->get();
+
+        $models->map(function($model){
+            $this->recommend($model);
+        });
     }
 
 
@@ -104,6 +117,8 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
+        return $this->refreshStreams();
+
         $product = Product::first();
 
         return (new RecommService)->addProduct($product);

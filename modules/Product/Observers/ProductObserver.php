@@ -13,7 +13,7 @@ class ProductObserver
      * @param  Product  $product
      * @return void
      */
-    public function created(Product $product)
+    public function updated(Product $product)
     {
         (new RecommService)->addProduct($product);
     }

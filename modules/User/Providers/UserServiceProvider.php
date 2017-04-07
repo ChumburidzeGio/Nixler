@@ -4,6 +4,8 @@ namespace Modules\User\Providers;
 
 use Validator, Hash;
 use Illuminate\Support\ServiceProvider;
+use Modules\User\Observers\UserObserver;
+use Modules\User\Entities\User;
 
 class UserServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,8 @@ class UserServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        User::observe(UserObserver::class);
+        
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();

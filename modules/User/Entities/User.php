@@ -93,7 +93,7 @@ class User extends Authenticatable
 
     public function sessions()
     {   
-        return $this->hasMany(Session::class, 'user_id');
+        return $this->hasMany(UserSession::class, 'user_id');
     }
 
 
