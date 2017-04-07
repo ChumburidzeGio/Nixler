@@ -17,19 +17,19 @@ Route::group(['middleware' => 'web', 'namespace' => 'Modules\User\Http\Controlle
 		Route::get('/', 'SettingsController@general');
 
 		//Account
-		Route::get('account', 'SettingsController@editAccount')->middleware('lastLoginTracker');
+		Route::get('account', 'SettingsController@editAccount');
 		Route::post('account', 'SettingsController@updateAccount');
 
 		//Password
-		Route::get('password', 'SettingsController@editPassword')->middleware('lastLoginTracker');
+		Route::get('password', 'SettingsController@editPassword');
 		Route::post('password', 'SettingsController@updatePassword');
 
 		//Social
-		Route::get('social', 'SettingsController@editSocial')->middleware('lastLoginTracker');
+		Route::get('social', 'SettingsController@editSocial');
 		Route::post('social', 'SettingsController@updateSocial');
 
 		//Email
-		Route::get('emails', 'SettingsController@editEmail')->middleware('lastLoginTracker');
+		Route::get('emails', 'SettingsController@editEmail');
 		Route::get('emails/{id}/verify', 'SettingsController@verifyEmail');
 		Route::post('emails/{id}/code', 'SettingsController@codeEmail');
 		Route::get('emails/{id}/default', 'SettingsController@defaultEmail');
