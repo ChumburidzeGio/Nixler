@@ -7,7 +7,7 @@ Route::group(['middleware' => 'web', 'namespace' => 'Modules\User\Http\Controlle
 	Route::post('@{id}/follow', 'UserController@follow');
 	Route::post('@{id}/photos', 'UserController@uploadPhoto');
 
-	Route::get('/avatars/{id}/{place}', 'UserController@avatar');
+	Route::get('/avatars/{id}/{place}', 'UserController@avatar')->name('avatar');
 
 	Route::get('/auth/{provider}', 'SocialAuthController@redirect');
 	Route::get('/auth/{provider}/callback', 'SocialAuthController@callback');

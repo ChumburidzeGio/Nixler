@@ -211,4 +211,5 @@ class User extends Authenticatable
 
     //ellisio/laravel-phone
     //giggsey/libphonenumber-for-php
+
 }

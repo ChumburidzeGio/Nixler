@@ -48,7 +48,7 @@ class RecommService {
             $request = new Reqs\AddDetailView($actor, $object, $params);
         }
             
-        return $this->client->send($request);
+        return $this->send($request);
     }
 
 
@@ -69,7 +69,7 @@ class RecommService {
             $request = new Reqs\DeleteDetailView($actor, $object, $params);
         }
             
-        return $this->client->send($request);
+        return $this->send($request);
     }
 
 
@@ -86,7 +86,7 @@ class RecommService {
             array_push($requests, new Reqs\SetItemValues($id, $item, ['cascadeCreate' => true]));
         }
 
-        return $this->client->send(new Reqs\Batch($requests));
+        return $this->send(new Reqs\Batch($requests));
     }
 
 
@@ -99,7 +99,7 @@ class RecommService {
     {   
         $params = $actor ? array_merge(['targetUserId' => $actor], $params) : $params;
 
-        return $this->client->send(new Reqs\ItemBasedRecommendation($id, $count, $params));
+        return $this->send(new Reqs\ItemBasedRecommendation($id, $count, $params));
     }
 
 
@@ -118,11 +118,7 @@ class RecommService {
 
         $request->setTimeout(1);
 
-        try {
-            return $this->client->send($request);
-        } catch(\Exception $e) {
-            return [];
-        }
+        return $this->send($request);
     }
 
 
@@ -146,7 +142,7 @@ class RecommService {
           'cascadeCreate' => true
         ]);
 
-        return $this->client->send(new Reqs\Batch([$addItem, $setValues]));
+        return $this->send(new Reqs\Batch([$addItem, $setValues]));
     }
 
 
@@ -157,7 +153,7 @@ class RecommService {
      */
     public function removeProduct($product)
     {   
-        return $this->client->send(new Reqs\DeleteItem($product->id));
+        return $this->send(new Reqs\DeleteItem($product->id));
     }
 
 
@@ -167,8 +163,8 @@ class RecommService {
      * @return string
      */
     public function addProductProps()
-    {	
-        $this->client->send(new Reqs\ResetDatabase());
+    {   
+        $this->send(new Reqs\ResetDatabase());
         
         $this->addProp('price', 'double');
         $this->addProp('title', 'string');
@@ -176,6 +172,21 @@ class RecommService {
         $this->addProp('updated_at', 'timestamp');
         $this->addProp('created_at', 'timestamp');
         $this->addProp('user_id', 'int');
+    }
+
+
+    /**
+     * Add activity to Keen
+     *
+     * @return string
+     */
+    public function send($request, $default = [])
+    {	
+        try {
+            return $this->client->send($request);
+        } catch(\Exception $e) {
+            return $default;
+        }
     }
 
 }

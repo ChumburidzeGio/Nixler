@@ -106,6 +106,8 @@ class MediaController extends Controller
             }
 
             $response = new Response($basic->encode('jpg', 90));
+            $response->header('Content-Type', 'image/jpg');
+            $response->header('content-transfer-encoding', 'binary');
             $response->header('Pragma', 'public');
             $response->header('Cache-Control', 'max-age=86400');
             $response->header('Expires', gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));

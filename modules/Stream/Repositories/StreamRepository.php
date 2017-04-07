@@ -88,7 +88,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
         $recommendations = (new RecommService)->recommendations($user->id, 30);
 
         $user->streamRemoveBySource('recs');
-        
+
         $user->pushInStream($recommendations, 'recs');
     }
 
@@ -115,8 +115,30 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      *
      * @return \Illuminate\Http\Response
      */
+    public function featuredAccounts($count = 6)
+    {
+        return Activity::join('products as p', 'activities.object', 'p.id')
+                    ->whereIn('verb', ['product:viewed', 'product:liked'])
+                    ->whereNotIn('owner_id', function($query){
+                        $query->select('follow_id')->from('followers')->where('user_id', auth()->id());
+                    })
+                    ->where('owner_id', '<>', auth()->id())
+                    ->groupBy('owner_id', 'owner_username')
+                    ->orderBy(DB::raw('count(activities.object)'),'desc')
+                    ->whereBetween('activities.created_at', [Carbon::now()->subWeek(), Carbon::now()])
+                    ->take($count)
+                    ->pluck('owner_username', 'owner_id');
+    }
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function discover()
     {
+        return $this->featuredAccounts();
         return $this->refreshStreams();
 
         $product = Product::first();
