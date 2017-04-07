@@ -8,6 +8,7 @@ use Plank\Metable\Metable;
 use MediaUploader;
 use Modules\Product\Entities\Product;
 use Modules\Product\Entities\ProductStats;
+use Modules\Stream\Entities\Activity;
 
 
 trait Merchant {
@@ -39,6 +40,7 @@ trait Merchant {
     }
 
     
+
     /**
      *  Relationships
      */
@@ -55,7 +57,7 @@ trait Merchant {
      */
     public function liked()
     {   
-        return $this->belongsToMany(Product::class, 'product_likes', 'actor', 'object');
+        return $this->belongsToMany(Product::class, 'activities', 'actor', 'object')->where('verb', 'product:liked');
     }
 
     

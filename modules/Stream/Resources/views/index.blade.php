@@ -17,7 +17,7 @@
 					<i class="material-icons _a8 _mt10 _fs20 _ml22">search</i>
 				</form>
 
-				@if($accounts)
+				{{--@if($accounts)
 				<div class="_clear _p10 _bt1">
 					<span class="_lhl _cg _fs12 _ttu _clear _mb15 _ml5">People you may follow</span>
 					@foreach($accounts as $id => $username)
@@ -30,7 +30,7 @@
 
 					@endforeach
 				</div>
-				@endif
+				@endif--}}
 			</div>
 
 

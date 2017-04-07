@@ -29,13 +29,11 @@ class StreamController extends Controller
     {
         if($request->has('query')){
             $products = $this->repository->search($request->input('query'));
-            $accounts = [];
         } else {
             $products = $this->repository->all();
-            $accounts = $this->repository->featuredAccounts(12);
         }
 
-        return $request->isMethod('post') ? $products : view('stream::index', compact('products', 'accounts'));
+        return $request->isMethod('post') ? $products->toJson() : view('stream::index', compact('products'));
     }
 
 

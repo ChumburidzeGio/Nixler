@@ -10,6 +10,7 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use Modules\Product\Transformers\ProductTransformer;
 use Modules\Product\Entities\Category;
+use Modules\Stream\Services\RecommService;
 
 class ProductRepository extends BaseRepository implements CacheableInterface {
 
@@ -188,5 +189,18 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         $product->save();
         
         return $liked;
+    }
+
+
+    /**
+     * Tranform text into tokens
+     *
+     * @return array
+     */
+    public function similar($id)
+    {
+        $ids = (new RecommService)->similar($id, 5);
+        
+        return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
     }
 }

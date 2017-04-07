@@ -30,9 +30,9 @@ class Product extends Model
     /**
      *  Get the avatar
      */
-    public function photo($type){
+    public function photo($type, $nullable = false){
         $media = $this->firstMedia('photo');
-        return url('media/'.($media ? $media->id : '-').'/product/'.$type.'.jpg');
+        return ($nullable && !$media) ? null : url('media/'.($media ? $media->id : '-').'/product/'.$type.'.jpg');
     }
 
 
@@ -74,7 +74,8 @@ class Product extends Model
      */
     public function firstPhoto()
     {
-        return $this->belongsToMany(config('mediable.model'), 'mediables', 'mediable_id', 'media_id')->latest()->nPerGroup('mediables', 'media_id', 1);
+        return $this->belongsToMany(config('mediable.model'), 'mediables', 'mediable_id', 'media_id')
+            ->where('mediable_type', get_class($this))->latest()->nPerGroup('mediables', 'media_id', 1);
     }
 
     

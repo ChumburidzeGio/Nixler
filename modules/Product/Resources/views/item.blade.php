@@ -9,6 +9,7 @@
 
         <div class="col-md-8">
             <div class="_bgw _b1 _bs011 _brds3 _clear _mb15">
+                @if($product->photo('full', 1))
                 <div class="_clear _posr _bb1 _bcg" style="height: 500px">
                     <img src="{{ $product->photo('full') }}" class="_clear _hf _ma" 
                     ng-init="vm.mediaBase='{{ url('media')}}/'" 
@@ -28,6 +29,7 @@
                     </ul>
 
                 </div>
+                @endif
 
                 @can('update', $product)
                 <div class="_tbs _ov _tar _bg5" style="padding:2px 4px 3px 4px;">
@@ -110,27 +112,27 @@
                         <a class="_btn _bgw _cg _mt5 _b1 _bcg _w100" href="{{ route('find-thread', ['id' => $merchant->id]) }}">Message</a>
                      </div>
 
-                     {{--<div class="_pr15 _pb0 _bt1 _tal _mt10 _mb0">
-                        <span class="_fs12">
-                            More items from this seller
-                        </span>
-
-                        @each('product.short-li', $photos, 'product')
-
-                    </div>--}}
-
                 </div>
 
             </div>
 
+            @if($similar->count())
+            <div class="_bgw _b1 _brds3 _clear _mt15">
+
+                     <div class="_pr15 _pl15 _tal _mb0 _p10">
+                        <span class="_fs12 _ttu _mb5 _clear">
+                            Similar products
+                        </span>
+
+                        @each('product::short-li', $similar, 'product')
+
+                    </div>
+
+            </div>
+            @endif
+
         </div>
     </div>
-
-    {{-- <h5 class="_mt15 _clear _pt5">Other interesting products</h5>
-    <div class="row _mt15 _pt5">
-       @each('product.short-card', $photos, 'product')
-    </div>--}}
-
 
 </div>
 </div>

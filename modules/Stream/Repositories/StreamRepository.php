@@ -140,9 +140,6 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
     {
         return $this->refreshStreams();
         
-        //return request()->has('user_id') ? (new RecommService)->recommendations(request()->input('user_id'), 5) : 
-           // (new RecommService)->similar(request()->input('pid'), 5);
-
         $query = Activity::select('object', DB::raw('count(activities.object) as total'))
                     ->whereIn('verb', ['product:viewed', 'product:liked'])
                     ->groupBy('object')
