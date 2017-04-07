@@ -138,44 +138,10 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
-        return $this->featuredAccounts();
         return $this->refreshStreams();
-
-        $product = Product::first();
-
-        return (new RecommService)->addProduct($product);
+        
         //return request()->has('user_id') ? (new RecommService)->recommendations(request()->input('user_id'), 5) : 
            // (new RecommService)->similar(request()->input('pid'), 5);
-
-        $verb = ['product:liked', 'product:purchased', 'product:viewed'];
-
-        $activities = Activity::where('new', 1)->whereIn('verb', $verb)->get();
-
-        return (new RecommService)->push($activities);
-
-        $activities->load('mobject', 'mactor');
-
-        $activities = $activities->map(function($item){
-            return [
-                'id' => $item->id,
-                'verb' => $item->verb,
-                'actor_id' => $item->mactor->id,
-                'actor_country' => $item->mactor->country,
-                'actor_locale' => $item->mactor->locale,
-                'object_id' => $item->mobject->id,
-                'object_price' => $item->mobject->price,
-                'object_currency' => $item->mobject->currency,
-                'object_category' => $item->mobject->category,
-                'object_likes_count' => $item->mobject->likes_count,
-            ];
-        })->groupBy('verb')->toArray();
-
-
-        Activity::where('new', 0)->whereIn('verb', $verb)->update([
-          'new' => 0
-        ]);
-
-        return ;
 
         $query = Activity::select('object', DB::raw('count(activities.object) as total'))
                     ->whereIn('verb', ['product:viewed', 'product:liked'])
