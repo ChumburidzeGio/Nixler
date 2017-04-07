@@ -99,7 +99,7 @@ class RecommService {
     {   
         $params = $actor ? array_merge(['targetUserId' => $actor], $params) : $params;
 
-        return dd($this->send(new Reqs\ItemBasedRecommendation($id, $count, $params)));
+        return $this->send(new Reqs\ItemBasedRecommendation($id, $count, $params));
     }
 
 
