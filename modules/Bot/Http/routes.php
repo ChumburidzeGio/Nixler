@@ -2,4 +2,4 @@
 
 use Modules\Bot\Http\Controllers\BotController;
 
-Route::match(['get', 'post'], '/bot', BotController::class.'@handle');
+//Route::match(['get', 'post'], '/bot', BotController::class.'@handle');
