@@ -17,6 +17,8 @@ class BotController extends Controller
     {
         $botman = app('botman');
 
+        info('Bot called');
+        
         $botman->hears('(Hello|Hi)', function (BotMan $bot) {
             $bot->startConversation(new GreetingsConversation());
         });
