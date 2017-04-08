@@ -200,6 +200,7 @@ return [
         Torann\GeoIP\GeoIPServiceProvider::class,
         Laravel\Dusk\DuskServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Mpociot\BotMan\BotManServiceProvider::class,
 
 
     ],
@@ -259,6 +260,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        'BotMan' => Mpociot\BotMan\Facades\BotMan::class,
     ],
 
 ];

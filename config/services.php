@@ -64,4 +64,7 @@ return [
         'readKey'   => env('KEEN_READ_KEY', ''),
     ],
 
+    'botman' => [
+        'telegram_token' => '336182320:AAGgXE7N_rhtpjg9o0KFZvY-HoYMFUnQvSo',
+    ],
 ];
