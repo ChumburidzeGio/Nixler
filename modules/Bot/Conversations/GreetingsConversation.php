@@ -7,6 +7,7 @@ use Mpociot\BotMan\Answer;
 use Mpociot\BotMan\Button;
 use Mpociot\BotMan\Conversation;
 use Mpociot\BotMan\Question;
+use Mpociot\BotMan\GenericTemplate;
 
 class GreetingsConversation extends Conversation
 {
@@ -21,7 +22,7 @@ class GreetingsConversation extends Conversation
             $this->firstname = $answer->getText();
 
             $this->say('Nice to meet you '.$this->firstname);
-            
+
             $this->askEmail();
         });
     }
@@ -40,7 +41,7 @@ class GreetingsConversation extends Conversation
 
     public function sendInfo()
     {
-        $bot->reply(GenericTemplate::create()
+        $this->reply(GenericTemplate::create()
             ->addElements([
                 Element::create('Nixler Documentation')
                     ->subtitle('All about Nixler')
