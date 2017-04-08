@@ -24,18 +24,11 @@ class BotController extends Controller
             $bot->reply('Hi there :)');
         });
 
+        $botman->hears('Start conversation', function (BotMan $bot) {
+            $bot->startConversation(new ExampleConversation());
+        });
+
         $botman->listen();
-    }
-
-
-    /**
-     * Loaded through routes
-     *
-     * @param  BotMan $bot
-     */
-    public function startConversation(BotMan $bot)
-    {
-        $bot->startConversation(new ExampleConversation());
     }
 
 }
