@@ -184,7 +184,6 @@ return [
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Plank\Mediable\MediableServiceProvider::class,
         Plank\Metable\MetableServiceProvider::class,
-        //Silber\Bouncer\BouncerServiceProvider::class,
         Overtrue\LaravelFollow\FollowServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
@@ -200,6 +199,7 @@ return [
         Laravel\Socialite\SocialiteServiceProvider::class,
         Torann\GeoIP\GeoIPServiceProvider::class,
         Laravel\Dusk\DuskServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
 
 
     ],
@@ -252,13 +252,13 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Newsletter' => Spatie\Newsletter\NewsletterFacade::class,
         'MediaUploader' => Plank\Mediable\MediaUploaderFacade::class,
-        //'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Module' => Nwidart\Modules\Facades\Module::class,
         'Amazon' => Dawson\AmazonECS\AmazonECSFacade::class,
         'Agent' => Jenssegers\Agent\Facades\Agent::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
     ],
 
 ];

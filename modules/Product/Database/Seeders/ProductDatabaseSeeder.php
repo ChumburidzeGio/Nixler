@@ -28,14 +28,17 @@ class ProductDatabaseSeeder extends Seeder
             $this->call(CategoryDatabaseSeeder::class);
         }
 
-        $iphone = array_get(Amazon::search('iphone')->json(), 'Items.Item');
-        $samsung = array_get(Amazon::search('samsung')->json(), 'Items.Item');
-        $iphone6 = array_get(Amazon::search('iphone 6')->json(), 'Items.Item');
-        $macbook = array_get(Amazon::search('macbook')->json(), 'Items.Item');
-        $nikon = array_get(Amazon::search('nikon')->json(), 'Items.Item');
-        $canon = array_get(Amazon::search('canon')->json(), 'Items.Item');
-        $lexar = array_get(Amazon::search('lexar')->json(), 'Items.Item');
-        $items = array_merge($iphone, $samsung, $iphone6, $macbook, $nikon, $canon, $lexar);
+        $items = array_merge(
+            array_get(Amazon::search('iphone')->json(), 'Items.Item'),
+            array_get(Amazon::search('samsung')->json(), 'Items.Item'),
+            array_get(Amazon::search('iphone 6')->json(), 'Items.Item'),
+            array_get(Amazon::search('macbook')->json(), 'Items.Item'),
+            array_get(Amazon::search('canon')->json(), 'Items.Item'),
+            array_get(Amazon::search('lexar')->json(), 'Items.Item'),
+            array_get(Amazon::search('POLO')->json(), 'Items.Item'),
+            array_get(Amazon::search('Robert Kent')->json(), 'Items.Item'),
+            array_get(Amazon::search('Hugo Boss')->json(), 'Items.Item'),
+        );
 
         DB::transaction(function () use ($items, $repository) {
 

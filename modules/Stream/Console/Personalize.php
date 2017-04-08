@@ -28,12 +28,11 @@ class Personalize extends Command
      * Execute the console command.
      * 
      * Get popular cetegories by this criterias:
-     * 1. Location (prefered: city) and home city
-     * 2. Gender
+     * -1. Location (prefered: city) and home city
+     * -2. Gender
      * 3. Device (for price range) and browser
-     * 4. Age range
-     * 5. Weather in the area of user
-     * 6. Language used - f.e. if user uses in Poland English offer language learning courses and books
+     * -4. Age range
+     * -6. Language used - f.e. if user uses in Poland English offer language learning courses and books
      * 7. Friends activity
      * 8. Relationship status and preferences
      * 9. Religious and political affiliations

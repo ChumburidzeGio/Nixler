@@ -25,17 +25,6 @@ class RecommService {
      *
      * @return string
      */
-    public function addProp($name, $type)
-    {   
-        $this->client->send(new Reqs\AddItemProperty($name, $type));
-    }
-
-
-    /**
-     * Add activity to Keen
-     *
-     * @return string
-     */
     public function push($actor, $object, $verb, $timestamp)
     {   
         $params = ['cascadeCreate' => true, 'timestamp' => $timestamp];
@@ -164,14 +153,37 @@ class RecommService {
      */
     public function addProductProps()
     {   
-        $this->send(new Reqs\ResetDatabase());
+        $requests = [];
+
+        $product_props = [
+            'price' => 'double',
+            'title' => 'string',
+            'user_id' => 'int',
+            'category_id' => 'int',
+            'in_stock' => 'int',
+            'currency' => 'string',
+        ];
+
+        $user_props = [
+            'currency' => 'string',
+            'locale' => 'string',
+            'gender' => 'int',
+            'age_range' => 'int',
+            'city_id' => 'int',
+            'income_lvl' => 'int',
+        ];
+
+        array_push($requests, new Reqs\ResetDatabase());
         
-        $this->addProp('price', 'double');
-        $this->addProp('title', 'string');
-        $this->addProp('likes_count', 'int');
-        $this->addProp('updated_at', 'timestamp');
-        $this->addProp('created_at', 'timestamp');
-        $this->addProp('user_id', 'int');
+        foreach ($product_props as $name => $type) {
+            array_push($requests, new Reqs\AddItemProperty($name, $type));
+        }
+        
+        foreach ($user_props as $name => $type) {
+            array_push($requests, new Reqs\AddUserProperty($name, $type));
+        }
+
+        return $this->send(new Reqs\Batch($requests));
     }
 
 

@@ -10,6 +10,7 @@
         "artesaos/seotools": "^0.10.0",
         "ayeo/price": "^1.0",
         "barryvdh/laravel-debugbar": "^2.3",
+        "bugsnag/bugsnag-laravel": "^2.0",
         "cviebrock/eloquent-sluggable": "^4.2",
         "cviebrock/eloquent-taggable": "^2.1",
         "damiantw/laravel-scout-mysql-driver": "^1.0",
