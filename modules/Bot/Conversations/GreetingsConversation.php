@@ -10,43 +10,58 @@ use Mpociot\BotMan\Question;
 
 class GreetingsConversation extends Conversation
 {
+    protected $firstname;
+    
+    protected $email;
 
-    /**
-     * First question
-     */
-    public function askReason()
+    public function askFirstname()
     {
-        $question = Question::create("Huh - you woke me up. So I have couple suggestions")
-            ->fallback('Unable to ask question')
-            ->callbackId('ask_reason')
-            ->addButtons([
-                Button::create('Have sex')->value('sex'),
-                Button::create('Read a book')->value('quote'),
-                Button::create('Sleep')->value('quote'),
-                Button::create('Code')->value('quote'),
-                Button::create('Contact investors')->value('quote'),
-            ]);
+        $this->ask('Hello! What is your name?', function(Answer $answer) {
+            // Save result
+            $this->firstname = $answer->getText();
 
-        return $this->ask($question, function (Answer $answer) {
-            if ($answer->isInteractiveMessageReply()) {
-                if ($answer->getValue() === 'joke') {
-                    $joke = json_decode(file_get_contents('http://api.icndb.com/jokes/random'));
-                    $this->say($joke->value->joke);
-                } elseif ($answer->getValue() === 'sex') {
-                    $this->say('Attractive ...');
-                } else {
-                    $this->say(Inspiring::quote());
-                }
-            }
+            $this->say('Nice to meet you '.$this->firstname);
+            
+            $this->askEmail();
         });
     }
 
-    /**
-     * Start the conversation
-     */
+    public function askEmail()
+    {
+        $this->ask('One more thing - what is your email?', function(Answer $answer) {
+            // Save result
+            $this->email = $answer->getText();
+
+            $this->say('Great - that is all we need, '.$this->firstname);
+
+            $this->sendInfo();
+        });
+    }
+
+    public function sendInfo()
+    {
+        $bot->reply(GenericTemplate::create()
+            ->addElements([
+                Element::create('Nixler Documentation')
+                    ->subtitle('All about Nixler')
+                    ->image('http://botman.io/img/botman-body.png')
+                    ->addButton(ElementButton::create('visit')->url('http://nixler.pl'))
+                    ->addButton(ElementButton::create('tell me more')
+                        ->payload('tellmemore')->type('postback')),
+                Element::create('Nixler Bot Docs')
+                    ->subtitle('This is the best way to start with NixlerBot')
+                    ->image('http://botman.io/img/botman-body.png')
+                    ->addButton(ElementButton::create('visit')
+                        ->url('https://nixler.pl/NixlerBot')
+                    )
+            ])
+        );
+    }
+
     public function run()
     {
-        $this->askReason();
+        // This will be called immediately
+        $this->askFirstname();
     }
 
 }
