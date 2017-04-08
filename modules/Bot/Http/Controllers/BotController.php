@@ -24,8 +24,12 @@ class BotController extends Controller
             $bot->reply('Hi there :)');
         });
 
-        $botman->hears('What to do?', function (BotMan $bot) {
+        $botman->hears('{Hey|Hello|Hi}', function (BotMan $bot) {
             $bot->startConversation(new GreetingsConversation());
+        });
+
+        $botman->fallback(function($bot) {
+            $bot->reply('Sorry, I did not understand these commands.');
         });
 
         $botman->listen();
