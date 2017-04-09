@@ -152,6 +152,41 @@ class RecommService {
      *
      * @return string
      */
+    public function addUser($user)
+    {   
+        $addUser = new Reqs\AddUser($user->id);
+
+        $setValues = new Reqs\SetUserValues($user->id, [
+            'currency' => $user->currency,
+            'locale' => $user->locale,
+            'gender' => $user->getMeta('gender'),
+            //'age_range' => ,
+            //'city_id' => 'int',
+            //'income_lvl' => 'int',
+        ], [
+          'cascadeCreate' => true
+        ]);
+
+        return $this->send(new Reqs\Batch([$addUser, $setValues]));
+    }
+
+
+    /**
+     * Add activity to Keen
+     *
+     * @return string
+     */
+    public function removeUser($user)
+    {   
+        return $this->send(new Reqs\DeleteUser($user->id));
+    }
+
+
+    /**
+     * Add activity to Keen
+     *
+     * @return string
+     */
     public function addProps()
     {   
         $requests = [];
