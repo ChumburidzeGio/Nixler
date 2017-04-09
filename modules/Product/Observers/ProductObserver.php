@@ -13,9 +13,13 @@ class ProductObserver
      * @param  Product  $product
      * @return void
      */
-    public function updated(Product $product)
+    public function saved(Product $product)
     {
-        (new RecommService)->addProduct($product);
+        if($product->is_active){
+
+            (new RecommService)->addProduct($product);
+
+        }
     }
 
     /**

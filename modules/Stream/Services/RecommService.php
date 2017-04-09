@@ -123,10 +123,11 @@ class RecommService {
         $setValues = new Reqs\SetItemValues($product->id, [
             'price' => $product->price,
             'title' => $product->title,
-            'likes_count' => $product->likes_count,
-            'updated_at' => $product->updated_at,
-            'created_at' => $product->created_at,
-            'user_id' => $product->owner_id
+            'user_id' => $product->owner_id,
+            'category_id' => $product->category,
+            'in_stock' => $product->in_stock,
+            'currency' => $product->currency,
+            'description' => $product->description
         ], [
           'cascadeCreate' => true
         ]);
@@ -151,7 +152,7 @@ class RecommService {
      *
      * @return string
      */
-    public function addProductProps()
+    public function addProps()
     {   
         $requests = [];
 
@@ -162,6 +163,7 @@ class RecommService {
             'category_id' => 'int',
             'in_stock' => 'int',
             'currency' => 'string',
+            'description' => 'string',
         ];
 
         $user_props = [

@@ -165,7 +165,7 @@ class Install extends Command
      */
     private function setRecomm()
     {
-        (new RecommService)->addProductProps();
+        (new RecommService)->addProps();
     }
 
     /**
