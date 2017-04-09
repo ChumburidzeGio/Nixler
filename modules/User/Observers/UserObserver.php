@@ -32,6 +32,19 @@ class UserObserver
      * @param  User  $user
      * @return void
      */
+    public function updating(User $user)
+    {
+        if ($user->username != $user->getOriginal('username')) {
+            $user->updateUsernameCallback($user->getOriginal('username'), $user->username);
+        }
+    }
+
+    /**
+     * Listen to the User created event.
+     *
+     * @param  User  $user
+     * @return void
+     */
     public function saved(User $user)
     {
         (new RecommService)->addUser($user);

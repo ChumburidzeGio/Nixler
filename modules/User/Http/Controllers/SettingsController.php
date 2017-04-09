@@ -5,7 +5,6 @@ namespace Modules\User\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Modules\User\Events\UsernameChanged;
 use Illuminate\Validation\Rule;
 use Modules\Address\Services\LocationService;
 use stdClass;
@@ -43,15 +42,10 @@ class SettingsController extends Controller
               'headline' => 'sometimes|max:255'
         ]);
 
-        $oldUsername = $user->username;
     	$user->username = $request->input('username');
     	$user->name = $request->input('name');
     	$user->setMeta('headline', $request->input('headline'));
     	$user->save();
-        
-        if($oldUsername != $user->username){
-            event(new UsernameChanged($user, $oldUsername));
-		}
 
         return redirect('settings/account')->with('status', 
                         trans('user::settings.account.updated_status'));
