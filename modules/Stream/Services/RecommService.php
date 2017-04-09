@@ -167,7 +167,7 @@ class RecommService {
           'cascadeCreate' => true
         ]);
 
-        return $this->send(new Reqs\Batch([$addUser, $setValues]));
+        return $this->send(new Reqs\Batch([/*$addUser,*/ $setValues]));
     }
 
 
