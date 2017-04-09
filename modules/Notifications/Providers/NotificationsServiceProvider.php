@@ -1,14 +1,10 @@
 <?php
 
-namespace Modules\Stream\Providers;
+namespace Modules\Notifications\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use Modules\Stream\Console\Personalize;
-use Modules\Stream\Console\UpdateStreams;
-use Modules\Stream\Observers\ActivityObserver;
-use Modules\Stream\Entities\Activity;
 
-class StreamServiceProvider extends ServiceProvider
+class NotificationsServiceProvider extends ServiceProvider
 {
     /**
      * Indicates if loading of the provider is deferred.
@@ -24,12 +20,9 @@ class StreamServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Activity::observe(ActivityObserver::class);
-        
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
-        $this->registerCommands();
     }
 
     /**
@@ -50,10 +43,10 @@ class StreamServiceProvider extends ServiceProvider
     protected function registerConfig()
     {
         $this->publishes([
-            __DIR__.'/../Config/config.php' => config_path('stream.php'),
+            __DIR__.'/../Config/config.php' => config_path('notifications.php'),
         ], 'config');
         $this->mergeConfigFrom(
-            __DIR__.'/../Config/config.php', 'stream'
+            __DIR__.'/../Config/config.php', 'notifications'
         );
     }
 
@@ -64,7 +57,7 @@ class StreamServiceProvider extends ServiceProvider
      */
     public function registerViews()
     {
-        $viewPath = base_path('resources/views/modules/stream');
+        $viewPath = base_path('resources/views/modules/notifications');
 
         $sourcePath = __DIR__.'/../Resources/views';
 
@@ -73,8 +66,8 @@ class StreamServiceProvider extends ServiceProvider
         ]);
 
         $this->loadViewsFrom(array_merge(array_map(function ($path) {
-            return $path . '/modules/stream';
-        }, \Config::get('view.paths')), [$sourcePath]), 'stream');
+            return $path . '/modules/notifications';
+        }, \Config::get('view.paths')), [$sourcePath]), 'notifications');
     }
 
     /**
@@ -84,28 +77,12 @@ class StreamServiceProvider extends ServiceProvider
      */
     public function registerTranslations()
     {
-        $langPath = base_path('resources/lang/modules/stream');
+        $langPath = base_path('resources/lang/modules/notifications');
 
         if (is_dir($langPath)) {
-            $this->loadTranslationsFrom($langPath, 'stream');
+            $this->loadTranslationsFrom($langPath, 'notifications');
         } else {
-            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'stream');
-        }
-    }
-
-
-    /**
-     * Register commands.
-     *
-     * @return void
-     */
-    public function registerCommands()
-    {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                Personalize::class,
-                UpdateStreams::class,
-            ]);
+            $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'notifications');
         }
     }
 

@@ -101,7 +101,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
     public function refreshStreams()
     {
         $models = User::whereHas('sessions', function($q){
-            return $q->whereBetween('updated_at', [Carbon::now()->subDay(), Carbon::now()]);
+            return $q->whereBetween('updated_at', [Carbon::now()->subMinutes(10), Carbon::now()]);
         })->get();
 
         $models->map(function($model){
@@ -138,8 +138,6 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
-        return $this->refreshStreams();
-        
         $query = Activity::select('object', DB::raw('count(activities.object) as total'))
                     ->whereIn('verb', ['product:viewed', 'product:liked'])
                     ->groupBy('object')
