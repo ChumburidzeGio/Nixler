@@ -75,7 +75,7 @@ class Product extends Model
     public function firstPhoto()
     {
         return $this->belongsToMany(config('mediable.model'), 'mediables', 'mediable_id', 'media_id')
-            ->where('mediable_type', get_class($this))->latest()->nPerGroup('mediables', 'media_id', 1);
+            ->where('mediable_type', get_class($this))->nPerGroup('mediables', 'media_id', 1);
     }
 
     
