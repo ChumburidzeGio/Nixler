@@ -37,7 +37,7 @@ class ProductDatabaseSeeder extends Seeder
             array_get(Amazon::search('lexar')->json(), 'Items.Item'),
             array_get(Amazon::search('POLO')->json(), 'Items.Item'),
             array_get(Amazon::search('Robert Kent')->json(), 'Items.Item'),
-            array_get(Amazon::search('Hugo Boss')->json(), 'Items.Item'),
+            array_get(Amazon::search('Hugo Boss')->json(), 'Items.Item')
         );
 
         DB::transaction(function () use ($items, $repository) {
