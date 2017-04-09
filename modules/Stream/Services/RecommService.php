@@ -160,9 +160,9 @@ class RecommService {
             'locale' => $user->locale,
             'gender' => $user->getMeta('gender') == 'male' ? 1 : 2,
             'headline' => $user->getMeta('headline'),
-            'age_range' => 4,
-            'city_id' => 4,
-            'income_lvl' => 2,
+            //'age_range' => 4,
+            //'city_id' => 4,
+            //'income_lvl' => 2,
         ], [
           'cascadeCreate' => true
         ]);
