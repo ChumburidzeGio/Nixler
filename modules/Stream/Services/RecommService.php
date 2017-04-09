@@ -156,7 +156,7 @@ class RecommService {
     public function addUser($user)
     {   
         //$addUser = new Reqs\AddUser($user->id);
-        print_r($user->currency);
+        print_r($user->currency, $user->getMeta('headline'));
         $setValues = new Reqs\SetUserValues($user->id, [
             'currency' => $user->currency,
             'locale' => $user->locale,
