@@ -160,6 +160,7 @@ class RecommService {
             'currency' => $user->currency,
             'locale' => $user->locale,
             'gender' => $user->getMeta('gender'),
+            'headline' => $user->getMeta('headline'),
             'age_range' => 4,
             'city_id' => 4,
             'income_lvl' => 2,
@@ -208,6 +209,7 @@ class RecommService {
             'age_range' => 'int',
             'city_id' => 'int',
             'income_lvl' => 'int',
+            'headline' => 'string',
         ];
 
         array_push($requests, new Reqs\ResetDatabase());
