@@ -154,7 +154,7 @@ class RecommService {
      */
     public function addUser($user)
     {   
-        $addUser = new Reqs\AddUser($user->id);
+        //$addUser = new Reqs\AddUser($user->id);
 
         $setValues = new Reqs\SetUserValues($user->id, [
             'currency' => $user->currency,
