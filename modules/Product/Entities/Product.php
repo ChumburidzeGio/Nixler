@@ -12,13 +12,12 @@ use Laravel\Scout\Searchable;
 use Modules\Comment\Traits\HasComments;
 use Modules\User\Entities\User;
 use App\Traits\NPerGroup;
-use Cviebrock\EloquentTaggable\Taggable;
 use Modules\Stream\Entities\Activity;
 use Modules\Stream\Traits\Actable;
 
 class Product extends Model
 {
-	use Mediable, Metable, Sluggable, HasComments, Searchable, NPerGroup, Taggable, Actable;
+	use Mediable, Metable, Sluggable, HasComments, Searchable, NPerGroup, Actable;
 	
     public $table = 'products';
     
@@ -89,7 +88,7 @@ class Product extends Model
 
 
     public function setPriceAttribute($value){
-        $this->attributes['price'] = floatval(ltrim($value, '$'));
+        $this->attributes['price'] = preg_replace('/[^0-9.]+/', '', $value);
     }
 
 

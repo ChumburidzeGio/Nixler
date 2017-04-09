@@ -45,7 +45,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
     {
         $user = auth()->user();
 
-        $products = $user->stream()->with('firstPhoto', 'owner')->paginate(20);
+        $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
 
         $manager = new Manager();
 

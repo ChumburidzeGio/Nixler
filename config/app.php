@@ -184,7 +184,6 @@ return [
         Dimsav\Translatable\TranslatableServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,
         Dawson\AmazonECS\AmazonECSServiceProvider::class,
-        Cviebrock\EloquentTaggable\ServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Spatie\CookieConsent\CookieConsentServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,

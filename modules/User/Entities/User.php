@@ -8,7 +8,6 @@ use Modules\Product\Traits\Merchant;
 use Modules\Messages\Traits\HasMessages;
 use Modules\Stream\Traits\HasStream;
 use Intervention\Image\ImageManagerStatic as Image;
-use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Overtrue\LaravelFollow\FollowTrait;
 use Plank\Mediable\Mediable;
 use Plank\Metable\Metable;
@@ -22,7 +21,7 @@ use Modules\User\Entities\Session;
 
 class User extends Authenticatable
 {
-    use Notifiable, Mediable, Metable, HasRolesAndAbilities, FollowTrait, Merchant, HasMessages, HasStream, Sluggable;
+    use Notifiable, Mediable, Metable, FollowTrait, Merchant, HasMessages, HasStream, Sluggable;
 
     /**
      * Return the sluggable configuration array for this model.

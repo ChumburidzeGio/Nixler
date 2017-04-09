@@ -127,8 +127,6 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
             $product->markAsActive();
         }
 
-        $product->reTag($this->tokenize($product->title));
-
         return $product;
     }
     
@@ -148,26 +146,6 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         $resource = new Collection($products, new ProductTransformer());
 
         return $manager->createData($resource)->toJson();
-    }
-
-
-    /**
-     * Tranform text into tokens
-     *
-     * @return array
-     */
-    public function tokenize($text)
-    {
-        $stopwords_en = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/en.json'));
-        $stopwords_ka = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/ka.json'));
-        $stopwords_pl = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/pl.json'));
-        $stopwords_ru = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/ru.json'));
-        $stopwords = array_merge($stopwords_en, $stopwords_ka, $stopwords_pl, $stopwords_ru);
-
-        $text = preg_replace('![^\pL\pN\s]+!u', '', mb_strtolower($text)); 
-        $words = preg_split('/\s+/', $text);
-
-        return array_unique(array_diff($words, $stopwords));
     }
 
 
@@ -203,4 +181,24 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         
         return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
     }
+
+
+    /**
+     * Tranform text into tokens
+     *
+     * @return array
+    public function tokenize($text)
+    {
+        $stopwords_en = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/en.json'));
+        $stopwords_ka = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/ka.json'));
+        $stopwords_pl = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/pl.json'));
+        $stopwords_ru = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/ru.json'));
+        $stopwords = array_merge($stopwords_en, $stopwords_ka, $stopwords_pl, $stopwords_ru);
+
+        $text = preg_replace('![^\pL\pN\s]+!u', '', mb_strtolower($text)); 
+        $words = preg_split('/\s+/', $text);
+
+        return array_unique(array_diff($words, $stopwords));
+    }
+     */
 }
