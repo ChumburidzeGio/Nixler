@@ -160,9 +160,9 @@ class RecommService {
             'currency' => $user->currency,
             'locale' => $user->locale,
             'gender' => $user->getMeta('gender'),
-            //'age_range' => ,
-            //'city_id' => 'int',
-            //'income_lvl' => 'int',
+            'age_range' => 4,
+            'city_id' => 4,
+            'income_lvl' => 2,
         ], [
           'cascadeCreate' => true
         ]);
