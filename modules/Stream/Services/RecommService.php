@@ -155,22 +155,19 @@ class RecommService {
      */
     public function addUser($user)
     {   
-        $addUser = new Reqs\AddUser($user->id);
-
-        info($user->currency.$user->getMeta('headline'));
         $setValues = new Reqs\SetUserValues($user->id, [
             'currency' => $user->currency,
             'locale' => $user->locale,
-            'gender' => $user->getMeta('gender'),
+            'gender' => $user->getMeta('gender') == 'male' ? 1 : 2,
             'headline' => $user->getMeta('headline'),
-            //'age_range' => 4,
-            //'city_id' => 4,
-            //'income_lvl' => 2,
+            'age_range' => 4,
+            'city_id' => 4,
+            'income_lvl' => 2,
         ], [
           'cascadeCreate' => true
         ]);
 
-        return $this->send(new Reqs\Batch([$addUser, $setValues]));
+        return $this->send($setValues);
     }
 
 
