@@ -21,7 +21,7 @@ class SeedFakeUsersTableSeeder extends Seeder
            
             $faker = Factory::create($locale);
 
-            for ($i=0; $i < config('test.models_per_locale.users'); $i++) { 
+            for ($i=0; $i < 30; $i++) { 
                 $user = $this->createUser($faker);
                 $this->createRelationships($user);
                 $this->createEmails($user, $faker);

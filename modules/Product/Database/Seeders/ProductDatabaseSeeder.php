@@ -50,18 +50,20 @@ class ProductDatabaseSeeder extends Seeder
 
                 $features = array_get($item, 'ItemAttributes.Feature');
                 $colors = collect(['Black', 'Indigo', 'Red', 'Blue', 'Yellow', 'Orange', 'Cyan', 'Aero']);
+                $title = str_limit(array_get($item, 'ItemAttributes.Title'), 180);
+                $price = array_get($item, 'ItemAttributes.ListPrice.FormattedPrice');
+
+                print("\nCreating ".$title.' for '.$price);
 
                 $product = $repository->update([
-                    'title' => str_limit(array_get($item, 'ItemAttributes.Title'), 180),
+                    'title' => $title,
                     'description' => is_array($features) ? implode(' ', $features) : $features,
-                    'price' => array_get($item, 'ItemAttributes.ListPrice.FormattedPrice'),
+                    'price' => $price,
                     'category' => Category::inRandomOrder()->whereNotNull('parent_id')->pluck('id')->first(),
                     'in_stock' => rand(1,50),
                     'variants' => json_encode($colors->random(rand(1,4))),
                     'action' => 'publish'
                 ], $product->id);
-
-                print("\nCreated ".$product->title);
 
                 if(array_get($item, 'LargeImage.URL')) $product->uploadPhoto(array_get($item, 'LargeImage.URL'), 'photo');
 
