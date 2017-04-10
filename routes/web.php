@@ -19,7 +19,6 @@ Route::group(['prefix' => (new Modules\Address\Services\LocationService)->segmen
 });
 
 Route::get('/policy', function(){
-	return filter_var("AR3,373.31", FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
 	return view('policy.page');
 });
 
