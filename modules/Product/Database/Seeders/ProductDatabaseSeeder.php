@@ -53,6 +53,10 @@ class ProductDatabaseSeeder extends Seeder
                 $title = str_limit(array_get($item, 'ItemAttributes.Title'), 180);
                 $price = array_get($item, 'ItemAttributes.ListPrice.FormattedPrice');
 
+                if(!$price) {
+                    return false;
+                }
+                
                 print("\nCreating ".$title.' for '.$price);
 
                 $product = $repository->update([
