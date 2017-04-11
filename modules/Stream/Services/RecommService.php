@@ -17,7 +17,7 @@ class RecommService {
      */
     public function __construct()
     {	
-    	$this->client = new Client('nixler', 'DaLxkWAdffLwmeU2orojf6s2ua6gMLdubZh2RGvDdA8Q062mf9je9o5Rk7KgVGOE', 'https');
+    	$this->client = new Client(env('RECOMM_DB'), env('RECOMM_KEY'), 'https');
     }
 
 

@@ -79,68 +79,41 @@ class Install extends Command
 
         $this->call('key:generate');
 
-        if($env = $this->anticipate('What is the enviroment?', ['local', 'production', 'development'])){
-            $this->writeNewEnvironmentFileWith('APP_ENV', $env);
-        }
+        $env = $this->svwq('What is the environment?', 'APP_ENV', 'anticipate', ['local', 'production', 'development']);
 
-        if($db_name = $this->ask('Name of database?')){
-            $this->writeNewEnvironmentFileWith('DB_DATABASE', $db_name);
-        }
-
-        if($db_port = $this->ask('Port?')){
-            $this->writeNewEnvironmentFileWith('DB_PORT', $db_port);
-        }
-
-        if($db_user = $this->ask('Username?')){
-            $this->writeNewEnvironmentFileWith('DB_USERNAME', $db_user);
-        }
-
-        if($db_pass = $this->secret('Password?')){
-            $this->writeNewEnvironmentFileWith('DB_PASSWORD', $db_pass);
-        }
+        $this->svwq('Name of database?', 'DB_DATABASE');
+        $this->svwq('Port?', 'DB_PORT');
+        $this->svwq('Username?', 'DB_USERNAME');
+        $this->svwq('Password?', 'DB_PASSWORD');
 
         if($env != 'production'){
 
-            $this->writeNewEnvironmentFileWith('MAIL_DRIVER', 'mailtrap');
-            $this->writeNewEnvironmentFileWith('MAIL_HOST', 'smtp.mailtrap.io');
-            $this->writeNewEnvironmentFileWith('MAIL_PORT', '2525');
+            $this->env('MAIL_DRIVER', 'mailtrap');
+            $this->env('MAIL_HOST', 'smtp.mailtrap.io');
+            $this->env('MAIL_PORT', '2525');
 
-            if($mt_user = $this->ask('Mailtrap username?')){
-                $this->writeNewEnvironmentFileWith('MAIL_USERNAME', $mt_user);
-            }
-
-            if($mt_pass = $this->ask('Mailtrap password?')){
-                $this->writeNewEnvironmentFileWith('MAIL_PASSWORD', $mt_pass);
-            }
+            $this->svwq('Mailtrap username?', 'MAIL_USERNAME');
+            $this->svwq('Mailtrap password?', 'MAIL_PASSWORD');
 
         } else {
 
-            $this->writeNewEnvironmentFileWith('MAIL_DRIVER', 'mailgun');
-            $this->writeNewEnvironmentFileWith('MAIL_HOST', 'smtp.mailgun.org');
-            $this->writeNewEnvironmentFileWith('MAIL_PORT', '587');
-            $this->writeNewEnvironmentFileWith('MAILGUN_DOMAIN', 'mail.nixler.pl');
+            $this->env('MAIL_DRIVER', 'mailgun');
+            $this->env('MAIL_HOST', 'smtp.mailgun.org');
+            $this->env('MAIL_PORT', '587');
+            $this->env('MAILGUN_DOMAIN', 'mail.nixler.pl');
 
-            if($mg_sec = $this->ask('Mailgun secret?')){
-                $this->writeNewEnvironmentFileWith('MAILGUN_SECRET', $mg_sec);
-            }
+            $this->svwq('Mailgun secret?', 'MAILGUN_SECRET');
 
         }
 
-        if($fb_id = $this->ask('Facebook APP ID?')){
-            $this->writeNewEnvironmentFileWith('FACEBOOK_APP_ID', $fb_id);
-        }
+        $this->svwq('Facebook APP ID?', 'FACEBOOK_APP_ID');
+        $this->svwq('Facebook APP secret?', 'FACEBOOK_APP_SECRET');
+        $this->svwq('Facebook APP redirect link?', 'FACEBOOK_APP_REDIRECT');
 
-        if($fb_secret = $this->ask('Facebook APP secret?')){
-            $this->writeNewEnvironmentFileWith('FACEBOOK_APP_SECRET', $fb_secret);
-        }
-
-        if($fb_url = $this->ask('Facebook APP redirect link?')){
-            $this->writeNewEnvironmentFileWith('FACEBOOK_APP_REDIRECT', $fb_url);
-        }
-
-        if($mc_key = $this->ask('Mailchimp API key?')){
-            $this->writeNewEnvironmentFileWith('MAILCHIMP_APIKEY', $mc_key);
-        }
+        $this->svwq('Recomm DB name?', 'RECOMM_DB');
+        $this->svwq('Recomm DB key?', 'RECOMM_KEY');
+        
+        $this->svwq('Mailchimp API key?', 'MAILCHIMP_APIKEY');
 
     }
 
@@ -248,13 +221,31 @@ class Install extends Command
      * @param  string  $key
      * @return void
      */
-    protected function writeNewEnvironmentFileWith($key, $val)
+    protected function env($key, $val)
     {
         file_put_contents($this->laravel->environmentFilePath(), preg_replace(
             $this->keyReplacementPattern($key),
            $key."=".$val,
             file_get_contents(app()->environmentFilePath())
         ));
+    }
+
+
+    /**
+     * Write a new environment file with the given key.
+     *
+     * @param  string  $key
+     * @return void
+     */
+    protected function svwq($question, $key, $type = 'ask', $params = null, $val = null)
+    {
+        if($val = $this->{$type}($question, $params)){
+            
+            $this->env($key, $val);
+            
+        }
+
+        return $val;
     }
 
 
