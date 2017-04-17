@@ -64,7 +64,13 @@ return [
         'readKey'   => env('KEEN_READ_KEY', ''),
     ],
 
-    'botman' => [
-        'telegram_token' => '336182320:AAGgXE7N_rhtpjg9o0KFZvY-HoYMFUnQvSo',
+    'nexmo' => [
+        'key' => env('NEXMO_KEY'),
+        'secret' => env('NEXMO_SECRET'),
+        'sms_from' => 'Nixler',
+    ],
+
+    'telegram-bot-api' => [
+        'token' => env('TELEGRAM_BOT_TOKEN')
     ],
 ];

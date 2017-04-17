@@ -17,17 +17,16 @@ class SeedFakeUsersTableSeeder extends Seeder
      */
     public function run()
     {
-        foreach (config('test.locales') as $locale) {
+        //foreach (config('test.locales') as $locale) {
            
-            $faker = Factory::create($locale);
+            $faker = Factory::create('en_US');
 
             for ($i=0; $i < 30; $i++) { 
                 $user = $this->createUser($faker);
                 $this->createRelationships($user);
-                $this->createEmails($user, $faker);
                 $this->uploadPhotos($user, $faker);
             }
-        }
+        //}
     }
 
 
@@ -60,25 +59,6 @@ class SeedFakeUsersTableSeeder extends Seeder
     {
         $user_ids = User::inRandomOrder()->where('id', '<>', $user->id)->take(rand(10,30))->pluck('id')->toArray();
         $user->follow($user_ids);
-    }
-
-
-    /**
-     * Create emails
-     *
-     * @return void
-     */
-    public function createEmails($user, $faker)
-    {
-        for ($i=0; $i < rand(2,8); $i++) {
-            $email = $user->emails()->create([
-                'address' => $faker->email
-            ]);
-
-            $code = $email->verify();
-            $email->makeVerified($code);
-            $email->makeDefault();
-        }
     }
 
 

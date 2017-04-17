@@ -51,7 +51,7 @@
                     <span class="_cb _clear _fs13  _telipsis _w100 _oh _pr10">
                        {{ $product->currency }} {{ $product->price }}
                     </span>
-                    @if($product->in_stock)
+                    @if($product->in_stock && !(auth()->check() && $product->currency !== auth()->user()->currency))
                     <div class="_a3 _posa _mr15">
                         <a class="_btn _bga _cb" href="{{ route('order') }}?product_id={{ $product->id }}">
                             BUY NOW
@@ -63,6 +63,13 @@
                 @if(!$product->in_stock)
                 <div class="_c3 _bg5 _p5 _pl15">
                     Product is out of stock, please contact owner or check comments for more information.
+                </div>
+                @endif
+
+
+                @if(auth()->check() && $product->currency !== auth()->user()->currency)
+                <div class="_c3 _bg5 _p5 _pl15">
+                    You can't buy product from this market because of difference in currency.
                 </div>
                 @endif
 

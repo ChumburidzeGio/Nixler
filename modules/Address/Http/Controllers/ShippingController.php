@@ -59,7 +59,7 @@ class ShippingController extends Controller
     {
         $this->validate($request, [
               'location_id' => 'required',
-              'price' => 'required|numeric|between:0,150000',
+              'price' => 'nullable|numeric|between:0,150000',
               'window_from' => 'required|numeric|between:0,99',
               'window_to' => 'required|numeric|min:'.$request->input('window_from').'|max:99',
         ]);
@@ -69,7 +69,7 @@ class ShippingController extends Controller
             'location_id' => $request->input('location_id'),
             'type' => 'city'
         ], [
-            'price' => $request->input('price'),
+            'price' => $request->input('price') ? : 0,
             'window_from' => $request->input('window_from'),
             'window_to' => $request->input('window_to'),
         ]);
@@ -105,7 +105,7 @@ class ShippingController extends Controller
 
         $this->validateWithBag($shipping->sid, $request, [
               'location_id' => 'required',
-              'price' => 'required|numeric|between:0,150000',
+              'price' => 'nullable|numeric|between:0,150000',
               'type' => 'required|in:city,country',
               'window_from' => 'required|numeric|between:0,99',
               'window_to' => 'required|numeric|min:'.$request->input('window_from').'|max:99',
@@ -114,7 +114,7 @@ class ShippingController extends Controller
         if($request->input('action') == 'save'){
 
             $updated = $shipping->update([
-                'price' => $request->input('price'),
+                'price' => $request->input('price') ? : 0,
                 'window_from' => $request->input('window_from'),
                 'window_to' => $request->input('window_to'),
             ]);

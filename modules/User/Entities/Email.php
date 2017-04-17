@@ -2,14 +2,16 @@
 
 namespace Modules\User\Entities;
 
-use Modules\User\Emails\VerificationMail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\Notifiable;
+use Modules\User\Notifications\SendVerificationCode;
 use Exception;
 
 class Email extends Model
 {
-
+    use Notifiable;
+    
     public $table = 'user_emails';
     
     protected $fillable  = [
@@ -55,16 +57,12 @@ class Email extends Model
 
         $code = mt_rand(100000, 999999);
 
-        try {
-            Mail::to($this->address)->send(new VerificationMail($code));
-        } catch (Exception $e){
-            return false;
-        }
+        $this->notify(new SendVerificationCode($code));
 
         $this->verification_code = $code;
         $this->save();
 
-        if(!$this->where('user_id', $this->user_id)->where('is_default', 1)->exists()){
+        if(!$this->where('user_id', $this->user_id)->where('is_verified', 1)->where('is_default', 1)->exists()){
             $this->makeDefault();
         }
 

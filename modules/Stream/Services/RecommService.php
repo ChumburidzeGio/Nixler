@@ -6,7 +6,6 @@ use KeenIO\Client\KeenIOClient;
 use Recombee\RecommApi\Client;
 use Recombee\RecommApi\Requests as Reqs;
 use Recombee\RecommApi\Exceptions as Ex;
-use Bugsnag;
 
 class RecommService {
 
@@ -235,7 +234,6 @@ class RecommService {
         try {
             return $this->client->send($request);
         } catch(\Exception $e) {
-            Bugsnag::notifyException($e);
             return $default;
         }
     }

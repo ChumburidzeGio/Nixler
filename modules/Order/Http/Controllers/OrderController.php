@@ -10,9 +10,25 @@ use Modules\Address\Entities\ShippingPrice;
 use Modules\Order\Entities\Order;
 use Ayeo\Price\Price;
 use Carbon\Carbon;
+use Illuminate\Validation\Rule;
+use Modules\Address\Repositories\AddressRepository;
+use Modules\User\Repositories\PhoneRepository;
 
 class OrderController extends Controller
 {
+
+    /**
+     * @var PostRepository
+     */
+    protected $addressRepo;
+    protected $phoneRepo;
+
+    public function __construct(AddressRepository $addressRepo, PhoneRepository $phoneRepo){
+        $this->addressRepo = $addressRepo;
+        $this->phoneRepo = $phoneRepo;
+    }
+
+
     /**
      * Display a listing of the resource.
      * @return Response
@@ -42,11 +58,23 @@ class OrderController extends Controller
 
         $variants = collect($product->getMeta('variants'));
 
+        $phones = $user->phones()->get()->map(function($item){
+            return [
+                'id' => $item->id,
+                'label' => $item->phone_number,
+                'is_verified' => $item->is_verified
+            ];
+        });
+
+        $hasVerifiedPhone = $phones->filter(function($item){
+            return $item['is_verified'];
+        })->first();
+
         $shipping_prices = ShippingPrice::where('user_id', $merchant->id)->get();
 
-        $addresses = $user->addresses()->get(['name', 'street', 'id', 'city_id', 'country_id']);
+        $addresses = $user->addresses()->with('city')->get(['street', 'id', 'city_id', 'country_id']);
 
-        $addresses = $addresses->map(function($address) use($shipping_prices){
+        $addresses = $addresses->map(function($address) use ($shipping_prices) {
 
             $shipping = $shipping_prices->filter(function($item) use ($address) {
                 return ($item->type == 'city' && $item->location_id == $address->city_id);
@@ -63,11 +91,17 @@ class OrderController extends Controller
                 return compact('price', 'window_from', 'window_to');
             })->first();
 
-            return $address;
+            return [
+                'id' => $address->id,
+                'label' => $address->street,
+                'shipping' => $address->shipping
+            ];
 
         });
 
-        return view('order::create', compact('product', 'user', 'merchant', 'variants', 'addresses'));
+        $country = $user->country()->with('cities.translations')->first();
+
+        return view('order::create', compact('product', 'user', 'merchant', 'variants', 'addresses', 'phones', 'country', 'hasVerifiedPhone'));
     }
 
     /**
@@ -77,15 +111,75 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-        //validation for request, currency, if in stock
-
-        $product = Product::findorFail($request->input('product_id'));
-
-        $merchant = $product->owner;
 
         $user = auth()->user();
 
-        $address = $user->addresses()->findOrFail($request->input('address'));
+        if($request->has('phone')){
+
+            $this->validate($request, [
+                  'phone' => ['required', 'numeric', Rule::unique('user_phones', 'number')]
+            ]);
+
+            $phone = $user->phones()->create([
+                'number' => $request->input('phone'),
+                'country_code' => $user->country()->first()->calling_code
+            ]);
+
+            if(!$phone->verify()){
+                $phone->delete();
+                return redirect()->back()->withErrors([
+                    'phone' => trans('user::settings.phones.created_error_status')
+                ]);
+            }
+        }
+
+        if($request->has('city_id')){
+            
+            $this->validate($request, [
+                'city_id' => 'required|numeric',
+                'street' => 'required|string',
+            ]);
+
+            $this->addressRepo->create($request->all());
+
+        }
+
+        if($request->has('phone') || $request->has('city_id')){
+            return redirect()->back();
+        }
+
+        if($request->has('phone_id')){
+
+            $phone_verified = $this->phoneRepo->verificationCheck(
+                $request->input('phone_id'),
+                $request->input('code')
+            );
+
+            if(!$phone_verified){
+                return redirect()->back()->withErrors([
+                    'code' => trans('user::settings.phones.wrong_code_status')
+                ]);
+            }
+
+        }
+
+        $this->validate($request, [
+              'product_id' => 'required',
+              'quantity' => 'required|numeric|between:1,50',
+              'variant' => 'nullable|string',
+              'address_id' => 'required|numeric',
+              'comment' => 'nullable|string',
+        ]);
+
+        $product = Product::findorFail($request->input('product_id'));
+
+        if($user->currency !== $product->currency){
+            redirect()->back();
+        }
+
+        $merchant = $product->owner;
+
+        $address = $user->addresses()->findOrFail($request->input('address_id'));
 
         $shipping_prices = ShippingPrice::where('user_id', $merchant->id)->get();
 

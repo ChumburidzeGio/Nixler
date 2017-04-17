@@ -24,16 +24,8 @@ Addresses
 
 
 			<div class="row">
-				
-				<div class="col-sm-5 _mb15">
-					<input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="Address Name (Home, Work)" name="name">
 
-					@if ($errors->has('name'))
-					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('name') }}</span>
-					@endif
-				</div>
-
-				<div class="col-sm-4 _mb15" ng-if="vm.cities">
+				<div class="col-xs-4 _mb15" ng-if="vm.cities">
 					<select selector model="vm.location_id" value-attr="id" label-attr="name" class="_b1 _bcg _brds3"
 						options="vm.cities" placeholder="City" ng-init="vm.location_id={{ old('city_id') ? : '-1'}}">
 					</select>
@@ -45,15 +37,7 @@ Addresses
 					@endif
 				</div>
 				
-				<div class="col-sm-3 _mb15">
-					<input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="Postal code" name="post_code">
-
-					@if ($errors->has('post_code'))
-					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('post_code') }}</span>
-					@endif
-				</div>
-				
-				<div class="col-sm-7 _mb15">
+				<div class="col-xs-6 _mb15">
 					<input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="Street address, block, flat" name="street">
 
 					@if ($errors->has('street'))
@@ -61,24 +45,7 @@ Addresses
 					@endif
 				</div>
 
-				<div class="col-sm-5 _mb15">
-					<input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="Phone number" name="phone">
-
-					@if ($errors->has('phone'))
-					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('phone') }}</span>
-					@endif
-				</div>
-
-				
-				<div class="col-sm-12 _mb15">
-					<input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="Note" name="note">
-
-					@if ($errors->has('note'))
-					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('note') }}</span>
-					@endif
-				</div>
-				
-				<div class="_mb15 col-xs-12">
+				<div class="_mb15 col-xs-2">
 					<button class="_btn _bga _cb _hvra _ml10 _right" type="submit" name="action" value="publish"> 
 						<i class="material-icons _mr5 _va5 _fs20">add</i> Add
 					</button>
@@ -109,8 +76,8 @@ Addresses
 
 		    <div class="_pl5 _media _clear">
 		      <a class="_oh" ng-click="vm.edit(i.id)" href="{{ route('settings.addresses.edit', ['id' => $address->id]) }}">
-		        <span class="_title _fs14 _ci">{{ $address->name }}</span>
-		        <small class="_clear">{{ $address->city->name }}, {{ $address->street }}</small>
+		        <span class="_title _fs14 _ci">{{ $address->street }}</span>
+		        <small class="_clear">{{ $address->city->name }}</small>
 		      </a>
 		      <span class="_ar _posa _m15 _pt5" 
 		      	ng-click="vm.delete('{{ route('settings.addresses.delete', ['id' => $address->id]) }}')" 

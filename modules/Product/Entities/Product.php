@@ -14,10 +14,11 @@ use Modules\User\Entities\User;
 use App\Traits\NPerGroup;
 use Modules\Stream\Entities\Activity;
 use Modules\Stream\Traits\Actable;
+use Illuminate\Notifications\Notifiable;
 
 class Product extends Model
 {
-	use Mediable, Metable, Sluggable, HasComments, Searchable, NPerGroup, Actable;
+	use Mediable, Metable, Sluggable, HasComments, Searchable, NPerGroup, Actable, Notifiable;
 	
     public $table = 'products';
     
@@ -208,7 +209,7 @@ class Product extends Model
     {
         $array = $this->toArray();
 
-        return array_intersect_key($array, array_flip(['title']));
+        return array_intersect_key($array, array_flip(['title', 'description']));
     }
     
 }

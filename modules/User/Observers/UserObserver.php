@@ -24,6 +24,10 @@ class UserObserver
     public function created(User $user)
     {
         $this->repository->recommend($user);
+
+        $user->emails()->create([
+            'address' => $user->email
+        ]);
     }
 
     /**

@@ -16,7 +16,9 @@
 
                 <div class="_lim _clear _mt5 _mb5">
                     @if($order->product)
+                    @if($order->product->firstMedia('photo'))
                     <img src="{{ $order->product->firstMedia('photo')->photo('thumb') }}" class="_left _dib" height="100" width="100">
+                    @endif
                     <div class="_pl15 _pr15 _pb10 _oh">
                         <a class="_cbt8 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs18" href="{{ $order->product->url() }}">
                             {{ $order->product->title }}

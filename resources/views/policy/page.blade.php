@@ -1,7 +1,6 @@
 @extends('layouts.general')
 
 @section('app')
-
 <body class="_bgw _ffroboto">
 
     <div id="app" class="_clear">

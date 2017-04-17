@@ -38,6 +38,16 @@ Route::group(['middleware' => 'web', 'namespace' => 'Modules\User\Http\Controlle
 		//Locale
 		Route::post('locale', 'SettingsController@updateLocale');
 
+		//Phones
+		Route::group(['prefix' => 'phones'], function() {
+			Route::get('/', 'Settings\PhonesController@index')->name('settings.phones');
+			Route::post('/', 'Settings\PhonesController@store');
+			Route::get('/{id}/verify', 'Settings\PhonesController@verify');
+			Route::post('/{id}/code', 'Settings\PhonesController@verificationCheck');
+			Route::get('/{id}/default', 'Settings\PhonesController@makeDefault');
+			Route::get('/{id}/delete', 'Settings\PhonesController@delete');
+		});
+
 	});
 
 });

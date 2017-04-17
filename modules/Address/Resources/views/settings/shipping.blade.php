@@ -83,8 +83,6 @@
 					ng-currency min="1" ng-required="true" currency-symbol="{{ $country->currency_symbol }} " 
 					ng-model="vm.price" placeholder="Price">
 
-					<input type="hidden" name="price" ng-value="vm.price">
-
 					@if ($errors->has('price'))
 					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('price') }}</span>
 					@endif

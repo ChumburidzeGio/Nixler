@@ -18,6 +18,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Modules\Address\Entities\UserAddress;
 use Modules\Stream\Entities\UserTag;
 use Modules\User\Entities\Session;
+use Modules\Address\Entities\Country;
 
 class User extends Authenticatable
 {
@@ -93,6 +94,12 @@ class User extends Authenticatable
     public function sessions()
     {   
         return $this->hasMany(UserSession::class, 'user_id');
+    }
+
+
+    public function country()
+    {   
+        return $this->hasOne(Country::class, 'iso_code', 'country');
     }
 
 
@@ -204,11 +211,5 @@ class User extends Authenticatable
         $user->locale = array_get($data, 'locale');
         $user->save();
     }
-    /*========================================
-               LOCATION & LANGUAGE
-    =========================================*/
-
-    //ellisio/laravel-phone
-    //giggsey/libphonenumber-for-php
 
 }

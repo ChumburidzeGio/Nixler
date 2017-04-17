@@ -20,9 +20,9 @@ class CreateUserPhonesTable extends Migration
             $table->bigInteger('user_id')->unsigned()->index();
             $table->string('country_code');
             $table->string('number')->index();
-            $table->boolean('is_verified');
-            $table->integer('verification_code')->unsigned();
-            $table->boolean('is_default')->default(1);
+            $table->boolean('is_verified')->default(0);
+            $table->integer('verification_code')->unsigned()->nullable();
+            $table->boolean('is_default')->default(0);
             $table->timestamps();
 
         });

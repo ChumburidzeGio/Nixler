@@ -12,7 +12,7 @@ class UserAddress extends Model
     public $table = 'user_addresses';
     
     protected $fillable  = [
-        'name', 'country_id', 'user_id', 'city_id', 'street', 'post_code', 'note', 'lat', 'lng', 'phone'
+        'country_id', 'user_id', 'city_id', 'street', 'lat', 'lng', 'phone'
     ];
     
     /**
@@ -68,7 +68,6 @@ class UserAddress extends Model
         $query = [];
         $query[] = $this->street       ?: '';
         $query[] = $this->city->name         ?: '';
-        $query[] = $this->post_code    ?: '';
         $query[] = $this->country->name ?: '';
 
         $query = trim( implode(',', array_filter($query)) );
@@ -87,9 +86,7 @@ class UserAddress extends Model
                 }
             }
 
-        } catch (Exception $e){
-
-        }
+        } catch (Exception $e){}
 
         return $this;
     }

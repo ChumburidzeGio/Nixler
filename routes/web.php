@@ -14,9 +14,7 @@
 
 Auth::routes(); 
 
-Route::group(['prefix' => (new Modules\Address\Services\LocationService)->segment()], function() {
-	Route::get('/', 'HomeController@welcome');
-});
+Route::get('/', 'HomeController@welcome');
 
 Route::get('/policy', function(){
 	return view('policy.page');

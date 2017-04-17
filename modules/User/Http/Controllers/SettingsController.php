@@ -77,15 +77,6 @@ class SettingsController extends Controller
         $user = auth()->user();
         $emails = $user->emails()->orderBy('is_default', 'desc')->get();
 
-        if(!count($emails) && $user->email){
-
-            $user->emails()->create([
-                'address' => $user->email
-            ]);
-
-            $emails = $user->emails()->get();
-        }
-
         return view('user::settings.emails', compact('emails'));
     }
 

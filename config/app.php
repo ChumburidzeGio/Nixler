@@ -79,9 +79,7 @@ return [
 
     'locale' => 'pl',
 
-    'locales' => ['en', 'pl'],
-
-    'countries' => ['GE', 'PL', 'UA'],
+    'countries' => ['GE', 'PL', 'UA', 'US'],
 
     /*
     |--------------------------------------------------------------------------
@@ -190,6 +188,8 @@ return [
         Torann\GeoIP\GeoIPServiceProvider::class,
         Laravel\Dusk\DuskServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        NotificationChannels\Telegram\TelegramServiceProvider::class,
+        Keevitaja\Linguist\LinguistServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*
@@ -259,6 +259,7 @@ return [
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        'Linguist'  => Keevitaja\Linguist\Facades\LinguistFacade::class,
         //'BotMan' => Mpociot\BotMan\Facades\BotMan::class,
     ],
 

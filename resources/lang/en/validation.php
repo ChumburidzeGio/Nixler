@@ -86,6 +86,9 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
     'postcode'             => 'Postal code format is invalid.',
+    'ownpass'              => 'You current password is not correct.',
+    "phone" => "The :attribute field contains an invalid number.",
+    "phone_unique" => "The :attribute has already been taken.",
 
     /*
     |--------------------------------------------------------------------------

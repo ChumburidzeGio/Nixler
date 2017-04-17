@@ -5,7 +5,10 @@ namespace Modules\User\Providers;
 use Validator, Hash;
 use Illuminate\Support\ServiceProvider;
 use Modules\User\Observers\UserObserver;
+use Modules\User\Observers\PhoneObserver;
 use Modules\User\Entities\User;
+use Modules\User\Entities\Phone;
+use App\Services\Phone as PhoneService;
 
 class UserServiceProvider extends ServiceProvider
 {
@@ -24,6 +27,7 @@ class UserServiceProvider extends ServiceProvider
     public function boot()
     {
         User::observe(UserObserver::class);
+        Phone::observe(PhoneObserver::class);
         
         $this->registerTranslations();
         $this->registerConfig();
@@ -31,6 +35,22 @@ class UserServiceProvider extends ServiceProvider
         
         Validator::extend('ownpass', function ($attribute, $value, $parameters) {
             return (auth()->check() && Hash::check($value, auth()->user()->password));
+        });
+        
+        Validator::extend('phone', function ($attribute, $value, $parameters) {
+
+            $phone = PhoneService::parse($value, array_first($parameters));
+
+            return $phone->is_valid;
+            
+        });
+        
+        Validator::extend('phone_unique', function ($attribute, $value, $parameters) {
+
+            $phone = PhoneService::parse($value, array_first($parameters));
+
+            return !Phone::where('country_code', $phone->country_code)->whereNumber($phone->number)->exists();
+
         });
     }
 

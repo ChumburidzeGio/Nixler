@@ -43,12 +43,8 @@ class AddressController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
             'city_id' => 'required|numeric',
-            'post_code' => 'required|postcode',
             'street' => 'required|string',
-            'phone' => 'required|numeric',
-            'note' => 'nullable|string',
         ]);
 
         $this->repository->create($request->all());
@@ -79,11 +75,7 @@ class AddressController extends Controller
     public function update($id, Request $request)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'post_code' => 'required|postcode',
             'street' => 'required|string',
-            'phone' => 'required|numeric',
-            'note' => 'nullable|string',
         ]);
 
         $this->repository->update($request->all(), $id);

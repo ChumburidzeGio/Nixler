@@ -23,6 +23,10 @@
 					<i class="material-icons _mr15 _va7 _fs20">email</i> 
 					{{ trans('user::settings.emails.title')}}
 				</a>
+				<a class="_lim _hvrd _cg" href="{{ url('settings/phones') }}">
+					<i class="material-icons _mr15 _va7 _fs20">phone</i> 
+					{{ trans('user::settings.phones.title')}}
+				</a>
 				@foreach(config('settings.menu') as $item)
 				<a class="_lim _hvrd _cg" href="{{ route($item['route']) }}">
 					<i class="material-icons _mr15 _va7 _fs20">{{ $item['icon'] }}</i> 

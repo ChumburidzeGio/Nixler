@@ -3,7 +3,7 @@
 namespace Modules\Address\Services;
 
 use PeterColes\Languages\Maker as Languages;
-use Session, Cache;
+use Session, Cache, Linguist;
 
 class LocationService
 {
@@ -19,9 +19,9 @@ class LocationService
 
 		$locale = null;
 
-		if($this->isAvailableLocaleKey($segment)){
+		if(Linguist::workingLocale()){
 
-			$locale = $segment;
+			$locale = Linguist::workingLocale();
 
 		} elseif(auth()->check() && $this->isAvailableLocaleKey(auth()->user()->locale)) {
 
@@ -92,31 +92,12 @@ class LocationService
 
 
     /**
-     * Check if url first segment is valid language key
-     *
-     * @return void
-     */
-	public function segment(){
-
-		$segment = request()->segment(1);
-
-		if($this->isAvailableLocaleKey($segment)){
-			return $segment;
-		}
-
-		return null;
-
-	}
-
-
-
-    /**
      * Get from config all available locale keys 
      *
      * @return array
      */
 	public function getAvailableLocaleKeys(){
-		return is_array(config('app.locales')) ? config('app.locales') : [config('app.locale')];
+		return config('linguist.locales');
 	}
 
 

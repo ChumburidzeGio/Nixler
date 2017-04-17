@@ -31,7 +31,7 @@ class AddressRepository extends BaseRepository implements CacheableInterface {
     {
     	$user = auth()->user();
 
-    	$country = Country::where('iso_code', $user->country)->with('cities.translations')->first();
+    	$country = $user->country()->with('cities.translations')->first();
 
         $addresses = $this->model->where('user_id', $user->id)->with('city')->get();
 
@@ -54,12 +54,7 @@ class AddressRepository extends BaseRepository implements CacheableInterface {
             'user_id' => $user->id,
             'country_id' => $country->id,
             'city_id' => array_get($attributes, 'city_id'),
-            'post_code' => array_get($attributes, 'post_code'),
             'street' => array_get($attributes, 'street'),
-            'phone' => array_get($attributes, 'phone'),
-        ], [
-            'name' => array_get($attributes, 'name'),
-            'note' => array_get($attributes, 'note'),
         ]);
     }
 
@@ -91,11 +86,7 @@ class AddressRepository extends BaseRepository implements CacheableInterface {
         $resource = $this->model->where('id', $id)->where('user_id', $user->id)->firstOrFail();
 
         $resource->update([
-            'post_code' => array_get($attributes, 'post_code'),
             'street' => array_get($attributes, 'street'),
-            'phone' => array_get($attributes, 'phone'),
-            'name' => array_get($attributes, 'name'),
-            'note' => array_get($attributes, 'note'),
         ]);
 
         return $resource;

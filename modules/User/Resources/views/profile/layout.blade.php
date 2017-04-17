@@ -5,7 +5,7 @@
 <div class="col-md-10 col-md-offset-1 col-xs-12 _p0">
 
     <div class="_bgw _b1 _brds3 _clear">
-        <div class="_posr">
+        <div class="_posr" height="150px">
             <img src="{{ $user->cover('profile') }}" class="_clear _w100">
 
             @if(auth()->check() && auth()->user()->id == $user->id)
@@ -29,7 +29,7 @@
         </div>
         <div class="_tac _pb15 _bb1">
           <div class="_posr">
-              <img src="{{ $user->avatar('profile') }}" class="_brds2 _dib _ma _mb10 _b1 _bcg _bw2 _clear _mt-50" height="100" width="100">
+              <img src="{{ $user->avatar('profile') }}" class="_brds2 _dib _ma _mb10 _b1 _bcg _bw2 _clear _mt-50" height="100px" width="100px">
 
               @if(auth()->check() && auth()->user()->id == $user->id)
               <form id="avatar-upload-form" action="{{ $user->action('photos') }}" 
