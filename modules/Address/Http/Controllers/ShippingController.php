@@ -7,47 +7,27 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Modules\Address\Entities\Country;
 use Modules\Address\Entities\ShippingPrice;
+use Modules\Address\Repositories\ShippingRepository;
 
 class ShippingController extends Controller
 {
+
+    /**
+     * @var PostRepository
+     */
+    protected $repository;
+
+    public function __construct(ShippingRepository $repository){
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      * @return Response
      */
     public function index()
     {
-        $user = auth()->user();
-
-        $country_code = $user->country;
-
-        $country = Country::where('iso_code', $country_code)->with('cities', 'cities.translations')->first();
-
-        $prices = ShippingPrice::where('user_id', auth()->id())->where('type', 'city')->with('city', 'city.translations')->get();
-
-        if($user->getMeta('delivery_full')){
-            $country_price = ShippingPrice::firstOrCreate([
-                'user_id' => auth()->id(),
-                'location_id' => $country->id,
-                'type' => 'country'
-            ], [
-                'price' => 0,
-                'window_from' => 1,
-                'window_to' => 3
-            ]);
-        } else {
-            $country_price = [];
-        }
-
-        return view('address::settings.shipping', compact('prices', 'country', 'country_price'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('address::create');
+        return view('address::settings.shipping', $this->repository->all());
     }
 
     /**
@@ -77,22 +57,6 @@ class ShippingController extends Controller
         return redirect()->route('shipping.settings');
     }
 
-    /**
-     * Show the specified resource.
-     * @return Response
-     */
-    public function show()
-    {
-        return view('address::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-    }
 
     /**
      * Update the specified resource in storage.
@@ -139,32 +103,9 @@ class ShippingController extends Controller
               'policy' => 'nullable|string',
         ]);
         
-        $user = auth()->user();
-        $user->setMeta('delivery_full', $request->input('delivery_full'));
-        $user->setMeta('has_return', $request->input('has_return'));
-        $user->setMeta('return_policy', $request->input('policy'));
-        $user->save();
-
-        if(!$request->input('delivery_full')){
-
-            $country = Country::where('iso_code', $user->country)->first();
-
-            $country_price = ShippingPrice::where([
-                'user_id' => auth()->id(),
-                'location_id' => $country->id,
-                'type' => 'country'
-            ])->delete();
-
-        }
+        $this->repository->settingsUpdate($request->all());
 
         return redirect()->route('shipping.settings');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     * @return Response
-     */
-    public function destroy()
-    {
-    }
 }

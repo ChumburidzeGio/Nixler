@@ -120,13 +120,9 @@ class OrderController extends Controller
                   'phone' => ['required', 'numeric', Rule::unique('user_phones', 'number')]
             ]);
 
-            $phone = $user->phones()->create([
-                'number' => $request->input('phone'),
-                'country_code' => $user->country()->first()->calling_code
-            ]);
+            $phone = $this->phoneRepo->create($request->input('phone'));
 
-            if(!$phone->verify()){
-                $phone->delete();
+            if(!$phone){
                 return redirect()->back()->withErrors([
                     'phone' => trans('user::settings.phones.created_error_status')
                 ]);
@@ -194,6 +190,10 @@ class OrderController extends Controller
         }
 
         $shipping = $shipping->first();
+
+        if(!$shipping){
+            return redirect()->back();
+        }
 
         $quantity = $request->input('quantity');
         $variant = $request->input('variant');

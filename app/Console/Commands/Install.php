@@ -42,20 +42,15 @@ class Install extends Command
 
         if ($this->confirm('Do you want to set enviroment variables ?')) {
             $this->setENV();
-            $this->info('Enviroment variables has been succesfully set');
         }
         
-        if ($this->confirm('Do you want to reset database ?')) {
+        if ($this->confirm('Do you want to reset databases ?')) {
             $this->setDB();
         }
 
         //if ($this->confirm('Do you want to clean all storage?')) {
         //    $this->cleanStorage('users');
         //}
-
-        if ($this->confirm('Do you want to update MaxMind IP database and download countries data?')) {
-            $this->setGeo();
-        }
 
         if ($this->confirm('Set Recommender props')) {
             $this->setRecomm();
@@ -115,6 +110,8 @@ class Install extends Command
         
         $this->svwq('Mailchimp API key?', 'MAILCHIMP_APIKEY');
 
+        $this->info('Enviroment variables has been succesfully set');
+
     }
 
     /**
@@ -129,6 +126,14 @@ class Install extends Command
         $this->call('migrate');
         $this->call('module:migrate');
         $this->call('scout:mysql-index', [ 'model' => 'Modules\\Product\\Entities\\Product' ]);
+
+        foreach (config('app.countries') as $country) {
+            $this->call('countries:download', [ 'iso_code' => $country]);
+            $this->info('Populated Geo data about ' . $country);
+        }
+
+        $this->call('geoip:update');
+        $this->info('Updated MaxMind database');
     }
 
     /**
@@ -139,20 +144,6 @@ class Install extends Command
     private function setRecomm()
     {
         (new RecommService)->addProps();
-    }
-
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function setGeo()
-    {
-        $this->call('geoip:update');
-
-        foreach (config('app.countries') as $country) {
-            $this->call('countries:download', [ 'iso_code' => $country]);
-        }
     }
 
     /**

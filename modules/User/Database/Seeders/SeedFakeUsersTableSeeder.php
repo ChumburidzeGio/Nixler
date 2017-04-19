@@ -35,6 +35,32 @@ class SeedFakeUsersTableSeeder extends Seeder
      *
      * @return void
      */
+    public function getCountry()
+    {
+        return collect([[
+            'country' => 'US',
+            'timezone' => 'America/New_York',
+            'currency' => 'USD',
+            'locale' => 'en',
+        ],[
+            'country' => 'PL',
+            'timezone' => 'Europe/Warsaw',
+            'currency' => 'PLN',
+            'locale' => 'pl',
+        ],[
+            'country' => 'GE',
+            'timezone' => 'Asia/Tbilisi',
+            'currency' => 'GEL',
+            'locale' => 'ka',
+        ]])->random();
+    }
+
+
+    /**
+     * Create user
+     *
+     * @return void
+     */
     public function createUser($faker)
     {
         $user = User::create([
@@ -43,7 +69,12 @@ class SeedFakeUsersTableSeeder extends Seeder
             'password' => bcrypt('test')
         ]);
 
-        $user->currency = collect(['USD', 'GEL', 'PLN', 'UAH'])->random();
+        $country = $this->getCountry();
+
+        $user->country = array_get($country, 'country');
+        $user->timezone = array_get($country, 'timezone');
+        $user->currency = array_get($country, 'currency');
+        $user->locale = array_get($country, 'locale');
         $user->save();
 
         return $user;

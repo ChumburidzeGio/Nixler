@@ -3,6 +3,8 @@
 namespace Modules\Order\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Order\Observers\OrderObserver;
+use Modules\Order\Entities\Order;
 
 class OrderServiceProvider extends ServiceProvider
 {
@@ -20,6 +22,8 @@ class OrderServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Order::observe(OrderObserver::class);
+
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();

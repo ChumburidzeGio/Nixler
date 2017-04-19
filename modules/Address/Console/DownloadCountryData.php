@@ -95,7 +95,8 @@ class DownloadCountryData extends Command
 
     private function geonamesGet($id, $locale) {
         $guzzle = new GuzzleHttp;
-        $req = $guzzle->request('GET', 'http://api.geonames.org/getJSON?geonameId='.$id.'&username=nixler');
+        $username = collect(['nixler', 'nixe', 'nixlerinfo'])->random();
+        $req = $guzzle->request('GET', 'http://api.geonames.org/getJSON?geonameId='.$id.'&username='.$username);
         return json_decode($req->getBody());
     }
 

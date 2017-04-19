@@ -4,15 +4,19 @@ namespace Modules\User\Observers;
 
 use Modules\User\Entities\User;
 use Modules\Stream\Repositories\StreamRepository;
+use Modules\Address\Repositories\ShippingRepository;
 use Modules\Stream\Services\RecommService;
 
 class UserObserver
 {
 
-    protected $repository;
+    protected $streamRepo;
 
-    public function __construct(StreamRepository $repository) {
-        $this->repository = $repository;
+    protected $shippingRepo;
+
+    public function __construct(StreamRepository $streamRepo, ShippingRepository $shippingRepo) {
+        $this->streamRepo = $streamRepo;
+        $this->shippingRepo = $shippingRepo;
     }
 
     /**
@@ -23,11 +27,17 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $this->repository->recommend($user);
+        $this->streamRepo->recommend($user);
 
         $user->emails()->create([
             'address' => $user->email
         ]);
+
+        $this->shippingRepo->settingsUpdate([
+            'delivery_full' => true,
+            'has_return' => true,
+            'return_policy' => ''
+        ], $user);
     }
 
     /**

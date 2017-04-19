@@ -104,16 +104,7 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         ]);
 
         //Media
-        $media_sorted = json_decode(array_get($attributes, 'media'));
-        $media = $product->getMedia('photo');
-        $media = $media->sortBy(function ($photo, $key) use ($media_sorted) {
-            foreach ($media_sorted as $key => $value) {
-                if(isset($value->id) && $value->id == $photo->id){
-                    return $key;
-                }
-            }
-        });
-        $product->syncMedia($media, 'photo');
+        $this->sortMedia(array_get($attributes, 'media'), $product);
 
         //Variants
         $variants = collect(json_decode(array_get($attributes, 'variants'), 1))->flatten();
@@ -128,6 +119,30 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         }
 
         return $product;
+    }
+    
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return void
+     */
+    public function sortMedia($attribute, $product)
+    {
+        $media_sorted = json_decode($attribute);
+
+        if($media_sorted){
+            $media = $product->getMedia('photo');
+            $media = $media->sortBy(function ($photo, $key) use ($media_sorted) {
+                foreach ($media_sorted as $key => $value) {
+                    if(isset($value->id) && $value->id == $photo->id){
+                        return $key;
+                    }
+                }
+            });
+            $product->syncMedia($media, 'photo');
+        }
     }
     
 
@@ -182,23 +197,4 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
     }
 
-
-    /**
-     * Tranform text into tokens
-     *
-     * @return array
-    public function tokenize($text)
-    {
-        $stopwords_en = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/en.json'));
-        $stopwords_ka = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/ka.json'));
-        $stopwords_pl = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/pl.json'));
-        $stopwords_ru = json_decode(file_get_contents('../modules/Stream/Resources/stopwords/ru.json'));
-        $stopwords = array_merge($stopwords_en, $stopwords_ka, $stopwords_pl, $stopwords_ru);
-
-        $text = preg_replace('![^\pL\pN\s]+!u', '', mb_strtolower($text)); 
-        $words = preg_split('/\s+/', $text);
-
-        return array_unique(array_diff($words, $stopwords));
-    }
-     */
 }
