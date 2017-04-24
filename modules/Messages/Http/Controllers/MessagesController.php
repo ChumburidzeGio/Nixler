@@ -89,7 +89,8 @@ class MessagesController extends Controller
                 'id' => $item->id,
                 'photo' => array_get($participantsKeyed, $item->user_id)->avatar('message'),
                 'body' => $item->body,
-                //'time' => $item->created_at->format('c'),
+                'time' => $item->created_at->format('c'),
+                'author' => array_get($participantsKeyed, $item->user_id)->name,
                 'own' => $item->is_own
             ];
         });

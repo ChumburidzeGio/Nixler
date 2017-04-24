@@ -7,7 +7,7 @@
 
 	<div class="col-md-8">
 
-		<div class="_z013 _bgw _mb2 _clear">
+		<div class="_z013 _bgw _mb2 _clear _brds3">
 
 			<div class="_tbs _ov _fs16 _p10 _pl15 _ml5" ng-bind="vm.thread.title"></div>
 			<hr class="_m0">
@@ -20,14 +20,19 @@
 				    </span>
 				</div>
 
-				<div class="_clear _media _m15" ng-repeat="msg in vm.thread.messages | orderBy:'id'" >
-					<img ng-src="@{{ msg.photo }}" class="_mr10 _left _brds50" ng-if="!msg.own">
-					<div class="_clear">
-						<div class="_p3 _pr10 _dib _pl10 _brds15 _mt3" 
-							ng-class="{'_right _mr10 _bg4 _cw':msg.own,'_tar _bgwd1':!msg.own}" ng-bind="msg.body">
-						</div>
-					</div>
+				<div class="_p10">
+				<div class="_media _clear _p3 _mt10" ng-repeat="msg in vm.thread.messages | orderBy:'id'">
+				    <img class="_mr10 _left _brds3" ng-src="@{{ msg.photo }}" height="38px" width="38px">
+				    <div class="_clear">
+				        <span class="_title _c4">
+				            <span ng-bind="msg.author"></span>
+				            <small class="_c2" ng-bind="msg.time | timeAgo"></small>
+				        </span>
+				        <p class="_c3 _anc" ng-bind-html="msg.body | linky"></p>
+				    </div>
 				</div>
+				</div>
+
 			</div>
 
 			<form ng-submit="vm.message()" class="_bt1 _pt5 _pb5 _posr _bgw _bcg">
@@ -48,7 +53,7 @@
 <div class="col-md-4">
 
 
-	<div class="_z013 _bgw _clear">
+	<div class="_z013 _bgw _clear _brds3">
 
 		<a class="_lim _hvrl _tal _bb1" href="{{ route('threads') }}">
 						<i class="material-icons _mr15 _va4 _fs18">filter_list</i> All messages
@@ -61,7 +66,7 @@
 		<a class="_lim _hvrl" ng-repeat="i in vm.thread.participants" ng-href="@{{ i.url }}">
 
 			<div class="_media _clear">
-				<img ng-src="@{{ i.avatar }}" class="_left _mr10 _brds50" height="22px">
+				<img ng-src="@{{ i.avatar }}" class="_left _mr10 _brds3" height="22px">
 				<span class="_cg" ng-bind="i.name"></span> <small ng-if="i.me"> (You)</small>
 			</div>
 

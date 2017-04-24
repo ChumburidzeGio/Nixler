@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use Modules\Product\Entities\Product;
 use Modules\Address\Entities\ShippingPrice;
 use Modules\Address\Entities\UserAddress;
+use Illuminate\Notifications\Notifiable;
 use Carbon\Carbon;
 
 class Order extends Model
 {
+    use Notifiable;
+    
     public $table = 'orders';
     
     protected $fillable  = [
@@ -28,6 +31,27 @@ class Order extends Model
         'shipping_window_from',
         'shipping_window_to',
     ];
+
+
+    /**
+     * 
+     *
+     * @return collection
+     */
+    public function merchant()
+    {   
+        return $this->belongsTo(config('auth.providers.users.model'), 'merchant_id', 'id');
+    }
+
+    /**
+     * 
+     *
+     * @return collection
+     */
+    public function user()
+    {   
+        return $this->belongsTo(config('auth.providers.users.model'), 'user_id', 'id');
+    }
 
 
     /**
@@ -60,6 +84,17 @@ class Order extends Model
     public function isStatus($status)
     {   
        return ($this->status == $status);
+    }
+
+
+    /**
+     * 
+     *
+     * @return collection
+     */
+    public function url()
+    {   
+       return route('order.show', ['id' => $this->id]);
     }
 
 

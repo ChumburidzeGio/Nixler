@@ -76,7 +76,7 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
 
         $categories = Category::with('translations', 'children.translations')->orderBy('order')->get();
 
-        return compact('product', 'categories');
+        return compact('product', 'categories', 'user');
     }
     
 

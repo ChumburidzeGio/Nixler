@@ -99,6 +99,12 @@ class ProductController extends Controller
 
         $this->repository->update($request->all(), $id);
         
+        $user = auth()->user();
+        
+        if($user->getMeta('delivery_full', 3) == 3) {
+            return redirect()->back();
+        }
+
         $isPublish = ($request->input('action') == 'publish');
         
         $status = trans('product::update.'.($isPublish ? 'published_message' : 'scheduled_message')); 

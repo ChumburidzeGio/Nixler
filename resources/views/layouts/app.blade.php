@@ -4,8 +4,9 @@
 <body>
 
     <div id="app" class="_mt70 _pb15 _db" ng-app="nx">
-
-        <nav class="_at _b0 _zi999 _bgw _z013 _cb _pl15 _pr15 _ma" ng-controller="NavCtrl as vm">
+    <br class="visible-xs">
+    <br class="visible-xs">
+        <nav class="_at _b0 _zi999 _bgw _z013 _cb _pl15 _pr15 _ma _tac" ng-controller="NavCtrl as vm">
 
             <span class="_logo _left _fs18 _cinherit _ml0 _mr0">
                 <i class="material-icons _fs20 _mr15 _crp _va4 _cinherit" ng-click="vm.openAside()" id="menu">menu</i> 
@@ -23,9 +24,17 @@
                 </a>
 
                 <a class="_tb" href="{{ auth()->user()->link() }}">
-                    <img src="{{ auth()->user()->avatar('nav') }}" height="25px" class="_va2 _brds50">
+                    <img src="{{ auth()->user()->avatar('nav') }}" height="25px" width="25px" class="_va2 _brds3">
                 </a>
                 @endif
+            </div>
+
+            <div class="_dib _oh _posr _b1 _brds3" style="width: 100%; max-width: 500px;margin-top: 7px;">
+                <form class="_fg _db _w100" action="{{ url('feed') }}">
+                    <input class="_fe _bg5" placeholder="Start typing name of product or account" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
+                    @if(request()->has('cat'))<input name="cat" type="hidden" value="{{ request()->input('cat') }}">@endif
+                    <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
+                </form>
             </div>
 
         </nav>
@@ -44,7 +53,7 @@
                             <a href="{{ Auth::check() ? auth()->user()->url : url('/login') }}" 
                                 class="_lh1 _et2 _cw _thvrw _fw600">
                                 <img src="{{  Auth::check() ? auth()->user()->avatar('aside') : '' }}" 
-                                class="_mb10 _clear _brds50" height="60" width="60">
+                                class="_mb10 _clear _brds3" height="60" width="60">
                                 {{ Auth::check() ? auth()->user()->name : 'Sign In to access account' }}
                             </a>
                             <a href="{{ Auth::check() ? auth()->user()->url : url('/register') }}">

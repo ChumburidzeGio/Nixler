@@ -10,7 +10,6 @@ window.variants = <?php echo $variants->flatten()->toJson(); ?>;
 window.price = <?php echo $product->price; ?>;
 window.max_quantity = <?php echo $product->in_stock > 99 ? 99 : $product->in_stock; ?>;
 </script>
-
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default _b0 _z013">

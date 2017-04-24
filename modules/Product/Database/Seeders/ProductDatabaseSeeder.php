@@ -24,10 +24,6 @@ class ProductDatabaseSeeder extends Seeder
     {
         Model::unguard();
         
-        if(!Category::count()){
-            $this->call(CategoryDatabaseSeeder::class);
-        }
-
         $items = array_merge(
             array_get(Amazon::search('iphone')->json(), 'Items.Item'),
             array_get(Amazon::search('samsung')->json(), 'Items.Item'),

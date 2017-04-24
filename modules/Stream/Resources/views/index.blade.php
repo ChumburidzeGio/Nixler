@@ -2,44 +2,51 @@
 
 @section('content')
 
-<div class="container" ng-controller="StreamCtrl as vm">
+<div class="container-fluid _m0 ng-cloak" ng-controller="StreamCtrl as vm" style="width: 100%">
 
 	<script>window.stream = {!! $products->toJson() !!};</script>
 
 	<div class="row">
 
-		<div class="col-xs-12">
+		<div class="col-sm-2 hidden-xs hidden-sm">
+			<div class="_posf">
 
-			<div class="_clear _bgw _z013 _brds3">
+				<!--div class="_fs12 _ttu _pl15 _pb5">Categories</div-->
 
-				<form class="_fg" action="{{ url('feed') }}">
-					<input class="_fe _brds3" placeholder="Start typing name of product or account" style="padding-left: 45px;" autofocus="on" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
-					<i class="material-icons _a8 _mt10 _fs20 _ml22">search</i>
-				</form>
+				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
+					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">local_mall</i> All categories
+				</a>
+				@foreach($categories as $id => $cat)
+				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query'), 'cat' => $id]) : route('feed', ['cat' => $id]) }}"
+					class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == $id ? ' _hvrda' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">{{ $cat['icon'] }}</i> {{ $cat['name'] }}
+				</a>
+				@endforeach
 
-				{{--@if($accounts)
-				<div class="_clear _p10 _bt1">
-					<span class="_lhl _cg _fs12 _ttu _clear _mb15 _ml5">People you may follow</span>
-					@foreach($accounts as $id => $username)
+			
+				{{--<div class="_fs12 _ttu _pl15 _pt10 _pb5">Order</div>
+				<a href="{{ url('/new-product') }}" class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == 1 ? ' _hvra' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">grade</i> Relevance
+				</a>
+				<a href="{{ url('/new-product') }}" class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == 1 ? ' _hvra' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">fiber_new</i> Newest arrivals
+				</a>
+				<a href="{{ url('/new-product') }}" class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == 1 ? ' _hvra' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">attach_money</i> Price: Low to high
+				</a>
+				<a href="{{ url('/new-product') }}" class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == 1 ? ' _hvra' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">attach_money</i> Price: High to low
+				</a>--}}
 
-					<div class="col-sm-1">
-						<a href="{{ route('user', ['id' => $username]) }}" class="_tac _db">
-							<img src="{{ route('avatar', ['id' => $id, 'place' => 'aside']) }}" height="60px" width="60px" class="_brds50">
-						</a>
-					</div>
-
-					@endforeach
-				</div>
-				@endif--}}
 			</div>
+		</div>
+		<div class="col-lg-9 col-md-10 col-xs-12">
 
+			@if($products->getResource()->getData()->total())
+			<div class="row _mb15">
 
-
-			<span class="_c3 _mt10 _clear">{{-- array_get($products->toArray(), 'meta.pagination.total', 0) --}}</span>
-
-			<div class="row _mt15">
-
-				<div class="col-md-3 _pb15" ng-repeat="product in vm.stream.data">
+				<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15" ng-repeat="product in vm.stream.data">
 					<a class="_bgw _b1 _brds3 _clear" href="@{{ product.url }}">
 
 						<img ng-src="@{{ product.photo }}" class="_db _w100">
@@ -63,8 +70,16 @@
 					More products
 				</span>
 			</div>
+			@else
+
+			<div class="_tac _pt15 _mt70 _c3">
+				<h5 class="_fw400">There is no products to show.</h5>
+			</div>
+
+			@endif
 
 		</div>
+
 
 
 	</div>

@@ -34,7 +34,7 @@ class UserController extends Controller
 
         $data = $this->repository->find($id, $tab);
 
-        return view('user::profile.'.$tab, $data);
+        return view('user::profile.'.$data['view'], $data);
     }
 
 

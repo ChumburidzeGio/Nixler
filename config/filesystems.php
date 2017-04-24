@@ -68,14 +68,14 @@ return [
 
     'media' => [
         'avatar' => [
-            'default' => public_path('img/person.jpg'),
+            'default' => public_path('img/person.png'),
             'sizes' => [
                 'profile' => [100, 100],
                 'nav' => [25, 25],
                 'aside' => [60, 60],
                 'product' => [80, 80],
                 'comments' => [40, 40],
-                'message' => [33, 33],
+                'message' => [38, 38],
             ]
         ],
         'cover' => [

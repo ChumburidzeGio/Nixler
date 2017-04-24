@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Modules\Stream\Services\RecommService;
+use Modules\User\Entities\User;
 use DB;
 
 class Install extends Command
@@ -134,6 +135,10 @@ class Install extends Command
 
         $this->call('geoip:update');
         $this->info('Updated MaxMind database');
+
+        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\CategoryDatabaseSeeder' ]);
+
+        $this->createNixlerAccount();
     }
 
     /**
@@ -166,10 +171,13 @@ class Install extends Command
     {
 
         $tables = DB::select('SHOW TABLES');
+        $droplist = [];
 
         foreach($tables as $table) {
             $droplist[] = $table->{'Tables_in_' . env('DB_DATABASE')};
         }
+
+        if(!$droplist) return false;
 
         $droplist = implode(',', $droplist);
 
@@ -202,6 +210,23 @@ class Install extends Command
             }
 
         });
+
+    }
+
+    /**
+     * Remove all files from storage
+     *
+     * @return mixed
+     */
+    private function createNixlerAccount()
+    {
+
+        User::create([
+            'name' => 'Nixler',
+            'email' => 'info@nixler.pl',
+            'password' => 'Yamaha12',
+            'username' => 'nixler',
+        ]);
 
     }
 

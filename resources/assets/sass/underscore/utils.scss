@@ -253,6 +253,7 @@
 ._mt30 { margin-top:30px!important;}
 ._mt40 { margin-top:40px!important;}
 ._mt50 { margin-top:50px!important;}
+._mt60 { margin-top:60px!important;}
 ._mt70 { margin-top:70px!important;}
 ._mt3 { margin-top:3px!important;}
 ._ml-10 { margin-left:-10px!important;}
@@ -324,6 +325,9 @@
     background: rgba(246, 248, 248, 0.84)!important;
 }
 ._hvrd:hover {
+    background: rgba(60, 60, 60, 0.08) !important;
+}
+._hvrda {
     background: rgba(60, 60, 60, 0.08) !important;
 }
 ._thvrl:hover {
@@ -674,3 +678,19 @@ select._fe{
 ._trans200{ transition: all 200ms ease; }
 ._trans5{ transition: all 5s ease; }
 ._trans2{ transition: all 2s ease; }
+
+
+/*=================================
+        Anchorable
+==================================*/
+
+._anc a { color: #3F51B5; }
+
+
+
+/*=================================
+        Responsive grid elements
+==================================*/
+@media (max-width: 420px){
+    ._cxxs12 { width: 100%; }
+}

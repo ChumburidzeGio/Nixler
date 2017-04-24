@@ -11,6 +11,7 @@ use League\Fractal\Resource\Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use Modules\Product\Transformers\ProductTransformer;
 use Modules\Product\Entities\Product;
+use Modules\Product\Entities\Category;
 use Modules\Stream\Console\Personalize;
 use DB;
 use Cviebrock\EloquentTaggable\Models\Tag;
@@ -41,11 +42,15 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      *
      * @return \Illuminate\Http\Response
      */
-    public function all($columns = array('*'))
+    public function all($cat = array('*'))
     {
         $user = auth()->user();
 
-        $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+        if(is_string($cat)){
+            $products = $this->filter($cat);
+        } else {
+            $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+        }
 
         $manager = new Manager();
 
@@ -62,9 +67,35 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      *
      * @return \Illuminate\Http\Response
      */
-    public function search($query)
+    public function filter($cat)
     {
-        $products = $this->model->search($query)->where('status', 'active')->paginate(20);
+        $cats = Category::where('id', $cat)->orWhere('parent_id', $cat)->pluck('id')->toArray();
+
+        return $this->model->with('firstPhoto', 'owner')->where('status', 'active')->whereIn('category', $cats)->latest()->paginate(20);
+    }
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search($query, $cat)
+    {
+        $products = $this->model->search($query)->where('status', 'active');
+
+        if($cat){
+
+            $cats = Category::where('id', $cat)->orWhere('parent_id', $cat)->pluck('id')->toArray();
+
+            $ids = $products->get()->pluck('id')->toArray();
+            $ids_ordered = implode(',', $ids);
+
+            $products = $this->model->whereIn('category', $cats)->whereIn('id', $ids)->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
+
+        }
+
+        $products = $products->paginate(20);
 
         $products->load('firstPhoto', 'owner');
 

@@ -1,9 +1,9 @@
 <?php
 
-namespace NotificationChannels\Trello;
+namespace Modules\Messages\Notifications\Channels;
 
-use Illuminate\Support\Arr;
 use Illuminate\Notifications\Notification;
+use Modules\User\Entities\User;
 
 class MessagesChannel
 {
@@ -20,11 +20,23 @@ class MessagesChannel
     {
         $params = $notification->toMessages($notifiable);
 
+        $messagable = array_get($params, 'to') ? : $notifiable;
+
         $sender = array_get($params, 'from');
 
         $message = array_get($params, 'message');
 
-        $thread = $sender->findOrCreateThreadWith($notifiable);
+        $users = User::whereIn('id', [$messagable, $sender])->get();
+
+        foreach ($users as $user) {
+            if(is_int($sender) && $user->id == $sender){
+                $sender = $user;
+            } else if(is_int($messagable) && $user->id == $messagable){
+                $messagable = $user;
+            }
+        }
+
+        $thread = $sender->findOrCreateThreadWith($messagable);
 
         $sender->messageIn($thread->id, $message);
     }

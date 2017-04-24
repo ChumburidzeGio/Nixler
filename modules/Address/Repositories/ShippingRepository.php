@@ -75,7 +75,6 @@ class ShippingRepository extends BaseRepository {
         $user->setMeta('delivery_full', array_get($data, 'delivery_full'));
         $user->setMeta('has_return', array_get($data, 'has_return'));
         $user->setMeta('return_policy', array_get($data, 'policy'));
-        $user->save();
 
         if(!array_get($data, 'delivery_full')){
 

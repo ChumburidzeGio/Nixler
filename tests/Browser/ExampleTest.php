@@ -29,6 +29,7 @@ class ExampleTest extends DuskTestCase
      * 15. Updating profile picture and cover
      * 16. Follow button
      * 17. Sending message
+        * 18. Shipping rules
      * 
      * @return void
      */
@@ -39,6 +40,8 @@ class ExampleTest extends DuskTestCase
             $faker = Factory::create();
 
             $user = $this->signUp($browser, $faker);
+            
+            $this->updateShippingRules($browser, $faker);
 
             $product = $this->addProduct($browser, $faker);
 
@@ -79,6 +82,38 @@ class ExampleTest extends DuskTestCase
      *
      * @return void
      */
+    public function updateShippingRules($browser, $faker)
+    {
+        $browser->visit('/new-product');
+
+        $policy = $faker->text;
+        $city = $faker->text;
+
+        $browser->click('#shipping_settings_route')
+        ->click('#delivery_full')
+        ->click('#has_return')
+        ->value('#policy', $policy)
+        ->press('#update')
+        ->assertSee($policy)
+        ->click('#add_new_form #city')
+        ->click('#add_new_form #city ul li:not(.selector-optgroup)');
+
+        $city = $browser->value("#add_new_form input[name='location_id']");
+
+        $browser->type("#add_new_form input[name='price']", 12)
+        ->type("#add_new_form #add_window_from", 1)
+        ->type("#add_new_form #add_window_to", 1)
+        ->press('#add_new_form button')
+        ->assertSee($city);
+
+    }
+
+
+    /**
+     * Test product adding
+     *
+     * @return void
+     */
     public function addProduct($browser, $faker)
     {
         $product = new stdClass;
@@ -88,6 +123,7 @@ class ExampleTest extends DuskTestCase
         $product->in_stock = rand(1,900);
 
         $browser->visit('/new-product')
+        ->assertSee('Publish')
         ->value('#title', $product->title)
         ->click('#category')
         ->click('#category ul li:not(.selector-optgroup)')

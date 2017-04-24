@@ -20,13 +20,13 @@
 				</h1>
 			</div>
 
-			<div class="_li _hvrl row" ng-click="vm.delivery_full=!vm.delivery_full" ng-init="vm.delivery_full={{ auth()->user()->getMeta('delivery_full', 0) }}">
+			<div class="_li _hvrl row" ng-click="vm.delivery_full=!vm.delivery_full" ng-init="vm.delivery_full={{ auth()->user()->getMeta('delivery_full', 0) }}" id="delivery_full">
 				<i class="material-icons _left _mr15 _fs20 _c2 _anim1 _ml15 _va7" ng-class="{'_c4': vm.delivery_full }" ng-bind="vm.delivery_full ? 'check_box' : 'check_box_outline_blank'"></i>
 				<input type="hidden" name="delivery_full" ng-value="vm.delivery_full | boolean">
 				Delivery accross the country
 			</div>
 
-			<div class="_li _hvrl row" ng-click="vm.has_return=!vm.has_return" ng-init="vm.has_return={{ auth()->user()->getMeta('has_return', 0) }}">
+			<div class="_li _hvrl row" ng-click="vm.has_return=!vm.has_return" ng-init="vm.has_return={{ auth()->user()->getMeta('has_return', 0) }}" id="has_return">
 				<i class="material-icons _left _mr15 _fs20 _c2 _anim1 _ml15 _va7" ng-class="{'_c4': vm.has_return }" ng-bind="vm.has_return ? 'check_box' : 'check_box_outline_blank'"></i>
 				<input type="hidden" name="has_return" ng-value="vm.has_return | boolean">
 				We accept return
@@ -36,11 +36,11 @@
 				<small class="_clear _pb5">Return policy</small>
 				<textarea name="policy" type="text" class="_b1 _bcg _fe _brds3"
 				ng-disabled="!vm.has_return"
-				placeholder="Please tell users about your return policy, in how many days is it possible to return product and what are the rules">{{ auth()->user()->getMeta('return_policy') }}</textarea>
+				placeholder="Please tell users about your return policy, in how many days is it possible to return product and what are the rules" id="policy">{{ auth()->user()->getMeta('return_policy') }}</textarea>
 			</div>
 
 			<div class="col-sm-12 _mb15 _tar">
-				<button class="_btn _bga _cb _hvra _mr5" type="submit"> 
+				<button class="_btn _bga _cb _hvra _mr5" type="submit" id="update"> 
 					<i class="material-icons _mr5 _va5 _fs20">refresh</i> Update
 				</button>
 			</div>
@@ -52,7 +52,7 @@
 
 	<div class="_z013 _bgw _brds2">
 
-		<form class="_fg" name="product" action="{{ route('shipping.settings.locations.create') }}" method="POST"">
+		<form class="_fg" name="product" action="{{ route('shipping.settings.locations.create') }}" method="POST" id="add_new_form">
 			{{ csrf_field() }}
 
 			<div class="_p15 _bb1 _posr">
@@ -67,7 +67,7 @@
 				<div class="row">
 
 					<div class="col-sm-3 _mb15" ng-if="vm.cities">
-						<select selector model="vm.location_id" value-attr="id" label-attr="name" class="_b1 _bcg _brds3"
+						<select id="city" selector model="vm.location_id" value-attr="id" label-attr="name" class="_b1 _bcg _brds3"
 						options="vm.cities" placeholder="Location" ng-init="{{ old('location_id') ? 'vm.location_id='.old('location_id') : ''}}">
 					</select>
 
@@ -81,15 +81,17 @@
 				<div class="col-sm-2 _mb15">
 					<input ng-init="{{ old('price') ? 'vm.price='.old('price') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" 
 					ng-currency min="1" ng-required="true" currency-symbol="{{ $country->currency_symbol }} " 
-					ng-model="vm.price" placeholder="Price">
+					ng-model="vm.price" placeholder="Price" name="price">
 
+					<input type="hidden" name="price" ng-value="vm.price">
+					
 					@if ($errors->has('price'))
 					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('price') }}</span>
 					@endif
 				</div>
 
 				<div class="col-sm-2 _mb15">
-					<input ng-init="{{ old('window_from') ? 'vm.from='.old('window_from') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.from" placeholder="From" ui-numeric-input min="0" max="60" max-length="2">
+					<input ng-init="{{ old('window_from') ? 'vm.from='.old('window_from') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.from" placeholder="From" ui-numeric-input min="0" max="60" max-length="2" id="add_window_from">
 
 					<input type="hidden" name="window_from" ng-value="vm.from">
 
@@ -99,7 +101,7 @@
 				</div>
 
 				<div class="col-sm-2 _mb15">
-					<input ng-init="{{ old('window_to') ? 'vm.to='.old('window_to') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.to" placeholder="To" ui-numeric-input min="0" max="60" max-length="2"> 
+					<input ng-init="{{ old('window_to') ? 'vm.to='.old('window_to') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.to" placeholder="To" ui-numeric-input min="0" max="60" max-length="2" id="add_window_to"> 
 
 					<input type="hidden" name="window_to" ng-value="vm.to">
 
@@ -129,7 +131,7 @@
 
 	<div class="_p15 _posr">
 		<h1 class="_fs18 _ci _lh1 _clear _telipsis _m0">
-			Shipping locations for Poland
+			Shipping locations for {{ $country->name }}
 		</h1>
 	</div>
 

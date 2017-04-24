@@ -80,7 +80,7 @@ class OrderController extends Controller
                 return ($item->type == 'city' && $item->location_id == $address->city_id);
             });
 
-            if(!$shipping){
+            if(!$shipping->count()){
                 $shipping = $shipping_prices->filter(function($item) use ($address) {
                     return ($item->type == 'country' && $item->location_id == $address->country_id);
                 });
@@ -146,15 +146,21 @@ class OrderController extends Controller
 
         if($request->has('phone_id')){
 
-            $phone_verified = $this->phoneRepo->verificationCheck(
-                $request->input('phone_id'),
-                $request->input('code')
-            );
+            $phone = $this->phoneRepo->find($request->input('phone_id'));
 
-            if(!$phone_verified){
-                return redirect()->back()->withErrors([
-                    'code' => trans('user::settings.phones.wrong_code_status')
-                ]);
+            if(!$phone->is_verified){
+
+                $phone_verified = $this->phoneRepo->verificationCheck(
+                    $request->input('phone_id'),
+                    $request->input('code')
+                );
+
+                if(!$phone_verified){
+                    return redirect()->back()->withErrors([
+                        'code' => trans('user::settings.phones.wrong_code_status')
+                    ]);
+                }
+
             }
 
         }
@@ -183,7 +189,7 @@ class OrderController extends Controller
             return ($item->type == 'city' && $item->location_id == $address->city_id);
         });
 
-        if(!$shipping){
+        if(!$shipping->count()){
             $shipping = $shipping_prices->filter(function($item) use ($address) {
                 return ($item->type == 'country' && $item->location_id == $address->country_id);
             });

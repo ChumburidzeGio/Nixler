@@ -46,6 +46,19 @@ class PhoneRepository extends BaseRepository {
 
 
     /**
+     * Find phone by ID
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function find($id, $user = null)
+    {
+        $user = $user ? : auth()->user();
+
+        return $user->phones()->findOrFail($id);
+    }
+
+
+    /**
      * Verify with code the phone
      *
      * @return \Illuminate\Http\Response

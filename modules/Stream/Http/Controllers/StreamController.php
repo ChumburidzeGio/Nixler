@@ -28,12 +28,27 @@ class StreamController extends Controller
     public function index(Request $request)
     {
         if($request->has('query')){
-            $products = $this->repository->search($request->input('query'));
+            $products = $this->repository->search($request->input('query'), $request->input('cat'));
         } else {
-            $products = $this->repository->all();
+            $products = $this->repository->all($request->input('cat'));
         }
 
-        return $request->isMethod('post') ? $products->toJson() : view('stream::index', compact('products'));
+        $categories = [
+            1 => ['icon' => 'wc', 'name' => 'Clothing & Accessories'],
+            2 => ['icon' => 'child_friendly', 'name' => 'Kids & Babe'],
+            3 => ['icon' => 'phone_iphone', 'name' => 'Electronics'],
+            4 => ['icon' => 'laptop_mac', 'name' => 'Computers'],
+            5 => ['icon' => 'directions_car', 'name' => 'Vehicles'],
+            6 => ['icon' => 'domain', 'name' => 'Real estate'],
+            7 => ['icon' => 'home', 'name' => 'Home'],
+            8 => ['icon' => 'spa', 'name' => 'Beauty & Healthcare'],
+            9 => ['icon' => 'fitness_center', 'name' => 'Sport & Leisure'],
+            10 => ['icon' => 'card_giftcard', 'name' => 'Spare time & Gifts'],
+            11 => ['icon' => 'pets', 'name' => 'Pets'],
+            12 => ['icon' => 'restaurant', 'name' => 'Food'],
+        ];
+
+        return $request->isMethod('post') ? $products->toJson() : view('stream::index', compact('products', 'categories'));
     }
 
 

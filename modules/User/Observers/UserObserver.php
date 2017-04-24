@@ -6,6 +6,7 @@ use Modules\User\Entities\User;
 use Modules\Stream\Repositories\StreamRepository;
 use Modules\Address\Repositories\ShippingRepository;
 use Modules\Stream\Services\RecommService;
+use Modules\Address\Entities\Country;
 
 class UserObserver
 {
@@ -32,12 +33,17 @@ class UserObserver
         $user->emails()->create([
             'address' => $user->email
         ]);
-
-        $this->shippingRepo->settingsUpdate([
-            'delivery_full' => true,
-            'has_return' => true,
-            'return_policy' => ''
-        ], $user);
+/*
+        if($user->country) {
+ 
+            $this->shippingRepo->settingsUpdate([
+                'delivery_full' => true,
+                'has_return' => true,
+                'return_policy' => ''
+            ], $user);
+        
+        }
+*/
     }
 
     /**

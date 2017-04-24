@@ -40,21 +40,26 @@ class UserRepository extends BaseRepository {
 
         if($tab == 'products'){
             $data = $user->products()->where('status', 'active')->withMedia()->take(20)->get();
+            $view = 'products';
         }
         elseif($tab == 'followers'){
             $data = $user->followers()->take(20)->get();
+            $view = 'people';
         }
         elseif($tab == 'followings'){
             $data = $user->followings()->take(20)->get();
+            $view = 'people';
         }
         elseif($tab == 'photos'){
             $data = $user->media()->take(20)->get();
+            $view = 'media';
         }
         else {
             $data = $user->liked()->withMedia()->take(20)->get();
+            $view = 'products';
         }
 
-        return compact('user', 'data', 'tab');
+        return compact('user', 'data', 'tab', 'view');
     }
 
 

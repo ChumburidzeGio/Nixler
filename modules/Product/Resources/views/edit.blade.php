@@ -6,6 +6,17 @@
 	<div class="row">
 
 		<div class="col-sm-8 col-xs-12">
+			@if($user->getMeta('delivery_full', 3) == 3)
+			<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
+				Please for first add shipping information before you will able to publish new product
+				<div class="_clear _mt10">
+					<a class="_btn _bga _cb _pr5 _hvrl" href="{{ route('shipping.settings') }}" id="shipping_settings_route">
+						Go to shipping settings <i class="material-icons _ml5 _va7">chevron_right</i>
+					</a>
+				</div>
+			</div>
+			@endif
+
 			@if(session('status'))
 			<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
 				{{ session('status') }}
@@ -173,9 +184,11 @@
 				@endif
 
 				@if($product->is_inactive)
+				@if($user->getMeta('delivery_full', 3) != 3)
 				<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish" id="publish"> 
 					<i class="material-icons _mr5 _va5 _fs20">store</i> Publish
 				</button>
+				@endif
 				@else
 				<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish" id="publish"> 
 					<i class="material-icons _mr5 _va5 _fs20">update</i> Update
