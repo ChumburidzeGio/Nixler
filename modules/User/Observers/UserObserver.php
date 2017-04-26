@@ -28,8 +28,6 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $this->streamRepo->recommend($user);
-
         $user->emails()->create([
             'address' => $user->email
         ]);
@@ -60,6 +58,10 @@ class UserObserver
                 'owner_username' => $user->username
             ]);
 
+        }
+
+        if ($user->currency != $user->getOriginal('currency')) {
+            $this->streamRepo->recommend($user);
         }
     }
 
