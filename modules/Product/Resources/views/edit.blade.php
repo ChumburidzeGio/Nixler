@@ -116,7 +116,7 @@
 							<div class="col-sm-3 _mb15">
 								<small class="_clear _pb5">In stock</small>
 
-								<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="12" ui-numeric-input min="0" max="500" max-length="3" ng-init="vm.in_stock={{ $product->in_stock }}" id="in_stock" name="in_stock">
+								<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="" ui-numeric-input min="0" max="500" max-length="3" ng-init="vm.in_stock={{ $product->in_stock }}" id="in_stock" name="in_stock">
 
 								@if ($errors->has('in_stock'))
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('in_stock') }}</span>

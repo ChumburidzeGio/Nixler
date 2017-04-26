@@ -1,8 +1,9 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
-    "license": "MIT",
+    "name": "nixler/web",
+    "description": "Nixler main web app.",
+    "keywords": ["nixler", "shopping"],
+    "version": "0.2.1",
+    "license": "",
     "type": "project",
     "require": {
         "php": ">=5.6.4",
@@ -31,6 +32,7 @@
         "laravel/scout": "^2.0",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
+        "league/commonmark": "^0.15.3",
         "league/fractal": "^0.15.0",
         "menarasolutions/geographer": "^0.3.3",
         "mpociot/botman": "^1.4",

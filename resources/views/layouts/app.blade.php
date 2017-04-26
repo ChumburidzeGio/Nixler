@@ -1,7 +1,7 @@
 @extends('layouts.general')
 
 @section('app')
-<body>
+<body class="@yield('body_class')">
 
     <div id="app" class="_mt70 _pb15 _db" ng-app="nx">
     <br class="visible-xs">

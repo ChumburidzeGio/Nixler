@@ -82,7 +82,7 @@ return [
             'default' => public_path('img/image.jpg'),
             'sizes' => [
                 'profile' => [800, 150],
-                'product' => [400, 75],
+                'product' => [400, 80],
             ]
         ],
         'media' => [

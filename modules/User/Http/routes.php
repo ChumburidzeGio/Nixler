@@ -3,8 +3,8 @@
 Route::group(['middleware' => 'web', 'namespace' => 'Modules\User\Http\Controllers'], function()
 {
 	Route::get('/@{id}', 'UserController@find')->name('user');
-	Route::post('@{id}/follow', 'UserController@follow');
-	Route::post('@{id}/photos', 'UserController@uploadPhoto');
+	Route::post('@{id}/follow', 'UserController@follow')->name('user.follow');
+	Route::post('@{id}/photos', 'UserController@uploadPhoto')->name('user.uploadPhoto');
 
 	Route::get('/avatars/{id}/{place}', 'UserController@avatar')->name('avatar');
 

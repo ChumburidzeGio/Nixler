@@ -13,44 +13,6 @@ use Modules\Stream\Entities\Activity;
 
 trait Merchant {
     
-    /**
-     *  Relationships
-     */
-    public function products()
-    {   
-        return $this->hasMany(Product::class, 'owner_id');
-    }
-
-    
-    /**
-     *  Relationships
-     */
-    public function shopStats()
-    {   
-        return $this->hasMany(ProductStats::class, 'actor');
-    }
-
-    
-    /**
-     *  Relationships
-     */
-    public function shopStatistics()
-    {   
-        return (new ProductStats)->calculate($this->shopStats()->get());
-    }
-
-    
-
-    /**
-     *  Relationships
-     */
-    public function updateUsernameCallback($from, $to)
-    {   
-        return $this->products()->where('owner_username', $from)->update([
-            'owner_username' => $to
-        ]);
-    }
-
     
     /**
      *  Relationships

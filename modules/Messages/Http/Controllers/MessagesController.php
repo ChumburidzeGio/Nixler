@@ -6,18 +6,18 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\Notifications\MessageRecieved;
+use Modules\User\Entities\User;
 use stdClass;
 
 class MessagesController extends Controller
 {
     /**
-     * Display a listing of the resource.
      * @return Response
      */
     public function index()
     {
-//return $user->message('Be how are you?', $user2);
-        $threads = auth()->user()->hermes()->take(10)->get()->map(function($item){
+        $threads = auth()->user()->hermes()->take(10)->get()->map(function($item) {
+
             $message = !is_null($item->latestMessage) ? $item->latestMessage->first() : null;
             $ps = $item->participants;
 
@@ -29,31 +29,16 @@ class MessagesController extends Controller
                 'last_replied' =>$message ? !!($message->user_id == auth()->user()->id) : false,
                 'unread' => $item->unread
             ];
-        });
 
-        //Message to thread
-        //$shop->messageIn($threads->first()->id, 'Hey hey');
-        //find thread by id
-        //$thread = $user->thread($threads->first()->id);
-        //thread messages
-        //$messages = $thread->messages()->take(20)->get();
+        });
 
         return view('messages::index', compact('threads'));
     }
 
     /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('messages::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
      * @param  Request $request
-     * @return Response
+     * @param  int $id
+     * @return array
      */
     public function store($id, Request $request)
     {
@@ -63,13 +48,14 @@ class MessagesController extends Controller
             'id' => $new_msg->id,
             'photo' => auth()->user()->avatar('message'),
             'body' => $new_msg->body,
+            'author' => auth()->user()->name,
+            'time' => $new_msg->created_at->format('c'),
             'own' => true
         ];
-        //$user->message('Hey how are you?', $user2);
     }
 
     /**
-     * Show the specified resource.
+     * @param  int $id
      * @return Response
      */
     public function show($id)
@@ -109,34 +95,8 @@ class MessagesController extends Controller
         return view('messages::show', compact('thread'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-        return view('messages::edit');
-    }
 
     /**
-     * Update the specified resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @return Response
-     */
-    public function destroy()
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
      * @return Response
      */
     public function load($id, Request $request)
@@ -148,24 +108,28 @@ class MessagesController extends Controller
         $last_id = $request->input('id');
         $dir = $request->input('dir');
 
-        return $thread->messages()->where('id', ($dir =='-1'?'<':'>'), $last_id)->take(15)->latest()->get()->map(function($item) use ($pcps) {
+        $rMessages = $thread->messages()->where('id', ($dir =='-1'?'<':'>'), $last_id)->take(15)->latest()->get();
+
+        $messages = $rMessages->map(function($item) use ($pcps) {
             return [
                 'id' => $item->id,
                 'photo' => array_get($pcps, $item->user_id)->avatar('message'),
                 'body' => $item->body,
-                //'time' => $item->created_at->format('c'),
+                'time' => $item->created_at->format('c'),
+                'author' => array_get($pcps, $item->user_id)->name,
                 'own' => $item->is_own
             ];
         });
+
+        return $messages;
     }
 
     /**
-     * Remove the specified resource from storage.
      * @return Response
      */
-    public function with($id)
+    public function redirectToConversation($id)
     {
-        $target = \Modules\User\Entities\User::findOrFail($id);
+        $target = User::findOrFail($id);
         $thread = auth()->user()->findOrCreateThreadWith($target);
         return redirect()->route('thread', ['id' => $thread->id]);
     }

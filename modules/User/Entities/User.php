@@ -19,6 +19,7 @@ use Modules\Address\Entities\UserAddress;
 use Modules\Stream\Entities\UserTag;
 use Modules\User\Entities\Session;
 use Modules\Address\Entities\Country;
+use Modules\Product\Entities\Product;
 
 class User extends Authenticatable
 {
@@ -45,7 +46,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password'
+        'name', 'email', 'password', 'currency', 'country', 'locale', 'timezone'
     ];
 
     /**
@@ -83,13 +84,7 @@ class User extends Authenticatable
     {   
         return $this->hasMany(UserAddress::class, 'user_id');
     }
-
-
-    public function tags()
-    {   
-        return $this->hasMany(UserTag::class, 'user_id');
-    }
-
+    
 
     public function sessions()
     {   
@@ -100,6 +95,15 @@ class User extends Authenticatable
     public function country()
     {   
         return $this->hasOne(Country::class, 'iso_code', 'country');
+    }
+
+    
+    /**
+     *  Relationships
+     */
+    public function products()
+    {   
+        return $this->hasMany(Product::class, 'owner_id');
     }
 
 
@@ -173,43 +177,11 @@ class User extends Authenticatable
 
 
     /**
-     *  Get the avatar
-     */
-    public function getIsOnlineAttribute(){
-        $last_activity = $model->getMeta('last_activity');
-        return (strtotime('4 min ago') < strtotime($last_activity));
-    }
-
-
-    /**
      *  Get the profile link
      */
     public function link($tab = ''){
         $url = route('user', ['id' => $this->username]);
         return $tab ? $url.'?tab='.$tab : $url;
-    }
-
-
-    /**
-     *  Get the profile link
-     */
-    public function action($action = ''){
-        $url = route('user', ['id' => $this->username]);
-        return $action ? $url.'/'.$action : $url;
-    }
-
-
-    /**
-     *  Get the profile link
-     */
-    public function setGeoData($data){
-        $user = $this;
-        $user->currency = array_get($data, 'currency');
-        $user->country = array_get($data, 'country');
-        $user->timezone = array_get($data, 'timezone');
-        $user->setMeta('city', array_get($data, 'city'));
-        $user->locale = array_get($data, 'locale');
-        $user->save();
     }
 
 }

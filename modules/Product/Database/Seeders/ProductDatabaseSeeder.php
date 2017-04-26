@@ -20,6 +20,35 @@ class ProductDatabaseSeeder extends Seeder
      *
      * @return void
      */
+    public function getCategory($binding)
+    {
+        $matching = [
+            'Electronics' => 24,
+            'Wireless Phone Accessory' => 14,
+            'Unlocked Phone' => 14,
+            'Personal Computers' => 23,
+            'Wireless Phone' => 14,
+            'Camera' => 15,
+            'Apparel' => 2,
+            'Shoes' => 3,
+            'Kindle Edition' => 66,
+            'Hardcover' => 66,
+            'Paperback' => 66,
+            'Health and Beauty' => 55,
+            'Kitchen' => 47,
+            'Misc.' => 87,
+        ];
+
+        return array_get($matching, $binding);
+
+    }
+
+
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
     public function run(ProductRepository $repository)
     {
         Model::unguard();
@@ -48,6 +77,7 @@ class ProductDatabaseSeeder extends Seeder
                 $colors = collect(['Black', 'Indigo', 'Red', 'Blue', 'Yellow', 'Orange', 'Cyan', 'Aero']);
                 $title = str_limit(array_get($item, 'ItemAttributes.Title'), 180);
                 $price = array_get($item, 'ItemAttributes.ListPrice.FormattedPrice');
+                $category = $this->getCategory(array_get($item, 'ItemAttributes.Binding'));
 
                 if(!$price) {
                     return false;
@@ -59,7 +89,7 @@ class ProductDatabaseSeeder extends Seeder
                     'title' => $title,
                     'description' => is_array($features) ? implode(' ', $features) : $features,
                     'price' => $price,
-                    'category' => Category::inRandomOrder()->whereNotNull('parent_id')->pluck('id')->first(),
+                    'category' => $category,
                     'in_stock' => rand(1,50),
                     'variants' => json_encode($colors->random(rand(1,4))),
                     'action' => 'publish'

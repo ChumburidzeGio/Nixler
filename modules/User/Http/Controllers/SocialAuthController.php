@@ -83,7 +83,7 @@ class SocialAuthController extends Controller
 
         auth()->login($user, true);
 
-        return redirect()->to('/');
+        return redirect()->intended('/feed');
     }
     
 }

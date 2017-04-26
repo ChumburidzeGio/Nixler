@@ -59,7 +59,7 @@ class LocationService
 		}
 
 		if(auth()->check()){
-			auth()->user()->setGeoData($geoData);
+			auth()->user()->update($geoData);
 		}
 
 		return $locale;

@@ -55,7 +55,11 @@ class UserObserver
     public function updating(User $user)
     {
         if ($user->username != $user->getOriginal('username')) {
-            $user->updateUsernameCallback($user->getOriginal('username'), $user->username);
+
+            $user->products()->where('owner_username', $user->getOriginal('username'))->update([
+                'owner_username' => $user->username
+            ]);
+
         }
     }
 

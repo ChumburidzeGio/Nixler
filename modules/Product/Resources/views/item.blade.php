@@ -109,15 +109,19 @@
 
             <div class="_bgw _b1 _brds3 _clear">
 
-                <img src="{{ $merchant->cover('product') }}" class="_clear _w100">
+                <img src="{{ $merchant->cover('product') }}" class="_clear _w100" height="80px" width="400px">
                 <div class=" _pb5 _pl15">
-                     <img src="{{ $merchant->avatar('product') }}" class="_brds50 _dib _ma _mb5 _b1 _bcg _bw2 _clear _mt-50" height="80" width="80">
+                     <img src="{{ $merchant->avatar('product') }}" class="_brds3 _dib _ma _mb5 _b1 _bcg _bw2 _clear _mt-50" height="80" width="80">
                      <a href="{{ $merchant->link() }}" class="_lh1 _et2 _fs18 _clear">{{ $merchant->name }}</a>
                      <small class="_clear _mb5">{{ $merchant->followers()->count() }} Followers</small>
+                     @if($merchant->id !== auth()->id())
                      <div class="_clear _mt10 _pr10 _mb5">
                         <!--div class="_btn _bgw _cg _mt5 _b1 _bcg">Follow</div-->
-                        <a class="_btn _bgw _cg _mt5 _b1 _bcg _w100" href="{{ route('find-thread', ['id' => $merchant->id]) }}">Message</a>
+                        <a class="_btn _bg5 _cb _mt5 _w100" href="{{ route('find-thread', ['id' => $merchant->id]) }}">
+                            <i class="material-icons _mr5 _va5 _fs20">message</i> Message
+                        </a>
                      </div>
+                     @endif
 
                 </div>
 

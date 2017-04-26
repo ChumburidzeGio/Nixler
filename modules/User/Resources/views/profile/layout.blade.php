@@ -9,7 +9,7 @@
             <img src="{{ $user->cover('profile') }}" class="_clear _w100">
 
             @if(auth()->check() && auth()->user()->id == $user->id)
-              <form id="cover-upload-form" action="{{ $user->action('photos') }}" 
+              <form id="cover-upload-form" action="{{ route('user.uploadPhoto', ['id' => $user->username]) }}" 
                method="POST" enctype="multipart/form-data" class="_posa _a2 _p10">
 
                {{ csrf_field() }}
@@ -32,7 +32,7 @@
               <img src="{{ $user->avatar('profile') }}" class="_brds2 _dib _ma _mb10 _b1 _bcg _bw2 _clear _mt-50" height="100px" width="100px">
 
               @if(auth()->check() && auth()->user()->id == $user->id)
-              <form id="avatar-upload-form" action="{{ $user->action('photos') }}" 
+              <form id="avatar-upload-form" action="{{ route('user.uploadPhoto', ['id' => $user->username]) }}" 
                method="POST" enctype="multipart/form-data" class="_posa _a5">
 
                {{ csrf_field() }}
@@ -67,7 +67,7 @@
                         <i class="material-icons _va4 _fs18">
                         {{ auth()->check() && auth()->user()->isFollowing($user->id) ? 'check' : 'person_add' }}</i>
                         {{ auth()->check() && auth()->user()->isFollowing($user->id) ? 'Following' : 'Follow' }}
-                    <form id="shfol12" action="{{ $user->action('follow') }}" method="POST" class="_d0">
+                    <form id="shfol12" action="{{ route('user.follow', ['id' => $user->username]) }}" method="POST" class="_d0">
                         {{ csrf_field() }}
                     </form>
                 </div>

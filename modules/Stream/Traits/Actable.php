@@ -47,6 +47,8 @@ trait Actable {
      */
     public function trackActivity($verb)
     {
+        if(auth()->guest()) return;
+        
     	return Activity::create([
     		'actor' => auth()->id(),
             'verb' => $verb,
