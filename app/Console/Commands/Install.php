@@ -113,7 +113,7 @@ class Install extends Command
         DB::commit();
 
         $this->comment("All tables successfully dropped");
-        
+
         $this->call('migrate');
         $this->call('module:migrate');
         $this->call('scout:mysql-index', [ 'model' => 'Modules\\Product\\Entities\\Product' ]);
@@ -127,7 +127,7 @@ class Install extends Command
      */
     private function cleanStorage()
     {
-        $files = Storage::allFiles(storage_path('app/public'));
+        $files = Storage::allFiles('public/users');
 
         collect($files)->map(function ($value, $key) {
 
