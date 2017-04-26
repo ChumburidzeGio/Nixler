@@ -116,7 +116,9 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function recommend($user)
     {
-        $recommendations = (new RecommService)->recommendations($user->id, 30);
+        $recommendations = (new RecommService)->recommendations($user->id, 30, [
+            'filter' => "'currency' == \"{$user->currency}\""
+        ]);
 
         $user->streamRemoveBySource('recs');
 
@@ -169,6 +171,8 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
      */
     public function discover()
     {
+        return $this->refreshStreams();
+
         $query = Activity::select('object', DB::raw('count(activities.object) as total'))
                     ->whereIn('verb', ['product:viewed', 'product:liked'])
                     ->groupBy('object')
