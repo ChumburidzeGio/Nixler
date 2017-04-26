@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Modules\Stream\Services\RecommService;
 use Modules\User\Entities\User;
-use DB;
+use DB, Storage;
 
 class Install extends Command
 {
@@ -40,30 +40,134 @@ class Install extends Command
      */
     public function handle()
     {
-
-        if ($this->confirm('Do you want to set enviroment variables ?')) {
-            $this->setENV();
-        }
-        
-        if ($this->confirm('Do you want to reset databases ?')) {
-            $this->setDB();
+        if ($this->confirm('Do you want to reset the system?')) {
+            $this->reset();
         }
 
-        //if ($this->confirm('Do you want to clean all storage?')) {
-        //    $this->cleanStorage('users');
-        //}
-
-        if ($this->confirm('Set Recommender props')) {
-            $this->setRecomm();
-        }
-
-        if ($this->confirm('Do you want to seed data to database for testing?')) {
+        if ($this->confirm('Do you want to seed data in database for testing?')) {
             $this->setFakeData();
         }
 
         $this->call('optimize');
+        $this->call('cache:clear');
         
     }
+
+    /**
+     * Remove all tables from database
+     *
+     * @return mixed
+     */
+    private function reset()
+    {
+        $this->resetDB();
+        $this->cleanStorage();
+        $this->resetRecomm();
+
+        foreach (config('app.countries') as $country) {
+            $this->call('countries:download', [ 'iso_code' => $country]);
+            $this->info('Populated Geo data about ' . $country);
+        }
+
+        $this->call('geoip:update');
+        $this->info('Updated MaxMind database');
+
+        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\CategoryDatabaseSeeder' ]);
+
+        $this->createNixlerAccount();
+    }
+
+    /**
+     * Remove all tables from database
+     *
+     * @return mixed
+     */
+    private function resetRecomm()
+    {
+        (new RecommService)->addProps();
+    }
+
+    /**
+     * Remove all tables from database
+     *
+     * @return mixed
+     */
+    private function resetDB()
+    {
+
+        $tables = DB::select('SHOW TABLES');
+        $droplist = [];
+
+        foreach($tables as $table) {
+            $droplist[] = $table->{'Tables_in_' . env('DB_DATABASE')};
+        }
+
+        if(!$droplist) return false;
+
+        $droplist = implode(',', $droplist);
+
+        DB::beginTransaction();
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        DB::statement("DROP TABLE $droplist");
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+        DB::commit();
+
+        $this->comment("All tables successfully dropped");
+        
+        $this->call('migrate');
+        $this->call('module:migrate');
+        $this->call('scout:mysql-index', [ 'model' => 'Modules\\Product\\Entities\\Product' ]);
+
+    }
+
+    /**
+     * Remove all files from storage
+     *
+     * @return mixed
+     */
+    private function cleanStorage()
+    {
+        $files = Storage::allFiles(storage_path('app/public'));
+
+        collect($files)->map(function ($value, $key) {
+
+            return \Storage::delete($value) 
+                ? $this->info('Deleted '.$value) 
+                : $this->error('Can\'t delete '.$value);
+
+        });
+
+    }
+
+    /**
+     * Remove all files from storage
+     *
+     * @return mixed
+     */
+    private function createNixlerAccount()
+    {
+
+        User::create([
+            'name' => 'Nixler',
+            'email' => 'info@nixler.pl',
+            'password' => 'Yamaha12',
+            'username' => 'nixler',
+        ]);
+
+    }
+
+    /**
+     * Remove all tables from database
+     *
+     * @return mixed
+     */
+    private function setFakeData()
+    {
+        $this->call('db:seed', [ '--class' => 'Modules\User\Database\Seeders\SeedFakeUsersTableSeeder' ]);
+        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\ProductDatabaseSeeder' ]);
+    }
+
+
 
     /**
      * Remove all tables from database
@@ -112,121 +216,6 @@ class Install extends Command
         $this->svwq('Mailchimp API key?', 'MAILCHIMP_APIKEY');
 
         $this->info('Enviroment variables has been succesfully set');
-
-    }
-
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function setDB()
-    {
-        $this->cleanDB();
-        $this->comment("All tables successfully dropped");
-        $this->call('migrate');
-        $this->call('module:migrate');
-        $this->call('scout:mysql-index', [ 'model' => 'Modules\\Product\\Entities\\Product' ]);
-
-        foreach (config('app.countries') as $country) {
-            $this->call('countries:download', [ 'iso_code' => $country]);
-            $this->info('Populated Geo data about ' . $country);
-        }
-
-        $this->call('geoip:update');
-        $this->info('Updated MaxMind database');
-
-        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\CategoryDatabaseSeeder' ]);
-
-        $this->createNixlerAccount();
-    }
-
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function setRecomm()
-    {
-        (new RecommService)->addProps();
-    }
-
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function setFakeData()
-    {
-        $this->call('db:seed', [ '--class' => 'Modules\User\Database\Seeders\SeedFakeUsersTableSeeder' ]);
-        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\ProductDatabaseSeeder' ]);
-    }
-
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function cleanDB()
-    {
-
-        $tables = DB::select('SHOW TABLES');
-        $droplist = [];
-
-        foreach($tables as $table) {
-            $droplist[] = $table->{'Tables_in_' . env('DB_DATABASE')};
-        }
-
-        if(!$droplist) return false;
-
-        $droplist = implode(',', $droplist);
-
-        DB::beginTransaction();
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
-        DB::statement("DROP TABLE $droplist");
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
-        DB::commit();
-
-    }
-
-    /**
-     * Remove all files from storage
-     *
-     * @return mixed
-     */
-    private function cleanStorage($dir)
-    {
-
-        collect(\Storage::files('storage/'.$dir))->map(function ($value, $key) {
-
-            if(!ends_with($value, 'default.jpg')){
-
-                return \Storage::delete($value) 
-                ? $this->info('Deleted '.$value) 
-                : $this->error('Can\'t delete '.$value);
-
-            } else {
-                $this->info('Skipped '.$value);
-            }
-
-        });
-
-    }
-
-    /**
-     * Remove all files from storage
-     *
-     * @return mixed
-     */
-    private function createNixlerAccount()
-    {
-
-        User::create([
-            'name' => 'Nixler',
-            'email' => 'info@nixler.pl',
-            'password' => 'Yamaha12',
-            'username' => 'nixler',
-        ]);
 
     }
 
