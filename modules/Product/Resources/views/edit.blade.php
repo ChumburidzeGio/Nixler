@@ -132,6 +132,30 @@
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('variants') }}</span>
 								@endif
 							</div>
+
+
+
+							<div class="col-sm-12 _mb15">
+								<small class="_clear">Tags</small>
+
+								<select selector
+									multi="true"
+									model="vm.tags"
+									remote="vm.remoteConfig"
+									remote-param="query"
+									value-attr="text"
+									label-attr="text"
+									debounce="100"
+									placeholder="Choose one or more countries..."></select>
+
+								<input type="hidden" name="tags" ng-value="vm.tags | json" 
+									ng-init="{{ $product->tags ? 'vm.tags='.$product->tags : '' }}">
+
+								@if ($errors->has('tags'))
+								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('tags') }}</span>
+								@endif
+							</div>
+
 						</div>
 						
 
@@ -158,7 +182,6 @@
 							<input type="hidden" name="media" ng-value="vm.media | json">
 
 						</div>
-
 					</div>
 
 

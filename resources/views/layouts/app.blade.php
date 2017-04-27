@@ -29,9 +29,9 @@
                 @endif
             </div>
 
-            <div class="_dib _oh _posr _b1 _brds3" style="width: 100%; max-width: 500px;margin-top: 7px;">
+            <div class="_dib _oh _posr _brds3" style="width: 100%; max-width: 500px;margin-top: 7px;">
                 <form class="_fg _db _w100" action="{{ url('feed') }}">
-                    <input class="_fe _bg5" placeholder="Start typing name of product or account" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
+                    <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="Start typing name of product or account" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
                     @if(request()->has('cat'))<input name="cat" type="hidden" value="{{ request()->input('cat') }}">@endif
                     <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
                 </form>

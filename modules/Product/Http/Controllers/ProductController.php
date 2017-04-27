@@ -192,4 +192,21 @@ class ProductController extends Controller
             'success' => $this->repository->like($id)
         ];
     }
+
+    /**
+     * Like product
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function tagsFind(Request $request)
+    {
+        $query = $request->input('query');
+
+        return collect([
+            ['text' => 'Men'],
+            ['text' => 'Women'],
+            ['text' => 'Kids'],
+            ['text' => 'Pregnant'],
+        ])->toArray();
+    }
 }

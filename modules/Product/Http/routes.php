@@ -12,4 +12,6 @@ Route::group(['middleware' => 'web', 'namespace' => 'Modules\Product\Http\Contro
 	Route::post('/products/{id}/status', 'ProductController@changeStatus')->middleware('auth')->name('product:update:status');
 	Route::post('/products/{id}/schedule', 'ProductController@schedule')->middleware('auth')->name('product:schedule');
 	Route::post('/products/{id}/like', 'ProductController@like')->middleware('auth')->name('product:like');
+
+	Route::get('/products/tags/find', 'ProductController@tagsFind')->middleware('auth')->name('product:tags:find');
 });

@@ -37896,6 +37896,14 @@ angular.module('products').controller('SellCtrl', ['$http', 'anchorSmoothScroll'
         }
     };
 
+    vm.remoteConfig = {
+        url: "/products/tags/find",
+        transformResponse: function transformResponse(data) {
+            console.log(data, angular.fromJson(data));
+            return angular.fromJson(data);
+        }
+    };
+
     vm.deleteMedia = function (media) {
 
         media.uploading = true;

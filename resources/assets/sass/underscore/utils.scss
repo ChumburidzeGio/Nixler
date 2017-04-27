@@ -349,6 +349,13 @@
     color: #FB8C00!important;
 }
 
+._fcsbuy:focus {
+    border: 2px solid #ffdb4d!important;
+}
+._fcsbw:focus {
+    background: #fff!important;
+}
+
 
 /*=================================
          WIDTH
@@ -463,6 +470,7 @@
 ==================================*/
 
 ._bcg {border-color: #d8d8d8!important;}
+._bcgt {border-color: rgba(216, 216, 216, 0.19) !important;}
 ._bca {border-color: #FFC107!important;}
 ._bcbl {border-color: #2196F3!important;}
 ._bci {border-color: #3F51B5!important;}

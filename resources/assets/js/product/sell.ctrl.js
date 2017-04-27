@@ -12,6 +12,15 @@ angular.module('products').controller('SellCtrl', [
             }
         }
 
+        vm.remoteConfig = {
+            url: "/products/tags/find",
+            transformResponse: function (data) {
+                console.log(data, angular.fromJson(data));
+                return angular.fromJson(data);
+            }
+        };
+
+
         vm.deleteMedia = function (media) {
 
             media.uploading = true;
