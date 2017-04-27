@@ -37685,6 +37685,8 @@ angular.module('comments', []).controller('CommentsCtrl', ['$http', '$scope', fu
 			vm.comment_text = '';
 			$scope.$parent.vm.comments_count += 1;
 			vm.sending = false;
+		}, function () {
+			vm.sending = false;
 		});
 	};
 

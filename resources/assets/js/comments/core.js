@@ -10,7 +10,7 @@ angular.module('comments', []).controller('CommentsCtrl', [
 		vm.commentPush = function(){
 
 			if(vm.sending) return false;
-			
+
 			vm.sending = true;
 
 			$http.post('/comments', {
@@ -21,6 +21,8 @@ angular.module('comments', []).controller('CommentsCtrl', [
 				vm.comments.unshift(response.data);
 				vm.comment_text = '';
 				$scope.$parent.vm.comments_count += 1;
+				vm.sending = false;
+			}, function(){
 				vm.sending = false;
 			});
 		}
