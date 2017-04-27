@@ -145,7 +145,7 @@
 /* Multiple */
 
 .selector-container.multiple .selector-input {
-    padding: 6.3px 13px !important;
+    padding: 6.3px 13px 2px !important;
     cursor: text;
     background: #fff;
 }
@@ -162,8 +162,6 @@
 .selector-container.multiple input, .selector-container.multiple .selector-values>li {
     padding: .2em .6em;
     margin: 0 .15em .25em;
-    border-width: 1px;
-    border-style: solid;
     float: left;
     line-height: 15px;
 }
@@ -171,12 +169,11 @@
 .selector-container.multiple .selector-values>li {
     display: inline-block;
     position: relative;
-    border-color: #B7B7B7;
     color: #424242;
-    font-weight: 300;
-    -webkit-border-radius: 2px;
-    border-radius: 2px;
-    background: transparent;
+    height: 26px;
+    line-height: 22px;
+    border-radius: 3px;
+    background: #E9EDDE;
 }
 
 .selector-container.multiple.remove-button .selector-values>li {
@@ -234,12 +231,10 @@
     border-bottom: none;
 }
 
-
 /* Unset */
 
 .selector-container.has-value.remove-button.rtl .selector-helper {
     border-left: none;
-    border-right: 1px solid #bbb;
 }
 
 .selector-container.has-value.remove-button .selector-icon {
@@ -307,7 +302,6 @@
 .selector-container.multiple.remove-button .selector-helper {
     display: block;
     width: 1.3em;
-    border-left: 1px solid #B7B7B7;
     cursor: pointer;
 }
 

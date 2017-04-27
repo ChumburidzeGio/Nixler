@@ -87,6 +87,11 @@ class Product extends Model
         return $this->hasOne(User::class,'id', 'owner_id');
     }
 
+    public function tags()
+    {   
+        return $this->belongsToMany(Tag::class, (new ProductTag)->getTable(), 'product_id', 'tag_id');
+    }
+
 
     public function setPriceAttribute($value){
         $this->attributes['price'] = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);

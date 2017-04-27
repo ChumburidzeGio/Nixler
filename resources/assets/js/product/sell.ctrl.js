@@ -10,10 +10,18 @@ angular.module('products').controller('SellCtrl', [
             for (var i = 0; i < files.length; i++) {
                 vm.uploadMedia(files[i]);
             }
-        }
+        };
+
+        vm.createFunction = function (tag) {
+            return $http.post('/products/tags/create', {
+                tag: tag
+            }).then(function(response){
+                return response.data;
+            });
+        };
 
         vm.remoteConfig = {
-            url: "/products/tags/find",
+            url: "/products/tags/search",
             transformResponse: function (data) {
                 console.log(data, angular.fromJson(data));
                 return angular.fromJson(data);

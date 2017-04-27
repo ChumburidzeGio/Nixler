@@ -193,20 +193,4 @@ class ProductController extends Controller
         ];
     }
 
-    /**
-     * Like product
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function tagsFind(Request $request)
-    {
-        $query = $request->input('query');
-
-        return collect([
-            ['text' => 'Men'],
-            ['text' => 'Women'],
-            ['text' => 'Kids'],
-            ['text' => 'Pregnant'],
-        ])->toArray();
-    }
 }

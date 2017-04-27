@@ -136,15 +136,17 @@
 
 
 							<div class="col-sm-12 _mb15">
-								<small class="_clear">Tags</small>
+								<small class="_clear _mb5">Tags</small>
 
 								<select selector
 									multi="true"
 									model="vm.tags"
 									remote="vm.remoteConfig"
+									class="_b1 _bcg _brds3"
 									remote-param="query"
-									value-attr="text"
-									label-attr="text"
+									value-attr="id"
+									label-attr="name"
+									create="vm.createFunction(input)"
 									debounce="100"
 									placeholder="Choose one or more countries..."></select>
 
