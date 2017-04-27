@@ -7,7 +7,7 @@
 
 	<div class="col-md-8">
 
-		<div class="_z013 _bgw _mb2 _clear _brds3">
+		<div class="_z013 _bgw _mb15 _clear _brds3">
 
 			<div class="_tbs _ov _fs16 _p10 _pl15 _ml5" ng-bind="vm.thread.title"></div>
 			<hr class="_m0">
