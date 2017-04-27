@@ -37724,14 +37724,22 @@ angular.module('messages', []).controller('ThreadsCtrl', ['$http', '$scope', fun
 
 	var vm = this;
 	vm.thread = window.thread;
+	vm.sending = false;
 
 	vm.message = function () {
+
+		if (vm.sending) return false;
+
 		vm.load(1);
+
+		vm.sending = true;
+
 		$http.post('/im/' + vm.thread.id, {
 			message: vm.text
 		}).then(function (response) {
 			vm.pushMessage(response.data);
 			vm.text = '';
+			vm.sending = false;
 		});
 	};
 

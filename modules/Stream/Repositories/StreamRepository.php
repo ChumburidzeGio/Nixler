@@ -38,7 +38,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
 
     /**
-     * Prepare product for editing
+     * Get all product from stream
      *
      * @return \Illuminate\Http\Response
      */
@@ -63,7 +63,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
 
     /**
-     * Prepare product for editing
+     * Filter products by category
      *
      * @return \Illuminate\Http\Response
      */
@@ -76,7 +76,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
 
     /**
-     * Prepare product for editing
+     * Search in products
      *
      * @return \Illuminate\Http\Response
      */
@@ -110,7 +110,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
 
     /**
-     * Prepare product for editing
+     * Recomment products to user
      *
      * @return \Illuminate\Http\Response
      */
@@ -120,14 +120,14 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
             'filter' => "'currency' == \"{$user->currency}\""
         ]);
 
-        $user->streamRemoveBySource('recs');
+        //$user->streamRemoveBySource('recs');
 
         $user->pushInStream($recommendations, 'recs');
     }
 
 
     /**
-     * Prepare product for editing
+     * Push new recommendations in streams of recetly active users
      *
      * @return \Illuminate\Http\Response
      */
@@ -144,7 +144,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
 
     /**
-     * Prepare product for editing
+     * Get most popular users
      *
      * @return \Illuminate\Http\Response
      */
@@ -165,7 +165,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
 
     /**
-     * Prepare product for editing
+     * Discover new products
      *
      * @return \Illuminate\Http\Response
      */
