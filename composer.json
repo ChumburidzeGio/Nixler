@@ -47,7 +47,6 @@
         "pusher/pusher-php-server": "^2.6",
         "rap2hpoutre/laravel-log-viewer": "^0.8.0",
         "recombee/php-api-client": "^1.3",
-        "rtconner/laravel-tagging": "^2.2",
         "silber/bouncer": "v1.0.0-beta.2",
         "spatie/laravel-cookie-consent": "^1.8",
         "spatie/laravel-newsletter": "^3.4",
