@@ -37667,9 +37667,15 @@ angular.module('comments', []).controller('CommentsCtrl', ['$http', '$scope', fu
 	var vm = this;
 	vm.comments = window.comments;
 	vm.target = window.comments_target;
+	vm.sending = false;
 	vm.page = 1;
 
 	vm.commentPush = function () {
+
+		if (vm.sending) return false;
+
+		vm.sending = true;
+
 		$http.post('/comments', {
 			prev: vm.comments.length ? vm.comments[0].id : null,
 			target: vm.target,
@@ -37678,6 +37684,7 @@ angular.module('comments', []).controller('CommentsCtrl', ['$http', '$scope', fu
 			vm.comments.unshift(response.data);
 			vm.comment_text = '';
 			$scope.$parent.vm.comments_count += 1;
+			vm.sending = false;
 		});
 	};
 
