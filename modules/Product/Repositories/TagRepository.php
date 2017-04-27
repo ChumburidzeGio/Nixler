@@ -37,10 +37,7 @@ class TagRepository extends BaseRepository {
             ]);
         }
 
-        return [
-            'id' => $tag->id,
-            'name' => $tag->name
-        ];
+        return $tag->name;
     }
 
 

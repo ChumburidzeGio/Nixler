@@ -27,9 +27,7 @@ class TagsController extends Controller
      */
     public function search(Request $request)
     {
-    	return $this->repository->search($request->input('query'))->take(10)->get()->map(function($item){
-    		return $item->setVisible(['id', 'name']);
-    	});
+    	return $this->repository->search($request->input('query'))->take(10)->get()->pluck('name');
     }
 
 

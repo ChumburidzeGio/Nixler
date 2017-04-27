@@ -138,17 +138,7 @@
 							<div class="col-sm-12 _mb15">
 								<small class="_clear _mb5">Tags</small>
 
-								<select selector
-									multi="true"
-									model="vm.tags"
-									remote="vm.remoteConfig"
-									class="_b1 _bcg _brds3"
-									remote-param="query"
-									value-attr="id"
-									label-attr="name"
-									create="vm.createFunction(input)"
-									debounce="100"
-									placeholder="Choose one or more countries..."></select>
+								<tags-input ng-model="vm.tags" placeholder="Tags for product" replace-spaces-with-dashes="0" key-property=""></tags-input>
 
 								<input type="hidden" name="tags" ng-value="vm.tags | json" 
 									ng-init="{{ $product->tags ? 'vm.tags='.$product->tags : '' }}">

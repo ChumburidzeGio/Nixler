@@ -28,6 +28,7 @@ class CreateProductTagsTable extends Migration
             $table->increments('id');
             $table->integer('tag_id')->unsigned();
             $table->string('name');
+            $table->string('slug');
             $table->string('locale')->index();
 
             $table->unique(['tag_id','locale']);
@@ -41,6 +42,7 @@ class CreateProductTagsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('tag_id')->unsigned();
             $table->integer('product_id')->unsigned();
+            $table->string('group');
         });
     }
 

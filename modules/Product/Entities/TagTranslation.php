@@ -10,6 +10,6 @@ class TagTranslation extends Model
 
     public $table = 'product_tags_t';
     
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'slug'];
 
 }

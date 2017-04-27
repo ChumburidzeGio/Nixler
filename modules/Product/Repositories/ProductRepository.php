@@ -2,20 +2,30 @@
 
 namespace Modules\Product\Repositories;
 
-use Prettus\Repository\Eloquent\BaseRepository;
-use Prettus\Repository\Contracts\CacheableInterface;
-use Prettus\Repository\Traits\CacheableRepository;
-use Prettus\Validator\Contracts\ValidatorInterface;
+use App\Repositories\BaseRepository;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use Modules\Product\Transformers\ProductTransformer;
 use Modules\Product\Entities\Category;
 use Modules\Stream\Services\RecommService;
+use Illuminate\Container\Container as App;
+use Modules\Product\Repositories\TagRepository;
 
-class ProductRepository extends BaseRepository implements CacheableInterface {
+class ProductRepository extends BaseRepository {
 
-	use CacheableRepository;
+    private $tags;
 
+    /**
+     * Specify Model class name
+     *
+     * @return string
+     */
+    public function __construct(App $app, TagRepository $tags)
+    {
+        parent::__construct($app);
+
+        $this->tags = $tags;
+    }
 
     /**
      * Specify Model class name
@@ -62,8 +72,12 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
             'owner_id' => $user->id
         ])->firstOrFail();
 
-        $product->variants = collect($product->getMeta('variants'))->mapWithKeys(function ($item, $key) {
-            return [$key => ['text' => $item]];
+        $product->variants = collect($product->tags('variants')->get())->mapWithKeys(function ($item, $key) {
+            return [$key => ['text' => $item->name]];
+        })->toJson();
+
+        $product->tags = collect($product->tags('tags')->get())->mapWithKeys(function ($item, $key) {
+            return [$key => ['text' => $item->name]];
         })->toJson();
 
         $product->media = $product->getMedia('photo')->map(function($media){
@@ -106,11 +120,13 @@ class ProductRepository extends BaseRepository implements CacheableInterface {
         //Media
         $this->sortMedia(array_get($attributes, 'media'), $product);
 
-        //Variants
+        //Variants & Tags
         $variants = collect(json_decode(array_get($attributes, 'variants'), 1))->flatten();
-        $product->setMeta('variants', $variants);
+        $product->addTags($variants, 'variants');
 
-        $product->setMeta('category', array_get($attributes, 'category'));
+        $tags = collect(json_decode(array_get($attributes, 'tags'), 1))->flatten();
+        $product->addTags($tags, 'tags');
+
 
         $product->save();
 

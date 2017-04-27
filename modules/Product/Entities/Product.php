@@ -87,9 +87,49 @@ class Product extends Model
         return $this->hasOne(User::class,'id', 'owner_id');
     }
 
-    public function tags()
+    public function tags($group)
     {   
-        return $this->belongsToMany(Tag::class, (new ProductTag)->getTable(), 'product_id', 'tag_id');
+        return $this->belongsToMany(Tag::class, (new ProductTag)->getTable(), 'product_id', 'tag_id')->where('group', $group)->with('translations');
+    }
+    
+    /**
+     * Adds a multiple tags
+     *
+     * @param $tagName string
+     */
+    public function addTags($tagNames, $group)
+    {
+        foreach ($tagNames as $tagName) {
+            $this->addTag($tagName, $group);
+        }
+    }
+    
+    /**
+     * Adds a single tag
+     *
+     * @param $tagName string
+     */
+    public function addTag($tagName, $group)
+    {
+        $tagName = trim($tagName);
+        $slug = str_slug($tagName);
+
+        $tag = Tag::whereTranslation('slug', $slug)->first();
+
+        if(!$tag){
+            $tag = Tag::create([
+                'name' => $tagName,
+                'slug' => $slug,
+                'user_id' => auth()->id()
+            ]);
+        }
+        
+        $product_tag = ProductTag::firstOrCreate([
+            'product_id' => $this->id,
+            'tag_id' => $tag->id,
+            'group' => $group,
+        ]);
+
     }
 
 

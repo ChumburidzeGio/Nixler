@@ -190,6 +190,7 @@ return [
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         NotificationChannels\Telegram\TelegramServiceProvider::class,
         Keevitaja\Linguist\LinguistServiceProvider::class,
+        Conner\Tagging\Providers\TaggingServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*

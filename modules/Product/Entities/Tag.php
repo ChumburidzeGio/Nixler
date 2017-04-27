@@ -11,10 +11,9 @@ class Tag extends Model
 
     public $table = 'product_tags';
     
-    public $translatedAttributes = ['name'];
+    public $translatedAttributes = ['name', 'slug'];
     
     protected $fillable = ['user_id'];
-
 
     public function product()
     {   
