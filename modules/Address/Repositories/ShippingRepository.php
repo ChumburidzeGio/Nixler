@@ -7,7 +7,7 @@ use Modules\Address\Entities\ShippingPrice;
 use Modules\Address\Entities\Country;
 
 class ShippingRepository extends BaseRepository {
-
+    
 
     /**
      * Specify Model class name

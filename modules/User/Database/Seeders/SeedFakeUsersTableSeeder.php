@@ -7,9 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Faker\Factory;
 use Faker\Generator;
 use Modules\User\Entities\User;
+use Modules\Address\Repositories\ShippingRepository;
 
 class SeedFakeUsersTableSeeder extends Seeder
 {
+
+    protected $shippingRepository;
+
+    public function __construct(ShippingRepository $repository){
+        $this->shippingRepository = $repository;
+    }
+
     /**
      * Run the database seeds.
      *
@@ -77,6 +85,12 @@ class SeedFakeUsersTableSeeder extends Seeder
         $user->currency = array_get($country, 'currency');
         $user->locale = array_get($country, 'locale');
         $user->save();
+
+        $this->shippingRepository->settingsUpdate([
+            'delivery_full' => 1,
+            'has_return' => 1,
+            'policy' => ''
+        ], $user);
 
         return $user;
     }

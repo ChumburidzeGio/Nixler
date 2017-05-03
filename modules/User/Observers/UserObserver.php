@@ -28,20 +28,11 @@ class UserObserver
      */
     public function created(User $user)
     {
-        $user->emails()->create([
-            'address' => $user->email
-        ]);
-/*
-        if($user->country) {
- 
-            $this->shippingRepo->settingsUpdate([
-                'delivery_full' => true,
-                'has_return' => true,
-                'return_policy' => ''
-            ], $user);
-        
+        if($user->email){
+            $user->emails()->create([
+                'address' => $user->email
+            ]);
         }
-*/
     }
 
     /**
