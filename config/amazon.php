@@ -5,12 +5,12 @@ return [
 	/**
 	 * Your access key.
 	 */
-	'access_key' => env('AMAZON_ACCESS_KEY', 'AKIAJOCLRPMDODV7TWPA'),
+	'access_key' => env('AMAZON_ACCESS_KEY', 'AKIAILXHNNWRYH7LITXA'),
 
 	/**
 	 * Your secret key.
 	 */
-	'secret_key' => env('AMAZON_SECRET_KEY', 'sb1U4bxqfxiRdIvUH2eaztaI7Ulf4lm/GbK5vuUF'),
+	'secret_key' => env('AMAZON_SECRET_KEY', 'smNvKqzFJcd1r95fWWLbhmsFMaaCfS8ippyrRcQK'),
 
 	/**
 	 * Your affiliate associate tag.
