@@ -17,7 +17,7 @@ class RecommService {
      */
     public function __construct()
     {	
-    	$this->client = new Client(env('RECOMM_DB'), env('RECOMM_KEY'), 'https');
+    	$this->client = new Client(env('RECOMM_DB'), env('RECOMM_KEY'));
     }
 
 
@@ -236,7 +236,7 @@ class RecommService {
             return $this->client->send($request);
         } catch(\Exception $e) {
             if (app()->environment('production', 'development')) {
-                Bugsnag::notifyException($ex);
+                Bugsnag::notifyException($e);
             }
             return $default;
         }
