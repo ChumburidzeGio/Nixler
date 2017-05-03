@@ -51,7 +51,7 @@ class SocialAuthController extends Controller
 
         $user = $account->user_id ? User::where('id', $account->user_id)->withTrashed()->first() : null;
 
-        if($user->trashed()) {
+        if($user && $user->trashed()) {
             $user->restore();
         }
 
