@@ -235,6 +235,7 @@ class RecommService {
         try {
             return $this->client->send($request);
         } catch(\Exception $e) {
+            dd($e);
             Bugsnag::notifyException($ex);
             return $default;
         }
