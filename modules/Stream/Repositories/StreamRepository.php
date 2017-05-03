@@ -215,11 +215,13 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
         if($active){
             $category = Category::find($active);
 
-            $children = Category::where('parent_id', $category->id)->with('translations')->get();
+            if($category){
+                $children = Category::where('parent_id', $category->id)->with('translations')->get();
 
-            return $children->count() || !$category->parent_id 
-                ? $children 
-                : Category::where('parent_id', $category->parent_id)->with('translations')->get();
+                return $children->count() || !$category->parent_id 
+                    ? $children 
+                    : Category::where('parent_id', $category->parent_id)->with('translations')->get();
+            }
         }
 
         return Category::whereNull('parent_id')->with('translations')->get();
