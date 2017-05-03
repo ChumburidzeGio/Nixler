@@ -42,55 +42,27 @@ class CategoryDatabaseSeeder extends Seeder
         Model::unguard();
         
         $categories = [
-
-        //ELECTRONICS
-            //TV
-            //
-
-
-            //Toys & Games
-            //
-
-            //Toys, Kids & Babe
-            //Health & Beauty
-            //Electronics & Computers
-            $this->sss('Phones & accessories', false, null, null, null, 'wc'), //AE
+            $this->sss('Phones & accessories', [
+                $this->sss('Computer & office')
+            ], null, null, null, 'wc'), //AE
             $this->sss('Computer & office', false, null, null, null, 'wc'), //AE
             $this->sss('Consumer electronics', false, null, null, null, 'wc'), //AE
-            
-            //Cars & Vehicles   /   Automotive & Industrial         
             $this->sss('Automobiles & Motorcycles', false, null, null, null, 'wc'), //AE
-
-            //Home, Garden & Tools
             $this->sss('Home & Garden, Furniture', false, null, null, null, 'wc'), //AE
             $this->sss('Home Improvement', false, null, null, null, 'wc'), //AE
-
-            //Sports & Outdoors
             $this->sss('Sports & Outdoors', false, null, null, null, 'wc'), //AE
-
-            //Food
-
-
-            //Handmade
-
-
-            //Books & Audible
-
-
-            //Services
-
         ];
 
-        $order = 0;
-
         foreach ($categories as $key => $value) {
-            $category = Category::create(['name:en' => $key, 'order' => $order]);
+            $value['order'] = $key;
+            $subcategories = isset($value['subcategories']) ? $value['subcategories'] : [];
+            unset($value['subcategories']);
+            $category = Category::create(array_filter($value, 'strlen'));
 
-            foreach ($value as $key => $value) {
-                $category->children()->create([ 'name:en' => $value, 'order' => $key ]);
+            foreach ($subcategories as $key => $value) {
+                $value['order'] = $key;
+                $category->children()->create(array_filter($value, 'strlen'));
             }
-
-            $order++;
         }
     }
 

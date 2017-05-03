@@ -27,29 +27,33 @@
  require('./address/core');
  require('./order/core');
  require('./stream/core');
+ require('./settings/core');
+ require('./user/core');
 
  var app = angular.module('nx', [
  	'utils',
     'products', 
- 	'address', 
- 	'nav', 
- 	'ng-currency', 
- 	'monospaced.elastic', 
- 	'ngTagsInput', 
- 	'confirm-click', 
- 	'angular-sortable-view', 
- 	'selector', 
- 	'comments', 
- 	'ngSanitize', 
- 	'yaru22.angular-timeago', 
- 	'ngDialog',
- 	'messages',
- 	'luegg.directives',
+    'address', 
+    'nav', 
+    'ng-currency', 
+    'monospaced.elastic', 
+    'ngTagsInput', 
+    'confirm-click', 
+    'angular-sortable-view', 
+    'selector', 
+    'comments', 
+    'ngSanitize', 
+    'yaru22.angular-timeago', 
+    'ngDialog',
+    'messages',
+    'luegg.directives',
     'ui.numericInput',
     'order',
     '720kb.tooltips',
-    'stream'
-   ]);
+    'stream',
+    'settings',
+    'user'
+    ]);
 
  app.factory('httpRequestInterceptor', function () {
  	return {
@@ -77,13 +81,20 @@
 }]);
 
 
-app.filter('boolean', function() {
+ app.filter('boolean', function() {
     return function(input) {
         return input ? 1 : 0;
     }
 });
 
-if (!Array.prototype.last){
+ app.filter('to_trusted', ['$sce', function($sce){
+        return function(text) {
+            return $sce.trustAsHtml(text);
+        };
+}]);
+
+
+ if (!Array.prototype.last){
     Array.prototype.last = function(){
         return this[this.length - 1];
     };

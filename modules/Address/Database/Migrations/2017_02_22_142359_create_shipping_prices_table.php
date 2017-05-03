@@ -21,6 +21,7 @@ class CreateShippingPricesTable extends Migration
             $table->enum('type', ['country', 'region', 'city']);
             $table->integer('location_id');
             $table->decimal('price', 8, 2)->default(0);
+            $table->string('currency', 3);
             $table->tinyInteger('window_from');
             $table->tinyInteger('window_to');
             $table->timestamps();

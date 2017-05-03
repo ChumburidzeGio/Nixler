@@ -25,6 +25,7 @@ class SeedFakeUsersTableSeeder extends Seeder
                 $user = $this->createUser($faker);
                 $this->createRelationships($user);
                 $this->uploadPhotos($user, $faker);
+                print("\nCreated ".$user->name);
             }
         //}
     }

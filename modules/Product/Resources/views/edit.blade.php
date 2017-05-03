@@ -6,7 +6,7 @@
 	<div class="row">
 
 		<div class="col-sm-8 col-xs-12">
-			@if($user->getMeta('delivery_full', 3) == 3)
+			@cannot('create', $product)
 			<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
 				Please for first add shipping information before you will able to publish new product
 				<div class="_clear _mt10">
@@ -38,11 +38,17 @@
 
 					<div class="_p15 _bb1 _posr">
 						<h1 class="_fs18 _ci _lh1 _clear _telipsis _m0">
-							Editing product #{{ $product->id }}
+							@if($product->slug)
+								Editing product #{{ $product->id }}
+							@else 
+								Adding new product
+							@endif
 						</h1>
+						@if($product->slug)
 						<a href="{{ $product->url() }}" class="_a3 _mr15" target="_blank">
 							<i class="material-icons _fs18 _va4">open_in_new</i> View product
 						</a>
+						@endif
 					</div>
 
 					<div class="_p15">
@@ -73,7 +79,7 @@
 									<optgroup label="{{ $category->name }}">
 										@foreach($category->children as $subcat)
 										<option value="{{ $subcat->id }}"
-											{{ $product->category == $subcat->id ? 'selected' : ''}}>
+											{{ $product->category_id == $subcat->id ? 'selected' : ''}}>
 											{{ $subcat->name }}
 										</option>
 										@endforeach
@@ -95,7 +101,9 @@
 
 
 
-						<small class="_clear _pb5">Product description</small>
+						<small class="_clear _pb5">
+							Product description
+						</small>
 
 						<textarea type="text" class="_b1 _bcg _fe _brds3 _mih70" msd-elastic ng-model="vm.description" rows="8" ng-init="vm.description='{{ addslashes($product->description) }}'" id="description" name="description"></textarea>
 
@@ -113,7 +121,7 @@
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('price') }}</span>
 								@endif
 							</div>
-							<div class="col-sm-3 _mb15">
+							<div class="col-sm-2 _mb15">
 								<small class="_clear _pb5">In stock</small>
 
 								<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="" ui-numeric-input min="0" max="500" max-length="3" ng-init="vm.in_stock={{ $product->in_stock }}" id="in_stock" name="in_stock">
@@ -122,10 +130,10 @@
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('in_stock') }}</span>
 								@endif
 							</div>
-							<div class="col-sm-6 _mb15">
+							<div class="col-sm-7 _mb15">
 								<small class="_clear">Product variants</small>
 
-								<tags-input ng-model="vm.variants" placeholder="Green, Red, Size S" replace-spaces-with-dashes="0" key-property=""></tags-input>
+								<tags-input ng-model="vm.variants" placeholder="Green - S, Red - M ..." replace-spaces-with-dashes="0" key-property=""></tags-input>
 								<input type="hidden" name="variants" ng-value="vm.variants | json" ng-init="vm.variants={{ $product->variants }}">
 
 								@if ($errors->has('variants'))
@@ -147,6 +155,18 @@
 								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('tags') }}</span>
 								@endif
 							</div>
+
+							@can('sellExternally', $product)
+							<div class="col-sm-12 _mb15">
+								<small class="_clear _pb5">Link to buy product</small>
+
+								<input id="buy_link" type="text" required name="buy_link" minlength="2" maxlength="90" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ $product->buy_link }}" placeholder="https://www.example.com/product-x.html"> 
+
+								@if ($errors->has('buy_link'))
+								<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('buy_link') }}</span>
+								@endif
+							</div>
+							@endcan
 
 						</div>
 						
@@ -199,7 +219,7 @@
 				@endif
 
 				@if($product->is_inactive)
-				@if($user->getMeta('delivery_full', 3) != 3)
+				@can('create', $product)
 				<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish" id="publish"> 
 					<i class="material-icons _mr5 _va5 _fs20">store</i> Publish
 				</button>
@@ -231,7 +251,7 @@
 
 
 
-<div class="col-md-4">
+<div class="col-md-4 col-xs-12">
 	<div class="_card _z013 _bgw _oh _p0"> 
 
 		<span class="_fs13 _clear _li _bb1 _cb">
@@ -250,7 +270,7 @@
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
-			<i class="material-icons _mr10 _va5 _fs18">people</i> 
+			<i class="material-icons _mr10 _va5 _fs18">favorite</i> 
 			{{ $product->likes_count }} Likes
 		</a>
 
@@ -269,6 +289,28 @@
 			Updated {{ $product->updated_at->diffForHumans() }}
 		</a>
 
+	</div>
+
+	<div class="_card _z013 _bgw _oh _p0 _mt15"> 
+
+		<span class="_fs13 _clear _li _bb1 _cb">
+			Markdown support
+		</span>
+		<div class="_p10">
+			Nixler uses Markdown for formatting. Here are the basics.
+			<hr class="_mt5 _mb5">
+			<span class="_cg _clear">Header</span>
+			<code># Material & Care</code>
+			<hr class="_mt5 _mb5">
+			<span class="_cg _clear">Bold</span>
+			<code>*100 day* return policy</code>
+			<hr class="_mt5 _mb5">
+			<span class="_cg _clear">Emphasis</span>
+			<code>Whisk the eggs _vigorously_.</code>
+			<hr class="_mt5 _mb5">
+			<span class="_cg _clear">Highlight</span>
+			<code>`Carefully` crack the eggs.</code>
+		</div>
 	</div>
 
 

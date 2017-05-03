@@ -70,7 +70,7 @@ return [
         'avatar' => [
             'default' => public_path('img/person.png'),
             'sizes' => [
-                'profile' => [100, 100],
+                'profile' => [120, 120],
                 'nav' => [25, 25],
                 'aside' => [60, 60],
                 'product' => [80, 80],
@@ -79,9 +79,9 @@ return [
             ]
         ],
         'cover' => [
-            'default' => public_path('img/image.jpg'),
+            'default' => public_path('img/meta.png'),
             'sizes' => [
-                'profile' => [800, 150],
+                'profile' => [1140, 130],
                 'product' => [400, 80],
             ]
         ],

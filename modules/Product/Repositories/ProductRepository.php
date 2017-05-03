@@ -9,22 +9,17 @@ use Modules\Product\Transformers\ProductTransformer;
 use Modules\Product\Entities\Category;
 use Modules\Stream\Services\RecommService;
 use Illuminate\Container\Container as App;
-use Modules\Product\Repositories\TagRepository;
 
 class ProductRepository extends BaseRepository {
-
-    private $tags;
 
     /**
      * Specify Model class name
      *
      * @return string
      */
-    public function __construct(App $app, TagRepository $tags)
+    public function __construct(App $app)
     {
         parent::__construct($app);
-
-        $this->tags = $tags;
     }
 
     /**
@@ -109,12 +104,17 @@ class ProductRepository extends BaseRepository {
             'owner_id' => $user->id
         ])->firstOrFail();
 
+        if($user->cannot('create', $product)){
+            return false;
+        }
+
         $product->fill([
             'title' => array_get($attributes, 'title'),
             'description' => array_get($attributes, 'description'),
             'price' => array_get($attributes, 'price'),
-            'category' => array_get($attributes, 'category'),
+            'category_id' => array_get($attributes, 'category'),
             'in_stock' => array_get($attributes, 'in_stock'),
+            'buy_link' => array_get($attributes, 'buy_link'),
         ]);
 
         //Media
@@ -122,10 +122,10 @@ class ProductRepository extends BaseRepository {
 
         //Variants & Tags
         $variants = collect(json_decode(array_get($attributes, 'variants'), 1))->flatten();
-        $product->addTags($variants, 'variants');
+        $product->syncTags($variants, 'variants');
 
         $tags = collect(json_decode(array_get($attributes, 'tags'), 1))->flatten();
-        $product->addTags($tags, 'tags');
+        $product->syncTags($tags, 'tags');
 
 
         $product->save();
@@ -208,7 +208,11 @@ class ProductRepository extends BaseRepository {
      */
     public function similar($id)
     {
-        $ids = (new RecommService)->similar($id, 5, auth()->id());
+        $props = auth()->guest() ? [] : [
+            'filter' => "'currency' == \"{auth()->user()->currency}\""
+        ];
+
+        $ids = (new RecommService)->similar($id, 5, auth()->id(), $props);
         
         return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
     }

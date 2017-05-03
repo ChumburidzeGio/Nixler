@@ -4,6 +4,10 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Auth;
+use Modules\User\Entities\User;
+use Illuminate\Http\Request;
+use Hash;
 
 class LoginController extends Controller
 {
@@ -43,5 +47,37 @@ class LoginController extends Controller
         }
 
         return view('auth.login');    
+    }
+
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        $username = $email = $request->input('email');
+        $password = $request->input('password');
+
+        $attempt = Auth::attempt(compact('email', 'password'), true);
+
+        if(!$attempt) {
+            $attempt = Auth::attempt(compact('username', 'password'), true);
+        }
+
+        if(!$attempt) {
+
+            $user = User::where('email', $email)->orWhere('username', $username)->withTrashed()->first();
+
+            if($user->trashed() && Hash::check($password, $user->password)) {
+                $user->restore();
+                Auth::login($user, true);
+                $attempt = true;
+            }
+
+        }
+
+        return $attempt;
     }
 }

@@ -4,8 +4,9 @@ namespace Modules\Stream\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
+use App\Http\Controllers\Controller;
 use Modules\Product\Entities\Product;
+use Modules\Product\Entities\Category;
 use Modules\Stream\Repositories\StreamRepository;
 
 class StreamController extends Controller
@@ -27,91 +28,40 @@ class StreamController extends Controller
      */
     public function index(Request $request)
     {
+        /*if(auth()->guest()){
+
+            $this->seo()->setTitle(trans('landing.meta.title'));
+
+            $this->seo()->setDescription(trans('landing.meta.description'));
+
+            $this->seo()->opengraph()->setUrl(request()->fullUrl());
+            
+            $this->seo()->opengraph()->addProperty('type', 'website');
+
+            $what = collect(trans('landing.what.items'))->chunk(2);
+
+            $why = collect(trans('landing.why.items'))->chunk(3);
+
+            $who = collect(trans('landing.who.items'))->chunk(4);
+
+            return view('landing.page', compact('what', 'why', 'who'));
+        }*/
+
         if($request->has('query')){
+
             $products = $this->repository->search($request->input('query'), $request->input('cat'));
+            
+            if(!$request->has('cat')){
+                $users = $this->repository->searchUsers($request->input('query'));
+            }
+
         } else {
             $products = $this->repository->all($request->input('cat'));
         }
 
-        $categories = [
-            1 => ['icon' => 'wc', 'name' => 'Clothing & Accessories'],
-            5 => ['icon' => 'child_friendly', 'name' => 'Kids & Babe'],
-            13 => ['icon' => 'phone_iphone', 'name' => 'Electronics'],
-            22 => ['icon' => 'laptop_mac', 'name' => 'Computers'],
-            30 => ['icon' => 'directions_car', 'name' => 'Vehicles'],
-            36 => ['icon' => 'domain', 'name' => 'Real estate'],
-            44 => ['icon' => 'home', 'name' => 'Home'],
-            52 => ['icon' => 'spa', 'name' => 'Beauty & Healthcare'],
-            58 => ['icon' => 'fitness_center', 'name' => 'Sport & Leisure'],
-            64 => ['icon' => 'card_giftcard', 'name' => 'Spare time & Gifts'],
-            73 => ['icon' => 'pets', 'name' => 'Pets'],
-            81 => ['icon' => 'restaurant', 'name' => 'Food'],
-        ];
+        $categories = $this->repository->categories($request->input('cat'));
 
-        return $request->isMethod('post') ? $products->toJson() : view('stream::index', compact('products', 'categories'));
+        return $request->isMethod('post') ? $products->toJson() : view('stream::index', compact('products', 'categories', 'users'));
     }
 
-
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function discover(Request $request)
-    {
-         return $this->repository->discover();
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     * @return Response
-     */
-    public function create()
-    {
-        return view('stream::create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-    }
-
-    /**
-     * Show the specified resource.
-     * @return Response
-     */
-    public function show()
-    {
-        return view('stream::show');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @return Response
-     */
-    public function edit()
-    {
-        return view('stream::edit');
-    }
-
-    /**
-     * Update the specified resource in storage.
-     * @param  Request $request
-     * @return Response
-     */
-    public function update(Request $request)
-    {
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     * @return Response
-     */
-    public function destroy()
-    {
-    }
 }

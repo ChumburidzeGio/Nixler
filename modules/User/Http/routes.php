@@ -18,14 +18,11 @@ Route::group(['middleware' => 'web', 'namespace' => 'Modules\User\Http\Controlle
 		//Account
 		Route::get('account', 'SettingsController@editAccount');
 		Route::post('account', 'SettingsController@updateAccount');
+		Route::post('account/deactivate', 'UserController@deactivate');
 
 		//Password
 		Route::get('password', 'SettingsController@editPassword');
 		Route::post('password', 'SettingsController@updatePassword');
-
-		//Social
-		Route::get('social', 'SettingsController@editSocial');
-		Route::post('social', 'SettingsController@updateSocial');
 
 		//Email
 		Route::get('emails', 'SettingsController@editEmail');

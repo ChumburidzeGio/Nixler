@@ -13,14 +13,22 @@
 
 				<!--div class="_fs12 _ttu _pl15 _pb5">Categories</div-->
 
+				@if(request()->input('cat'))
+				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
+					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">arrow_back</i> Go back
+				</a>
+				@else
 				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
 					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
 					<i class="material-icons _fs18 _mr15 _va4">local_mall</i> All categories
 				</a>
-				@foreach($categories as $id => $cat)
-				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query'), 'cat' => $id]) : route('feed', ['cat' => $id]) }}"
-					class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == $id ? ' _hvrda' : '' }}">
-					<i class="material-icons _fs18 _mr15 _va4">{{ $cat['icon'] }}</i> {{ $cat['name'] }}
+				@endif
+
+				@foreach($categories as $cat)
+				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query'), 'cat' => $cat->id]) : route('feed', ['cat' => $cat->id]) }}"
+					class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == $cat->id ? ' _hvrda' : '' }}">
+					<i class="material-icons _fs18 _mr15 _va4">{{ $cat->icon or 'brightness_1' }}</i> {{ $cat->name }}
 				</a>
 				@endforeach
 
@@ -42,6 +50,29 @@
 			</div>
 		</div>
 		<div class="col-lg-9 col-md-10 col-xs-12">
+
+			@if(auth()->guest())
+			<a class="_cw _clear _p10 _mb15 _brds3 _bgbl _tac _thvrw" href="{{ route('register') }}">
+  				<i class="material-icons _left _mr15 _fs24 _ml5">android</i>
+  				<span class="_oh _fs15">Our Artificial Intelligence knows what you want... Would you like to check?</span>
+  				<span class="_right">
+  					Register now <i class="material-icons _mr5 _fs24 _ml5 _va7">arrow_forward</i>
+  				</span>
+			</a>
+			@endif
+
+			@if(isset($users) && $users->count())
+				<span class="_fs16 _clear _mb15">Accounts</span>
+				<div class="row _mb15"> 
+				@foreach($users as $user)
+					<a href="{{ $user->link() }}" class="_left col-xs-2 _tac _oh">
+						<img src="{{ $user->avatar('aside') }}" class="_brds3">
+			            <span class="_telipsis _mt10 _clear">{{ $user->name }}</span>
+					</a>
+				@endforeach
+				</div>
+				<span class="_mt30 _fs16 _clear _mb15">Products</span>
+			@endif
 
 			@if($products->getResource()->getData()->total())
 			<div class="row _mb15">

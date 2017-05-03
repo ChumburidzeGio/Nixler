@@ -49,11 +49,15 @@ class SocialAuthController extends Controller
             'external_id' => $socialUser->getId()
         ]);
 
-        $user = $account->user_id ? User::find($account->user_id) : null;
+        $user = $account->user_id ? User::where('id', $account->user_id)->withTrashed()->first() : null;
+
+        if($user->trashed()) {
+            $user->restore();
+        }
 
         if (is_null($user)) {
 
-            $user = User::whereEmail($socialUser->getEmail())->first();
+            $user = User::whereEmail($socialUser->getEmail())->withTrashed()->first();
 
             if(is_null($user)){
                 $user = $account->user()->create([
@@ -83,7 +87,7 @@ class SocialAuthController extends Controller
 
         auth()->login($user, true);
 
-        return redirect()->intended('/feed');
+        return redirect()->intended('/');
     }
     
 }

@@ -22,13 +22,15 @@
 
 				<div class="_p10">
 				<div class="_media _clear _p3 _mt10" ng-repeat="msg in vm.thread.messages | orderBy:'id'">
-				    <img class="_mr10 _left _brds3" ng-src="@{{ msg.photo }}" height="38px" width="38px">
+				    <a ng-href="@{{ msg.link }}">
+				    	<img class="_mr10 _left _brds3" ng-src="@{{ msg.photo }}" height="38px" width="38px">
+				    </a>
 				    <div class="_clear">
-				        <span class="_title _c4">
+				        <a class="_title _c4" ng-href="@{{ msg.link }}">
 				            <span ng-bind="msg.author"></span>
 				            <small class="_c2" ng-bind="msg.time | timeAgo"></small>
-				        </span>
-				        <p class="_c3 _anc" ng-bind-html="msg.body | linky"></p>
+				        </a>
+				        <p class="_c3 _anc" ng-bind-html="msg.body | to_trusted"></p>
 				    </div>
 				</div>
 				</div>
@@ -56,7 +58,7 @@
 	<div class="_z013 _bgw _clear _brds3">
 
 		<a class="_lim _hvrl _tal _bb1" href="{{ route('threads') }}">
-						<i class="material-icons _mr15 _va4 _fs18">filter_list</i> All messages
+						<i class="material-icons _mr15 _va4 _fs18">message</i> All messages
 		</a>
 
 		<a class="_lim _hvrl">

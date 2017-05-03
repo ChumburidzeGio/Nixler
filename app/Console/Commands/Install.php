@@ -73,6 +73,7 @@ class Install extends Command
         $this->info('Updated MaxMind database');
 
         $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\CategoryDatabaseSeeder' ]);
+        $this->call('db:seed', [ '--class' => 'Modules\Blog\Database\Seeders\BlogDatabaseSeeder' ]);
 
         $this->createNixlerAccount();
     }
@@ -117,6 +118,7 @@ class Install extends Command
         $this->call('migrate');
         $this->call('module:migrate');
         $this->call('scout:mysql-index', [ 'model' => 'Modules\\Product\\Entities\\Product' ]);
+        $this->call('scout:mysql-index', [ 'model' => 'Modules\\User\\Entities\\User' ]);
 
     }
 
@@ -150,7 +152,7 @@ class Install extends Command
         User::create([
             'name' => 'Nixler',
             'email' => 'info@nixler.pl',
-            'password' => 'Yamaha12',
+            'password' => bcrypt('Yamaha12'),
             'username' => 'nixler',
         ]);
 
@@ -163,6 +165,7 @@ class Install extends Command
      */
     private function setFakeData()
     {
+        app()->setLocale(config('app.fallback_locale'));
         $this->call('db:seed', [ '--class' => 'Modules\User\Database\Seeders\SeedFakeUsersTableSeeder' ]);
         $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\ProductDatabaseSeeder' ]);
     }

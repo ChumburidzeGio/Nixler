@@ -24,17 +24,17 @@
 </a>
 @endcannot
 
-<div class="_media _clear _p3 _mt10" ng-repeat="comment in vm.comments">
+<div class="_media _clear _p3 _mt10 _pb0" ng-repeat="comment in vm.comments">
     <img class="_mr10 _left _brds3" ng-src="@{{ comment.avatar }}">
     <div class="_clear">
         <span class="_title _c4">
             <span ng-bind="comment.author"></span>
             <small class="_c2" ng-bind="comment.time | timeAgo"></small>
-            <span ng-show="comment.can_delete" confirm-click="You are sure?" class="" ng-click="vm.delete(comment)">
+            <span ng-show="comment.can_delete" confirm-click="Are you sure?" class="" ng-click="vm.delete(comment)">
                 <span class="_crp _fs12 _ls5 _c2 _mr10 _dib _p3 _pb0 _pt0 _brds3  _bg5 _right">delete</span>
             </span>
         </span>
-        <p class="_c3" ng-bind-html="comment.text"></p>
+        <p class="_c3 _mb5" ng-bind-html="comment.text"></p>
     </div>
 </div>
 

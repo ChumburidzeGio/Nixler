@@ -44,12 +44,19 @@ class ShippingController extends Controller
               'window_to' => 'required|numeric|min:'.$request->input('window_from').'|max:99',
         ]);
 
-        $country = ShippingPrice::updateOrCreate([
+        $user = auth()->user();
+
+        $country_code = $user->country;
+
+        $country = Country::where('iso_code', $country_code)->first();
+
+        ShippingPrice::updateOrCreate([
             'user_id' => auth()->id(),
             'location_id' => $request->input('location_id'),
             'type' => 'city'
         ], [
             'price' => $request->input('price') ? : 0,
+            'currency' => $country->currency,
             'window_from' => $request->input('window_from'),
             'window_to' => $request->input('window_to'),
         ]);
@@ -77,13 +84,20 @@ class ShippingController extends Controller
 
         if($request->input('action') == 'save'){
 
+            $user = auth()->user();
+
+            $country_code = $user->country;
+
+            $country = Country::where('iso_code', $country_code)->first();
+
             $updated = $shipping->update([
                 'price' => $request->input('price') ? : 0,
+                'currency' => $country->currency,
                 'window_from' => $request->input('window_from'),
                 'window_to' => $request->input('window_to'),
             ]);
 
-        } elseif ($request->input('action') == 'delete' && $request->input('type') == 'country'){
+        } elseif ($request->input('action') == 'delete'){
             $shipping->delete();
         }
 

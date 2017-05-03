@@ -1,2 +1,7 @@
 User-agent: *
-Disallow:
+Disallow: /settings/
+Disallow: /orders
+Disallow: /orders/
+Disallow: /new-product
+Disallow: /im
+Disallow: /im/

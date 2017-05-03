@@ -56,7 +56,7 @@ class OrderController extends Controller
 
         $merchant = $product->owner;
 
-        $variants = collect($product->getMeta('variants'));
+        $variants = $product->tags('variants')->get()->pluck('name');
 
         $phones = $user->phones()->get()->map(function($item){
             return [
@@ -71,7 +71,8 @@ class OrderController extends Controller
         })->first();
 
         $shipping_prices = ShippingPrice::where('user_id', $merchant->id)->get();
-
+        $shipping_prices->load('location');
+        
         $addresses = $user->addresses()->with('city')->get(['street', 'id', 'city_id', 'country_id']);
 
         $addresses = $addresses->map(function($address) use ($shipping_prices) {
@@ -88,7 +89,7 @@ class OrderController extends Controller
 
             $address->shipping = $shipping->map(function($item){
                 extract($item->toArray());
-                return compact('price', 'window_from', 'window_to');
+                return compact('price', 'currency', 'window_from', 'window_to');
             })->first();
 
             return [
@@ -101,7 +102,7 @@ class OrderController extends Controller
 
         $country = $user->country()->with('cities.translations')->first();
 
-        return view('order::create', compact('product', 'user', 'merchant', 'variants', 'addresses', 'phones', 'country', 'hasVerifiedPhone'));
+        return view('order::create', compact('product', 'user', 'merchant', 'variants', 'addresses', 'phones', 'country', 'hasVerifiedPhone', 'shipping_prices'));
     }
 
     /**
@@ -233,6 +234,9 @@ class OrderController extends Controller
             'note' => $comment
         ]);
 
+        $product->decrement('in_stock', $quantity);
+        $product->update();
+        
         return redirect()->route('order.show', ['id' => $order->id]);
         
     }

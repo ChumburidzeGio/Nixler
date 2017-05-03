@@ -1,11 +1,15 @@
-@extends('layouts.app')
+@extends('layouts.general')
 
-@section('content')
-<div class="container">
+@section('app')
+<div class="container _mt50">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Register</div>
+
+            <div class="panel panel-default _b0 _z013">
+                <div class="panel-heading _oh _posr _tac">
+                    <a href="javascript:history.back()" class="_posa _a8 _pt10 _ml15"><i class="material-icons _fs18 _mr10 _va4">arrow_back</i> Go back</a>
+                    Register now
+                </div>
                  <div class="panel-body _pb5 _bb1">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/register') }}">
                         {{ csrf_field() }}
@@ -57,7 +61,7 @@
                     </form>
                 </div>
 
-                    <div class="_tac _mb15">
+                    <div class="_tac _mb15 _pb10">
 
                         <a href="{{ url('/auth/facebook') }}" class="_btn _bgi _cw _mt15 _z013 _pt5 _pb5 _thvrw" style="background:#3b5998">
                             <img class="_mr5 _va3 _brds1" src="/img/facebook-lite.svg" height="15px"> 

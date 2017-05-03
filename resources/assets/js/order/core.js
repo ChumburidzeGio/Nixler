@@ -1,11 +1,11 @@
 angular.module('order', [])
 
 .controller('OrderCtrl', [
-	'$http', '$scope', '$timeout', function ($http, $scope, $timeout) {
+	'$http', '$scope', '$timeout', '$filter', function ($http, $scope, $timeout, $filter) {
 
 		var vm = this;
 		vm.addresses = window.addresses;
-		vm.cities = window.cities;
+		vm.cities = $filter('orderBy')(window.cities, 'name');
 		vm.variants = window.variants;
 		vm.phones = window.phones;
 		vm.product_price = window.price;

@@ -11,10 +11,6 @@
 					<i class="material-icons _mr15 _va7 _fs20">info</i> 
 					{{ trans('user::settings.account.title')}}
 				</a>
-				<a class="_lim _hvrd _cg" href="{{ url('settings/social') }}">
-					<i class="material-icons _mr15 _va7 _fs20">link</i> 
-					{{ trans('user::settings.social.title')}}
-				</a>
 				<a class="_lim _hvrd _cg" href="{{ url('settings/password') }}">
 					<i class="material-icons _mr15 _va7 _fs20">fingerprint</i> 
 					{{ trans('user::settings.password.title')}}

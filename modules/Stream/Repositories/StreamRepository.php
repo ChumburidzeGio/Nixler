@@ -48,8 +48,10 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
         if(is_string($cat)){
             $products = $this->filter($cat);
-        } else {
+        } elseif($user) {
             $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+        } else {
+            $products = $this->featuredProducts();
         }
 
         $manager = new Manager();
@@ -71,7 +73,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
     {
         $cats = Category::where('id', $cat)->orWhere('parent_id', $cat)->pluck('id')->toArray();
 
-        return $this->model->with('firstPhoto', 'owner')->where('status', 'active')->whereIn('category', $cats)->latest()->paginate(20);
+        return $this->model->with('firstPhoto', 'owner')->where('status', 'active')->whereIn('category_id', $cats)->latest()->paginate(20);
     }
 
 
@@ -91,7 +93,7 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
             $ids = $products->get()->pluck('id')->toArray();
             $ids_ordered = implode(',', $ids);
 
-            $products = $this->model->whereIn('category', $cats)->whereIn('id', $ids)->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
+            $products = $this->model->whereIn('category_id', $cats)->whereIn('id', $ids)->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
 
         }
 
@@ -110,13 +112,24 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
 
 
     /**
+     * Search in products
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function searchUsers($query)
+    {
+        return User::search($query)->take(6)->get();
+    }
+
+
+    /**
      * Recomment products to user
      *
      * @return \Illuminate\Http\Response
      */
     public function recommend($user)
     {
-        $recommendations = (new RecommService)->recommendations($user->id, 30, [
+        $recommendations = (new RecommService)->recommendations($user->id, 50, [
             'filter' => "'currency' == \"{$user->currency}\""
         ]);
 
@@ -164,6 +177,25 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
     }
 
 
+
+    /**
+     * Get most popular users
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function featuredProducts($count = 6)
+    {
+        $ids = Activity::select('object', DB::raw('count(activities.object) as total'))
+                    ->whereIn('verb', ['product:viewed', 'product:liked'])
+                    ->groupBy('object')
+                    ->orderBy('total','desc')
+                    ->whereBetween('activities.created_at', [Carbon::now()->subWeek(), Carbon::now()])
+                    ->pluck('object');
+
+        return $this->model->whereIn('id', $ids)->with('firstPhoto', 'owner')->where('status', 'active')->paginate(20);
+    }
+
+
     /**
      * Discover new products
      *
@@ -172,17 +204,24 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
     public function discover()
     {
         return $this->refreshStreams();
+    }
 
-        $query = Activity::select('object', DB::raw('count(activities.object) as total'))
-                    ->whereIn('verb', ['product:viewed', 'product:liked'])
-                    ->groupBy('object')
-                    ->orderBy('total','desc')
-                    ->whereBetween('activities.created_at', [Carbon::now()->subWeek(), Carbon::now()]);
 
-        return [
-            'products' => $query->pluck('object'),
-            'users' => $query->join('products as p', 'activities.object', 'p.id')->addSelect('p.owner_id')
-                    ->groupBy('owner_id')->get()
-        ];
+    /**
+     * Get categories for stream
+     */
+    public function categories($active)
+    {
+        if($active){
+            $category = Category::find($active);
+
+            $children = Category::where('parent_id', $category->id)->with('translations')->get();
+
+            return $children->count() || !$category->parent_id 
+                ? $children 
+                : Category::where('parent_id', $category->parent_id)->with('translations')->get();
+        }
+
+        return Category::whereNull('parent_id')->with('translations')->get();
     }
 }

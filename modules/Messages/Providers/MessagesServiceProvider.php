@@ -3,6 +3,7 @@
 namespace Modules\Messages\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Modules\Messages\Console\UpdateResponseTimes;
 
 class MessagesServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,7 @@ class MessagesServiceProvider extends ServiceProvider
         $this->registerTranslations();
         $this->registerConfig();
         $this->registerViews();
+        $this->registerCommands();
     }
 
     /**
@@ -83,6 +85,20 @@ class MessagesServiceProvider extends ServiceProvider
             $this->loadTranslationsFrom($langPath, 'messages');
         } else {
             $this->loadTranslationsFrom(__DIR__ .'/../Resources/lang', 'messages');
+        }
+    }
+
+    /**
+     * Register commands.
+     *
+     * @return void
+     */
+    public function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                UpdateResponseTimes::class,
+            ]);
         }
     }
 

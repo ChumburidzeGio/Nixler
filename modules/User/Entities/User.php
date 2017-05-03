@@ -20,10 +20,13 @@ use Modules\Stream\Entities\UserTag;
 use Modules\User\Entities\Session;
 use Modules\Address\Entities\Country;
 use Modules\Product\Entities\Product;
+use Modules\Address\Entities\ShippingPrice;
+use Laravel\Scout\Searchable;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable, Mediable, Metable, FollowTrait, Merchant, HasMessages, HasStream, Sluggable;
+    use Notifiable, Mediable, Metable, FollowTrait, Merchant, HasMessages, HasStream, Sluggable, Searchable, SoftDeletes;
 
     /**
      * Return the sluggable configuration array for this model.
@@ -40,6 +43,20 @@ class User extends Authenticatable
         ];
     }
 
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        return array_intersect_key($array, array_flip(['name', 'email']));
+    }
+
+
     /**
      * The attributes that are mass assignable.
      *
@@ -49,6 +66,7 @@ class User extends Authenticatable
         'name', 'email', 'password', 'currency', 'country', 'locale', 'timezone'
     ];
 
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -57,6 +75,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
 
     
     /**
@@ -89,6 +115,12 @@ class User extends Authenticatable
     public function sessions()
     {   
         return $this->hasMany(UserSession::class, 'user_id');
+    }
+    
+
+    public function shippingPrices()
+    {   
+        return $this->hasMany(ShippingPrice::class, 'user_id');
     }
 
 
@@ -182,6 +214,31 @@ class User extends Authenticatable
     public function link($tab = ''){
         $url = route('user', ['id' => $this->username]);
         return $tab ? $url.'?tab='.$tab : $url;
+    }
+
+
+    /**
+     *  Get the profile link
+     */
+    public function getResponseTimeAttribute(){
+
+        $avg = round($this->attributes['response_time'] / 60, -1);
+
+        if($avg > 20 || !$this->attributes['response_time']) return null;
+
+        $times = [
+            15 => 'Very responsive to messages',
+            60 => 'Response within '.$avg.' minutes.',
+            3600 => 'Response within '.round(($avg / 60), -1).' hours.'
+        ];
+
+        foreach ($times as $mins => $text) {
+            if($avg < $mins)  {
+                $rating = $text; break;
+            }
+        }
+
+        return $rating;
     }
 
 }

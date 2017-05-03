@@ -4,6 +4,7 @@ namespace Modules\User\Repositories;
 
 use App\Repositories\BaseRepository;
 use Modules\User\Entities\User;
+use Modules\User\Notifications\SomeoneFollowedYou;
 
 class UserRepository extends BaseRepository {
 
@@ -21,8 +22,6 @@ class UserRepository extends BaseRepository {
 
     /**
      * Find user by username
-     *
-     * @return \Illuminate\Http\Response
      */
     public function find($username, $tab)
     {
@@ -64,9 +63,7 @@ class UserRepository extends BaseRepository {
 
 
     /**
-     * Follow user by username
-     *
-     * @return \Illuminate\Http\Response
+     * Follow user
      */
     public function follow($username)
     {
@@ -80,12 +77,23 @@ class UserRepository extends BaseRepository {
                 $user->unfollowCallback($target);
             } else {
                 $user->follow($target->id);
+                $target->notify(new SomeoneFollowedYou($user));
                 $user->followCallback($target);
             } 
 
         }
 
         return $target;
+    }
+
+
+    /**
+     * Soft delete user
+     */
+    public function deactivate()
+    {
+        $user = auth()->user();
+        return $user->delete();
     }
 
 }

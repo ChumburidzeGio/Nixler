@@ -11,4 +11,14 @@ class CountryTranslation extends Model
     
     protected $fillable = ['name'];
 
+    /**
+     * 
+     *
+     * @return collection
+     */
+    public function getNameAttribute()
+    {   
+    	$value = $this->attributes['name'];
+        return starts_with($value, 'Rzeczpospolita') ? str_replace('Rzeczpospolita', '', $value) : $value;
+    }
 }

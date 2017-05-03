@@ -19,6 +19,7 @@ class CreateProductCatsTable extends Migration
             $table->increments('id');
             $table->integer('parent_id')->unsigned()->nullable();
             $table->integer('order')->unsigned();
+            $table->string('icon')->nullable();
             $table->timestamps();
 
         });

@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Modules\Product\Entities\Product;
 use Modules\User\Entities\User;
+use Modules\Address\Entities\ShippingPrice;
 use Modules\Product\Repositories\ProductRepository;
 
 class ProductController extends Controller
@@ -36,8 +37,49 @@ class ProductController extends Controller
             abort(404);
         }
 
+        $shipping_prices = ShippingPrice::where('user_id', $merchant->id)->get();
+        $shipping_prices->load('location');
+
+        if(auth()->check()){
+
+            $user = auth()->user();
+
+            $addresses = $user->addresses()->with('city')->get(['street', 'id', 'city_id', 'country_id']);
+
+            $addresses = $addresses->map(function($address) use ($shipping_prices) {
+
+                $shipping = $shipping_prices->filter(function($item) use ($address) {
+                    return ($item->type == 'city' && $item->location_id == $address->city_id);
+                });
+
+                if(!$shipping->count()){
+                    $shipping = $shipping_prices->filter(function($item) use ($address) {
+                        return ($item->type == 'country' && $item->location_id == $address->country_id);
+                    });
+                }
+
+                $address->shipping = $shipping->map(function($item){
+                    extract($item->toArray());
+                    return compact('price', 'currency', 'window_from', 'window_to');
+                })->first();
+
+                return [
+                    'id' => $address->id,
+                    'label' => $address->street,
+                    'shipping' => $address->shipping
+                ];
+
+            });
+
+        } elseif (auth()->guest() && $shipping_prices->count() > 2) {
+            $shipping_prices->take(2);
+        }
+
         $product->setRelation('media', $product->media('photo')->take(10)->get());
         $product->setRelation('comments', $product->comments()->sortBy('most_recent')->paginate());
+        $product->setRelation('tags', $product->tags('tags')->take(3)->get());
+        $product->setRelation('variants', $product->tags('variants')->get());
+        $product->load('category');
 
         $product->trackActivity('product:viewed');
 
@@ -54,7 +96,7 @@ class ProductController extends Controller
 
         $similar = $this->repository->similar($product->id);
 
-        return view('product::item', compact('product', 'merchant', 'jComments', 'similar'));
+        return view('product::item', compact('product', 'merchant', 'jComments', 'similar', 'shipping_prices', 'addresses'));
     }
 
     /**
@@ -94,16 +136,11 @@ class ProductController extends Controller
               'action' => 'required|in:schedule,publish',
               'media' => 'json',
               'category' => 'required|string',
-              'in_stock' => 'required|numeric'
+              'in_stock' => 'required|numeric',
+              'buy_link' => 'required|url',
         ]);
 
         $this->repository->update($request->all(), $id);
-        
-        $user = auth()->user();
-        
-        if($user->getMeta('delivery_full', 3) == 3) {
-            return redirect()->back();
-        }
 
         $isPublish = ($request->input('action') == 'publish');
         

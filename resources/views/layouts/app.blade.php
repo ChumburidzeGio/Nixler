@@ -26,17 +26,26 @@
                 <a class="_tb" href="{{ auth()->user()->link() }}">
                     <img src="{{ auth()->user()->avatar('nav') }}" height="25px" width="25px" class="_va2 _brds3">
                 </a>
+                @else 
+                
+                <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri">
+                    Sign up
+                </a>
+                <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri">
+                    Log in
+                </a>
+
                 @endif
             </div>
 
             <div class="_dib _oh _posr _brds3" style="width: 100%; max-width: 500px;margin-top: 7px;">
-                <form class="_fg _db _w100" action="{{ url('feed') }}">
-                    <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="Start typing name of product or account" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
+                <form class="_fg _db _w100" action="{{ route('feed') }}">
+                    <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="Search for products and accounts" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
                     @if(request()->has('cat'))<input name="cat" type="hidden" value="{{ request()->input('cat') }}">@endif
                     <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
                 </form>
             </div>
-
+            
         </nav>
 
         @yield('content')
@@ -50,15 +59,15 @@
 
                     <span class="_clear _posr _db _p15 _posr">
                         <div class="_mt30">
-                            <a href="{{ Auth::check() ? auth()->user()->url : url('/login') }}" 
+                            <a href="{{ Auth::check() ? auth()->user()->link() : url('/login') }}" 
                                 class="_lh1 _et2 _cw _thvrw _fw600">
-                                <img src="{{  Auth::check() ? auth()->user()->avatar('aside') : '' }}" 
+                                <img src="{{  Auth::check() ? auth()->user()->avatar('aside') : url('media/-/avatar/aside.jpg') }}" 
                                 class="_mb10 _clear _brds3" height="60" width="60">
-                                {{ Auth::check() ? auth()->user()->name : 'Sign In to access account' }}
+                                {{ Auth::check() ? auth()->user()->name : 'Sign in to access your account' }}
                             </a>
                             <a href="{{ Auth::check() ? auth()->user()->url : url('/register') }}">
                                 <small class="_clear _cw">
-                                    {{ Auth::check() ? ('@'.auth()->user()->username) : 'Or Sign up now' }}
+                                    {{ Auth::check() ? ('@'.auth()->user()->username) : 'or sign up now' }}
                                 </small>
                             </a>
                         </div>
@@ -68,25 +77,27 @@
 
                     @if(auth()->check())
 
-                    <a href="{{ auth()->user()->link() }}" class="_li _hvrd _cg">
+                    <a href="{{ auth()->user()->link() }}" class="_li _fs13 _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">person</i> Profile
                     </a>
-                    <a href="{{ route('orders') }}" class="_li _hvrd _cg">
+                    <a href="{{ route('threads') }}" class="_li _fs13 _hvrd _cg">
+                        <span class="_posr _dib">
+                            <i class="material-icons _fs20 _mr15">message</i>
+                            @if(auth()->user()->getMeta('has_messages'))
+                            <span class="_p5 _brds50 _bgr _a2 _posa _mr5"></span>
+                            @endif
+                        </span> Messages
+                    </a>
+                    <a href="{{ route('orders') }}" class="_li _fs13 _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">shopping_basket</i> Orders
                     </a>
-                    <a href="{{ url('/new-product') }}" class="_li _hvrd _cg _bb1" id="new-product">
+                    <a href="{{ url('/new-product') }}" class="_li _fs13 _hvrd _cg" id="new-product">
                         <i class="material-icons _fs20 _mr15">add</i> Add Product
                     </a>
-                    <a href="{{ url('/settings') }}" class="_li _hvrd _cg">
+                    <a href="{{ url('/settings') }}" class="_li _fs13 _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">settings</i> Settings
                     </a>
-                    <a href="{{ url('/pages/help') }}" class="_li _hvrd _cg">
-                        <i class="material-icons _fs20 _mr15">help</i> Help
-                    </a>
-                    <a href="{{ url('/policy') }}" class="_li _hvrd _cg _bb1">
-                        <i class="material-icons _fs20 _mr15">accessibility</i> Privacy
-                    </a>
-                    <li class="_li">
+                    <li class="_li _fs13 _hvrd _cg _bb1">
                         <a href="{{ url('/logout') }}"
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();" id="logout">
@@ -98,6 +109,38 @@
                 </li>
 
                 @endif
+
+                <span class="_li _fs13 _cg _mt10 _pt15"> Language 
+                    <i class="material-icons _fs16 _va4">translate</i> 
+
+                    <span class="_right">
+                            <a onclick="event.preventDefault();
+                            document.getElementById('setlcl813').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci">
+                            English
+                            <form id="setlcl813" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="locale" value="en">
+                            </form>
+                        </a>
+
+                        <span class="_ml5 _mr5"> · </span>
+
+                        <a onclick="event.preventDefault();
+                            document.getElementById('setlcl814').submit();" href="/" class="_tb _fs13 _cp _pt0 _ci">
+                            polski
+                            <form id="setlcl814" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="locale" value="pl">
+                            </form>
+                        </a>
+                    </span>
+
+                </span>
+                <a href="{{ url('/articles/help') }}" class="_li _fs13 _hvrd _cg"> Get help</a>
+                <a href="{{ url('/articles/policy') }}" class="_li _fs13 _hvrd _cg"> Privacy Policy</a>
+                <a href="{{ url('/articles/terms') }}" class="_li _fs13 _hvrd _cg"> Terms of Service</a>
+                <a href="{{ url('/articles/about') }}" class="_li _fs13 _hvrd _cg"> About Nixler </a>
+
 
             </ul>
         </div>

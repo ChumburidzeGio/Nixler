@@ -1,18 +1,21 @@
-@extends('layouts.app')
+@extends('layouts.general')
 
-@section('content')
-<div class="container">
+@section('app')
+<div class="container _mt50">
     <div class="row">
     <div class="col-md-6 col-md-offset-3">
-            <div class="panel panel-default">
-                <div class="panel-heading">Login</div>
+            <div class="panel panel-default _b0 _z013">
+                <div class="panel-heading _oh _posr _tac">
+                    <a href="javascript:history.back()" class="_posa _a8 _pt10 _ml15"><i class="material-icons _fs18 _mr10 _va4">arrow_back</i> Go back</a>
+                    Sign in now
+                </div>
                 <div class="panel-body _pb5 _bb1">
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
 
                         <div class="form-group _m0 _mb10 {{ $errors->has('email') ? ' has-error' : '' }}">
 
-                            <input id="email" type="email" class="_b1 _bcg _fe _brds3" name="email" value="{{ old('email') }}" required autofocus placeholder="Email">
+                            <input id="email" type="text" class="_b1 _bcg _fe _brds3" name="email" value="{{ old('email') }}" required autofocus placeholder="Email or Username">
 
                             @if ($errors->has('email'))
                             <span class="help-block _mb _mt0">

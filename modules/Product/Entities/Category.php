@@ -14,7 +14,7 @@ class Category extends Model
     public $translatedAttributes = ['name'];
 
     protected $fillable  = [
-        'parent_id', 'order'
+        'parent_id', 'order', 'icon'
     ];
 
 

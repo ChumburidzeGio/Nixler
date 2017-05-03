@@ -64,10 +64,10 @@ tags-input .tags .input {
   border: 0;
   outline: none;
   margin: 2px;
-  padding: 0;
+  padding: 3px 0px;
   padding-left: 5px;
   float: left;
-  height: 26px;
+  height: 32px;
   padding-top: 3px;
 }
 tags-input .tags .input.invalid-tag {

@@ -82,8 +82,6 @@ class ProductDatabaseSeeder extends Seeder
                 if(!$price) {
                     return false;
                 }
-                
-                print("\nCreating ".$title.' for '.$price);
 
                 $product = $repository->update([
                     'title' => $title,
@@ -94,6 +92,8 @@ class ProductDatabaseSeeder extends Seeder
                     'variants' => json_encode($colors->random(rand(1,4))),
                     'action' => 'publish'
                 ], $product->id);
+                
+                print("\nCreated ".str_limit($product->title, 40).' for '.$product->price);
 
                 if(array_get($item, 'LargeImage.URL')) $product->uploadPhoto(array_get($item, 'LargeImage.URL'), 'photo');
 

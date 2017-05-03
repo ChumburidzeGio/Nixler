@@ -3,6 +3,7 @@
 namespace Modules\Messages\Traits;
 
 use Modules\Messages\Entities\Thread;
+use Modules\Messages\Entities\Message;
 
 trait HasMessages {
     
@@ -61,11 +62,21 @@ trait HasMessages {
     /**
      * Show comments for model
      */
-    public function message($text, $model)
+    public function messages()
     {
         $thread = $this->findOrCreateThreadWith($model);
 
         return $thread->message($text, $this);
+
+    }
+
+
+    /**
+     * Show comments for model
+     */
+    public function message($text, $model)
+    {
+        return $this->hasMany(Message::class);
 
     }
 

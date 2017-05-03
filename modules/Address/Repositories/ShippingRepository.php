@@ -92,6 +92,7 @@ class ShippingRepository extends BaseRepository {
                 'type' => 'country'
             ], [
                 'price' => 0,
+                'currency' => $country->currency,
                 'window_from' => 1,
                 'window_to' => 3
             ]);

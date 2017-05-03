@@ -14,7 +14,7 @@
 
 Auth::routes(); 
 
-Route::get('/', 'HomeController@welcome');
+//Route::get('/', 'HomeController@welcome');
 
 Route::get('/policy', function(){
 	return view('policy.page');

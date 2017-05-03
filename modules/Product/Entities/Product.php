@@ -15,6 +15,7 @@ use App\Traits\NPerGroup;
 use Modules\Stream\Entities\Activity;
 use Modules\Stream\Traits\Actable;
 use Illuminate\Notifications\Notifiable;
+use App\Services\Markdown;
 
 class Product extends Model
 {
@@ -23,7 +24,7 @@ class Product extends Model
     public $table = 'products';
     
     protected $fillable  = [
-        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category', 'in_stock'
+        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category_id', 'in_stock', 'buy_link'
     ];
 
 
@@ -86,19 +87,39 @@ class Product extends Model
     {   
         return $this->hasOne(User::class,'id', 'owner_id');
     }
-
+    
+    /**
+     * One to one relationship for categories
+     */
+    public function category()
+    {   
+        return $this->hasOne(Category::class, 'id', 'category_id')
+            ->with('translations');
+    }
+    
+    /**
+     * Tags relationship
+     *
+     * @param $group string
+     */
     public function tags($group)
     {   
-        return $this->belongsToMany(Tag::class, (new ProductTag)->getTable(), 'product_id', 'tag_id')->where('group', $group)->with('translations');
+        return $this->belongsToMany(Tag::class, (new ProductTag)
+            ->getTable(), 'product_id', 'tag_id')
+            ->where('group', $group)
+            ->with('translations');
     }
     
     /**
      * Adds a multiple tags
      *
      * @param $tagName string
+     * @param $group string
      */
-    public function addTags($tagNames, $group)
+    public function syncTags($tagNames, $group)
     {
+        $this->tags($group)->delete();
+        
         foreach ($tagNames as $tagName) {
             $this->addTag($tagName, $group);
         }
@@ -108,6 +129,7 @@ class Product extends Model
      * Adds a single tag
      *
      * @param $tagName string
+     * @param $group string
      */
     public function addTag($tagName, $group)
     {
@@ -255,6 +277,15 @@ class Product extends Model
         $array = $this->toArray();
 
         return array_intersect_key($array, array_flip(['title', 'description']));
+    }
+    
+    
+    /**
+     * Return description parsed with Markdown
+     */
+    public function getDescriptionParsedAttribute()
+    {   
+        return (new Markdown)->text($this->attributes['description']);
     }
     
 }

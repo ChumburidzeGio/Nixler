@@ -20,6 +20,8 @@ angular.module('products').controller('ShowCtrl', [
       vm.like = function(){
         $http.post('/products/'+vm.id+'/like').then(function(response){
             vm.liked = response.data.success;
+            if(vm.liked) vm.likes_count++;
+            else vm.likes_count--;
         });
     }
 

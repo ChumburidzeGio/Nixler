@@ -39,12 +39,14 @@ class SettingsController extends Controller
         $this->validate($request, [
               'username' => ['required', 'alpha_dash', Rule::unique('users')->ignore($user->id)],
               'name' => 'required|string|max:255',
-              'headline' => 'sometimes|max:255'
+              'headline' => 'sometimes|max:255',
+              'website' => 'nullable|url',
         ]);
 
     	$user->username = $request->input('username');
     	$user->name = $request->input('name');
     	$user->setMeta('headline', $request->input('headline'));
+        $user->setMeta('website', $request->input('website'));
     	$user->save();
 
         return redirect('settings/account')->with('status', 
@@ -174,45 +176,6 @@ class SettingsController extends Controller
         (new LocationService)->updateLocaleByKey($locale);
         
         return redirect()->back();
-    }
-
-    public function editSocial(Request $request)
-    {
-        $user = auth()->user()->where('id', auth()->user()->id)->with('meta')->first();
-
-        $links = new stdClass();
-        $links->facebook = $user->getMeta('facebook');
-        $links->twitter = $user->getMeta('twitter');
-        $links->linkedin = $user->getMeta('linkedin');
-        $links->vk = $user->getMeta('vk');
-        $links->blog = $user->getMeta('blog');
-        $links->website = $user->getMeta('website');
-
-        return view('user::settings.social', compact('links'));
-    }
-
-    public function updateSocial(Request $request)
-    {
-        $this->validate($request, [
-              'facebook' => 'nullable|url',
-              'twitter' => 'nullable|url',
-              'linkedin' => 'nullable|url',
-              'vk' => 'nullable|url',
-              'blog' => 'nullable|url',
-              'website' => 'nullable|url',
-        ]);
-        
-        $user = auth()->user();
-
-        $user->setMeta('facebook', $request->input('facebook'));
-        $user->setMeta('twitter', $request->input('twitter'));
-        $user->setMeta('linkedin', $request->input('linkedin'));
-        $user->setMeta('vk', $request->input('vk'));
-        $user->setMeta('blog', $request->input('blog'));
-        $user->setMeta('website', $request->input('website'));
-
-        return redirect('settings/social')->with('status', 
-                        trans('user::settings.social.updated_status'));
     }
 
 }

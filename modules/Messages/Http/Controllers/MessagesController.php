@@ -6,11 +6,23 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use App\Notifications\MessageRecieved;
+use Modules\Messages\Repositories\MessengerRepository;
 use Modules\User\Entities\User;
 use stdClass;
 
 class MessagesController extends Controller
 {
+
+    /**
+     * @var PostRepository
+     */
+    protected $repository;
+
+    public function __construct(MessengerRepository $repository){
+        $this->repository = $repository;
+    }
+
+
     /**
      * @return Response
      */
@@ -49,6 +61,7 @@ class MessagesController extends Controller
             'photo' => auth()->user()->avatar('message'),
             'body' => $new_msg->body,
             'author' => auth()->user()->name,
+            'link' => auth()->user()->link(),
             'time' => $new_msg->created_at->format('c'),
             'own' => true
         ];
@@ -60,37 +73,7 @@ class MessagesController extends Controller
      */
     public function show($id)
     {
-        $rThread = auth()->user()->thread($id);
-
-        $thread = new stdClass;
-        $thread->id = $rThread->id;
-        $thread->title = $rThread->subject ? : $rThread->participants->filter(function($user){
-            return ($user->id != auth()->user()->id);
-        })->pluck('name')->implode(', ');
-
-        $participantsKeyed = $rThread->participants->keyBy('id');
-
-        $thread->messages = $rThread->messages->map(function($item) use ($participantsKeyed) {
-            return [
-                'id' => $item->id,
-                'photo' => array_get($participantsKeyed, $item->user_id)->avatar('message'),
-                'body' => $item->body,
-                'time' => $item->created_at->format('c'),
-                'author' => array_get($participantsKeyed, $item->user_id)->name,
-                'own' => $item->is_own
-            ];
-        });
-
-        $thread->participants = $rThread->participants->map(function($item){
-            return [
-                'url' => $item->link(),
-                'avatar' => $item->avatar('comments'),
-                'name' => $item->name,
-                'me' => ($item->id == auth()->user()->id)
-            ];
-        });
-
-        $thread->messages_count = $rThread->messages()->count();
+        $thread = $this->repository->findThreadById($id);
 
         return view('messages::show', compact('thread'));
     }
@@ -117,6 +100,7 @@ class MessagesController extends Controller
                 'body' => $item->body,
                 'time' => $item->created_at->format('c'),
                 'author' => array_get($pcps, $item->user_id)->name,
+                'link' => array_get($pcps, $item->user_id)->link(),
                 'own' => $item->is_own
             ];
         });

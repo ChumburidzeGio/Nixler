@@ -16,7 +16,7 @@ Addresses
 
 		<div class="_p15 _bb1 _posr">
 			<h1 class="_fs18 _ci _lh1 _clear _telipsis _m0">
-				{{ trans('address::addresses.settings.add_new') }}
+				{{ trans('address::settings.addresses.add_new') }}
 			</h1>
 		</div>
 
@@ -27,7 +27,7 @@ Addresses
 
 				<div class="col-xs-4 _mb15" ng-if="vm.cities">
 					<select selector model="vm.location_id" value-attr="id" label-attr="name" class="_b1 _bcg _brds3"
-						options="vm.cities" placeholder="{{ trans('address::addresses.settings.city_placeholder') }}" ng-init="vm.location_id={{ old('city_id') ? : '-1'}}">
+						options="vm.cities" placeholder="{{ trans('address::settings.addresses.city_placeholder') }}" ng-init="vm.location_id={{ old('city_id') ? : '-1'}}">
 					</select>
 
 					<input type="hidden" name="city_id" ng-value="vm.location_id">
@@ -38,7 +38,7 @@ Addresses
 				</div>
 				
 				<div class="col-xs-6 _mb15">
-					<input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="{{ trans('address::addresses.settings.address_placeholder') }}" name="street">
+					<input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="{{ trans('address::settings.addresses.address_placeholder') }}" name="street">
 
 					@if ($errors->has('street'))
 					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('street') }}</span>
@@ -47,7 +47,7 @@ Addresses
 
 				<div class="_mb15 col-xs-2">
 					<button class="_btn _bga _cb _hvra _ml10 _right" type="submit" name="action" value="publish"> 
-						<i class="material-icons _mr5 _va5 _fs20">add</i> {{ trans('address::addresses.settings.add') }}
+						<i class="material-icons _mr5 _va5 _fs20">add</i> {{ trans('address::settings.addresses.add') }}
 					</button>
 				</div>
 
@@ -64,7 +64,7 @@ Addresses
 
 	<div class="_p15 _posr _bb1 _bcg">
 		<h1 class="_fs18 _ci _lh1 _clear _telipsis _m0">
-			{{ trans('address::addresses.settings.your_addresses') }}
+			{{ trans('address::settings.addresses.your_addresses') }}
 		</h1>
 	</div>
 
@@ -81,7 +81,7 @@ Addresses
 		      </a>
 		      <span class="_ar _posa _m15 _pt5" 
 		      	ng-click="vm.delete('{{ route('settings.addresses.delete', ['id' => $address->id]) }}')" 
-		      	confirm-click="{{ trans('address::addresses.settings.delete_confirm') }}">
+		      	confirm-click="{{ trans('address::settings.addresses.delete_confirm') }}">
 		          <i class="material-icons _fs20">delete</i>
 		        </span>
 		    </div>
@@ -92,7 +92,7 @@ Addresses
 		@else
 
 		<div class="row _tac _p15">
-			{{ trans('address::addresses.settings.addresses_empty') }}
+			{{ trans('address::settings.addresses.addresses_empty') }}
 		</div>
 		@endif
 

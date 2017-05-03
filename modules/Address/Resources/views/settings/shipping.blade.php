@@ -290,7 +290,7 @@
 
 				<div class="col-sm-3 _mb15 _tac">
 					<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="save"> 
-						<i class="material-icons _mr5 _va5 _fs20">refresh</i> Update
+						<i class="material-icons _mr5 _va5 _fs20">refresh</i> Save
 					</button>
 				</div>
 

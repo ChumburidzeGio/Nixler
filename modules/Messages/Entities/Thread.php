@@ -43,6 +43,14 @@ class Thread extends Model
     /**
      * Show comments for model
      */
+    public function latestFiveMessage()
+    {
+        return $this->messages()->orderBy('id','desc')->nPerGroup(null, 'thread_id', 5);
+    }
+    
+    /**
+     * Show comments for model
+     */
     public function messages()
     {
         return $this->hasMany(Message::class);

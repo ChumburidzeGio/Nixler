@@ -24,9 +24,10 @@ class CreateUsersTable extends Migration
             $table->string('currency', 5)->nullable();
             $table->string('timezone')->nullable();
             $table->boolean('verified')->default(0);
+            $table->integer('response_time')->nullable();
             $table->rememberToken();
             $table->timestamps();
-
+            $table->softDeletes();
         });
     }
 

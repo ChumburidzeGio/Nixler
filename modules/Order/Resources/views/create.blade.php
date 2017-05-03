@@ -20,7 +20,7 @@ window.max_quantity = <?php echo $product->in_stock > 99 ? 99 : $product->in_sto
                         <img src="{{ $product->firstMedia('photo')->photo('thumb') }}" class="_left _dib" height="100" width="100">
                         @endif
                         <div class="_pl15 _pr15 _pb10 _oh">
-                            <a class="_cbt8 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs18" href="{{ $product->url() }}">
+                            <a class="_c4 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs18" href="{{ $product->url() }}">
                                 {{ $product->title }}
                             </a>
                             <span class="_cbt8 _clear _telipsis _w100 _oh _pr10 _oh _fs13">
@@ -33,6 +33,28 @@ window.max_quantity = <?php echo $product->in_stock > 99 ? 99 : $product->in_sto
                     </div>
 
                 </div>
+
+                <div class="panel-body _pb15 _pl15 _pr5 _mb10 _bb1">
+                <b>Shipping rules</b><br>
+
+                @foreach($shipping_prices as $sp)
+
+                    @if($sp->type == 'country')
+                        Around whole {{ $sp->location->name }}
+                    @else
+                        In {{ $sp->location->name }}
+                    @endif
+
+                    delivery in {{ $sp->window_from }}-{{ $sp->window_to }} days for 
+                    @if($sp->price == '0.00')
+                        <span class="_cgr _ttu">free</span>
+                    @else
+                    {{ $sp->currency }} {{ $sp->price }}
+                    @endif
+
+                @endforeach
+                </div>
+
                 <div class="panel-body _pb15 _pl5 _pr5 _mb10">
                     <form novalidate class="form-horizontal _row" role="form" method="POST" action="{{ route('order.store') }}">
                         {{ csrf_field() }}
@@ -176,7 +198,7 @@ window.max_quantity = <?php echo $product->in_stock > 99 ? 99 : $product->in_sto
 
                             <div ng-if="!vm.address.shipping && vm.address" class="_c3 _bg5 _p5">
 
-                                Shipping is not available on this address please choose another or <a href="{{ route('settings.addresses') }}" class="_c4">add new one</a>.
+                                Shipping is not available on this address. <a class="_c4" href="{{ route('find-thread', ['id' => $merchant->id]) }}">Ask the seller</a> about delivery to your city or choose another address.
 
                             </div>
 

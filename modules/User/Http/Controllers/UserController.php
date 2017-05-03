@@ -94,4 +94,15 @@ class UserController extends Controller
         return redirect('/media/'.$id.'/avatar/'.$place.'.jpg?='.$ts, 302);
     }
 
+
+
+    /**
+     * Deactivate user account
+     */
+    public function deactivate(Request $request)
+    {
+        $deactivate = $this->repository->deactivate();
+        return compact('deactivate');
+    }
+
 }
