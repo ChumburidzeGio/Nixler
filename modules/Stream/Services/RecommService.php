@@ -125,7 +125,7 @@ class RecommService {
             'price' => $product->price,
             'title' => $product->title,
             'user_id' => $product->owner_id,
-            'category_id' => $product->category,
+            'category_id' => $product->category_id,
             'in_stock' => $product->in_stock,
             'currency' => $product->currency,
             'description' => $product->description
