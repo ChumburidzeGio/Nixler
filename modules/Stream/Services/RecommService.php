@@ -235,8 +235,9 @@ class RecommService {
         try {
             return $this->client->send($request);
         } catch(\Exception $e) {
-            dd($e);
-            Bugsnag::notifyException($ex);
+            if (app()->environment('production', 'development')) {
+                Bugsnag::notifyException($ex);
+            }
             return $default;
         }
     }
