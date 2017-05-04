@@ -73,7 +73,7 @@ class ProductController extends Controller
               'media' => 'json',
               'category' => 'required|string',
               'in_stock' => 'required|numeric',
-              'buy_link' => 'required|url',
+              'buy_link' => 'nullable|url',
         ]);
 
         $this->repository->update($request->all(), $id);
