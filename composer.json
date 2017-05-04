@@ -19,6 +19,7 @@
         "dimsav/laravel-translatable": "^7.0",
         "doctrine/dbal": "^2.5",
         "erusev/parsedown": "^1.6",
+        "facebook/graph-sdk": "^5.5",
         "geoip2/geoip2": "~2.0",
         "giggsey/libphonenumber-for-php": "^8.4",
         "guzzlehttp/guzzle": "^6.2",

@@ -1,6 +1,6 @@
 <div class="_clear" ng-controller="CommentsCtrl as vm">
 
-<script>window.comments = <?php echo $comments; ?></script>
+<script>window.comments = <?php echo $comments->toJson(); ?></script>
 <script>window.comments_target = <?php echo $id; ?></script>
 
 @can('create', \Modules\Comment\Entities\Comment::class)

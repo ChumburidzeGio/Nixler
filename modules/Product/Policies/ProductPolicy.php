@@ -42,4 +42,16 @@ class ProductPolicy
     {
         return !!(auth()->check() && $user->verified);
     }
+
+    /**
+     * Determine if the user can view the product.
+     *
+     * @param  User  $user
+     * @param  Product  $product
+     * @return bool
+     */
+    public function view(User $user, Product $product)
+    {
+        return !(!$product->is_active && $user->id !== $product->owner_id);
+    }
 }

@@ -16,9 +16,7 @@ class UserAddress extends Model
     ];
     
     /**
-     * 
-     *
-     * @return collection
+     * User to address one to one relationship
      */
     public function user()
     {   
@@ -26,9 +24,7 @@ class UserAddress extends Model
     }
     
     /**
-     * 
-     *
-     * @return collection
+     * City to address one to one relationship
      */
     public function city()
     {   
@@ -36,9 +32,7 @@ class UserAddress extends Model
     }
     
     /**
-     * 
-     *
-     * @return collection
+     * Country to address one to one relationship
      */
     public function country()
     {   
@@ -47,14 +41,23 @@ class UserAddress extends Model
 
 
     /**
-     * {@inheritdoc}
+     * Boot model and add observers
      */
     public static function boot() {
         parent::boot();
 
         static::saving(function($address) {
-            $address->geocode();
+            $address->geocode()->updateUserCity();
         });
+    }
+
+    /**
+     * Set user city from address
+     */
+    public function updateUserCity() {
+        $user = $this->user()->first();
+        $user->city_id = $this->city_id;
+        $user->save();
     }
 
     /**

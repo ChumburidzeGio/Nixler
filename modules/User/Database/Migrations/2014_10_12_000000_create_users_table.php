@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password')->nullable();
             $table->string('username', 150)->nullable()->unique();
             $table->string('country', 5)->nullable();
+            $table->integer('city_id')->nullable();
             $table->string('locale', 5)->nullable();
             $table->string('currency', 5)->nullable();
             $table->string('timezone')->nullable();

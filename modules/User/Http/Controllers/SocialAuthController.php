@@ -7,10 +7,17 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Modules\User\Entities\Profile;
 use Modules\User\Entities\User;
+use Modules\User\Repositories\UserRepository;
 use Socialite;
 
 class SocialAuthController extends Controller
 {
+
+    protected $repository;
+
+    public function __construct(UserRepository $repository) {
+        $this->repository = $repository;
+    }
 
     public function redirect($provider)
     {
@@ -34,58 +41,11 @@ class SocialAuthController extends Controller
             return [];
         }
 
-        $socialUser = Socialite::driver($provider);
-        $fields = config('services.'.$provider.'.fields');
+        $provider = Socialite::driver($provider)->fields(config('services.'.$provider.'.fields'));
 
-        if($fields) $socialUser = $socialUser->fields($fields);
+        $socialUser = $provider->user();
 
-        $socialUser = $socialUser->user();
-
-        $name = sprintf("%s %s", $socialUser->offsetGet('first_name'), $socialUser->offsetGet('last_name'));
-        $photo =  $socialUser->getAvatar();
-
-        $account = Profile::firstOrCreate([
-            'provider' => $provider,
-            'external_id' => $socialUser->getId()
-        ]);
-
-        $user = $account->user_id ? User::where('id', $account->user_id)->withTrashed()->first() : null;
-
-        if($user && $user->trashed()) {
-            $user->restore();
-        }
-
-        if (is_null($user)) {
-
-            $user = User::whereEmail($socialUser->getEmail())->withTrashed()->first();
-
-            if(is_null($user)){
-                $user = $account->user()->create([
-                    'email' => $socialUser->getEmail(),
-                    'name' => $name
-                ]);
-            }
-
-            if($account->wasRecentlyCreated && !$user->firstMedia('avatar')){
-                $user->changeAvatar($socialUser->getAvatar());
-            }
-
-            $account->update([
-                'user_id' => $user->id
-            ]);
-        }
-
-        if($socialUser->offsetExists('birthday') && !$user->hasMeta('birthday')){
-            $carbon = new \Carbon\Carbon;
-            list($month,$day,$year) = explode('/', $socialUser->offsetGet('birthday'));
-            $user->setMeta('birthday', $carbon->createFromDate($year, $month, $day));
-        }
-
-        if($socialUser->offsetExists('gender') && !$user->hasMeta('gender')){
-            $user->setMeta('gender', $socialUser->offsetGet('gender'));
-        }
-
-        auth()->login($user, true);
+        $this->repository->facebookProviderCallback($socialUser);
 
         return redirect()->intended('/');
     }

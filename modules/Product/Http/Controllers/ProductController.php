@@ -30,73 +30,9 @@ class ProductController extends Controller
      */
     public function find($uid, $id)
     {
-        $merchant = User::whereUsername($uid)->firstOrFail();
-        $product = $merchant->products()->whereSlug($id)->firstOrFail();
+        $product = $this->repository->findBySlug($id, $uid);
 
-        if(!$product->is_active && auth()->id() !== $merchant->id){
-            abort(404);
-        }
-
-        $shipping_prices = ShippingPrice::where('user_id', $merchant->id)->get();
-        $shipping_prices->load('location');
-
-        if(auth()->check()){
-
-            $user = auth()->user();
-
-            $addresses = $user->addresses()->with('city')->get(['street', 'id', 'city_id', 'country_id']);
-
-            $addresses = $addresses->map(function($address) use ($shipping_prices) {
-
-                $shipping = $shipping_prices->filter(function($item) use ($address) {
-                    return ($item->type == 'city' && $item->location_id == $address->city_id);
-                });
-
-                if(!$shipping->count()){
-                    $shipping = $shipping_prices->filter(function($item) use ($address) {
-                        return ($item->type == 'country' && $item->location_id == $address->country_id);
-                    });
-                }
-
-                $address->shipping = $shipping->map(function($item){
-                    extract($item->toArray());
-                    return compact('price', 'currency', 'window_from', 'window_to');
-                })->first();
-
-                return [
-                    'id' => $address->id,
-                    'label' => $address->street,
-                    'shipping' => $address->shipping
-                ];
-
-            });
-
-        } elseif (auth()->guest() && $shipping_prices->count() > 2) {
-            $shipping_prices->take(2);
-        }
-
-        $product->setRelation('media', $product->media('photo')->take(10)->get());
-        $product->setRelation('comments', $product->comments()->sortBy('most_recent')->paginate());
-        $product->setRelation('tags', $product->tags('tags')->take(3)->get());
-        $product->setRelation('variants', $product->tags('variants')->get());
-        $product->load('category');
-
-        $product->trackActivity('product:viewed');
-
-        $jComments = $product->comments->map(function($comment){
-            return [
-                'id' => $comment->id,
-                'avatar' => $comment->author->avatar('comments'),
-                'author' => $comment->author->name,
-                'text' => nl2br(str_limit($comment->text, 1000)),
-                'time' => $comment->created_at->format('c'),
-                'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
-            ];
-        })->toJson();
-
-        $similar = $this->repository->similar($product->id);
-
-        return view('product::item', compact('product', 'merchant', 'jComments', 'similar', 'shipping_prices', 'addresses'));
+        return view('product::item', compact('product'));
     }
 
     /**
@@ -156,10 +92,7 @@ class ProductController extends Controller
      */
     public function uploadPhoto($id, Request $request)
     {
-        $user = auth()->user();
-        $product = $user->products()->findOrFail($id);
-        $media = $product->uploadPhoto($request->file('file'), 'photo');
-
+        $media = $this->repository->uploadMediaForProduct($id, $request->file('file'));
 
         return [
             'success' => true,
@@ -173,16 +106,11 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function removePhoto($id, $media_id, Request $request)
+    public function removePhoto($product_id, $media_id)
     {
-        $user = auth()->user();
-        $product = $user->products()->findOrFail($id);
-        $media = $product->media()->findOrFail($media_id);
-        $media->delete();
+        $success = $this->repository->removeMediaFromProductById($product_id, $media_id);
 
-        return [
-            'success' => true,
-        ];
+        return compact('success');
     }
 
     /**

@@ -2,7 +2,7 @@ angular.module('comments', []).controller('CommentsCtrl', [
 	'$http', '$scope', function ($http, $scope) {
 
 		var vm = this;
-		vm.comments = window.comments;
+		vm.comments = window.comments.data;
 		vm.target = window.comments_target;
 		vm.sending = false;
 		vm.page = 1;

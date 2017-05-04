@@ -75,7 +75,7 @@
                     @if($product->in_stock && !(auth()->check() && $product->currency !== auth()->user()->currency))
                     <div class="_a3 _posa _mr15 _buybtn">
                         <a class="_btn _bga _cb" href="{{ $product->buy_link or route('order', ['product_id' => $product->id]) }}" {{ $product->buy_link ? 'target="_blank"' : '' }}>
-                            BUY NOW on {{ ucfirst(str_replace('www.', '', parse_url($product->buy_link, PHP_URL_HOST))) }}
+                            BUY NOW  {{ $product->buy_link ?  'on'.ucfirst(str_replace('www.', '', parse_url($product->buy_link, PHP_URL_HOST))) : '' }}
                         </a>
                         <span class="_fs11 _clear _tac">{{ $product->in_stock }} in stock</span>
                     </div>
@@ -83,8 +83,8 @@
                 </div>
 
                 <div class="panel-body _pb15 _pl15 _pr5 _mb10 _bb1">
-                @if(auth()->check() && $addresses->count())
-                    @foreach($addresses as $address)
+                @if(auth()->check() && $product->addresses->count())
+                    @foreach($product->addresses as $address)
                         You can get this product on {{ $address['label'] }} for 
                         @if(array_get($address, 'shipping.price') == '0.00')
                             <span class="_cgr _ttu">free</span>
@@ -96,7 +96,7 @@
                         <i class="_clear">*only you can see it</i>
                     @endforeach
                 @else
-                    @foreach($shipping_prices as $sp)
+                    @foreach($product->owner->shippingPrices as $sp)
 
                         @if($sp->type == 'country')
                             Around whole {{ $sp->location->name }}
@@ -159,7 +159,7 @@
 
 
                 <div class="_clear _p5">
-                @include('comment::index', ['comments' => $jComments, 'id' => $product->id])
+                @include('comment::index', ['comments' => $product->comments, 'id' => $product->id])
                 </div>
 
             </div>
@@ -170,22 +170,22 @@
 
             <div class="_bgw _b1 _brds3 _clear">
 
-                <a href="{{ $merchant->link() }}">
-                    <img src="{{ $merchant->cover('product') }}" class="_clear _w100" height="80px">
+                <a href="{{ $product->owner->link() }}">
+                    <img src="{{ $product->owner->cover('product') }}" class="_clear _w100" height="80px">
                 </a>
                 <div class=" _pb5 _pl15">
-                     <a href="{{ $merchant->link() }}">
-                        <img src="{{ $merchant->avatar('product') }}" class="_brds3 _dib _ma _mb5 _b1 _bcg _bw2 _clear _mt-50" height="80" width="80">
-                        <span class="_lh1 _et2 _fs18 _clear _c4">{{ $merchant->name }}</span>
+                     <a href="{{ $product->owner->link() }}">
+                        <img src="{{ $product->owner->avatar('product') }}" class="_brds3 _dib _ma _mb5 _b1 _bcg _bw2 _clear _mt-50" height="80" width="80">
+                        <span class="_lh1 _et2 _fs18 _clear _c4">{{ $product->owner->name }}</span>
                      </a>
-                     <small class="_clear _mb5">{{ $merchant->followers()->count() }} Followers</small>
-                     @if($merchant->id !== auth()->id())
+                     <small class="_clear _mb5">{{ $product->owner->followers()->count() }} Followers</small>
+                     @if($product->owner->id !== auth()->id())
                      <div class="_clear _mt10 _pr10 _mb5">
                         <!--div class="_btn _bgw _cg _mt5 _b1 _bcg">Follow</div-->
-                        <a class="_btn _bg5 _cb _mt5 _w100" href="{{ route('find-thread', ['id' => $merchant->id]) }}">
+                        <a class="_btn _bg5 _cb _mt5 _w100" href="{{ route('find-thread', ['id' => $product->owner->id]) }}">
                             <i class="material-icons _mr5 _va5 _fs20">message</i> Message
                         </a>
-                        <span class="_fs11 _clear _tac _cgr">{{ $merchant->response_time }}</span>
+                        <span class="_fs11 _clear _tac _cgr">{{ $product->owner->response_time }}</span>
                      </div>
                      @endif
 
@@ -193,7 +193,7 @@
 
             </div>
 
-            @if($similar->count())
+            @if($product->similar->count())
             <div class="_bgw _b1 _brds3 _clear _mt15">
 
                      <div class="_pr15 _pl15 _tal _mb0 _p10">
@@ -201,7 +201,7 @@
                             More products
                         </span>
 
-                        @each('product::short-li', $similar, 'product')
+                        @each('product::short-li', $product->similar, 'product')
 
                     </div>
 

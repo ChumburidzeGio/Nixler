@@ -39,8 +39,8 @@ return [
         'client_id' => env('FACEBOOK_APP_ID'),
         'client_secret' => env('FACEBOOK_APP_SECRET'),
         'redirect' => env('FACEBOOK_APP_REDIRECT'),
-        'scopes' => ['user_birthday'],
-        'fields' => ['first_name', 'last_name', 'email', 'gender', 'birthday']
+        'scopes' => ['user_birthday', 'user_location'],
+        'fields' => ['name', 'email', 'gender', 'birthday', 'locale', 'timezone', 'updated_time', 'verified', 'location']
     ],
 
     'vk' => [

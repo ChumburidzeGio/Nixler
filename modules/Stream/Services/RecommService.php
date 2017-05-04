@@ -156,13 +156,13 @@ class RecommService {
     public function addUser($user)
     {   
         $setValues = new Reqs\SetUserValues($user->id, [
+            'name' => $user->name,
             'currency' => $user->currency,
             'locale' => $user->locale,
             'gender' => $user->getMeta('gender') == 'male' ? 1 : 2,
             'headline' => $user->getMeta('headline'),
             //'age_range' => 4,
-            //'city_id' => 4,
-            //'income_lvl' => 2,
+            'city_id' => $user->city_id,
         ], [
           'cascadeCreate' => true
         ]);
@@ -202,12 +202,12 @@ class RecommService {
         ];
 
         $user_props = [
+            'name' => 'string',
             'currency' => 'string',
             'locale' => 'string',
             'gender' => 'int',
             'age_range' => 'int',
             'city_id' => 'int',
-            'income_lvl' => 'int',
             'headline' => 'string',
         ];
 

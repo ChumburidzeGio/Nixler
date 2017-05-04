@@ -34,6 +34,7 @@ class CreateProductsTable extends Migration
             $table->integer('category_id')->unsigned()->nullable();
 
             $table->integer('likes_count')->default(0);
+            $table->boolean('is_used')->default(0);
             $table->timestamps();
 
         });
