@@ -20,6 +20,7 @@
     "angular-timeago": "^0.4.4",
     "angular-tooltips": "^1.1.10",
     "angularjs-scroll-glue": "^2.2.0",
+    "angularjs-slider": "^6.1.1",
     "bootstrap-sass": "^3.3.7",
     "confirm-click": "^0.7.0",
     "laravel-echo": "^1.2.5",

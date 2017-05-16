@@ -190,6 +190,8 @@ return [
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         NotificationChannels\Telegram\TelegramServiceProvider::class,
         Keevitaja\Linguist\LinguistServiceProvider::class,
+        Silber\Bouncer\BouncerServiceProvider::class,
+        Lab404\Impersonate\ImpersonateServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*
@@ -260,6 +262,7 @@ return [
         'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
         'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
         'Linguist'  => Keevitaja\Linguist\Facades\LinguistFacade::class,
+        'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         //'BotMan' => Mpociot\BotMan\Facades\BotMan::class,
     ],
 

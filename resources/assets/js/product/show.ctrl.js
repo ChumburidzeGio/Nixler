@@ -1,9 +1,11 @@
 angular.module('products').controller('ShowCtrl', [
-    '$http', '$scope', 'ngDialog', function ($http, $scope, ngDialog) {
+    '$http', '$scope', 'ngDialog', '$timeout', function ($http, $scope, ngDialog, $timeout) {
 
         var vm = this;
         vm.media = {};
         vm.mainPhoto = 0;
+        vm.quantities = window.quantities;
+        vm.variants = window.variants;
 
         vm.media = {
         	add: function(id,mid){
@@ -44,4 +46,13 @@ angular.module('products').controller('ShowCtrl', [
 
     }
 
+    vm.selectDefaults = function(){
+      vm.quantity = 1;
+      vm.variant = vm.variants.length ? vm.variants[0].id : 0;
+    }
+
+    $timeout(function(){
+      vm.selectDefaults();
+    }, 100);
+    
 }]);

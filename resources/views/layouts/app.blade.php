@@ -3,11 +3,15 @@
 @section('app')
 <body class="@yield('body_class')">
 
-    <div id="app" class="_mt70 _pb15 _db" ng-app="nx">
-    <br class="visible-xs">
-    <br class="visible-xs">
-        <nav class="_at _b0 _zi999 _bgw _z013 _cb _pl15 _pr15 _ma _tac" ng-controller="NavCtrl as vm">
+    
+    <div id="app" class="_pb15 _db" ng-app="nx">
+        <nav class="_clear _b0 _bgw _bb1 _cb _ma _tac _mb15" ng-controller="NavCtrl as vm">
 
+        @impersonating
+        <a href="{{ route('impersonate.leave') }}" class="_clear _tac _bg3 _p5 _cw _thvrw _crp _fs13">Leave impersonation</a>
+        @endImpersonating
+        
+        <div class=" _pl15 _pr15">
             <span class="_logo _left _fs18 _cinherit _ml0 _mr0">
                 <i class="material-icons _fs20 _mr15 _crp _va4 _cinherit" ng-click="vm.openAside()" id="menu">menu</i> 
                 <a href="{{ url('/') }}" class="_cinherit _thvrb">{{ config('app.name')}}</a>
@@ -28,10 +32,10 @@
                 </a>
                 @else 
                 
-                <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri">
+                <a href="{{ route('register') }}" class="_tb _posr _pt15 _thvri" id="register">
                     Sign up
                 </a>
-                <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri">
+                <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri" id="login">
                     Log in
                 </a>
 
@@ -45,8 +49,10 @@
                     <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
                 </form>
             </div>
-            
+
+            </div>
         </nav>
+
 
         @yield('content')
 
@@ -88,7 +94,7 @@
                             @endif
                         </span> Messages
                     </a>
-                    <a href="{{ route('orders') }}" class="_li _fs13 _hvrd _cg">
+                    <a href="{{ route('settings.orders') }}" class="_li _fs13 _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">shopping_basket</i> Orders
                     </a>
                     <a href="{{ url('/new-product') }}" class="_li _fs13 _hvrd _cg" id="new-product">
@@ -97,8 +103,8 @@
                     <a href="{{ url('/settings') }}" class="_li _fs13 _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">settings</i> Settings
                     </a>
-                    <li class="_li _fs13 _hvrd _cg _bb1">
-                        <a href="{{ url('/logout') }}"
+                    
+                    <a href="{{ url('/logout') }}" class="_li _fs13 _hvrd _cg _bb1"
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();" id="logout">
                         <i class="material-icons _fs20 _mr15">exit_to_app</i> Logout
@@ -106,7 +112,6 @@
                     <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="_d0">
                         {{ csrf_field() }}
                     </form>
-                </li>
 
                 @endif
 

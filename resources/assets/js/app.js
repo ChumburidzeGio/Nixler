@@ -18,6 +18,7 @@
  require('angularjs-scroll-glue');
  require('angular-numeric-input');
  require('angular-tooltips');
+ require('angularjs-slider');
 
  require('./utils/core');
  require('./product/core');
@@ -40,7 +41,8 @@
     'ngTagsInput', 
     'confirm-click', 
     'angular-sortable-view', 
-    'selector', 
+    'selector',
+    'rzModule',
     'comments', 
     'ngSanitize', 
     'yaru22.angular-timeago', 
@@ -52,7 +54,7 @@
     '720kb.tooltips',
     'stream',
     'settings',
-    'user'
+    'user',
     ]);
 
  app.factory('httpRequestInterceptor', function () {
@@ -94,7 +96,7 @@
 }]);
 
 
- if (!Array.prototype.last){
+if (!Array.prototype.last){
     Array.prototype.last = function(){
         return this[this.length - 1];
     };

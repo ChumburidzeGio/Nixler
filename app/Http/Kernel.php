@@ -34,7 +34,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \Modules\User\Http\Middleware\SetUserGeoDataMiddleware::class,
+            \App\Http\Middleware\SetUserGeoDataMiddleware::class,
         ],
 
         'api' => [
@@ -57,6 +57,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'lastLoginTracker' => \Modules\User\Http\Middleware\UserLastLoginMiddleware::class,
+        'lastLoginTracker' => \App\Http\Middleware\UserLastLoginMiddleware::class,
     ];
 }

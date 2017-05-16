@@ -8,7 +8,7 @@ class Markdown extends Parsedown
 {
 	protected $BlockTypes = array(
         '#' => array('Header'),
-        '*' => array('Rule'),
+        '*' => array('Rule', 'List'),
         '-' => array('Rule'),
         '`' => array('FencedCode'),
         '~' => array('FencedCode'),

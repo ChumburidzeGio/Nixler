@@ -3,9 +3,9 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Modules\Stream\Services\RecommService;
-use Modules\User\Entities\User;
-use DB, Storage;
+use App\Services\RecommService;
+use App\Entities\User;
+use DB, Storage, Bouncer;
 
 class Install extends Command
 {
@@ -72,10 +72,10 @@ class Install extends Command
         $this->call('geoip:update');
         $this->info('Updated MaxMind database');
 
-        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\CategoryDatabaseSeeder' ]);
-        $this->call('db:seed', [ '--class' => 'Modules\Blog\Database\Seeders\BlogDatabaseSeeder' ]);
+        $this->call('db:seed', [ '--class' => 'CategoryDatabaseSeeder' ]);
+        $this->call('db:seed', [ '--class' => 'BlogDatabaseSeeder' ]);
 
-        $this->createNixlerAccount();
+        $this->createAccountsAndRoles();
     }
 
     /**
@@ -116,9 +116,8 @@ class Install extends Command
         $this->comment("All tables successfully dropped");
 
         $this->call('migrate');
-        $this->call('module:migrate');
-        $this->call('scout:mysql-index', [ 'model' => 'Modules\\Product\\Entities\\Product' ]);
-        $this->call('scout:mysql-index', [ 'model' => 'Modules\\User\\Entities\\User' ]);
+        $this->call('scout:mysql-index', [ 'model' => 'App\\Entities\\Product' ]);
+        $this->call('scout:mysql-index', [ 'model' => 'App\\Entities\\User' ]);
 
     }
 
@@ -146,16 +145,21 @@ class Install extends Command
      *
      * @return mixed
      */
-    private function createNixlerAccount()
+    private function createAccountsAndRoles()
     {
-
-        User::create([
+        $nixler = User::create([
             'name' => 'Nixler',
             'email' => 'info@nixler.pl',
             'password' => bcrypt('Yamaha12'),
             'username' => 'nixler',
         ]);
 
+        Bouncer::allow('root')->to('create-articles');
+        Bouncer::allow('root')->to('impersonate');
+
+        $nixler->assign('root');
+        
+        Bouncer::refresh();
     }
 
     /**
@@ -166,8 +170,7 @@ class Install extends Command
     private function setFakeData()
     {
         app()->setLocale(config('app.fallback_locale'));
-        $this->call('db:seed', [ '--class' => 'Modules\User\Database\Seeders\SeedFakeUsersTableSeeder' ]);
-        $this->call('db:seed', [ '--class' => 'Modules\Product\Database\Seeders\ProductDatabaseSeeder' ]);
+        $this->call('db:seed');
     }
 
 

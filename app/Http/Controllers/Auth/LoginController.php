@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
-use Modules\User\Entities\User;
+use App\Entities\User;
 use Illuminate\Http\Request;
 use Hash;
 
@@ -70,7 +70,7 @@ class LoginController extends Controller
 
             $user = User::where('email', $email)->orWhere('username', $username)->withTrashed()->first();
 
-            if($user->trashed() && Hash::check($password, $user->password)) {
+            if($user && $user->trashed() && Hash::check($password, $user->password)) {
                 $user->restore();
                 Auth::login($user, true);
                 $attempt = true;

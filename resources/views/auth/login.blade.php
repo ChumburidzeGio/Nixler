@@ -38,7 +38,7 @@
                         <input type="hidden" name="remember" value="1">
 
                         <button type="submit" class="_btn _bgi _cw _mt15 block">Sign in</button>
-                        <a class="_ci _tac _clear _crp _mt10 _fs12 _mb5" href="{{ url('/password/reset') }}">
+                        <a class="_ci _tac _clear _crp _mt10 _fs12 _mb5" href="{{ url('/password/reset') }}" id="password-reset">
                            Forgot password ?</a>
 
                         </form>

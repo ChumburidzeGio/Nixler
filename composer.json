@@ -28,6 +28,7 @@
         "jenssegers/agent": "^2.5",
         "keen-io/keen-io": "^2.5",
         "keevitaja/linguist": "^1.0",
+        "lab404/laravel-impersonate": "^1.1",
         "laravel-notification-channels/telegram": "^0.0.2",
         "laravel/dusk": "^1.0",
         "laravel/framework": "5.4.*",

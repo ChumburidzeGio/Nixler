@@ -4,6 +4,7 @@ angular.module('settings', [])
 	'$http', '$scope', '$timeout', '$window', 'ngDialog', function ($http, $scope, $timeout, $window, ngDialog) {
 
 		var vm = this;
+		vm.cities = window.cities;
 		
 		vm.deactivateAccount = function(){
 

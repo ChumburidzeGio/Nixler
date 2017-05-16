@@ -1,0 +1,541 @@
+<?php
+
+namespace App\Repositories;
+
+use App\Repositories\BaseRepository;
+use App\Entities\ProductCategory;
+use App\Services\RecommService;
+use Illuminate\Container\Container as App;
+use App\Entities\Product;
+use App\Transformers\ProductTransformer;
+use League\Fractal\Manager;
+use League\Fractal\Resource\Collection;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use App\Entities\Activity;
+use App\Entities\ProductVariant;
+use App\Entities\ProductTag;
+use Carbon\Carbon;
+use Auth, DB;
+
+class ProductRepository extends BaseRepository {
+
+    /**
+     * Specify Model class name
+     *
+     * @return string
+     */
+    function model()
+    {
+        return Product::class;
+    }
+    
+
+    /**
+     * @param $slug string
+     * @param $owner string
+     * @return array
+     */
+    public function findBySlug($slug, $owner_username)
+    {
+        $product = $this->model->where(compact('slug', 'owner_username'))->firstOrFail();
+
+        if(!$product->is_active) {
+            abort_if(auth()->guest() || auth()->user()->cannot('view', $product), 403);
+        }
+
+        $product->load('owner.shippingPrices', 'category');
+        $product->owner->shippingPrices->load('location');
+        $product->setRelation('media', $product->media('photo')->take(10)->get());
+        $product->setRelation('comments', $product->comments()->sortBy('most_recent')->paginate());
+
+        $product->tags = ProductTag::where('product_id', $product->id)->get();
+
+        $product->variants = ProductVariant::where('product_id', $product->id)->get();
+
+        $product->setRelation('similar', $this->similar($product->id));
+
+        $product->trackActivity('product:viewed');
+
+        $product->comments->transform(function($comment){
+            return [
+                'id' => $comment->id,
+                'avatar' => $comment->author->avatar('comments'),
+                'author' => $comment->author->name,
+                'text' => nl2br(str_limit($comment->text, 1000)),
+                'time' => $comment->created_at->format('c'),
+                'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
+            ];
+        });
+
+        return $this->calculateShippingPriceForProduct($product);
+
+        return $product;
+    }
+    
+
+
+    /**
+     * @param $product \App\Entities\Product
+     * @return \App\Entities\Product
+     */
+    public function calculateShippingPriceForProduct($product)
+    {
+        if(auth()->guest()) {
+            $product->owner->shippingPrices->take(2);
+            return $product;
+        }
+
+        $shipping_prices = $product->owner->shippingPrices;
+
+        $user = auth()->user();
+
+        $addresses = $user->addresses()->with('city')->get(['street', 'id', 'city_id', 'country_id']);
+
+        $addresses = $this->calculateShippingPriceForEachAddress($addresses, $shipping_prices);
+
+        $product->setRelation('addresses', $addresses);
+
+        return $product;
+    }
+    
+
+
+    /**
+     * @param $addresses \App\Entities\Address
+     * @param $shipping_prices \App\Entities\ShippingPrice
+     * @return \App\Entities\Address
+     */
+    public function calculateShippingPriceForEachAddress($addresses, $shipping_prices)
+    {
+        return $addresses->map(function($address) use ($shipping_prices) {
+
+            $shipping = $shipping_prices->filter(function($item) use ($address) {
+                return ($item->type == 'city' && $item->location_id == $address->city_id);
+            });
+
+            if(!$shipping->count()){
+                $shipping = $shipping_prices->filter(function($item) use ($address) {
+                    return ($item->type == 'country' && $item->location_id == $address->country_id);
+                });
+            }
+
+            $address->shipping = $shipping->map(function($item){
+                extract($item->toArray());
+                return compact('price', 'currency', 'window_from', 'window_to');
+            })->first();
+
+            return [
+                'id' => $address->id,
+                'label' => $address->street,
+                'shipping' => $address->shipping
+            ];
+
+        });
+    }
+    
+
+
+    /**
+     * Create new product
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create(array $attributes = [])
+    {
+        $user = auth()->user();
+
+        return $this->model->create([
+            'status' => 'inactive',
+            'currency' => $user->currency,
+            'owner_id' => $user->id,
+            'owner_username' => $user->username,
+        ]);
+    }
+    
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $user = auth()->user();
+
+        $product = $this->model->where([
+            'id' => $id,
+            'owner_id' => $user->id
+        ])->firstOrFail();
+
+        $product->variants = ProductVariant::where('product_id', $product->id)->get()->toJson();
+
+        $product->tags = ProductTag::where('product_id', $product->id)->get()->toJson();
+
+        $product->media = $product->getMedia('photo')->map(function($media){
+            return [
+                'success' => true,
+                'id' => $media->id,
+                'thumb' => url('media/'.$media->id.'/avatar/profile.jpg')
+            ];
+        })->toJson();
+
+        $categories = ProductCategory::with('translations', 'children.translations')->orderBy('order')->get();
+
+        return compact('product', 'categories', 'user');
+    }
+    
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function update(array $attributes, $id)
+    {
+        $user = auth()->user();
+
+        $product = $this->model->where([
+            'id' => $id,
+            'owner_id' => $user->id
+        ])->firstOrFail();
+
+        $this->sortMedia(array_get($attributes, 'media'), $product);
+
+        $this->syncVariants(array_get($attributes, 'variants'), $product);
+
+        $this->syncTags(array_get($attributes, 'tags'), $product);
+
+        $product->fill([
+            'title' => array_get($attributes, 'title'),
+            'description' => array_get($attributes, 'description'),
+            'category_id' => array_get($attributes, 'category'),
+            'buy_link' => array_get($attributes, 'buy_link'),
+            'is_used' => array_get($attributes, 'is_used', 0),
+        ]);
+
+        if(!$product->has_variants){
+            $product->price = array_get($attributes, 'price');
+            $product->in_stock = array_get($attributes, 'in_stock');
+        }
+
+        $product->save();
+
+        if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
+            $product->markAsActive();
+        }
+
+        return $product;
+    }
+    
+
+
+    /**
+     * @param $id integer
+     * @param $file string|mixed
+     * @param ? $user \App\Entities\User
+     * @return \App\Entities\Media
+     */
+    public function uploadMediaForProduct($id, $file, $user = null)
+    {
+        $user = $user ? : auth()->user();
+
+        $product = $user->products()->findOrFail($id);
+
+        return $product->uploadPhoto($file, 'photo');
+    }
+    
+
+
+    /**
+     * @param $product_id integer
+     * @param $media_id integer
+     * @return \App\Entities\Media
+     */
+    public function removeMediaFromProductById($id, $file, $user = null)
+    {
+        $user = $user ? : auth()->user();
+
+        $product = $user->products()->findOrFail($product_id);
+
+        $media = $product->media()->findOrFail($media_id);
+        
+        return $media->delete();
+    }
+    
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return void
+     */
+    public function sortMedia($attribute, $product)
+    {
+        $media_sorted = json_decode($attribute);
+
+        if($media_sorted){
+            $media = $product->getMedia('photo');
+            $media = $media->sortBy(function ($photo, $key) use ($media_sorted) {
+                foreach ($media_sorted as $key => $value) {
+                    if(isset($value->id) && $value->id == $photo->id){
+                        return $key;
+                    }
+                }
+            });
+            $product->syncMedia($media, 'photo');
+        }
+    }
+
+
+
+    /**
+     * Tranform text into tokens
+     *
+     * @return array
+     */
+    public function like($id)
+    {
+        $product = $this->model->findOrFail($id);
+
+        $user = auth()->user();
+
+        $liked = $product->toggleActivity('product:liked');
+
+        $product->likes_count = $product->getActivities('product:liked')->count();
+        
+        $product->save();
+        
+        return $liked;
+    }
+
+
+    /**
+     * Tranform text into tokens
+     *
+     * @return array
+     */
+    public function similar($id)
+    {
+        $props = auth()->guest() ? [] : [
+            'filter' => "'currency' == \"{auth()->user()->currency}\""
+        ];
+
+        $ids = (new RecommService)->similar($id, 5, auth()->id(), $props);
+        
+        return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
+    }
+
+
+    /**
+     * @return \Illuminate\Http\Response
+     */
+    public function getUserStream($cat = array('*'))
+    {
+        $user = auth()->user();
+
+        if(is_string($cat)){
+            $products = $this->filterProductsByCategory($cat);
+        } elseif($user) {
+            $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+        } else {
+            $products = $this->getPopularProducts();
+        }
+
+        $manager = new Manager();
+
+        $resource = new Collection($products, new ProductTransformer());
+
+        $resource->setPaginator(new IlluminatePaginatorAdapter($products));
+
+        return $manager->createData($resource);
+    }
+
+
+
+    /**
+     * @param $active integer
+     * @return Category
+     */
+    public function getProductCategories($active)
+    {
+        if($active){
+            $category = ProductCategory::find($active);
+
+            if($category){
+                $children = ProductCategory::where('parent_id', $category->id)->with('translations')->get();
+
+                return $children->count() || !$category->parent_id 
+                    ? $children 
+                    : ProductCategory::where('parent_id', $category->parent_id)->with('translations')->get();
+            }
+        }
+
+        return ProductCategory::whereNull('parent_id')->with('translations')->get();
+    }
+
+
+    /**
+     * Search in products
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search($filters)
+    {   
+        $query = array_get($filters, 'query');
+        $category = array_get($filters, 'cat');
+
+        $products = $this->model->search($query)->where('status', 'active');
+
+        if($category){
+
+            $cats = ProductCategory::where('id', $category)->orWhere('parent_id', $category)->pluck('id')->toArray();
+
+            $ids = $products->get()->pluck('id')->toArray();
+            $ids_ordered = implode(',', $ids);
+
+            $products = $this->model->whereIn('category_id', $cats)->whereIn('id', $ids)->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
+
+        }
+
+        $products = $products->paginate(20);
+
+        $products->load('firstPhoto', 'owner');
+
+        $manager = new Manager();
+
+        $resource = new Collection($products, new ProductTransformer());
+
+        $resource->setPaginator(new IlluminatePaginatorAdapter($products));
+
+        return $manager->createData($resource);
+    }
+
+
+    /**
+     * @param $count integer
+     */
+    public function getPopularProducts($count = 6)
+    {
+        $ids = Activity::select('object', DB::raw('count(activities.object) as total'))
+                    ->whereIn('verb', ['product:viewed', 'product:liked'])
+                    ->groupBy('object')
+                    ->orderBy('total','desc')
+                    ->whereBetween('activities.created_at', [Carbon::now()->subWeek(), Carbon::now()])
+                    ->pluck('object');
+
+        return $this->model->whereIn('id', $ids)->with('firstPhoto', 'owner')->where('status', 'active')->paginate(20);
+    }
+
+
+    /**
+     * Filter products by category
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function filterProductsByCategory($cat)
+    {
+        $cats = ProductCategory::where('id', $cat)->orWhere('parent_id', $cat)->pluck('id')->toArray();
+
+        return $this->model->with('firstPhoto', 'owner')->where('status', 'active')->whereIn('category_id', $cats)->latest()->paginate(20);
+    }
+
+
+    /**
+     * Sync variants with product.
+     *
+     * @param $variants string(json)
+     * @param $product Product
+     */
+    public function syncVariants($variants, Product $product)
+    {
+        $variants = collect(json_decode($variants));
+
+        $models = $variants->map(function ($variant) use ($product) {
+            return $this->updateOrCreateVariant($variant, $product);
+        });
+
+        if($models->count()) {
+            $product->has_variants = true;
+            $product->price = $models->min('price');
+            $product->in_stock = $models->sum('in_stock');
+        }
+
+        return ProductVariant::whereNotIn('id', $models->pluck('id'))->where('product_id', $product->id)->delete();
+    }
+
+
+    /**
+     * Update or create new variant for product.
+     *
+     * @param $variant object
+     * @param $product Product
+     */
+    public function updateOrCreateVariant($variant, Product $product)
+    {
+        $model = new ProductVariant;
+
+        if(isset($variant->id)) {
+            $model = ProductVariant::find($variant->id);
+        }
+
+        $model->fill([
+            'product_id' => $product->id,
+            'name' => $variant->name,
+            'price' => $variant->price,
+            'in_stock' => $variant->in_stock,
+        ]);
+
+        $model->save();
+
+        return $model;
+    }
+
+
+    /**
+     * Sync tags with product.
+     *
+     * @param $tags string(json)
+     * @param $product Product
+     */
+    public function syncTags($tags, Product $product)
+    {
+        $tags = collect(json_decode($tags));
+
+        $ids = $tags->map(function ($tag) use ($product) {
+            $model = $this->updateOrCreateTag($tag, $product);
+            return $model->id;
+        })->flatten();
+
+        return ProductTag::whereNotIn('id', $ids)->where('product_id', $product->id)->delete();
+    }
+
+
+    /**
+     * Update or create new tag for product.
+     *
+     * @param $tag object
+     * @param $product Product
+     *
+     * @return ProductTag
+     */
+    public function updateOrCreateTag($tag, Product $product)
+    {
+        $tag = trim($tag);
+        $slug = str_slug($tag);
+
+        $model = ProductTag::whereTranslation('slug', $slug)->first();
+
+        if(!$model) {
+            $model = ProductTag::create([
+                'name' => $tag,
+                'slug' => $slug,
+                'user_id' => auth()->id()
+            ]);
+        }
+
+        return $model;
+    }
+
+}

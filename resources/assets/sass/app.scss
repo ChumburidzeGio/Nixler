@@ -42,6 +42,7 @@
 @import "./vendor/ng-tags-input";
 @import "./vendor/selector";
 @import "./vendor/ngDialog";
+@import "./vendor/rz-slider";
 
 @import "underscore/core";
 
@@ -50,16 +51,6 @@
 ._c3{color: #4D5061;}._bg3{background: #4D5061;}
 ._c4{color: #5C80BC;}._bg4{background: #5C80BC;}
 ._c5{color: #E9EDDE;}._bg5{background: #E9EDDE;}
-
-@media (max-width: 768px){
-	.container {
-	    padding: 0!important;
-	}
-
-	#app {
-	    margin-top: 50px;
-	}
-}
 
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
@@ -74,4 +65,52 @@
 	._buybtn ._btn {
 		width:100%;
 	}
+}
+
+.product-description h4 {
+	font-size: 15px;
+}
+
+.product-description ul {
+	padding-left: 25px;
+}
+
+
+
+/* Show more directive */
+.show-more-container {
+    overflow: hidden;
+}
+
+.show-more-collapse, .show-more-expand {
+    text-align: center;
+    display: none;
+}
+
+.show-more-expanded > .show-more-collapse {
+    display: inherit;
+}
+
+.show-more-collapsed > .show-more-expand {
+    display: inherit;
+}
+
+
+
+
+
+
+.table-container {
+  display: table;
+}
+
+.table-container .table-row {
+  height: 100%;
+  display: table-row;
+}
+
+.table-container .table-row .table-col {
+  display: table-cell;
+  float: none;
+  vertical-align: top;
 }

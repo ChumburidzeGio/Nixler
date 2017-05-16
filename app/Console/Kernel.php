@@ -13,7 +13,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\Install::class
+        \App\Console\Commands\Install::class,
+        \App\Console\Commands\UpdateStreams::class,
+        \App\Console\Commands\UpdateResponseTimes::class,
+        \App\Console\Commands\DownloadCountryData::class,
     ];
 
     /**

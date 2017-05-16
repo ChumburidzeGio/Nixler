@@ -4,6 +4,66 @@ angular.module('products').controller('SellCtrl', [
         var vm = this;
         vm.media = [];
 
+
+        vm.variants = {
+            items: [],
+            count: function(){
+                return this.items.length;
+            },
+            add: function() {
+                this.items.push({
+                    name: '',
+                    price: null,
+                    in_stock: null
+                });
+            },
+            remove: function(variant) {
+                this.items.splice(this.items.indexOf(variant), 1);
+            },
+            price: function() {
+
+                var prices = this.items.map(function(i){
+                    return i.price;
+                }).filter(function onlyUnique(value, index, self) { 
+                    return self.indexOf(value) === index && value !== null;
+                });
+
+                var min = Math.min(...prices);
+                var max = Math.max(...prices);
+                
+                var price = '0.00';
+
+                if(min != 'Infinity' && max != '-Infinity'){
+                    
+                    if(!min + "".indexOf('.')) min = min + '.00';
+
+                    if(!max + "".indexOf('.')) max = max + '.00';
+
+                    price = (min == max) ? min : min + ' - ' + max;
+                }
+
+                return price;
+            },
+            in_stock: function() {
+
+                return this.items.map(function(i){
+                    return i.in_stock;
+                }).filter(function (value) { 
+                    return value !== null;
+                }).reduce(function(a, b) { 
+                    return a + b; 
+                }, 0);
+
+            }
+        };
+
+        $scope.$watch(function(){
+            return vm.variants.items;
+        }, function() {
+           vm.price = vm.variants.price();
+           vm.in_stock = vm.variants.in_stock();
+        }, true);
+
         vm.selectMedia = function (event) {
             var files = event.target.files;
             if (files.length === 0) return;

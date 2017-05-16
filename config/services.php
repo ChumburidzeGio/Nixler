@@ -73,4 +73,10 @@ return [
     'telegram-bot-api' => [
         'token' => env('TELEGRAM_BOT_TOKEN')
     ],
+
+    'algolia' => [
+        'app_id' => env('ALGOLIA_APP_ID'),
+        'app_search_key' => env('ALGOLIA_APP_SEARCH_KEY'),
+        'app_admin_key' => env('ALGOLIA_APP_ADMIN_KEY')
+    ],
 ];
