@@ -58,7 +58,7 @@
 
 
         <div id="aside" ng-controller="AsideCtrl as vm">
-            <div class="_af _bgb aside_overlay" ng-click="vm.close()"  ng-class="{'active':vm.aside_opened}"></div>
+            <div class="_af aside_overlay" ng-click="vm.close()"  ng-class="{'active':vm.aside_opened}"></div>
             <div class="_al _mhwmax _zi9999 _bgw _aside left" ng-class="{'active':vm.aside_opened}">
 
                 <ul class="_p0">

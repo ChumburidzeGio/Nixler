@@ -8567,14 +8567,12 @@ select._fe {
 
 ._aside {
   min-height: 100%;
-  border: none;
-  transition: all 0.8s cubic-bezier(0.55, 0, 0.1, 1);
-  vertical-align: top;
-  overflow-x: hidden;
-  overflow-y: auto;
-  width: 0;
-  box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.35);
-  -webkit-box-shadow: 2px 0px 15px rgba(0, 0, 0, 0.35);
+    border-right: 1px solid #ececec;
+    transition: all 0.8s cubic-bezier(0.55, 0, 0.1, 1);
+    vertical-align: top;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 0;
 }
 
 ._aside.left {
