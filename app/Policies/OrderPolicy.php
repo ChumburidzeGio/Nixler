@@ -15,18 +15,20 @@ class OrderPolicy
      */
     public function updateStatus(User $user, Order $order, $status)
     {
-        $is_merchant = ($user->id == $order->merchant_id);
+        if($user->id != $order->merchant_id) {
+            return false;
+        }
 
         if($status == 'closed'){
-            return ($user->id == $order->user_id && $order->isStatus('sent'));
+            return $order->isStatus('sent');
         } 
 
         elseif($status == 'rejected' || $status == 'confirmed') {
-            return ($is_merchant && $order->isStatus('created'));
+            return $order->isStatus('created');
         }
 
         elseif($status == 'sent') {
-            return ($is_merchant && $order->isStatus('confirmed'));
+            return $order->isStatus('confirmed');
         }
 
         return false;

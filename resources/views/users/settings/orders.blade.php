@@ -119,8 +119,6 @@
                 </div>
 
 
-                <div class="_bt1">
-
                     <div class="_mb5 _p10 _ta0 _oh _pl15">
                         <form id="logout-form" action="{{ route('order.commit', ['id' => $order->id]) }}" method="POST">
                          {{ csrf_field() }}
@@ -145,15 +143,15 @@
 
                         <div class="_tac">
                         @if($order->status == 'closed' || $order->status == 'rejected')
-                            Order is closed, no opperations available
+                            Order is closed, no opperations available. For return or other issues please <a class="_cbl" href="{{ route('find-thread', ['id' => $order->merchant_id]) }}">contact merchant</a>.
+
+                            <small class="_mt10 _clear">In case of problem please <a class="_cbl" href="{{ route('find-thread', ['id' => 1]) }}">contact us</a>.</small>
                         @endif
                         </div>
 
                         <!--a class="_c2 _bg5 _brds3 _btn _right">Report Order</a-->
                     </div>
 
-
-                </div>
 
             </div>
 

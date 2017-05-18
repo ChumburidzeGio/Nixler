@@ -90,22 +90,22 @@ class OrderStatusChanged extends Notification
                 
             case 'confirmed':
                 $data['to'] = $notifiable->user()->first()->id;
-                $data['message'] = "Merchant confirmed your order. Please go orders page for more information.\n".$notifiable->url();
+                $data['message'] = "Merchant confirmed your order. Please go to orders page for more information.\n".$notifiable->url();
                 break;
                 
             case 'rejected':
                 $data['to'] = $notifiable->user()->first()->id;
-                $data['message'] = "Merchant rejected your order. Please go orders page for more information.\n".$notifiable->url();
+                $data['message'] = "Merchant rejected your order. Please go to orders page for more information.\n".$notifiable->url();
                 break;
                 
             case 'sent':
                 $data['to'] = $notifiable->user()->first()->id;
-                $data['message'] = "Merchant set status of your order as sent. Please go orders page for more information.\n".$notifiable->url();
+                $data['message'] = "Merchant set status of your order as sent. Please go to orders page for more information.\n".$notifiable->url();
                 break;
 
             case 'closed':
                 $data['to'] = $notifiable->merchant()->first()->id;
-                $data['message'] = "The order #".$notifiable->id." is closed. Please go orders page for more information.\n".$notifiable->url();
+                $data['message'] = "The order #".$notifiable->id." is closed. Please go to orders page for more information.\n".$notifiable->url();
                 break;
         }
 
