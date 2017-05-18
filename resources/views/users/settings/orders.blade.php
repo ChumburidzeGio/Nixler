@@ -4,12 +4,8 @@
 
 <div ng-controller="ShipSettingsCtrl as vm">
 
-		<div class="row">
-
 		@if(isset($order))
-        <div class="col-sm-7">
-
-            <div class="_bgw _z013 _brds3 _mb15" ng-init="vm.close = closeThisDialog">
+            <div class="_bgw _z013 _brds3 _mb15">
 
                 <div class="_lh1 _p10 _pl15 _pr15 _cb _fs14 _bb1">Information about order #{{ $order->id }}
                     <span class="_pl5 _pr5 _c2 _bg5 _fs13 _brds3 _mr5 _dib _m5">{{ $order->status }}</span>
@@ -49,7 +45,7 @@
                     <li class="_clear _telipsis">
                         <span class="_cg">Address</span>:  
                         <span>
-                            {{ $order->address->name }} ({{ $order->address->street }})
+                            {{ $order->address }})
                         </span>
                     </li>
                     @endif
@@ -74,15 +70,6 @@
                             {{ $order->currency }} {{ $order->amount }}
                         </span>
                     </li>
-
-                    @if($order->note)
-                    <li class="_clear">
-                        <span class="_cg">Note</span>:  
-                        <span>
-                            {{ $order->note }}
-                        </span>
-                    </li>
-                    @endif
 
                 </div>
 
@@ -169,21 +156,19 @@
                 </div>
 
             </div>
-        </div>
-        @endif
-        <div class="col-sm-{{ isset($order) ? 5 : 12 }}">
+
+        @else
 
             <div class="_z013 _bgw _mb10 _clear _brds3 _mih150 _posr">
                 @forelse($orders as $item)
-                <a class="_lim _hvrd _cg {{ $order->id == $item->id ? '_bg5' :'' }}" 
-                    href="{{ route('order.show', ['id' => $item->id]) }}">
+                <a class="_lim _hvrd _cg _bb1" href="{{ route('settings.orders', ['id' => $item->id]) }}">
                     
                     <div class="pt5">
                         <i class="material-icons _mr15 _va7 _fs18 _left _mt5">
                             {{ $item->user_id == auth()->id() ? 'call_made' : 'call_received'}}
                         </i> 
                         Order #{{ $item->id }} ({{ $item->currency }} {{ $item->amount }})
-                        <span class="_pl5 _pr5 _c2 _fs13 _brds3 _mr5 _dib _m5 {{ $order->id == $item->id ? '_bgw' :'_bg5' }}">
+                        <span class="_pl5 _pr5 _c2 _fs13 _brds3 _mr5 _dib _m5 _bg5">
                             {{ $item->status }}
                         </span>
                         @if($item->product)
@@ -201,9 +186,7 @@
                 @endforelse
 
             </div>
-
-        </div>
-    </div>
+        @endif
 
 </div>
 @endsection

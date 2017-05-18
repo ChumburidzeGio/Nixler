@@ -67,12 +67,11 @@ Route::group([], function()
 	Route::post('/products/{id}/status', 'ProductController@changeStatus')->middleware('auth')->name('product:update:status');
 	Route::post('/products/{id}/schedule', 'ProductController@schedule')->middleware('auth')->name('product:schedule');
 	Route::post('/products/{id}/like', 'ProductController@like')->middleware('auth')->name('product:like');
+	Route::post('products/{id}/order', 'ProductController@order')->name('order');
 });
 
 Route::group(['middleware' => ['auth']], function()
 {
-    Route::get('/order', 'OrderController@create')->name('order');
-    Route::post('/order', 'OrderController@store')->name('order.store');
     Route::post('/orders/{id}/commit', 'OrderController@update')->name('order.commit');
 });
 

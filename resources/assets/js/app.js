@@ -31,6 +31,7 @@
  require('./settings/core');
  require('./user/core');
 
+ 
  var app = angular.module('nx', [
  	'utils',
     'products', 

@@ -99,6 +99,26 @@ class CreateProductsTables extends Migration
             $table->timestamps();
 
         });
+
+        Schema::create('orders', function (Blueprint $table) {
+
+            $table->bigIncrements('id');
+            $table->string('status', 15);
+            $table->decimal('amount', 8, 2)->default(0);
+            $table->string('currency', 3);
+            $table->tinyInteger('quantity')->unsigned()->default(1);
+            $table->string('address');
+            $table->decimal('shipping_cost', 8, 2)->default(0);
+            $table->timestamp('shipping_window_from')->nullable();
+            $table->timestamp('shipping_window_to')->nullable();
+            $table->string('payment_method')->nullable();
+            $table->integer('user_id')->unsigned();
+            $table->integer('product_id')->unsigned();
+            $table->string('product_variant')->nullable();
+            $table->integer('merchant_id')->unsigned();
+            $table->timestamps();
+
+        });
         
     }
 
@@ -109,6 +129,7 @@ class CreateProductsTables extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('orders');
         Schema::dropIfExists('product_variants');
         Schema::dropIfExists('product_tags_t');
         Schema::dropIfExists('product_tags'); 

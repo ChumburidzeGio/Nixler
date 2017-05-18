@@ -1,10 +1,8 @@
 @extends('layouts.general')
 
 @section('app')
-<body class="@yield('body_class')">
-
     
-    <div id="app" class="_pb15 _db" ng-app="nx">
+    <div class="_pb15">
         <nav class="_clear _b0 _bgw _bb1 _cb _ma _tac _mb15" ng-controller="NavCtrl as vm">
 
         @impersonating
@@ -152,12 +150,5 @@
     </div>
 
 </div>
-
-
-<!-- Scripts -->
-<script src="{{ url('js/app.js') }}"></script>
-@include('cookieConsent::index')
-
-</body>
 
 @endsection

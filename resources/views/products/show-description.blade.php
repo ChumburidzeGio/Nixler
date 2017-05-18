@@ -45,7 +45,7 @@
 @endcan
 
 
-@if(auth()->check() && $product->addresses->count())
+{{-- @if(auth()->check() && $product->addresses->count())
 <div class="panel-body _pb15 _pl15 _pr5 _mb10 _bb1">
     @foreach($product->addresses as $address)
     You can get this product on {{ $address['label'] }} for 
@@ -59,7 +59,7 @@
     <i class="_clear">*only you can see it</i>
     @endforeach
 </div>
-@endif
+@endif --}}
 
 @if(!$product->in_stock)
 <div class="_c3 _bg5 _p5 _pl15 _m5 _brds3">

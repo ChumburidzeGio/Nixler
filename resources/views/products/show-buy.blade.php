@@ -13,21 +13,19 @@
         </a>
 
         @else
-        <form method="GET" action="{{ route('order', ['product_id' => $product->id]) }}" class="row _ov">
-
-                <input type="hidden" name="product_id" value="{{ $product->id }}">
-
+        <form method="POST" action="{{ route('order', ['id' => $product->id]) }}" class="row _ov">
+            {{ csrf_field() }}
                 <div id="variant" class="col-xs-8 _mb10" ng-if="vm.variants.length">
                     <select selector
                     model="vm.variant"
-                    value-attr="id"
                     class="_bg5 _brds3"
                     placeholder="Variant"
                     label-attr="name"
                     options="vm.variants"
                     require="true">
                 </select>
-                <input type="hidden" name="variant" ng-value="vm.variant">
+                <input type="hidden" name="variant" ng-value="vm.variant.id">
+                <input type="hidden" name="variant_label" ng-value="vm.variant.name">
             </div>
 
             <div id="quantity" class="_mb10" ng-class="{'col-xs-4':vm.variants.length, 'col-xs-3':!vm.variants.length}">

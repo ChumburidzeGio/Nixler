@@ -14,7 +14,10 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Entities\Activity;
 use App\Entities\ProductVariant;
 use App\Entities\ProductTag;
+use App\Entities\ShippingPrice;
+use App\Entities\Order;
 use Carbon\Carbon;
+use Ayeo\Price\Price;
 use Auth, DB;
 
 class ProductRepository extends BaseRepository {
@@ -67,70 +70,7 @@ class ProductRepository extends BaseRepository {
             ];
         });
 
-        return $this->calculateShippingPriceForProduct($product);
-
         return $product;
-    }
-    
-
-
-    /**
-     * @param $product \App\Entities\Product
-     * @return \App\Entities\Product
-     */
-    public function calculateShippingPriceForProduct($product)
-    {
-        if(auth()->guest()) {
-            $product->owner->shippingPrices->take(2);
-            return $product;
-        }
-
-        $shipping_prices = $product->owner->shippingPrices;
-
-        $user = auth()->user();
-
-        $addresses = $user->addresses()->with('city')->get(['street', 'id', 'city_id', 'country_id']);
-
-        $addresses = $this->calculateShippingPriceForEachAddress($addresses, $shipping_prices);
-
-        $product->setRelation('addresses', $addresses);
-
-        return $product;
-    }
-    
-
-
-    /**
-     * @param $addresses \App\Entities\Address
-     * @param $shipping_prices \App\Entities\ShippingPrice
-     * @return \App\Entities\Address
-     */
-    public function calculateShippingPriceForEachAddress($addresses, $shipping_prices)
-    {
-        return $addresses->map(function($address) use ($shipping_prices) {
-
-            $shipping = $shipping_prices->filter(function($item) use ($address) {
-                return ($item->type == 'city' && $item->location_id == $address->city_id);
-            });
-
-            if(!$shipping->count()){
-                $shipping = $shipping_prices->filter(function($item) use ($address) {
-                    return ($item->type == 'country' && $item->location_id == $address->country_id);
-                });
-            }
-
-            $address->shipping = $shipping->map(function($item){
-                extract($item->toArray());
-                return compact('price', 'currency', 'window_from', 'window_to');
-            })->first();
-
-            return [
-                'id' => $address->id,
-                'label' => $address->street,
-                'shipping' => $address->shipping
-            ];
-
-        });
     }
     
 
@@ -533,6 +473,165 @@ class ProductRepository extends BaseRepository {
                 'slug' => $slug,
                 'user_id' => auth()->id()
             ]);
+        }
+
+        return $model;
+    }
+
+
+    /**
+     * Find product and shipping conditions for this product for each city inside country.
+     *
+     * @param $id integer
+     *
+     * @return array
+     */
+    public function getWithShippingByCity($id)
+    {
+        $product = $this->model->findOrFail($id);
+
+        $product->load('owner.shippingPrices', 'owner.country.cities');
+
+        $prices = $product->owner->shippingPrices;
+
+        $cities = $product->owner->country()->first()->cities;
+
+        $cities->transform(function($city) use ($prices) {
+
+            $shipping = $prices->filter(function($item) use ($city) {
+                return ($item->type == 'city' && $item->location_id == $city->id);
+            });
+
+            if(!$shipping->count()){
+                $shipping = $prices->filter(function($item) use ($city) {
+                    return ($item->type == 'country' && $item->location_id == $city->country_id);
+                });
+            }
+
+            $shipping_text = $shipping_price = null;
+
+            $shipping = $shipping->map(function($item){
+                extract($item->toArray());
+                return compact('price', 'currency', 'window_from', 'window_to');
+            })->first();
+
+            if($shipping) {
+                $delivery = $shipping['window_from'] == $shipping['window_to'] 
+                ? "{$shipping['window_from']} day" 
+                : "{$shipping['window_from']}-{$shipping['window_to']} days";
+
+                $price = $shipping['price'] == '0.00' ? 'free' : $shipping['currency'].$shipping['price'];
+
+                $shipping_text = "Delivery in {$delivery} for {$price}";
+                
+                $shipping_price = $shipping['price'];
+            }
+
+            return [
+                'id' => $city->id,
+                'label' => $city->name,
+                'shipping' => $shipping_text,
+                'shipping_price' => $shipping_price,
+            ];
+
+        });
+
+        return compact('product', 'cities');
+    }
+
+
+    /**
+     * Store new order
+     *
+     * @param $id integer
+     * @param $quantity int
+     * @param $variant int
+     *
+     * @return Order
+     */
+    public function order($id, $quantity, $variant)
+    {
+        $product = $this->model->findOrFail($id);
+
+        $user = auth()->user();
+
+        if($product->has_variants) {
+
+            $variant = ProductVariant::where('product_id', $product->id)->findOrFail($variant);
+
+            $productPrice = Price::buildByGross($variant->price, 0, $product->currency);
+
+        } else {
+            $productPrice = Price::buildByGross($product->price, 0, $product->currency);
+        }
+
+        $subTotal = $productPrice->multiply($quantity);
+
+        $mShippingPrice = $this->getShippingPriceForCity($user->city_id, $product->owner_id);
+
+        $shippingPrice = Price::buildByGross($mShippingPrice->price, 0, $product->currency);
+
+        $total = $productPrice->add($shippingPrice)->getGross();
+
+        $windowFrom = Carbon::now()->addDays($mShippingPrice->window_from);
+
+        $windowTo = Carbon::now()->addDays($mShippingPrice->window_to);
+
+        $order = Order::create([
+            'status' => 'created',
+            'amount' => $total,
+            'currency' => $product->currency,
+            'quantity' => $quantity,
+            'address' => $user->getMeta('address'),
+            'shipping_cost' => $shippingPrice->getGross(),
+            'shipping_window_from' => $windowFrom,
+            'shipping_window_to' => $windowTo,
+            'payment_method' => 'COD',
+            'user_id' => $user->id,
+            'product_id' => $product->id,
+            'product_variant' => $variant->name,
+            'merchant_id' => $product->owner_id
+        ]);
+
+        if($product->has_variants) {
+
+            $variant->decrement('in_stock', $quantity);
+
+            $variant->update();
+
+        } else {
+
+            $product->decrement('in_stock', $quantity);
+
+            $product->update();
+
+        }
+
+        return $order;
+    }
+
+
+    /**
+     * Get shippng price for particular city
+     *
+     * @param $city_id int
+     * @param $merchant_id int
+     *
+     * @return float
+     */
+    public function getShippingPriceForCity($city_id, $merchant_id)
+    {
+        $model = ShippingPrice::where([
+            'user_id' => $merchant_id,
+            'type' => 'city',
+            'location_id' => $city_id
+        ])->first();
+
+        if(!$model) {
+            $model = ShippingPrice::where([
+                'user_id' => $merchant_id,
+                'type' => 'country',
+            ])->firstOrFail();
         }
 
         return $model;

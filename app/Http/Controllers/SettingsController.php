@@ -95,11 +95,14 @@ class SettingsController extends Controller
     public function orders(Request $request)
     {
         $user = auth()->user();
-
-        $orders = Order::where('user_id', $user->id)->orWhere('merchant_id', $user->id)->with('product')->latest()->paginate();
-
+       
         if($request->has('id')) {
-          $order = Order::where('id', $id)->where('user_id', $user->id)->with('product', 'product.owner', 'address')->firstOrFail();
+            $order = Order::where([
+                'id' => $request->input('id'),
+                'user_id' => $user->id
+            ])->with('product', 'product.owner')->firstOrFail();
+        } else {
+            $orders = Order::where('user_id', $user->id)->orWhere('merchant_id', $user->id)->with('product')->latest()->paginate();
         }
         
         return view('users.settings.orders', compact('user', 'order', 'orders'));

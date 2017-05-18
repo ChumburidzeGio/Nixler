@@ -209,8 +209,10 @@ class UserRepository extends BaseRepository {
             'username', 'name', 'email', 'city_id'
         ]));
 
-        $user->phone = PhoneService::parse(array_get($data, 'phone'), $user->country)->number;
-
+        if(array_get($data, 'phone')) {
+            $user->phone = PhoneService::parse(array_get($data, 'phone'), $user->country)->number;
+        }
+        
         if($user->phone != $user->getOriginal('phone')) {
             $user->verified = false;
             $code = mt_rand(100000, 999999);
@@ -223,6 +225,8 @@ class UserRepository extends BaseRepository {
             $user->verified = true;
         }
 
+        $user->setMeta('address', array_get($data, 'address'));
+        
         $user->setMeta('headline', array_get($data, 'headline'));
 
         $user->setMeta('website', array_get($data, 'website'));

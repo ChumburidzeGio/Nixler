@@ -36,12 +36,6 @@
                         @endif
 
 
-
-                        
-
-
-
-
         <div class="_pl15 _pr10 _pb10 _posr _pt10 row">
             <div class="col-md-8">
             

@@ -9,6 +9,7 @@ use App\Entities\Product;
 use App\Entities\User;
 use App\Entities\ShippingPrice;
 use App\Repositories\ProductRepository;
+use App\Repositories\UserRepository;
 
 class ProductController extends Controller
 {
@@ -18,8 +19,11 @@ class ProductController extends Controller
      */
     protected $repository;
 
-    public function __construct(ProductRepository $repository){
+    protected $userRepository;
+
+    public function __construct(ProductRepository $repository, UserRepository $userRepository){
         $this->repository = $repository;
+        $this->userRepository = $userRepository;
     }
 
 
@@ -158,6 +162,58 @@ class ProductController extends Controller
         return [
             'success' => $this->repository->like($id)
         ];
+    }
+
+    /**
+     * Order product
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function order($id, Request $request)
+    {
+        $user = auth()->user();
+
+        if(!$request->has('step')) {
+
+            $data = $this->repository->getWithShippingByCity($id, $request->all());
+
+            return view('products.order', $data);
+
+        } elseif($request->input('step') == 2) {
+
+            $this->validate($request, [
+                'phone' => ['phone:'.$user->country, 'phone_unique:'.$user->country],
+                'city_id' => 'required|numeric',
+                'address' => 'required|string',
+                'quantity' => 'required|numeric',
+                'variant' => 'required|nullable|numeric',
+            ]);
+
+            $this->userRepository->update($request->all());
+
+            if($user->verified) {
+
+                $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
+
+                return redirect()->route('settings.orders', ['id' => $order->id]);
+
+            }
+
+            return view('products.order-step2', compact('id'));
+
+        } elseif($request->input('step') == 3) {
+
+            $this->validate($request, [
+                'pcode' => 'required|numeric|digits:6',
+            ]);
+
+            $user = $this->userRepository->update($request->all());
+
+            $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
+
+            return redirect()->route('settings.orders', ['id' => $order->id]);
+
+        }
     }
 
 }

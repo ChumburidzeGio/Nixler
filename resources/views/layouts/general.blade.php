@@ -36,5 +36,13 @@
     </script>
 
 </head>
-@yield('app')
+<body class="@yield('body_class')">
+    
+    <div id="app" class="_db" ng-app="nx">
+    @yield('app')
+    </div>
+
+    <script src="{{ url('js/app.js') }}"></script>
+    @include('cookieConsent::index')
+</body>
 </html>
