@@ -37,7 +37,7 @@ class MessengerRepository extends BaseRepository {
 
         $participantsKeyed = $rThread->participants->keyBy('id');
 
-        $messages = $this->groupMessages($rThread->messages);
+        $messages = /*$this->groupMessages(*/$rThread->messages/*)*/;
 
         $thread->messages = $messages->map(function($item) use ($participantsKeyed) {
             return [

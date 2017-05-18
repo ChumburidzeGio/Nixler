@@ -20,7 +20,7 @@ class MessagesChannel
     {
         $params = $notification->toMessages($notifiable);
 
-        $messagable = array_get($params, 'to') ? : $notifiable;
+        $messagable = array_get($params, 'to') ? : $notifiable->id;
 
         $sender = array_get($params, 'from');
 
@@ -29,9 +29,12 @@ class MessagesChannel
         $users = User::whereIn('id', [$messagable, $sender])->get();
 
         foreach ($users as $user) {
+            
             if(is_int($sender) && $user->id == $sender){
                 $sender = $user;
-            } else if(is_int($messagable) && $user->id == $messagable){
+            } 
+
+            if(is_int($messagable) && $user->id == $messagable){
                 $messagable = $user;
             }
         }
