@@ -42,7 +42,7 @@ class AlgoliaService
         $searchSettings = [];
 
         foreach ($settings as $key => $value) {
-            if(in_array($key, ['facets', 'numericFilters'])){
+            if(in_array($key, ['facets', 'numericFilters', 'filters'])){
                 $searchSettings[$key] = $value;
             } else {
                 $generalSettings[$key] = $value;

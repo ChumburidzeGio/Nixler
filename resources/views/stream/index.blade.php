@@ -52,7 +52,10 @@
 		</div>
 		<div class="col-lg-9 col-md-10 col-xs-12">
 
-		@if(request()->has('query'))
+		@if(request()->has('query') && $facets->count() > 0)
+
+			<script>window.facets = {!! $facets->toJson() !!};</script>
+
 			<div class="_db _tbs _ov">
 				<div class="_tb _crp">
 					<span ng-click="vm.showPriceRange=!vm.showPriceRange" ng-class="{'_zi999': vm.showPriceRange}">
@@ -61,7 +64,7 @@
 
 					<div class="_af _bgwt2 _zi999" ng-if="vm.showPriceRange" ng-click="vm.showPriceRange=0"></div>
 
-					<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange">
+					<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange" ng-init="vm.filters.price.min={{ request()->input('price_min') }};vm.filters.price.max={{ request()->input('price_max') }};">
 						<div class="_clear">
 							<span class="_fs17 _clear">@{{ vm.filters.price.min }}zł - @{{ vm.filters.price.max }}zł</span>
 							<span class="">The average price of product is @{{ vm.filters.price.avg }}zł.</span>
@@ -97,17 +100,21 @@
 
 					   <div class="_db _tbs _ov _mt5">
 							<div class="_tb _crp _pl5 _fs15 _pb0" ng-click="vm.showPriceRange=0">Cancel</div>
-							<div class="_tb _crp _c4 _right _pr5 _fs15 _pb0">Apply</div>
+							<div class="_tb _crp _c4 _right _pr5 _fs15 _pb0" onclick="event.preventDefault();document.getElementById('search-filters-form').submit();">Apply</div>
+							<form id="search-filters-form" action="{{ route('feed') }}">
+								<input name="query" type="hidden" value="{{ request()->input('query') }}">
+								<input name="price_min" type="hidden" ng-value="vm.filters.price.min">
+								<input name="price_max" type="hidden" ng-value="vm.filters.price.max">
+							</form>
 						</div>
+
+						
 
 					</div>
 				</div>
 			</div>
 
 		@endif
-
-
-
 
 		@if(auth()->guest() && !request()->has('cat') && !request()->has('query'))
 		<a class="_cw _clear _p10 _mb15 _brds3 _bgbl _tac _thvrw" href="{{ route('register') }}">

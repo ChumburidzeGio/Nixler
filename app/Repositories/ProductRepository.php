@@ -18,6 +18,7 @@ use App\Entities\ShippingPrice;
 use App\Entities\Order;
 use Carbon\Carbon;
 use Ayeo\Price\Price;
+use App\Services\AlgoliaService;
 use Auth, DB;
 
 class ProductRepository extends BaseRepository {
@@ -317,6 +318,15 @@ class ProductRepository extends BaseRepository {
 
 
     /**
+     * Price filter
+     */
+    public function filterPrice($value)
+    {   
+        return filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+    }
+
+
+    /**
      * Search in products
      *
      * @return \Illuminate\Http\Response
@@ -324,9 +334,34 @@ class ProductRepository extends BaseRepository {
     public function search($filters)
     {   
         $query = array_get($filters, 'query');
-        $category = array_get($filters, 'cat');
 
-        $products = $this->model->search($query)->where('status', 'active');
+        $category = intval(array_get($filters, 'cat'));
+
+        $priceMin = $this->filterPrice(array_get($filters, 'price_min', 0));
+
+        $priceMax = $this->filterPrice(array_get($filters, 'price_max', 9999));
+
+        $params = [
+            //'customRanking' => ['desc(price)'],
+            'hitsPerPage' => 50,
+            'attributesToRetrieve' => ['objectID'],
+            //'attributesForFaceting' => ["price", "category_id"],
+            'attributesToHighlight' => [],
+            'facets' => ['price'],
+            'numericFilters' => ["price:{$priceMin} TO {$priceMax}"],
+            //'aroundLatLng' => '40.71, -74.01'
+        ];
+
+        if($category) {
+            $params['filters'] = "category_id:{$category}";
+        }
+
+        $results = (new AlgoliaService)->search('products', $query, $params);
+
+        $ids = array_flatten(array_get($results, 'hits'));
+
+        $facets = $this->transformSearchFacets(array_get($results, 'facets'), $ids);
+        /*$products = $this->model->search($query)->where('status', 'active');
 
         if($category){
 
@@ -337,12 +372,37 @@ class ProductRepository extends BaseRepository {
 
             $products = $this->model->whereIn('category_id', $cats)->whereIn('id', $ids)->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
 
+        }*/
+
+        $products = $this->findByIds($ids)->with('firstPhoto', 'owner')->paginate(20);
+
+        $products = $this->transformToCollection($products);
+
+        return compact('products', 'facets');
+    }
+
+
+    /**
+     * @param $count integer
+     */
+    public function transformSearchFacets($facets, $ids)
+    {
+        if(!$facets || count($ids) < 10) {
+            return collect([]);
         }
 
-        $products = $products->paginate(20);
+        $facets['price'][9999] = 0;
+        $facets['price'][0] = 0;
 
-        $products->load('firstPhoto', 'owner');
+        return collect($facets);
+    }
 
+
+    /**
+     * @param $count integer
+     */
+    public function transformToCollection($products)
+    {
         $manager = new Manager();
 
         $resource = new Collection($products, new ProductTransformer());
@@ -350,6 +410,17 @@ class ProductRepository extends BaseRepository {
         $resource->setPaginator(new IlluminatePaginatorAdapter($products));
 
         return $manager->createData($resource);
+    }
+
+
+    /**
+     * @param $count integer
+     */
+    public function findByIds($ids)
+    {
+        $ids_ordered = implode(',', $ids);
+
+        return $this->model->whereIn('id', $ids)->where('status', 'active')->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
     }
 
 

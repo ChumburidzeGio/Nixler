@@ -32,7 +32,7 @@ angular.module('stream', [])
 			return {
 				min: Math.min(...Object.keys(prices)),
 				max: Math.max(...Object.keys(prices)),
-				avg: calculateAvg(prices)
+				avg: calculateAvg(prices),
 			};
 		};
 
@@ -71,39 +71,22 @@ angular.module('stream', [])
 
 		$timeout(function(){
 
-			vm.grices = {
-				55: 23,
-				78: 50,
-				5200: 14,
-				1200: 12,
-				580: 25,
-				125: 50,
-				300: 26,
-				450: 1,
-				854: 6,
-				200: 2,
-				510: 1,
-				311: 1,
-				412: 3,
-				53: 6,
-				2552: 2,
-				686: 1,
-				123: 1,
-				745: 3,
-				4567: 3,
-				9785: 3,
-			};
+			if(window.facets) {
 
-			vm.filters.price = calcPriceRange(vm.grices);
+				vm.grices = window.facets.price;
 
-			vm.priceSliderOptions = {
-				ceil: vm.filters.price.max,
-				floor: vm.filters.price.min,
-				step: 1,
-				precision: 1,
-				showTicksValues: true,
-				stepsArray: pricesToRange(vm.grices, vm.filters.price.min, vm.filters.price.max)
-			};
+				vm.filters.price = calcPriceRange(vm.grices);
+
+				vm.priceSliderOptions = {
+					ceil: vm.filters.price.max,
+					floor: vm.filters.price.min,
+					step: 1,
+					precision: 1,
+					showTicksValues: true,
+					stepsArray: pricesToRange(vm.grices, vm.filters.price.min, vm.filters.price.max)
+				};
+				
+			}
 
 		});
 

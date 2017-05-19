@@ -52,8 +52,12 @@ class StreamController extends Controller
 
         if($request->has('query')){
 
-            $products = $this->productRepository->search($request->only('query', 'cat'));
+            $result = $this->productRepository->search($request->all());
             
+            $products = array_get($result, 'products');
+
+            $facets = array_get($result, 'facets');
+
             if(!$request->has('cat')){
                 $users = $this->repository->searchUsers($request->input('query'));
             }
@@ -64,7 +68,7 @@ class StreamController extends Controller
 
         $categories = $this->productRepository->getProductCategories($request->input('cat'));
 
-        return $request->isMethod('post') ? $products->toJson() : view('stream.index', compact('products', 'categories', 'users'));
+        return $request->isMethod('post') ? $products->toJson() : view('stream.index', compact('products', 'categories', 'users', 'facets'));
     }
 
 }
