@@ -133,9 +133,9 @@ class RecommService {
      *
      * @return string
      */
-    public function removeProduct($product)
+    public function removeProduct($id)
     {   
-        return $this->send(new Reqs\DeleteItem($product->id));
+        return $this->send(new Reqs\DeleteItem($id));
     }
 
 

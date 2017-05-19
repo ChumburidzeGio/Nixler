@@ -126,11 +126,9 @@ class ProductController extends Controller
      */
     public function delete($id)
     {
-        $user = auth()->user();
-        $product = $user->products()->findOrFail($id);
-        $product->delete();
+        $this->repository->delete($id);
 
-        return redirect($user->link());
+        return redirect('/');
     }
 
     /**

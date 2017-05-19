@@ -35,6 +35,17 @@ class AlgoliaService
      * @param $content array
      * @param $objectId integer
      */
+    public function deleteObject($index, $objectId) 
+    {
+        $index = $this->clint->initIndex(config('app.env')."_{$index}");
+        
+        return $index->deleteObject($objectId)
+    }
+
+    /**
+     * @param $content array
+     * @param $objectId integer
+     */
     public function search($index, $query, $settings) 
     {
         $generalSettings = [];

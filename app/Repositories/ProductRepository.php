@@ -19,6 +19,8 @@ use App\Entities\Order;
 use Carbon\Carbon;
 use Ayeo\Price\Price;
 use App\Services\AlgoliaService;
+use App\Notifications\ProductUpdated;
+use App\Notifications\ProductDeleted;
 use Auth, DB;
 
 class ProductRepository extends BaseRepository {
@@ -44,7 +46,7 @@ class ProductRepository extends BaseRepository {
         $product = $this->model->where(compact('slug', 'owner_username'))->firstOrFail();
 
         if(!$product->is_active) {
-            abort_if(auth()->guest() || auth()->user()->cannot('view', $product), 403);
+            abort_if(auth()->guest() || auth()->user()->cannot('view', $product), 404);
         }
 
         $product->load('owner.shippingPrices', 'category');
@@ -164,6 +166,7 @@ class ProductRepository extends BaseRepository {
         $product->save();
 
         if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
+            $product->notify(new ProductUpdated);
             $product->markAsActive();
         }
 
@@ -361,18 +364,6 @@ class ProductRepository extends BaseRepository {
         $ids = array_flatten(array_get($results, 'hits'));
 
         $facets = $this->transformSearchFacets(array_get($results, 'facets'), $ids);
-        /*$products = $this->model->search($query)->where('status', 'active');
-
-        if($category){
-
-            $cats = ProductCategory::where('id', $category)->orWhere('parent_id', $category)->pluck('id')->toArray();
-
-            $ids = $products->get()->pluck('id')->toArray();
-            $ids_ordered = implode(',', $ids);
-
-            $products = $this->model->whereIn('category_id', $cats)->whereIn('id', $ids)->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
-
-        }*/
 
         $products = $this->findByIds($ids)->with('firstPhoto', 'owner')->paginate(20);
 
@@ -706,6 +697,26 @@ class ProductRepository extends BaseRepository {
         }
 
         return $model;
+    }
+
+
+    /**
+     * Get shippng price for particular city
+     *
+     * @param $city_id int
+     * @param $merchant_id int
+     *
+     * @return float
+     */
+    public function delete($id)
+    {
+        $user = auth()->user();
+
+        $product = $user->products()->findOrFail($id);
+        
+        $product->notify(new ProductDeleted);
+
+        $product->delete();
     }
 
 }
