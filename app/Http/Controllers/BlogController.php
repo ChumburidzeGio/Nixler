@@ -12,6 +12,7 @@ class BlogController extends Controller
     protected $repository;
 
     public function __construct(BlogRepository $repository) {
+        parent::__construct();
         $this->repository = $repository;
     }
 

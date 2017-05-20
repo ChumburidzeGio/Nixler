@@ -24,6 +24,7 @@ class SettingsController extends Controller
      */
     public function __construct(UserRepository $repository)
     {
+        parent::__construct();
         $this->middleware('auth', ['except' => 'updateLocale']);
         $this->repository = $repository;
     }

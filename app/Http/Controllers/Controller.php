@@ -11,4 +11,11 @@ use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests, SEOToolsTrait;
+
+    public function __construct(){
+        $this->seo()->metatags()->setTitleDefault("Nixler");
+        $this->seo()->opengraph()->setTitle(trans('app.title'));
+        $this->seo()->setDescription(trans('app.description'));
+        $this->seo()->addImages([url('/img/meta.jpg')]);
+    }
 }

@@ -18,6 +18,7 @@ class ShippingController extends Controller
     protected $repository;
 
     public function __construct(ShippingRepository $repository){
+        parent::__construct();
         $this->repository = $repository;
     }
 

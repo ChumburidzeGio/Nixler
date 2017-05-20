@@ -19,6 +19,7 @@ class MessagesController extends Controller
     protected $repository;
 
     public function __construct(MessengerRepository $repository){
+        parent::__construct();
         $this->repository = $repository;
     }
 

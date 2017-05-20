@@ -16,6 +16,7 @@ class SocialAuthController extends Controller
     protected $repository;
 
     public function __construct(UserRepository $repository) {
+        parent::__construct();
         $this->repository = $repository;
     }
 

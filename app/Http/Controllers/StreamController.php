@@ -20,6 +20,7 @@ class StreamController extends Controller
     protected $productRepository;
 
     public function __construct(StreamRepository $repository, ProductRepository $productRepository){
+        parent::__construct();
         $this->repository = $repository;
         $this->productRepository = $productRepository;
     }

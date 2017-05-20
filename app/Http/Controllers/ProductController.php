@@ -23,6 +23,7 @@ class ProductController extends Controller
     protected $userRepository;
 
     public function __construct(ProductRepository $repository, UserRepository $userRepository){
+        parent::__construct();
         $this->repository = $repository;
         $this->userRepository = $userRepository;
     }

@@ -21,7 +21,6 @@ class MediaController extends Controller
     }
 
 
-
     public function generate ($id = '-', $type, $place)
     {   
         return response()->photo(
