@@ -48,6 +48,8 @@ class Install extends Command
             $this->setFakeData();
         }
 
+        $this->call('server-monitor:add-host');
+        
         $this->call('optimize');
         $this->call('cache:clear');
         

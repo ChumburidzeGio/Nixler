@@ -27,8 +27,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('stream:update')->everyTenMinutes();
         $schedule->command('response_times:update')->daily();
+        $schedule->command('stream:update')->everyTenMinutes();
+        $schedule->command('server-monitor:run-checks')->everyMinute();
     }
 
     /**

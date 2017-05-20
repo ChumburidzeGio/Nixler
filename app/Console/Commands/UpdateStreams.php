@@ -47,6 +47,8 @@ class UpdateStreams extends Command
     public function handle()
     {
         $this->repository->updateStreams();
+
+        info('Streams updated succesfully!');
     }
 
 }

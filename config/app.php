@@ -191,6 +191,7 @@ return [
         Keevitaja\Linguist\LinguistServiceProvider::class,
         Silber\Bouncer\BouncerServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
+        Spatie\ServerMonitor\ServerMonitorServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*

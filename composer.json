@@ -53,6 +53,7 @@
         "silber/bouncer": "v1.0.0-beta.2",
         "spatie/laravel-cookie-consent": "^1.8",
         "spatie/laravel-newsletter": "^3.4",
+        "spatie/laravel-server-monitor": "^1.2",
         "teamtnt/tntsearch": "^1.0",
         "torann/geoip": "^1.0",
         "watson/validating": "^3.0"
