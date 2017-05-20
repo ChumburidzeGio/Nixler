@@ -193,6 +193,7 @@ return [
         Lab404\Impersonate\ImpersonateServiceProvider::class,
         Spatie\ServerMonitor\ServerMonitorServiceProvider::class,
         Spatie\Backup\BackupServiceProvider::class,
+        App\Providers\GoogleDriveServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*

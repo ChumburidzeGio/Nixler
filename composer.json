@@ -38,6 +38,7 @@
         "league/fractal": "^0.15.0",
         "menarasolutions/geographer": "^0.3.3",
         "mpociot/botman": "^1.4",
+        "nao-pon/flysystem-google-drive": "~1.1",
         "nckg/laravel-minify-html": "^1.1",
         "nexmo/client": "@beta",
         "nlp-tools/nlp-tools": "^0.1.3",

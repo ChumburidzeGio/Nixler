@@ -8,7 +8,7 @@ return [
          * The name of this application. You can use this name to monitor
          * the backups.
          */
-        'name' => env('APP_URL'),
+        'name' => env('APP_DOMAIN'),
 
         'source' => [
 
@@ -80,7 +80,7 @@ return [
             \Spatie\Backup\Notifications\Notifications\BackupHasFailed::class         => ['slack'],
             \Spatie\Backup\Notifications\Notifications\UnhealthyBackupWasFound::class => ['slack'],
             \Spatie\Backup\Notifications\Notifications\CleanupHasFailed::class        => ['slack'],
-            \Spatie\Backup\Notifications\Notifications\BackupWasSuccessful::class     => ['slack'],
+            \App\Notifications\BackupWasSuccessful::class     => ['slack', \App\Channels\GoogleDriveChannel::class],
             \Spatie\Backup\Notifications\Notifications\HealthyBackupWasFound::class   => ['slack'],
             \Spatie\Backup\Notifications\Notifications\CleanupWasSuccessful::class    => ['slack'],
         ],
