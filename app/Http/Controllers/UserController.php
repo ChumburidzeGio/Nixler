@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Entities\User;
 use App\Repositories\UserRepository;
+use App\Repositories\MediaRepository;
 
 class UserController extends Controller
 {
@@ -33,6 +34,16 @@ class UserController extends Controller
         $tab = $req->has('tab') && in_array($req->input('tab'), $tab_whitelist) ? $req->input('tab') : 'profile';
 
         $data = $this->repository->find($id, $tab);
+
+        $user = $data['user'];
+
+        $this->seo()->setTitle($user->name." ({$user->username})");
+
+        $this->seo()->setDescription($user->headline);
+
+        $this->seo()->opengraph()->addImages([$user->avatar('profile')]);
+
+        $this->seo()->opengraph()->addProperty('type', 'profile');
 
         return view('users.profile.'.$data['view'], $data);
     }
@@ -89,9 +100,10 @@ class UserController extends Controller
 
         $media = $user->getMedia('avatar')->first();
         $id = $media ? $media->id : '-';
-        $ts = isset($media->created_at) ? strtotime($media->created_at) : 0;
 
-        return redirect('/media/'.$id.'/avatar/'.$place.'.jpg?='.$ts, 302);
+        return response()->photo(
+            app(MediaRepository::class)->generate($id, 'avatar', $place)
+        );
     }
 
 
