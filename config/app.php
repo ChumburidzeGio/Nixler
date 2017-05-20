@@ -192,6 +192,7 @@ return [
         Silber\Bouncer\BouncerServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
         Spatie\ServerMonitor\ServerMonitorServiceProvider::class,
+        Spatie\Backup\BackupServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*
