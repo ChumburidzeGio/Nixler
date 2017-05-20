@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Entities\Product;
 use App\Entities\User;
+use App\Entities\Order;
 use App\Entities\ShippingPrice;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
@@ -35,6 +36,14 @@ class ProductController extends Controller
     public function find($uid, $id)
     {
         $product = $this->repository->findBySlug($id, $uid);
+
+        $this->seo()->setTitle($product->title);
+
+        $this->seo()->setDescription($product->description);
+
+        $this->seo()->opengraph()->addImages([$product->photo('full')]);
+
+        $this->seo()->opengraph()->addProperty('type', 'product');
 
         return view('products.show', compact('product'));
     }
@@ -212,6 +221,28 @@ class ProductController extends Controller
             return redirect()->route('settings.orders', ['id' => $order->id]);
 
         }
+    }
+
+    /**
+     * Update the specified resource in storage.
+     * @param  Request $request
+     * @return Response
+     */
+    public function commitOrder($id, Request $request)
+    {
+        $user = auth()->user();
+
+        $order = Order::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+
+        $status = $request->input('status');
+
+        if($user->can('update-status', [$order, $status])){
+            $order->update([
+                'status' => $status
+            ]);
+        }
+
+        return redirect()->route('settings.orders', ['id' => $order->id]);
     }
 
 }

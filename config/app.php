@@ -186,7 +186,6 @@ return [
         Spatie\CookieConsent\CookieConsentServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Torann\GeoIP\GeoIPServiceProvider::class,
-        Laravel\Dusk\DuskServiceProvider::class,
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
         NotificationChannels\Telegram\TelegramServiceProvider::class,
         Keevitaja\Linguist\LinguistServiceProvider::class,

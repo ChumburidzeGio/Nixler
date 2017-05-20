@@ -68,6 +68,7 @@ Route::group([], function()
 	Route::post('/products/{id}/schedule', 'ProductController@schedule')->middleware('auth')->name('product:schedule');
 	Route::post('/products/{id}/like', 'ProductController@like')->middleware('auth')->name('product:like');
 	Route::post('products/{id}/order', 'ProductController@order')->name('order');
+	Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 });
 
 Route::group(['middleware' => ['auth']], function()

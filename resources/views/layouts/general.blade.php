@@ -14,13 +14,11 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {!! app('seotools')->generate() !!}
-
-    
+    {!! app('seotools')->metatags()->generate() !!}
+    {!! app('seotools')->opengraph()->generate() !!}
 
     <!-- Browser theme styling -->
     <meta content="#ffffff" name="msapplication-TileColor" />
-    {{--<meta content="assets/brand/touch-icons/ms-icon-144x144.png" name="msapplication-TileImage" />--}}
     <meta content="#ffffff" name="theme-color" />
 
     <!-- Stylesheets -->
