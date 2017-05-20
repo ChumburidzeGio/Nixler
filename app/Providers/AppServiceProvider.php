@@ -8,13 +8,13 @@ use Laravel\Dusk\DuskServiceProvider;
 use Bouncer, Validator;
 use App\Observers\OrderObserver;
 use App\Entities\Order;
-use App\Observers\ProductObserver;
-use App\Entities\Product;
 use App\Observers\ActivityObserver;
 use App\Entities\Activity;
 use App\Observers\UserObserver;
 use App\Entities\User;
 use App\Services\PhoneService;
+use Illuminate\Support\Facades\Response as ResponseFacade;
+use Illuminate\Http\Response;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,13 +27,21 @@ class AppServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
         Order::observe(OrderObserver::class);
-        Product::observe(ProductObserver::class);
         Activity::observe(ActivityObserver::class);
 
         Schema::defaultStringLength(191);
 
         Bouncer::cache();
 
+        ResponseFacade::macro('photo', function ($value) {
+            $response = new Response($value);
+            $response->header('Content-Type', 'image/jpg');
+            $response->header('content-transfer-encoding', 'binary');
+            $response->header('Pragma', 'public');
+            $response->header('Cache-Control', 'max-age=86400');
+            $response->header('Expires', gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
+            return $response;
+        });
         
         Validator::extend('ownpass', function ($attribute, $value, $parameters) {
             return (auth()->check() && Hash::check($value, auth()->user()->password));
