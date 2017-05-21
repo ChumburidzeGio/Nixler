@@ -35,11 +35,11 @@
 <div class="_tbs _ov _tar _bg5 _m5 _brds3  _pl5">
 
     <small class="_tb _crp _left">
-        You can manage this product
+        @lang('You can manage with this product')
     </small>
 
     <a class="_tb _crp _anim1 _fs13 _ls5 _c4" href="{{ route('product.edit', ['id' => $product->id]) }}">
-        Edit or Delete
+        @lang('Edit or Delete')
     </a>
 </div>
 @endcan
@@ -63,14 +63,14 @@
 
 @if(!$product->in_stock)
 <div class="_c3 _bg5 _p5 _pl15 _m5 _brds3">
-    Product is out of stock, please contact owner or check comments for more information.
+    @lang('Product is out of stock, please contact owner or check comments for more information.')
 </div>
 @endif
 
 
 @if(auth()->check() && $product->currency !== auth()->user()->currency)
 <div class="_c3 _bg5 _p5 _pl15 _m5 _brds3">
-    You can't buy product from this market because of difference in currency.
+    @lang('You can\'t buy product from this market because of difference in currency.')
 </div>
 @endif
 
@@ -89,7 +89,7 @@
                     {{ $product->owner->name }}
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
-                    <div class="_clear" show-more more="Read more" less="Less" height="70">{!! $product->description_parsed !!}</div>
+                    <div class="_clear" show-more more="@lang('Read more')" less="@lang('Show less')" height="70">{!! $product->description_parsed !!}</div>
                 </p>
             </div>
         </div>

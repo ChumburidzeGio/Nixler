@@ -13,14 +13,14 @@
     </div>
 
     <div class="_li _p10 _clear _pr0 _pb5" ng-if="showbtn">
-     <button class="_btn _bg4 _cw _right">Send</button>
+     <button class="_btn _bg4 _cw _right">@lang('Send')</button>
  </div>
 </form>
 @endcan
 
 @cannot('create', \App\Entities\Comment::class)
 <a class="_cb _bg5 _posr _fs14 _brds3 _crp _clear _p5 _tac" href="{{ route('login') }}">
-    Please sign in to write the comment
+    @lang('Please sign in to write the comment')
 </a>
 @endcannot
 
@@ -30,7 +30,7 @@
         <span class="_title _c4">
             <span ng-bind="comment.author"></span>
             <small class="_c2" ng-bind="comment.time | timeAgo"></small>
-            <span ng-show="comment.can_delete" confirm-click="Are you sure?" class="" ng-click="vm.delete(comment)">
+            <span ng-show="comment.can_delete" confirm-click="@lang('Are you sure?')" class="" ng-click="vm.delete(comment)">
                 <span class="_crp _fs12 _ls5 _c2 _mr10 _dib _p3 _pb0 _pt0 _brds3  _bg5 _right">delete</span>
             </span>
         </span>
@@ -40,7 +40,7 @@
 
 <div class="_tbs _tac _bg5 _mt15 _crp" ng-click="vm.load()" ng-if="vm.isMore()">
     <span class="_tb">
-        More comments
+        @lang('More comments')
     </span>
 </div>
 </div>

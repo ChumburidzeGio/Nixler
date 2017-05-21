@@ -1,10 +1,10 @@
 @component('mail::message')
-# {{ trans('users.settings.email.verification.greeting') }}
+# @lang('Hello')!
 
-{{ trans('users.settings.email.verification.text') }}
+@lang('Please use the following security code for your Nixler account')
 
 # {{ $code }}
 
-{{trans('users.settings.email.verification.thanks') }}<br>
-{{trans('users.settings.email.verification.sender') }}
+@lang('Thanks')<br>
+@lang('The Nixler team')
 @endcomponent

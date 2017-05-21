@@ -20,7 +20,7 @@
            {{ csrf_field() }}
 
            <label for="cover-picker-input" class="_m0"> 
-             <span class="label _bgi _crp">Change</span> 
+             <span class="label _bgi _crp">@lang('Change')</span> 
          </label>
 
          <input type="hidden" name="_t" value="2">
@@ -43,7 +43,7 @@
        {{ csrf_field() }}
 
        <label for="avatar-picker-input" class="_m0"> 
-         <span class="label _bgi _crp">Change</span> 
+         <span class="label _bgi _crp">@lang('Change')</span> 
      </label>
 
      <input type="hidden" name="_t" value="1">
@@ -59,7 +59,7 @@
 <span class="_lh1 _et2 _fs24 _clear _c2 _lh1">{{ $user->name }}</span>
 <p class="_clear _fs14 _cbt8">
  @if(!$user->getMeta('headline'))
- Member since: {{ $user->created_at->format('F jS, Y') }}
+ @lang('Member since'): {{ $user->created_at->format('F jS, Y') }}
  @else
  {{ $user->getMeta('headline') }}
  @endif
@@ -76,19 +76,19 @@
     document.getElementById('shfol12').submit();">
     <i class="material-icons _mr5 _va5 _fs20">
       {{ auth()->check() && auth()->user()->isFollowing($user->id) ? 'check' : 'person_add' }}</i>
-      {{ auth()->check() && auth()->user()->isFollowing($user->id) ? 'Following' : 'Follow' }}
+      {{ auth()->check() && auth()->user()->isFollowing($user->id) ? __('Following') : __('Follow') }}
       <form id="shfol12" action="{{ route('user.follow', ['id' => $user->username]) }}" method="POST" class="_d0">
         {{ csrf_field() }}
     </form>
 </div>
 
 <a class="_btn _bg5 _cb _mt5 _fs15 _p3 _pl15 _pr15" href="{{ route('find-thread', ['id' => $user->id]) }}">
-  <i class="material-icons _mr5 _va5 _fs20">message</i> Message
+  <i class="material-icons _mr5 _va5 _fs20">message</i> @lang('Message')
 </a>
 
 @can('impersonate')
 <a class="_btn _bg5 _cb _mt5 _fs15 _p3 _pl15 _pr15 _ml10" href="{{ route('impersonate', $user->id) }}">
-  <i class="material-icons _mr5 _va5 _fs20">adb</i> Impersonate
+  <i class="material-icons _mr5 _va5 _fs20">adb</i> @lang('Impersonate')
 </a>
 @endcan
 
@@ -98,19 +98,19 @@
 
 <div class="_tbs  _tal _pt4 _fw600 _pl5">
   <a class="_fs12 _tb{{$tab == 'profile' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link() }}">
-    Liked <span class="_fw300 _ml5">{{ $user->liked_count }}</span>
+    @lang('Liked') <span class="_fw300 _ml5">{{ $user->liked_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'products' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('products') }}">
-    Selling <span class="_fw300 _ml5">{{ $user->selling_count }}</span>
+    @lang('Selling') <span class="_fw300 _ml5">{{ $user->selling_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'followers' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('followers') }}">
-    Followers <span class="_fw300 _ml5">{{ $user->followers_count }}</span>
+    @lang('Followers') <span class="_fw300 _ml5">{{ $user->followers_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'followings' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('followings') }}">
-    Following <span class="_fw300 _ml5">{{ $user->followings_count }}</span>
+    @lang('Following') <span class="_fw300 _ml5">{{ $user->followings_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'photos' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('photos') }}">
-    Photos <span class="_fw300 _ml5">{{ $user->media_count }}</span>
+    @lang('Photos') <span class="_fw300 _ml5">{{ $user->media_count }}</span>
 </a>
             <!--a class="_tb _right _fw300" href="/">Share</a>
             <a class="_tb _right _fw300" href="/" onclick='event.preventDefault();if(prompt("Please write shortly the reason")){document.getElementById("avatar-upload-form").submit();}'>Report</a-->

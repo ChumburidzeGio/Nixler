@@ -7,7 +7,7 @@
 		@if(isset($order))
             <div class="_bgw _z013 _brds3 _mb15">
 
-                <div class="_lh1 _p10 _pl15 _pr15 _cb _fs14 _bb1">Information about order #{{ $order->id }}
+                <div class="_lh1 _p10 _pl15 _pr15 _cb _fs14 _bb1">@lang('Information about order') #{{ $order->id }}
                     <span class="_pl5 _pr5 _c2 _bg5 _fs13 _brds3 _mr5 _dib _m5">{{ $order->status }}</span>
                 </div>
 
@@ -34,38 +34,38 @@
                 <div class="_p15 _pt2 _cb _bb1 _bt1">
 
                     <li class="_clear">
-                        <span class="_cg">Type</span>: COD (Cash on Delivery)
+                        <span class="_cg">@lang('Type')</span>: @lang('COD (Cash on Delivery)')
                     </li>
 
                     <li class="_clear">
-                        <span class="_cg">Delivery</span>: {{ $order->shipping_window_from->format('F jS') }} - {{ $order->shipping_window_to->format('F jS') }}
+                        <span class="_cg">@lang('Delivery')</span>: {{ $order->shipping_window_from->format('F jS') }} - {{ $order->shipping_window_to->format('F jS') }}
                     </li>
 
                     @if($order->address)
                     <li class="_clear _telipsis">
-                        <span class="_cg">Address</span>:  
+                        <span class="_cg">@lang('Address')</span>:  
                         <span>
-                            {{ $order->address }})
+                            {{ $order->address }}
                         </span>
                     </li>
                     @endif
 
                     <li class="_clear">
-                        <span class="_cg">Quantity</span>:  
+                        <span class="_cg">@lang('Quantity')</span>:  
                         <span>
                             {{ $order->quantity }}
                         </span>
                     </li>
 
                     <li class="_clear">
-                        <span class="_cg">Shipping cost</span>:  
+                        <span class="_cg">@lang('Shipping cost')</span>:  
                         <span>
                             {{ $order->currency }} {{ $order->shipping_cost }}
                         </span>
                     </li>
 
                     <li class="_clear">
-                        <span class="_cg">Total</span>:  
+                        <span class="_cg">@lang('Total')</span>:  
                         <span>
                             {{ $order->currency }} {{ $order->amount }}
                         </span>
@@ -78,7 +78,7 @@
                     <div class="_tbs _db _ov _tac">
 
                         <span class="_tb _crp _pl0">
-                            <i class="material-icons _c4" tooltips tooltip-template="Product ordered">
+                            <i class="material-icons _c4" tooltips tooltip-template="@lang('Product ordered')">
                                 shopping_basket
                             </i>
                         </span>
@@ -87,11 +87,11 @@
 
                         <span class="_tb _crp _pl0{{ $order->stagePassed('confirmation') ? ' _c4' : ' _c2' }}">
                             @if($order->isStatus('confirmed') || !$order->isStatus('rejected'))
-                            <i class="material-icons" tooltips tooltip-template="Confirmed by merchant">
+                            <i class="material-icons" tooltips tooltip-template="@lang('Confirmed by merchant')">
                                 accessibility
                             </i>
                             @elseif($order->isStatus('rejected'))
-                            <i class="material-icons" tooltips tooltip-template="Rejected">
+                            <i class="material-icons" tooltips tooltip-template="@lang('Rejected')">
                                 remove_shopping_cart
                             </i>
                             @endif
@@ -101,7 +101,7 @@
                         <span class="_tb _pl0"><i class="material-icons _c3">chevron_right</i></span>
 
                         <span class="_tb _crp _pl0{{ $order->stagePassed('shipping') ? ' _c4' : ' _c2' }}">
-                            <i class="material-icons" tooltips tooltip-template="Product sent">
+                            <i class="material-icons" tooltips tooltip-template="@lang('Product sent')">
                                 local_shipping
                             </i>
                         </span>
@@ -109,7 +109,7 @@
                         <span class="_tb _pl0"><i class="material-icons _c3">chevron_right</i></span>
 
                         <span class="_tb _crp _pl0{{ $order->isStatus('closed') ? ' _c4' : ' _c2' }}">
-                            <i class="material-icons" tooltips tooltip-template="Product delievered & order closed">
+                            <i class="material-icons" tooltips tooltip-template="@lang('Product delievered & order closed')">
                                 check
                             </i>
                         </span>
@@ -124,28 +124,28 @@
                          {{ csrf_field() }}
 
                         @can('update-status', [$order, 'confirmed'])
-                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="confirmed">Confirm</button>
+                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="confirmed">@lang('Confirm')</button>
                         @endcan
 
                         @can('update-status', [$order, 'rejected'])
-                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="rejected">Reject</button>
+                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="rejected">@lang('Reject')</button>
                         @endcan
 
                         @can('update-status', [$order, 'sent'])
-                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="sent">Set as Sent</button>
+                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="sent">@lang('Set as Sent')</button>
                         @endcan
 
                         @can('update-status', [$order, 'closed'])
-                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="closed">Set as Delivered</button>
+                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="closed">@lang('Set as Delivered')</button>
                         @endcan
                         
                         </form>
 
                         <div class="_tac">
                         @if($order->status == 'closed' || $order->status == 'rejected')
-                            Order is closed, no opperations available. For return or other issues please <a class="_cbl" href="{{ route('find-thread', ['id' => $order->merchant_id]) }}">contact merchant</a>.
+                            @lang('Order is closed, no opperations available. For return or other issues please') <a class="_cbl" href="{{ route('find-thread', ['id' => $order->merchant_id]) }}">@lang('contact merchant')</a>.
 
-                            <small class="_mt10 _clear">In case of problem please <a class="_cbl" href="{{ route('find-thread', ['id' => 1]) }}">contact us</a>.</small>
+                            <small class="_mt10 _clear">@lang('In case of problem please') <a class="_cbl" href="{{ route('find-thread', ['id' => 1]) }}">@lang('contact us')</a>.</small>
                         @endif
                         </div>
 
@@ -173,14 +173,14 @@
                         <div class="_clear _fs13"> {{ $item->product->title }} </div>
                         @endif
                         <div class="_clear _fs13 _c2">
-                            Delivery at {{ $item->shipping_window_from->format('F jS') }} - {{ $item->shipping_window_to->format('F jS') }} for {{ $item->currency }} {{ $item->shipping_cost }}
+                            @lang('Delivery at') {{ $item->shipping_window_from->format('F jS') }} - {{ $item->shipping_window_to->format('F jS') }} · {{ $item->currency }} {{ $item->shipping_cost }}
                         </div>
                     </div>
 
                 </a>
 
                 @empty
-                <span class="_a0 _posa">You don't have orders yet</span>
+                <span class="_a0 _posa">@lang('You don\'t have orders yet')</span>
                 @endforelse
 
             </div>

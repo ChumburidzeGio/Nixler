@@ -17,12 +17,12 @@
 				@if(request()->input('cat'))
 				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
 					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
-					<i class="material-icons _fs18 _mr15 _va4">arrow_back</i> Go back
+					<i class="material-icons _fs18 _mr15 _va4">arrow_back</i> @lang('Go back');
 				</a>
 				@else
 				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
 					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
-					<i class="material-icons _fs18 _mr15 _va4">local_mall</i> All categories
+					<i class="material-icons _fs18 _mr15 _va4">local_mall</i> @lang('All categories')
 				</a>
 				@endif
 
@@ -59,7 +59,7 @@
 			<div class="_db _tbs _ov">
 				<div class="_tb _crp">
 					<span ng-click="vm.showPriceRange=!vm.showPriceRange" ng-class="{'_zi999': vm.showPriceRange}">
-						Price range<i class="material-icons _fs17 _va5">expand_more</i>
+						@lang('Price range')<i class="material-icons _fs17 _va5">expand_more</i>
 					</span>
 
 					<div class="_af _bgwt2 _zi999" ng-if="vm.showPriceRange" ng-click="vm.showPriceRange=0"></div>
@@ -67,7 +67,7 @@
 					<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange" ng-init="vm.filters.price.min={{ request()->input('price_min') }};vm.filters.price.max={{ request()->input('price_max') }};">
 						<div class="_clear">
 							<span class="_fs17 _clear">@{{ vm.filters.price.min }}zł - @{{ vm.filters.price.max }}zł</span>
-							<span class="">The average price of product is @{{ vm.filters.price.avg }}zł.</span>
+							<span class="">@lang('The average price of product is') @{{ vm.filters.price.avg }}zł.</span>
 						</div>
 
 						<rzslider
@@ -99,8 +99,8 @@
 					   </script>
 
 					   <div class="_db _tbs _ov _mt5">
-							<div class="_tb _crp _pl5 _fs15 _pb0" ng-click="vm.showPriceRange=0">Cancel</div>
-							<div class="_tb _crp _c4 _right _pr5 _fs15 _pb0" onclick="event.preventDefault();document.getElementById('search-filters-form').submit();">Apply</div>
+							<div class="_tb _crp _pl5 _fs15 _pb0" ng-click="vm.showPriceRange=0">@lang('Cancel')</div>
+							<div class="_tb _crp _c4 _right _pr5 _fs15 _pb0" onclick="event.preventDefault();document.getElementById('search-filters-form').submit();">@lang('Apply')</div>
 							<form id="search-filters-form" action="{{ route('feed') }}">
 								<input name="query" type="hidden" value="{{ request()->input('query') }}">
 								<input name="price_min" type="hidden" ng-value="vm.filters.price.min">
@@ -119,15 +119,15 @@
 		@if(auth()->guest() && !request()->has('cat') && !request()->has('query'))
 		<a class="_cw _clear _p10 _mb15 _brds3 _bgbl _tac _thvrw" href="{{ route('register') }}">
 			<i class="material-icons _left _mr15 _fs24 _ml5">android</i>
-			<span class="_oh _fs15">Our Artificial Intelligence knows what you want... Would you like to check?</span>
+			<span class="_oh _fs15">@lang('Our Artificial Intelligence knows what you want... Would you like to check?')</span>
 			<span class="_right">
-				Register now <i class="material-icons _mr5 _fs24 _ml5 _va7">arrow_forward</i>
+				@lang('Register now') <i class="material-icons _mr5 _fs24 _ml5 _va7">arrow_forward</i>
 			</span>
 		</a>
 		@endif
 
 		@if(isset($users) && $users->count())
-		<span class="_fs16 _clear _mb15">Accounts</span>
+		<span class="_fs16 _clear _mb15">@lang('Accounts')</span>
 		<div class="row _mb15"> 
 			@foreach($users as $user)
 			<a href="{{ $user->link() }}" class="_left col-xs-2 _tac _oh">
@@ -136,7 +136,7 @@
 			</a>
 			@endforeach
 		</div>
-		<span class="_mt30 _fs16 _clear _mb15">Products</span>
+		<span class="_mt30 _fs16 _clear _mb15">@lang('Products')</span>
 		@endif
 
 		@if($products->getResource()->getData()->total())
@@ -163,13 +163,13 @@
 
 		<div class="_tbs _tac _bg5 _mt15 _crp _clear" ng-click="vm.load()" ng-if="vm.isMore()">
 			<span class="_tb">
-				More products
+				@lang('More products')
 			</span>
 		</div>
 		@else
 
 		<div class="_tac _pt15 _mt70 _c3">
-			<h5 class="_fw400">There is no products to show.</h5>
+			<h5 class="_fw400">@lang('There is no products to show.')</h5>
 		</div>
 
 		@endif

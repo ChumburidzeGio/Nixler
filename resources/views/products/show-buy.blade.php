@@ -9,7 +9,7 @@
         @if($product->buy_link)
 
         <a class="_btn _bga _c2 _w100" style="line-height:33px;" href="{{ $product->buy_link }}" target="_blank">
-            Buy now on {{ ucfirst(str_replace('www.', '', parse_url($product->buy_link, PHP_URL_HOST))) }} <i class="material-icons _fs18 _va4 _ml4">open_in_new</i>
+            @lang('Buy now on :service', ['service' => ucfirst(str_replace('www.', '', parse_url($product->buy_link, PHP_URL_HOST)))]) <i class="material-icons _fs18 _va4 _ml4">open_in_new</i>
         </a>
 
         @else
@@ -39,9 +39,8 @@
 
     <div id="submit" class="_mb10" ng-class="{'col-xs-12':vm.variants.length, 'col-xs-9':!vm.variants.length}">
         <div class="_clear">
-            <button class="_btn _bga _cb _w100" style="line-height:33px;" href="{{ $product->buy_link }}" {{ $product->buy_link ? 'target="_blank"' : '' }}>
-                BUY NOW  {{ $product->buy_link ?  'on'.ucfirst(str_replace('www.', '', parse_url($product->buy_link, PHP_URL_HOST))) : '' }}
-
+            <button class="_btn _bga _cb _w100 _ttu" style="line-height:33px;">
+                @lang('Buy now')
                 <i class="material-icons _fs18 _va4 _ml4">chevron_right</i>
             </button>
         </div>
@@ -53,7 +52,7 @@
 
      @if($product->owner->id !== auth()->id())
         <a class="_btn _bgwd1 _cb _w100 _mt5" style="line-height:33px;" href="{{ route('find-thread', ['id' => $product->owner->id]) }}"> 
-            <i class="material-icons _fs18 _va4 _mr5">message</i> Contact seller </a>
+            <i class="material-icons _fs18 _va4 _mr5">message</i> @lang('Contact seller') </a>
         <span class="_fs11 _clear _tac _cgr">{{ $product->owner->response_time }}</span>
     @endif
 

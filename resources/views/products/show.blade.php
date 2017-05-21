@@ -45,7 +45,7 @@
 
 
     <span class="_fs12 _ttu _mb10 _clear">
-       <span ng-init="vm.comments_count={{ $product->comments->total() }}" ng-bind="vm.comments_count">{{ $product->comments->total() }}</span> Comments
+       <span ng-init="vm.comments_count={{ $product->comments->total() }}" ng-bind="vm.comments_count">{{ $product->comments->total() }}</span> @lang('Comments')
    </span>
    @include('comments.index', ['comments' => $product->comments, 'id' => $product->id])
 </div>
@@ -66,7 +66,7 @@
         @if($product->similar->count())
 
         <span class="_fs12 _ttu _mb5 _clear _mt15">
-            More products
+            @lang('More products')
         </span>
 
         <div class="_clear">

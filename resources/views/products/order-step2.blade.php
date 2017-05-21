@@ -9,7 +9,7 @@
 
 
                 <span class="_c2 _lh1 _mb0 _fs18 _p15 _clear _pb0">
-                    Confirm your phone
+                    @lang('Confirm your phone')
                     <span ng-if="vm.city.shipping" ng-bind="vm.city.shipping" class="_right _fs14 _cbl"></span>
                 </span>
 
@@ -22,14 +22,14 @@
 
                         <div class="col-xs-12 _pt10">
 
-                            <p class="_clear _cbl _mt10 _tac">A 5-digit activation code will be texted to your phone within a few minutes.</p>
+                            <p class="_clear _cbl _mt10 _tac">@lang('A 5-digit activation code will be texted to your phone within a few minutes.')</p>
 
                                 <div class="_mb15 col-sm-6 col-sm-offset-3 _mt10 {{ $errors->has('pcode') ? ' has-error' : '' }}">
 
                                     <div class="row">
 
                                         <div class="col-xs-6">
-                                            <small class="_clear _pb1 _mt5">Confirmation code</small>
+                                            <small class="_clear _pb1 _mt5">@lang('Confirmation code')</small>
                                         </div>
                                         <div class="col-xs-6">
                                             <input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="2124431" name="pcode" required="">
@@ -46,7 +46,7 @@
 
 
                             <button type="submit" class="_btn _bga _cb block _fs15 _right _mt15">
-                                Confirm <i class="material-icons _fs18 _va4 _ml4">chevron_right</i>
+                                @lang('Confirm') <i class="material-icons _fs18 _va4 _ml4">chevron_right</i>
                             </button>
                         </form>
 

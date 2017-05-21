@@ -14,7 +14,7 @@
 
 					@can('update', $user)
 					<div class="_p5 _brds3 _a2 _bgbt2 _m10 _fs13 _cw _fw600 _pb0">
-							<span ng-click="vm.deletePhoto('{{ $photo->id }}')" confirm-click="Do you really want to delete photo?">
+							<span ng-click="vm.deletePhoto('{{ $photo->id }}')" confirm-click="@lang('Do you really want to delete photo?')">
 		                       <i class="material-icons _fs18">delete</i>
 		                    </span>
 		                    <form id="{{ $photo->id }}-delete-form" action="{{ url('/media/'.$photo->id) }}" method="POST" class="_d0">
@@ -38,7 +38,7 @@
 	@else
 
 		<div class="_tac _pt15 _mt70 _c3">
-			<h5 class="_fw400">There is no media to show.</h5>
+			<h5 class="_fw400">@lang('There is no media to show').</h5>
 		</div>
 
 	@endif

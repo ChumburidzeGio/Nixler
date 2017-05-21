@@ -10,7 +10,7 @@
 	@else
 
 		<div class="_tac _pt15 _mt70 _c3">
-			<h5 class="_fw400">There is no products to show.</h5>
+			<h5 class="_fw400">@lang('There is no products to show.')</h5>
 		</div>
 
 	@endif

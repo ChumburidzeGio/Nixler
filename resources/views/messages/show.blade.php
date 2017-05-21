@@ -16,7 +16,7 @@
 
 				<div class="_tbs _tac _bg5 _crp" ng-click="vm.load('-1')" ng-if="vm.isMore()">
 				    <span class="_tb">
-				        Previous messages
+				        @lang('Previous messages')
 				    </span>
 				</div>
 
@@ -43,7 +43,7 @@
 				</div>
 
 				<div class="_li _p10 _clear _pt0 _pb5 _a4">
-					<button class="_btn _bg5 _c2 _right">Send</button>
+					<button class="_btn _bg5 _c2 _right">@lang('Send')</button>
 				</div>
 
 			</form>
@@ -58,18 +58,18 @@
 	<div class="_z013 _bgw _clear _brds3">
 
 		<a class="_lim _hvrl _tal _bb1" href="{{ route('threads') }}">
-						<i class="material-icons _mr15 _va4 _fs18">message</i> All messages
+						<i class="material-icons _mr15 _va4 _fs18">message</i> @lang('All messages')
 		</a>
 
 		<a class="_lim _hvrl">
-			<i class="material-icons _mr10 _va4 _fs18">people</i> Participants
+			<i class="material-icons _mr10 _va4 _fs18">people</i> @lang('Participants')
 		</a>
 
 		<a class="_lim _hvrl" ng-repeat="i in vm.thread.participants" ng-href="@{{ i.url }}">
 
 			<div class="_media _clear">
 				<img ng-src="@{{ i.avatar }}" class="_left _mr10 _brds3" height="22px">
-				<span class="_cg" ng-bind="i.name"></span> <small ng-if="i.me"> (You)</small>
+				<span class="_cg" ng-bind="i.name"></span> <small ng-if="i.me"> (@lang('You'))</small>
 			</div>
 
 		</a>

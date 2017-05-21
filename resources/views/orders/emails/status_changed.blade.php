@@ -1,12 +1,12 @@
 @component('mail::message')
-# Order {{ $status }}
+# @lang('Order status changed to') {{ $status }}
 
-The status of order is changed. Please go orders page for more information.
+@lang('The status of order is changed. Please go orders page for more information.')'
 
 @component('mail::button', ['url' => $url])
-View Order
+@lang('View Order')
 @endcomponent
 
-Thanks,<br>
+@lang('Thanks'),<br>
 {{ config('app.name') }}
 @endcomponent

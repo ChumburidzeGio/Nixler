@@ -9,10 +9,10 @@
 		<div class="col-sm-8 col-xs-12">
 			@cannot('create', $product)
 			<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
-				Please for first add shipping information before you will able to publish new product
+				@lang('Please for first add shipping information before you will able to publish new product')
 				<div class="_clear _mt10">
 					<a class="_btn _bga _cb _pr5 _hvrl" href="{{ route('shipping.settings') }}" id="shipping_settings_route">
-						Go to shipping settings <i class="material-icons _ml5 _va7">chevron_right</i>
+						@lang('Go to shipping settings') <i class="material-icons _ml5 _va7">chevron_right</i>
 					</a>
 				</div>
 			</div>
@@ -23,9 +23,9 @@
 				{{ session('status') }}
 				@if(session('buttons'))
 				<div class="_clear _mt15">
-					<a class="_btn _bga _cb _mr5" href="{{ url('new-product') }}">Add new</a>
+					<a class="_btn _bga _cb _mr5" href="{{ url('new-product') }}">@lang('Add new')</a>
 					<a class="_btn _cb _bg0 _pr5 _b1 _bcg _hvrl" href="{{ $product->url() }}">
-						Go to product page <i class="material-icons _ml5 _va7">chevron_right</i>
+						@lang('Go to product page') <i class="material-icons _ml5 _va7">chevron_right</i>
 					</a>
 				</div>
 				@endif
@@ -40,14 +40,14 @@
 					<div class="_p15 _bb1 _posr">
 						<h1 class="_fs18 _ci _lh1 _telipsis _m0">
 							@if($product->slug)
-							Editing product #{{ $product->id }}
+							@lang('Editing product')
 							@else 
-							Adding new product
+							@lang('Adding new product')
 							@endif
 						</h1>
 						@if($product->slug)
 						<a href="{{ $product->url() }}" class="_a3 _mr15" target="_blank">
-							<i class="material-icons _fs18 _va4">open_in_new</i> View product
+							<i class="material-icons _fs18 _va4">open_in_new</i> @lang('View product')
 						</a>
 						@endif
 					</div>
@@ -58,7 +58,7 @@
 						<div class="row">
 
 							<div class="col-sm-7 _mb15">
-								<small class="_clear _pb5">Product name</small>
+								<small class="_clear _pb5">@lang('Product name')</small>
 
 								<input id="title" type="text" required name="title" minlength="2" maxlength="90" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ old('title', $product->title) }}"> 
 
@@ -68,7 +68,7 @@
 							</div>
 
 							<div class="col-sm-5 _mb15">
-								<small class="_clear _pb5">Category</small>
+								<small class="_clear _pb5">@lang('Category')</small>
 
 								<div id="category">
 									<select selector
@@ -104,7 +104,7 @@
 
 
 					<small class="_clear _pb5">
-						Product description
+						@lang('Product description')
 					</small>
 
 					<textarea type="text" class="_b1 _bcg _fe _brds3 _mih70" msd-elastic ng-model="vm.description" rows="8" ng-init="vm.description='{{ old('description', addslashes($product->description)) }}'" id="description" name="description"></textarea>
@@ -115,7 +115,7 @@
 
 					<div class="row _mt15">
 						<div class="col-sm-3 _mb15">
-							<small class="_clear _pb5">Price</small>
+							<small class="_clear _pb5">@lang('Price')</small>
 
 							<input value="{{ $product->currency }} @{{ vm.price }}" class="_b1 _bcg _fe _brds3 _fes" readonly ng-if="vm.variants.count()" type="text">
 
@@ -126,7 +126,7 @@
 							@endif
 						</div>
 						<div class="col-sm-2 _mb15">
-							<small class="_clear _pb5">In stock</small>
+							<small class="_clear _pb5">@lang('In stock')</small>
 
 							<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="" ui-numeric-input min="0" max="500" max-length="3" ng-init="vm.in_stock={{ $product->in_stock }}" id="in_stock" name="in_stock" ng-readonly="vm.variants.count()">
 
@@ -135,9 +135,9 @@
 							@endif
 						</div>
 						<div class="col-sm-7 _mb15">
-							<small class="_clear _mb5">Tags</small>
+							<small class="_clear _mb5">@lang('Tags')</small>
 
-							<tags-input ng-model="vm.tags" placeholder="Tags for product" replace-spaces-with-dashes="0" key-property=""></tags-input>
+							<tags-input ng-model="vm.tags" placeholder="@lang('Tags for product')" replace-spaces-with-dashes="0" key-property=""></tags-input>
 
 							<input type="hidden" name="tags" ng-value="vm.tags | json" 
 							ng-init="{{ old('tags', $product->tags) ? 'vm.tags='.$product->tags : '' }}">
@@ -151,36 +151,36 @@
 						<div ng-init='vm.variants.items={{ old("variants", $product->variants) }}'>
 						<div class="col-xs-12 _mb15" ng-if="!vm.variants.count()">
 							<span class="_clear _fs14 _mb5">
-								Product Variants
+								@lang('Product Variants')
 							</span>
 							<span class="_clear _fs13 _c4 _crp" ng-click="vm.variants.add()" id="add-variants">
-								<i class="material-icons _hvra _dib _mr5 _va4 _fs18">add</i> Add Variant
+								<i class="material-icons _hvra _dib _mr5 _va4 _fs18">add</i> @lang('Add Variant')
 							</span>
 						</div>
 
 						<div class="_bgwt8 _p10 _clear _brds3 _pb5 _ml5 _mr5" ng-if="vm.variants.count()">
 							<span class="_clear _mb5 _fs13 _mb10">
-								Product Variants
+								@lang('Product Variants')
 								<span class="_right _crp" ng-click="vm.variants.add()" id="add-variant">
-									<i class="material-icons _cb _hvra _dib _mr5 _va4 _fs18">add</i> Add more
+									<i class="material-icons _cb _hvra _dib _mr5 _va4 _fs18">add</i> @lang('Add more')
 								</span>
 							</span>
 							<div class="row">
 
 								<div class="col-sm-7 _mb5">
-									<small class="_clear _mb5">Name</small>
+									<small class="_clear _mb5">@lang('Name')</small>
 								</div>
 
 								<div class="col-sm-2 _mb5">
-									<small class="_clear _mb5">Price</small>
+									<small class="_clear _mb5">@lang('Price')</small>
 								</div>
 
 								<div class="col-sm-2 _mb5">
-									<small class="_clear _mb5">In stock</small>
+									<small class="_clear _mb5">@lang('In stock')</small>
 								</div>
 
 								<div class="col-sm-1 _mb5 _oh _tac">
-									<small class="_clear _mb5">Delete</small>
+									<small class="_clear _mb5">@lang('Delete')</small>
 								</div>
 
 							</div>
@@ -188,7 +188,7 @@
 							<div ng-repeat="variant in vm.variants.items">
 
 								<div class="col-sm-7 _mb15">
-									<input type="text" ng-required="true" minlength="2" maxlength="40" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" placeholder="Green - XL" ng-model="variant.name"> 
+									<input type="text" ng-required="true" minlength="2" maxlength="40" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" placeholder="@lang('Green - XL')" ng-model="variant.name"> 
 								</div>
 
 								<div class="col-sm-2 _mb15">
@@ -214,7 +214,7 @@
 
 					@can('sellExternally', $product)
 					<div class="col-sm-12 _mb15">
-						<small class="_clear _pb5">Link to buy product</small>
+						<small class="_clear _pb5">@lang('Link to buy product')</small>
 
 						<input id="buy_link" type="text" name="buy_link" minlength="2" maxlength="90" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ old('buy_link', $product->buy_link) }}" placeholder="https://www.example.com/product-x.html"> 
 
@@ -256,32 +256,34 @@
 			<div class="_p15 _bt1 _clear _tar">
 
 				@if(!$product->just_created)
-				<a class="_btn _bg5 _cg _hvra _left" ng-click="vm.delete()" confirm-click="Do you really want to delete product?">Delete</a>
+				<a class="_btn _bg5 _cg _hvra _left" ng-click="vm.delete()" confirm-click="@lang('Do you really want to delete product?')">
+					@lang('Delete')
+				</a>
 				@endif 
 
 				@if($product->is_active)
 				<a class="_btn _bg5 _cg _hvra _ml10 _left" onclick="event.preventDefault();
 				document.getElementById('status-change-form').submit();" href="/"> 
-				{{ $product->is_active ? 'Hide' : 'Show' }} 
+				{{ $product->is_active ? __('Hide') : __('Show') }} 
 			</a>
 			@endif
 
 		@if($product->just_created || $product->isInactive)
 		<button class="_btn _bg5 _cb _hvra _ml10" 
 			type="submit" name="action" value="schedule"> 
-			<i class="material-icons _mr5 _va5 _fs20">schedule</i> Schedule
+			<i class="material-icons _mr5 _va5 _fs20">schedule</i> @lang('Schedule')
 		</button>
 		@endif
 
 		@if($product->is_inactive)
 		@can('create', $product)
 		<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish" id="publish"> 
-			<i class="material-icons _mr5 _va5 _fs20">store</i> Publish
+			<i class="material-icons _mr5 _va5 _fs20">store</i> @lang('Publish')
 		</button>
 		@endif
 		@else
 		<button class="_btn _bga _cb _hvra _ml10" type="submit" name="action" value="publish" id="publish"> 
-			<i class="material-icons _mr5 _va5 _fs20">update</i> Update
+			<i class="material-icons _mr5 _va5 _fs20">update</i> @lang('Update')
 		</button>
 		@endif
 	</div>
@@ -310,63 +312,63 @@
 	<div class="_card _z013 _bgw _oh _p0"> 
 
 		<span class="_fs13 _clear _li _bb1 _cb">
-			<i class="material-icons _mr10 _va5 _fs18">trending_up</i> Product Statistics
+			<i class="material-icons _mr10 _va5 _fs18">trending_up</i> @lang('Product Statistics')
 		</span>
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">fingerprint</i> 
-			Product ID: #{{ $product->id }}
+			@lang('Product ID'): #{{ $product->id }}
 		</a>
 
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">shopping_basket</i>
-			{{ $product->getMeta('sales', 0) }} Sales
+			@lang(':amount Sales', ['amount' => $product->getMeta('sales', 0)])
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">favorite</i> 
-			{{ $product->likes_count }} Likes
+			@lang(':amount Likes', ['amount' => $product->likes_count])
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">comment</i> 
-			{{ $product->getMeta('comments', 0) }} Comments
+			@lang(':amount Comments', ['amount' => $product->getMeta('comments', 0)])
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">access_time</i> 
-			Added {{ $product->created_at->diffForHumans() }}
+			@lang('Added :date', ['date' => $product->created_at->diffForHumans()])
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">update</i> 
-			Updated {{ $product->updated_at->diffForHumans() }}
+			@lang('Updated :date', ['date' => $product->updated_at->diffForHumans()])
 		</a>
 
 	</div>
 
-	<div class="_card _z013 _bgw _oh _p0 _mt15"> 
+	{{-- <div class="_card _z013 _bgw _oh _p0 _mt15"> 
 
 		<span class="_fs13 _clear _li _bb1 _cb">
-			Markdown support
+			@lang('Markdown support')
 		</span>
 		<div class="_p10">
-			Nixler uses Markdown for formatting. Here are the basics.
+			@lang('Nixler uses Markdown for formatting. Here are the basics.')
 			<hr class="_mt5 _mb5">
-			<span class="_cg _clear">Header</span>
+			<span class="_cg _clear">@lang('Header')</span>
 			<code># Material & Care</code>
 			<hr class="_mt5 _mb5">
-			<span class="_cg _clear">Bold</span>
+			<span class="_cg _clear">@lang('Bold')</span>
 			<code>*100 day* return policy</code>
 			<hr class="_mt5 _mb5">
-			<span class="_cg _clear">Emphasis</span>
+			<span class="_cg _clear">@lang('Emphasis')</span>
 			<code>Whisk the eggs _vigorously_.</code>
 			<hr class="_mt5 _mb5">
-			<span class="_cg _clear">Highlight</span>
+			<span class="_cg _clear">@lang('Highlight')</span>
 			<code>`Carefully` crack the eggs.</code>
 		</div>
-	</div>
+	</div> --}}
 
 
 </div>

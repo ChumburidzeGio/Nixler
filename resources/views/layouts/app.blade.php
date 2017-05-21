@@ -6,7 +6,9 @@
         <nav class="_clear _b0 _bgw _bb1 _cb _ma _tac _mb15" ng-controller="NavCtrl as vm">
 
         @impersonating
-        <a href="{{ route('impersonate.leave') }}" class="_clear _tac _bg3 _p5 _cw _thvrw _crp _fs13">Leave impersonation</a>
+        <a href="{{ route('impersonate.leave') }}" class="_clear _tac _bg3 _p5 _cw _thvrw _crp _fs13">
+            @lang('Leave impersonation')
+        </a>
         @endImpersonating
         
         <div class=" _pl15 _pr15">
@@ -31,10 +33,10 @@
                 @else 
                 
                 <a href="{{ route('register') }}" class="_tb _posr _pt15 _thvri" id="register">
-                    Sign up
+                    @lang('Sign up')
                 </a>
                 <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri" id="login">
-                    Log in
+                    @lang('Log in')
                 </a>
 
                 @endif
@@ -42,7 +44,7 @@
 
             <div class="_dib _oh _posr _brds3" style="width: 100%; max-width: 500px;margin-top: 7px;">
                 <form class="_fg _db _w100" action="{{ route('feed') }}">
-                    <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="Search for products and accounts" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
+                    <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="@lang('Search for products and accounts')" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
                     @if(request()->has('cat'))<input name="cat" type="hidden" value="{{ request()->input('cat') }}">@endif
                     <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
                 </form>
@@ -67,11 +69,11 @@
                                 class="_lh1 _et2 _cw _thvrw _fw600">
                                 <img src="{{  Auth::check() ? auth()->user()->avatar('aside') : url('media/-/avatar/aside.jpg') }}" 
                                 class="_mb10 _clear _brds3" height="60" width="60">
-                                {{ Auth::check() ? auth()->user()->name : 'Sign in to access your account' }}
+                                {{ Auth::check() ? auth()->user()->name : __('Sign in to access your account') }}
                             </a>
                             <a href="{{ Auth::check() ? auth()->user()->url : url('/register') }}">
                                 <small class="_clear _cw">
-                                    {{ Auth::check() ? ('@'.auth()->user()->username) : 'or sign up now' }}
+                                    {{ Auth::check() ? ('@'.auth()->user()->username) : __('or sign up now') }}
                                 </small>
                             </a>
                         </div>
@@ -82,7 +84,7 @@
                     @if(auth()->check())
 
                     <a href="{{ auth()->user()->link() }}" class="_li _fs13 _hvrd _cg">
-                        <i class="material-icons _fs20 _mr15">person</i> Profile
+                        <i class="material-icons _fs20 _mr15">person</i> @lang('Profile')
                     </a>
                     <a href="{{ route('threads') }}" class="_li _fs13 _hvrd _cg">
                         <span class="_posr _dib">
@@ -90,22 +92,22 @@
                             @if(auth()->user()->getMeta('has_messages'))
                             <span class="_p5 _brds50 _bgr _a2 _posa _mr5"></span>
                             @endif
-                        </span> Messages
+                        </span> @lang('Messages')
                     </a>
                     <a href="{{ route('settings.orders') }}" class="_li _fs13 _hvrd _cg">
-                        <i class="material-icons _fs20 _mr15">shopping_basket</i> Orders
+                        <i class="material-icons _fs20 _mr15">shopping_basket</i> @lang('Orders')
                     </a>
                     <a href="{{ url('/new-product') }}" class="_li _fs13 _hvrd _cg" id="new-product">
-                        <i class="material-icons _fs20 _mr15">add</i> Add Product
+                        <i class="material-icons _fs20 _mr15">add</i> @lang('Add Product')
                     </a>
                     <a href="{{ url('/settings') }}" class="_li _fs13 _hvrd _cg">
-                        <i class="material-icons _fs20 _mr15">settings</i> Settings
+                        <i class="material-icons _fs20 _mr15">settings</i> @lang('Settings')
                     </a>
                     
                     <a href="{{ url('/logout') }}" class="_li _fs13 _hvrd _cg _bb1"
                         onclick="event.preventDefault();
                         document.getElementById('logout-form').submit();" id="logout">
-                        <i class="material-icons _fs20 _mr15">exit_to_app</i> Logout
+                        <i class="material-icons _fs20 _mr15">exit_to_app</i> @lang('Logout')
                     </a>
                     <form id="logout-form" action="{{ url('/logout') }}" method="POST" class="_d0">
                         {{ csrf_field() }}
@@ -113,10 +115,21 @@
 
                 @endif
 
-                <span class="_li _fs13 _cg _mt10 _pt15"> Language 
+                <span class="_li _fs13 _cg _mt10 _pt15"> @lang('Language')
                     <i class="material-icons _fs16 _va4">translate</i> 
 
                     <span class="_right">
+                            <a onclick="event.preventDefault();
+                            document.getElementById('setlcl812').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci">
+                            ქართული
+                            <form id="setlcl812" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                                {{ csrf_field() }}
+                                <input type="hidden" name="locale" value="ka">
+                            </form>
+                        </a>
+
+                        <span class="_ml5 _mr5"> · </span>
+
                             <a onclick="event.preventDefault();
                             document.getElementById('setlcl813').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci">
                             English
@@ -139,10 +152,10 @@
                     </span>
 
                 </span>
-                <a href="{{ url('/articles/help') }}" class="_li _fs13 _hvrd _cg"> Get help</a>
-                <a href="{{ url('/articles/policy') }}" class="_li _fs13 _hvrd _cg"> Privacy Policy</a>
-                <a href="{{ url('/articles/terms') }}" class="_li _fs13 _hvrd _cg"> Terms of Service</a>
-                <a href="{{ url('/articles/about') }}" class="_li _fs13 _hvrd _cg"> About Nixler </a>
+                <a href="{{ url('/articles/help') }}" class="_li _fs13 _hvrd _cg"> @lang('Get help')</a>
+                <a href="{{ url('/articles/policy') }}" class="_li _fs13 _hvrd _cg"> @lang('Privacy Policy')</a>
+                <a href="{{ url('/articles/terms') }}" class="_li _fs13 _hvrd _cg"> @lang('Terms of Service')</a>
+                <a href="{{ url('/articles/about') }}" class="_li _fs13 _hvrd _cg"> @lang('About Nixler') </a>
 
 
             </ul>
