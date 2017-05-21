@@ -18,6 +18,10 @@ class GoogleDriveChannel
     {
         $params = $notification->toGoogleDrive($notifiable);
 
+        if(!$params) {
+            return false;
+        }
+        
         Storage::disk('google')->put(
             array_get($params, 'name'),
             file_get_contents(array_get($params, 'path'))
