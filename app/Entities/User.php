@@ -26,6 +26,8 @@ use Laravel\Scout\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Lab404\Impersonate\Models\Impersonate;
+use App\Services\SystemService;
+
 
 class User extends Authenticatable
 {
@@ -195,7 +197,7 @@ class User extends Authenticatable
             //(new Dispatcher)->dispatch('eloquent.photoUploaded: ' . get_class($this), [$this, $media]);
 
         } catch (\Exception $e){
-            dd($e->getMessage());
+            app(SystemService::class)->reportException($e);
             return null;
         }
 

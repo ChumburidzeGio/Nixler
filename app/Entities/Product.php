@@ -17,6 +17,7 @@ use Illuminate\Notifications\Notifiable;
 use App\Services\Markdown;
 use App\Entities\ProductCategory;
 use App\Entities\Comment;
+use App\Services\SystemService;
 
 class Product extends Model
 {
@@ -205,6 +206,7 @@ class Product extends Model
             return $media;
             
         } catch (\Exception $e){
+            app(SystemService::class)->reportException($e);
             return null;
         }
 
