@@ -37,7 +37,9 @@ class UserController extends Controller
 
         $user = $data['user'];
 
-        $this->seo()->setTitle($user->name." ({$user->username})");
+        $this->seo()->metatags()->setTitleDefault($user->name." ({$user->username})");
+        
+        $this->seo()->opengraph()->setTitle($user->name." ({$user->username})");
 
         $this->seo()->setDescription($user->headline);
 

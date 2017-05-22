@@ -131,7 +131,7 @@
                         <span class="_ml5 _mr5"> · </span>
 
                             <a onclick="event.preventDefault();
-                            document.getElementById('setlcl813').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci">
+                            document.getElementById('setlcl813').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci" id="setlcl813a">
                             English
                             <form id="setlcl813" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
                                 {{ csrf_field() }}

@@ -38,7 +38,9 @@ class ProductController extends Controller
     {
         $product = $this->repository->findBySlug($id, $uid);
 
-        $this->seo()->setTitle($product->title);
+        $this->seo()->metatags()->setTitleDefault($product->title);
+        
+        $this->seo()->opengraph()->setTitle($product->title);
 
         $this->seo()->setDescription($product->description);
 

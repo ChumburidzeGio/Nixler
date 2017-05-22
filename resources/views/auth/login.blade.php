@@ -51,7 +51,7 @@
                         </a>
 
                         <p class="_clear _fw600 _fs12 _p10 _cb _pb15 _mt15">
-                            @lang('Don't have account yet?')'
+                            @lang('Don\'t have account yet?')
                             <a class="_cbl" href="{{ url('register') }}">@lang('Join us')</a>
                         </p>
 

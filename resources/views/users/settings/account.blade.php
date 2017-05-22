@@ -116,7 +116,7 @@
 						</label>
 
 						<div class="col-md-6">
-							<select selector model="vm.city_id" value-attr="id" label-attr="name" class="_b1 _bcg _brds3" options="vm.cities" ng-init="vm.city_id={{ old('city_id', $user->city_id)}}" require="1" id="city">
+							<select selector model="vm.city_id" value-attr="id" label-attr="name" class="_b1 _bcg _brds3" options="vm.cities" ng-init="vm.city_id={{ old('city_id', $user->city_id) ? : 0}}" require="1" id="city">
 							</select>
 
 							<input type="hidden" name="city_id" ng-value="vm.city_id">

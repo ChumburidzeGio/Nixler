@@ -53,6 +53,11 @@ class UserTest extends DuskTestCase
             ->click('form button')
             ->assertSee('message');
 
+            $browser->click('#menu')
+            ->pause(500)
+            ->press('#setlcl813a');
+
+
         });
     }
 
