@@ -193,6 +193,7 @@ return [
         Spatie\ServerMonitor\ServerMonitorServiceProvider::class,
         Spatie\Backup\BackupServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
+        Spatie\DemoMode\DemoModeServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*

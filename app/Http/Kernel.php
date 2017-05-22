@@ -59,5 +59,6 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'lastLoginTracker' => \App\Http\Middleware\UserLastLoginMiddleware::class,
+        'demoMode' => \Spatie\DemoMode\DemoMode::class,
     ];
 }
