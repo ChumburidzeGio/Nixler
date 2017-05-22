@@ -82,7 +82,7 @@
     </form>
 </div>
 
-<a class="_btn _bg5 _cb _mt5 _fs15 _p3 _pl15 _pr15" href="{{ route('find-thread', ['id' => $user->id]) }}">
+<a class="_btn _bg5 _cb _mt5 _fs15 _p3 _pl15 _pr15" href="{{ route('find-thread', ['id' => $user->id]) }}" id="messageAccount">
   <i class="material-icons _mr5 _va5 _fs20">message</i> @lang('Message')
 </a>
 

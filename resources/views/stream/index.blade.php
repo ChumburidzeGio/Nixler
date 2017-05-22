@@ -17,7 +17,7 @@
 				@if(request()->input('cat'))
 				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
 					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
-					<i class="material-icons _fs18 _mr15 _va4">arrow_back</i> @lang('Go back');
+					<i class="material-icons _fs18 _mr15 _va4">arrow_back</i> @lang('Go back')
 				</a>
 				@else
 				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 

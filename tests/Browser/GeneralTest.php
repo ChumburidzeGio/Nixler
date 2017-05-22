@@ -173,4 +173,23 @@ class UserTest extends DuskTestCase
        });
     }
 
+
+    /**
+     * Test messaging
+     *
+     * @return void
+     */
+    public function testMessages()
+    {
+        $this->browse(function ($browser) {
+           $browser->visit('/@nixler')
+            ->click('#messageAccount')
+            ->type('textarea', 'Some message')
+            ->press('button')
+            ->pause(500)
+            ->assertSeeIn('div#media p', 'Some message');
+              
+       });
+    }
+
 }
