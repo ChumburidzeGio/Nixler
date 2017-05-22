@@ -39,7 +39,7 @@ class AlgoliaService
     {
         $index = $this->clint->initIndex(config('app.env')."_{$index}");
         
-        return $index->deleteObject($objectId)
+        return $index->deleteObject($objectId);
     }
 
     /**

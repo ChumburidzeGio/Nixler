@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Services\SystemService;
 
 class Handler extends ExceptionHandler
 {
@@ -32,6 +33,10 @@ class Handler extends ExceptionHandler
      */
     public function report(Exception $exception)
     {
+        if ($this->shouldReport($exception)) {
+           app(SystemService::class)->reportException($exception);
+        }
+
         parent::report($exception);
     }
 

@@ -5,7 +5,7 @@ namespace App\Services;
 use Recombee\RecommApi\Client;
 use Recombee\RecommApi\Requests as Reqs;
 use Recombee\RecommApi\Exceptions as Ex;
-use Bugsnag;
+use App\Service\SystemService;
 
 class RecommService {
 
@@ -233,7 +233,7 @@ class RecommService {
             return $this->client->send($request);
         } catch(\Exception $e) {
             if (app()->environment('production', 'development')) {
-                Bugsnag::notifyException($e);
+                app(SystemService::class)->reportException($e);
             }
             return $default;
         }
