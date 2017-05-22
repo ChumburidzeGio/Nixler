@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Nckg\Minify\Minifier;
+use App\Services\HtmlMinifierService;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class MinifyResponse
@@ -22,7 +22,7 @@ class MinifyResponse
         $response = $next($request);
 
         if (!app()->isLocal() and false === is_a($response, StreamedResponse::class) and $response->headers->get('Content-Type') !== 'image/jpg') {
-            $response->setContent((new Minifier())->html($response->getContent()));
+            $response->setContent((new HtmlMinifierService())->minify($response->getContent()));
         }
 
         return $response;
