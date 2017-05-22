@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         Bouncer::cache();
 
         ResponseFacade::macro('photo', function ($value) {
-            $response = new Response($value);
+            $response = ResponseFacade::make($value);
             $response->header('Content-Type', 'image/jpg');
             $response->header('content-transfer-encoding', 'binary');
             $response->header('Pragma', 'public');
