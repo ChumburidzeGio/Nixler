@@ -23,8 +23,10 @@ class MediaController extends Controller
 
     public function generate ($id = '-', $type, $place)
     {   
+        $media = app()->make(config('mediable.model'))->find($id);
+
         return response()->photo(
-            app(MediaRepository::class)->generate($id, $type, $place)
+            app(MediaRepository::class)->generate($media, $type, $place), $media
         );
     }
 }

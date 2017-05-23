@@ -33,13 +33,14 @@ class AppServiceProvider extends ServiceProvider
 
         Bouncer::cache();
 
-        ResponseFacade::macro('photo', function ($value) {
+        ResponseFacade::macro('photo', function ($value, $media, $cache = 'max-age=86400') {
             $response = ResponseFacade::make($value);
             $response->header('Content-Type', 'image/jpg');
             $response->header('content-transfer-encoding', 'binary');
             $response->header('Pragma', 'public');
-            $response->header('Cache-Control', 'max-age=86400');
+            $response->header('Cache-Control', $cache);
             $response->header('Expires', gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
+            $response->header('Last-Modified', ($media ? $media->updated_at->format('D, d M Y H:i:s \G\M\T') : time()));
             return $response;
         });
         

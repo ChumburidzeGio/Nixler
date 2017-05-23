@@ -24,15 +24,14 @@ class MediaRepository extends BaseRepository {
      * @param $data array
      * @return Article
      */
-    public function generate ($id, $type, $place)
+    public function generate ($media, $type, $place)
     {   
-        return Cache::remember(md5($id.$type.$place), (60 * 24), function () use ($id, $type, $place) {
+        return Cache::remember(md5(($media ? $media->id : '-').$type.$place), (60 * 24), function () use ($media, $type, $place) {
 
             $default = config("filesystems.media.{$type}.default") ? : abort(404);
             $sizes = config("filesystems.media.{$type}.sizes.{$place}") ? : abort(404);
             $width = array_last($sizes);
             $height = array_first($sizes);
-            $media = app()->make(config('mediable.model'))->find($id);
             $path = $media ? $media->getAbsolutePath() : $default;
 
             Image::configure(array('driver' => 'gd'));

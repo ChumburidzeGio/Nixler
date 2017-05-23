@@ -104,7 +104,7 @@ class UserController extends Controller
         $id = $media ? $media->id : '-';
 
         return response()->photo(
-            app(MediaRepository::class)->generate($id, 'avatar', $place)
+            app(MediaRepository::class)->generate($media, 'avatar', $place), $media, 'no-cache, must-revalidate'
         );
     }
 
