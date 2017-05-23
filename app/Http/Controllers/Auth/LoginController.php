@@ -75,7 +75,7 @@ class LoginController extends Controller
                 $user->restore();
                 Auth::login($user, true);
                 $attempt = true;
-                Session::flash('message', __('Your account successfully restored. Have a good day and thank you for comming back!'));
+                Session::flash('message', __('Your account successfully restored. Have a good day and thank you for coming back!'));
             }
 
         }

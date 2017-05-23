@@ -124,7 +124,7 @@ class UserRepository extends BaseRepository {
         }
 
         if($model && $model->trashed()) {
-            Session::flash('message', __('Your account successfully restored. Have a good day and thank you for comming back!'));
+            Session::flash('message', __('Your account successfully restored. Have a good day and thank you for coming back!'));
             $model->restore();
         }
 
