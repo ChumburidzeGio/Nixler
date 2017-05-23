@@ -23,7 +23,7 @@
     "Deactivate account": "დეაქტივაცია",
     "Cancel": "გაუქმება",
     "If you deactivate your account your profile won’t be visible to other people on Nixler and people won’t be able to search for you. Some information, such as messages you sent, may still be visible to others.": 
-    	"ანგარიშის დეაქტივაციის შემთხვევაში თქვენი პროფილი გახდება მიუწვდომელი და ხალხს აღარ შეეძლება თქვენი მოძებნა. მაგრამ, გარკვეული ტიპის ინფორმაცია, მაგალითად პირადი მიმოწერა შეიძლება ისევ ხელმისაწვდომი იყოს.",
+    	"ანგარიშის დეაქტივაციის შემთხვევაში თქვენი პროფილი გახდება მიუწვდომელი და საიტის მომხმარებლებს აღარ შეეძლება თქვენი მოძებნა, მაგრამ გარკვეული ტიპის ინფორმაცია, მაგალითად პირადი მიმოწერა შეიძლება ისევ ხელმისაწვდომი იყოს.",
     "If you’d like to come back to Nixler after you’ve deactivated your account, you can reactivate your account at anytime by logging in with your email and password or with oher auth provider.": 
     	"თქვენი ანგარიში ავტომატურად გააქტიურდება საიტზე ავტორიზაციის შემთხვევაში.",
     "Keep in mind, if you use your Nixler account to log into Nixler your account will be reactivated. This means your Nixler profile, including things like your followers, products, photos and orders, will be completely restored.": 
