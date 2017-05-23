@@ -5,6 +5,12 @@
     <div class="_pb15">
         <nav class="_clear _b0 _bgw _bb1 _cb _ma _tac _mb15" ng-controller="NavCtrl as vm">
 
+        @if(session('message'))
+        <span class="_clear _tac _bgbl _p5 _cw _thvrw _crp _fs13">
+            {{ session('message') }}
+        </span>
+        @endif
+
         @impersonating
         <a href="{{ route('impersonate.leave') }}" class="_clear _tac _bg3 _p5 _cw _thvrw _crp _fs13">
             @lang('Leave impersonation')

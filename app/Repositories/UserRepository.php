@@ -12,6 +12,7 @@ use App\Services\PhoneService;
 use App\Services\RecommService;
 use App\Notifications\SendVerificationCode;
 use Carbon\Carbon;
+use Session;
 
 class UserRepository extends BaseRepository {
 
@@ -123,6 +124,7 @@ class UserRepository extends BaseRepository {
         }
 
         if($model && $model->trashed()) {
+            Session::flash('message', __('Your account successfully restored. Have a good day and thank you for comming back!'));
             $model->restore();
         }
 

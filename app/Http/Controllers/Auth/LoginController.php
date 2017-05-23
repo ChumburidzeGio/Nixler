@@ -7,7 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Entities\User;
 use Illuminate\Http\Request;
-use Hash;
+use Hash, Session;
 
 class LoginController extends Controller
 {
@@ -75,6 +75,7 @@ class LoginController extends Controller
                 $user->restore();
                 Auth::login($user, true);
                 $attempt = true;
+                Session::flash('message', __('Your account successfully restored. Have a good day and thank you for comming back!'));
             }
 
         }

@@ -15,6 +15,7 @@ use App\Entities\User;
 use App\Services\PhoneService;
 use Illuminate\Support\Facades\Response as ResponseFacade;
 use Illuminate\Http\Response;
+use Hash;
 
 class AppServiceProvider extends ServiceProvider
 {
