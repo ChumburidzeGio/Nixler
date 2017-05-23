@@ -56,6 +56,18 @@
   display: none !important;
 }
 
+@media (max-width: 800px) {
+  #search-container {
+      max-width: 370px!important;
+  }
+}
+
+@media (max-width: 650px){
+  #search-container {
+      max-width: 100%!important;
+  }
+}
+
 @media (max-width: 500px){
 	._buybtn {
 		position: relative!important;
