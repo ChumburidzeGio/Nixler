@@ -2,7 +2,7 @@
     "name": "nixler/web",
     "description": "Nixler main web app.",
     "keywords": ["nixler", "shopping"],
-    "version": "0.2.2",
+    "version": "168",
     "license": "",
     "type": "project",
     "require": {
