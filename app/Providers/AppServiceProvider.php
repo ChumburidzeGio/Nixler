@@ -60,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
 
             $phone = PhoneService::parse($value, array_first($parameters));
 
-            return !User::where('phone', $phone->number)->where('id', '<>', auth()->id())->exists();
+            return $phone->is_valid ? !User::where('phone', $phone->number)->where('id', '<>', auth()->id())->exists() : false;
 
         });
         
