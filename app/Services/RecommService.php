@@ -5,7 +5,7 @@ namespace App\Services;
 use Recombee\RecommApi\Client;
 use Recombee\RecommApi\Requests as Reqs;
 use Recombee\RecommApi\Exceptions as Ex;
-use App\Service\SystemService;
+use App\Services\SystemService;
 
 class RecommService {
 

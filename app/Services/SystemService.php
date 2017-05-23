@@ -4,6 +4,7 @@ namespace App\Services;
 
 use AlgoliaSearch\Client;
 use App\Notifications\ExceptionThrown;
+use Exception;
 
 class SystemService
 {
@@ -12,6 +13,10 @@ class SystemService
     }
 
     public function reportException($e) {
-        $this->notify(new ExceptionThrown($e));
+        try {
+        	$this->notify(new ExceptionThrown($e));
+        } catch (Exception $e) {
+        	info($e->getMessage());
+        }
     }
 }
