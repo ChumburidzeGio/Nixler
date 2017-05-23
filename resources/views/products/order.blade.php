@@ -46,7 +46,12 @@ window.price = <?php echo $product->price; ?>;
 
                         <div class="col-xs-3 _mb15">
                             <small class="_clear _pb1">@lang('Your phone')</small>
-                            <input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="" name="phone" required>
+                            <input class="_b1 _bcg _fe _brds3 _fes" 
+                                type="text" 
+                                placeholder="" 
+                                name="phone" 
+                                required
+                                onkeyup="this.value=this.value.replace(/[^\d]/,'')">
 
                             @if ($errors->has('phone'))
                             <span class="help-block _mb _mt0">

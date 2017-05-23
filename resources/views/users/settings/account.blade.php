@@ -100,7 +100,12 @@
 							@endif
 
 
-							<input id="phone" type="text" class="_b1 _bcg _brds3 _fe _fes" name="phone" value="{{ $user->phone }}">
+							<input id="phone" 
+								type="text" 
+								class="_b1 _bcg _brds3 _fe _fes" 
+								name="phone" 
+								value="{{ $user->phone }}"
+								onkeyup="this.value=this.value.replace(/[^\d]/,'')">
 
 							@if ($errors->has('phone'))
 							<span class="help-block">
