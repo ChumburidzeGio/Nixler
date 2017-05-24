@@ -98,8 +98,10 @@ class ProductController extends Controller
 
         $isPublish = ($request->input('action') == 'publish');
         
-        $status = trans('productsss.'.($isPublish ? 'published_message' : 'scheduled_message')); 
-       
+        $status = $isPublish ? 
+            __('Your product has been saved, you can anytime publish it from this page or "My Products" section.') : 
+            __('Your product has been updated and is now live. Do you want to add another one or go to product page?');
+
         return redirect()->route('product.edit', ['id' => $id])->with('status', $status)->with('buttons', $isPublish);
     }
 
