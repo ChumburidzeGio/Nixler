@@ -62,6 +62,15 @@ class CreateUsersTable extends Migration
 
         });
 
+        Schema::create('sessions', function ($table) {
+            $table->string('id')->unique();
+            $table->unsignedInteger('user_id')->nullable();
+            $table->string('ip_address', 45)->nullable();
+            $table->text('user_agent')->nullable();
+            $table->text('payload');
+            $table->integer('last_activity');
+        });
+
         Schema::create('followers', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('user_id');
