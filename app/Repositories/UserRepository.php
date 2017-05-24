@@ -112,7 +112,7 @@ class UserRepository extends BaseRepository {
     {
         $model = null;
 
-        $city = $this->getCityModelByFacebookLocation($user->offsetGet('location'), $user->token);
+        $city = $user->offsetExists('location') ? $this->getCityModelByFacebookLocation($user->offsetGet('location'), $user->token) : null;
 
         $account = Profile::firstOrCreate([
             'provider' => 'facebook',

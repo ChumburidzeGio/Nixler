@@ -1,4 +1,4 @@
-<?php
+	<?php
 
 use App\Services\AlgoliaService;
 
@@ -73,11 +73,6 @@ Route::group(['middleware' => 'demoMode'], function () {
 		Route::post('/products/{id}/like', 'ProductController@like')->middleware('auth')->name('product:like');
 		Route::post('products/{id}/order', 'ProductController@order')->name('order');
 		Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
-	});
-
-	Route::group(['middleware' => ['auth']], function()
-	{
-	    Route::post('/orders/{id}/commit', 'OrderController@update')->name('order.commit');
 	});
 
 	Route::group(['prefix' => 'comments'], function()
