@@ -279,7 +279,7 @@ class UserRepository extends BaseRepository {
     public function updateStreams()
     {
         $models = $this->model->whereHas('sessions', function($q){
-            return $q->whereBetween('updated_at', [Carbon::now()->subMinutes(10), Carbon::now()]);
+            return $q->whereBetween('last_activity', [strtotime('-10 min'), strtotime('now')]);
         })->get();
 
         $models->map(function($model){

@@ -9,6 +9,7 @@ use App\Entities\Product;
 use App\Entities\ProductCategory;
 use App\Repositories\StreamRepository;
 use App\Repositories\ProductRepository;
+use App\Repositories\UserRepository;
 
 class StreamController extends Controller
 {
@@ -23,6 +24,16 @@ class StreamController extends Controller
         parent::__construct();
         $this->repository = $repository;
         $this->productRepository = $productRepository;
+    }
+
+
+    /**
+     * Display a listing of the resource.
+     * @return Response
+     */
+    public function discover(Request $request)
+    {
+        return app(UserRepository::class)->updateStreams();
     }
 
 

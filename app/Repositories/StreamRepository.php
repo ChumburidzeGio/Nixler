@@ -47,14 +47,4 @@ class StreamRepository extends BaseRepository implements CacheableInterface {
         return User::search($query)->take(6)->get();
     }
 
-
-    /**
-     * Discover new products
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function discover()
-    {
-        return $this->refreshStreams();
-    }
 }

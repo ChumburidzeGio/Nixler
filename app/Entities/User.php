@@ -119,17 +119,16 @@ class User extends Authenticatable
     }
 
 
+    public function sessions()
+    {   
+        return $this->hasMany(Session::class, 'user_id');
+    }
+
+
     public function addresses()
     {   
         return $this->hasMany(UserAddress::class, 'user_id');
     }
-    
-
-    public function sessions()
-    {   
-        return $this->hasMany(UserSession::class, 'user_id');
-    }
-    
 
     public function shippingPrices()
     {   
