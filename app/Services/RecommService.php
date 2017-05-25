@@ -232,9 +232,7 @@ class RecommService {
         try {
             return $this->client->send($request);
         } catch(\Exception $e) {
-            if (app()->environment('production', 'development')) {
-                app(SystemService::class)->reportException($e);
-            }
+            app(SystemService::class)->reportException($e);
             return $default;
         }
     }

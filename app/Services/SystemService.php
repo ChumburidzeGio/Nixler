@@ -13,10 +13,16 @@ class SystemService
     }
 
     public function reportException($e) {
+
+        if (app()->environment('testing', 'local')) {
+            return dd($e);
+        } 
+
         try {
-        	$this->notify(new ExceptionThrown($e));
+           $this->notify(new ExceptionThrown($e));
         } catch (Exception $e) {
-        	info($e->getMessage());
+           info($e->getMessage());
         }
+        
     }
 }
