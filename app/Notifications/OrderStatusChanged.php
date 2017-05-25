@@ -11,6 +11,7 @@ use App\Emails\SoldNotificationEmail;
 use App\Emails\StatusChangedNotificationEmail;
 use App\Channels\MessagesChannel;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Notifications\Messages\SlackMessage;
 
 class OrderStatusChanged extends Notification
 {
@@ -24,17 +25,16 @@ class OrderStatusChanged extends Notification
      */
     public function via($notifiable)
     {
-        return [TelegramChannel::class, MessagesChannel::class];
+        return ['slack', MessagesChannel::class];
     }
 
 
     /**
-     * Get the Telegram representation of the notification.
+     * Get the Slack representation of the notification.
      *
      * @param  mixed  $notifiable
-     * @return \NotificationChannels\Telegram\TelegramMessage
      */
-    public function toTelegram($notifiable)
+    public function toSlack($notifiable): SlackMessage
     {
         switch ($notifiable->status) {
             case 'created':
@@ -63,10 +63,12 @@ class OrderStatusChanged extends Notification
                 break;
         }
 
-        return TelegramMessage::create()
-            ->to('-202561791')
-            ->content("Order status changed to " . $notifiable->status .": \n")
-            ->button("Open order", $notifiable->url());
+        return (new SlackMessage)->attachment(function ($attachment) use ($notifiable) {
+            $attachment->title("Order status changed to " . $notifiable->status, $notifiable->url())->fields([
+                'Environment' => config('app.env'),
+                'User' => "#".auth()->id()." (".auth()->user()->name.")"
+            ]);
+        });
 
     }
 

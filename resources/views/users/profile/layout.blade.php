@@ -107,7 +107,7 @@
     @lang('Followers') <span class="_fw300 _ml5">{{ $user->followers_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'followings' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('followings') }}">
-    @lang('Following') <span class="_fw300 _ml5">{{ $user->followings_count }}</span>
+    @lang('Following', ['amount' => $user->followings_count]) <span class="_fw300 _ml5">{{ $user->followings_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'photos' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('photos') }}">
     @lang('Photos') <span class="_fw300 _ml5">{{ $user->media_count }}</span>

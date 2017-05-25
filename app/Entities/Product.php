@@ -141,9 +141,9 @@ class Product extends Model
 
         $this->status = 'active';
 
-        auth()->user()->pushInStreams($this->id, 'user:'.auth()->id());
+        $this->update();
 
-        return $this->update();
+        return auth()->user()->pushInStreams($this->id, 'user:'.auth()->id());
     }
 
     public function markAsInactive(){

@@ -9,6 +9,8 @@ use App\Emails\VerificationMail;
 use Illuminate\Notifications\Messages\NexmoMessage;
 use NotificationChannels\Telegram\TelegramChannel;
 use NotificationChannels\Telegram\TelegramMessage;
+use Illuminate\Notifications\Messages\SlackMessage;
+use App\Services\SystemService;
 
 class SendVerificationCode extends Notification
 {
@@ -16,18 +18,14 @@ class SendVerificationCode extends Notification
 
     protected $code;
 
-    protected $via;
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct($code, $via)
+    public function __construct($code)
     {
         $this->code = $code;
-
-        $this->via = ($via == 'sms') ? ['nexmo'] : ['mail'];
     }
 
 
@@ -39,25 +37,9 @@ class SendVerificationCode extends Notification
      */
     public function via($notifiable)
     {
-        if (app()->environment('local')) {
-            return [TelegramChannel::class];
-        }
-       
-        return $this->via;
+        return method_exists($notifiable, 'getTable') ? ['nexmo'] : ['slack'];
     }
 
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-
-        return (new VerificationMail($this->code))->to($notifiable->address);
-    }
 
     /**
      * Get the Nexmo / SMS representation of the notification.
@@ -71,11 +53,9 @@ class SendVerificationCode extends Notification
                     ->content('Verification code: '.$this->code);
     }
 
-    public function toTelegram($notifiable)
+    public function toSlack(): SlackMessage
     {
-        return TelegramMessage::create()
-            ->to('-213889926')
-            ->content('Verification code: '.$this->code);
+        return (new SlackMessage)->content('Verification code for '.auth()->user()->name.': '.$this->code);
     }
 
 }

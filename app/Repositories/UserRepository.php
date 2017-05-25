@@ -6,10 +6,12 @@ use App\Repositories\BaseRepository;
 use App\Entities\User;
 use App\Notifications\SomeoneFollowedYou;
 use App\Repositories\LocationRepository;
+use App\Repositories\ProductRepository;
 use App\Entities\Profile;
 use App\Services\Facebook;
 use App\Services\PhoneService;
 use App\Services\RecommService;
+use App\Services\SystemService;
 use App\Notifications\SendVerificationCode;
 use Carbon\Carbon;
 use Session;
@@ -219,7 +221,12 @@ class UserRepository extends BaseRepository {
             $user->verified = false;
             $code = mt_rand(100000, 999999);
             $user->setMeta('phone_vcode', $code);
-            $user->notify(new SendVerificationCode($code, 'sms'));
+
+            if (app()->environment('local')) {
+                app(SystemService::class)->notify(new SendVerificationCode($code));
+            } else {
+                $user->notify(new SendVerificationCode($code));
+            }
         }
 
         if(array_get($data, 'pcode') and $user->phone and array_get($data, 'pcode') == $user->getMeta('phone_vcode')) {
@@ -272,7 +279,7 @@ class UserRepository extends BaseRepository {
             'booster' => $relationshipBooster
         ]);
 
-        //$user->streamRemoveBySource('recs');
+        $products = app(ProductRepository::class)->findByIds($recommendations)->pluck('id');
 
         $user->pushInStream($recommendations, 'recs');
     }

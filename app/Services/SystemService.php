@@ -20,7 +20,9 @@ class SystemService
 
         try {
            $this->notify(new ExceptionThrown($e));
-        } catch (Exception $e) {
+        } 
+
+        catch (Exception $e) {
            info($e->getMessage());
         }
         

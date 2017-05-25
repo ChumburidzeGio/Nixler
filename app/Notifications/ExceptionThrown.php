@@ -51,7 +51,7 @@ class ExceptionThrown extends Notification
                 'Request url' => Request::method().':'.Request::url(),
                 'Request param' => json_encode(Request::all()),
                 'Environment' => config('app.env'),
-                'User' => auth()->check() ? "#{auth()->id()} ({auth()->user()->name})" : 'guest',
+                'User' => (auth()->check() ? "#".auth()->id()." (".auth()->user()->name.")" : 'guest').";IP:".Request::ip(),
             ]);
 
         });
