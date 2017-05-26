@@ -6,16 +6,16 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
-use Artesaos\SEOTools\Traits\SEOTools as SEOToolsTrait;
+use MetaTag;
 
 class Controller extends BaseController
 {
-    use AuthorizesRequests, DispatchesJobs, ValidatesRequests, SEOToolsTrait;
+    use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
     public function __construct(){
-        $this->seo()->metatags()->setTitleDefault("Nixler");
-        $this->seo()->opengraph()->setTitle(trans('app.title'));
-        $this->seo()->setDescription(trans('app.description'));
-        $this->seo()->addImages([url('/img/meta.jpg')]);
+    	MetaTag::set('title', trans('app.title'));
+    	MetaTag::set('description', trans('app.description'));
+        MetaTag::set('image', url('/img/meta.jpg'));
+        MetaTag::set('type', 'website');
     }
 }

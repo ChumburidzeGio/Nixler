@@ -170,7 +170,6 @@ return [
          */
         Laravel\Tinker\TinkerServiceProvider::class,
         Spatie\Newsletter\NewsletterServiceProvider::class,
-        Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
         Plank\Mediable\MediableServiceProvider::class,
         Plank\Metable\MetableServiceProvider::class,
         Overtrue\LaravelFollow\FollowServiceProvider::class,
@@ -194,6 +193,7 @@ return [
         Spatie\Backup\BackupServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
         Spatie\DemoMode\DemoModeServiceProvider::class,
+        Torann\LaravelMetaTags\MetaTagsServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*
@@ -264,6 +264,7 @@ return [
         'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
         'Linguist'  => Keevitaja\Linguist\Facades\LinguistFacade::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
+        'MetaTag'   => Torann\LaravelMetaTags\Facades\MetaTag::class,
         //'BotMan' => Mpociot\BotMan\Facades\BotMan::class,
     ],
 

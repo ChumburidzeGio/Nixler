@@ -11,6 +11,7 @@ use App\Entities\Order;
 use App\Entities\ShippingPrice;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
+use MetaTag;
 
 class ProductController extends Controller
 {
@@ -38,15 +39,10 @@ class ProductController extends Controller
     {
         $product = $this->repository->findBySlug($id, $uid);
 
-        $this->seo()->metatags()->setTitleDefault($product->title);
-        
-        $this->seo()->opengraph()->setTitle($product->title);
-
-        $this->seo()->setDescription($product->description);
-
-        $this->seo()->opengraph()->addImages([$product->photo('full')]);
-
-        $this->seo()->opengraph()->addProperty('type', 'product');
+        MetaTag::set('title', $product->title);
+        MetaTag::set('description', $product->description);
+        MetaTag::set('image', $product->photo('full'));
+        MetaTag::set('type', 'product');
 
         return view('products.show', compact('product'));
     }

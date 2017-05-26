@@ -22,8 +22,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    {!! app('seotools')->metatags()->generate() !!}
-    {!! app('seotools')->opengraph()->generate() !!}
+    <title>{{ MetaTag::get('title') }}</title>
+    {!! MetaTag::tag('description') !!}
+    {!! MetaTag::tag('image') !!}
+    {!! MetaTag::openGraph() !!}
 
     <!-- Browser theme styling -->
     <meta content="#ffffff" name="msapplication-TileColor" />
