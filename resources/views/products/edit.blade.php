@@ -190,7 +190,7 @@ window.product = <?php echo json_encode([
 							<div ng-repeat="variant in vm.variants.items">
 
 								<div class="col-sm-7 _mb15">
-									<input type="text" ng-required="true" minlength="2" maxlength="40" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" placeholder="@lang('Green - XL')" ng-model="variant.name"> 
+									<input type="text" ng-required="true" minlength="1" maxlength="40" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" placeholder="@lang('Green - XL')" ng-model="variant.name"> 
 								</div>
 
 								<div class="col-sm-2 _mb15">
