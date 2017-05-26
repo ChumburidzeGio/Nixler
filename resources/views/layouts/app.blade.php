@@ -37,12 +37,13 @@
                     <img src="{{ auth()->user()->avatar('nav') }}" height="25px" width="25px" class="_va2 _brds3">
                 </a>
                 @else 
+
+                <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri _cbl" id="login">
+                    @lang('Log in')
+                </a>
                 
                 <a href="{{ route('register') }}" class="_tb _posr _pt15 _thvri" id="register">
                     @lang('Sign up')
-                </a>
-                <a href="{{ route('login') }}" class="_tb _posr _pt15 _thvri" id="login">
-                    @lang('Log in')
                 </a>
 
                 @endif
