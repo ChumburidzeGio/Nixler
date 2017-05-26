@@ -7,7 +7,6 @@ use App\Entities\ProductCategory;
 use App\Services\RecommService;
 use Illuminate\Container\Container as App;
 use App\Entities\Product;
-use App\Transformers\ProductTransformer;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -297,13 +296,8 @@ class ProductRepository extends BaseRepository {
             $products = $this->getPopularProducts();
         }
 
-        $manager = new Manager();
+        return $this->transformProducts($products);
 
-        $resource = new Collection($products, new ProductTransformer());
-
-        $resource->setPaginator(new IlluminatePaginatorAdapter($products));
-
-        return $manager->createData($resource);
     }
 
 
@@ -377,9 +371,41 @@ class ProductRepository extends BaseRepository {
 
         $products = $ids ? $this->findByIds($ids)->with('firstPhoto', 'owner')->paginate(20) : collect([]);
 
-        $products = $this->transformToCollection($products);
+        $products = $this->transformProducts($products);
 
         return compact('products', 'facets');
+    }
+
+
+    /**
+     * @param $count integer
+     */
+    public function transformProducts($products)
+    {
+        $items = [];
+
+        if(method_exists($products, 'items')) {
+            $items = collect($products->items())->map(function($item){
+                return [
+                    'id'      => (int) $item->id,
+                    'title'   => $item->title,
+                    'url'   => $item->url(),
+                    'price' => $item->currency . ' ' . $item->price,
+                    'likes_count' => $item->likes_count,
+                    'owner' => $item->owner->name,
+                    'photo' => route('photo', [
+                        'id' => array_get($item->firstPhoto->first(), 'id', '-'),
+                        'type' => 'product',
+                        'place' => 'short-card'
+                    ])
+                ];
+            });
+        }
+
+        return collect([
+            'hasMorePages' => $products->hasMorePages(),
+            'items' => $items
+        ]);
     }
 
 
@@ -396,21 +422,6 @@ class ProductRepository extends BaseRepository {
         $facets['price'][0] = 0;
 
         return collect($facets);
-    }
-
-
-    /**
-     * @param $count integer
-     */
-    public function transformToCollection($products)
-    {
-        $manager = new Manager();
-
-        $resource = new Collection($products, new ProductTransformer());
-
-        $resource->setPaginator(new IlluminatePaginatorAdapter($products));
-
-        return $manager->createData($resource);
     }
 
 

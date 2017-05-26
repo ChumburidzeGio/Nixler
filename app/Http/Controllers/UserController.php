@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Entities\User;
 use App\Repositories\UserRepository;
 use App\Repositories\MediaRepository;
+use MetaTag;
 
 class UserController extends Controller
 {
@@ -37,16 +38,11 @@ class UserController extends Controller
 
         $user = $data['user'];
 
-        $this->seo()->metatags()->setTitleDefault($user->name." ({$user->username})");
+        MetaTag::set('title', $user->name." ({$user->username})");
+        MetaTag::set('description', $user->headline);
+        MetaTag::set('image', $user->avatar('profile'));
+        MetaTag::set('type', 'profile');
         
-        $this->seo()->opengraph()->setTitle($user->name." ({$user->username})");
-
-        $this->seo()->setDescription($user->headline);
-
-        $this->seo()->opengraph()->addImages([$user->avatar('profile')]);
-
-        $this->seo()->opengraph()->addProperty('type', 'profile');
-
         return view('users.profile.'.$data['view'], $data);
     }
 

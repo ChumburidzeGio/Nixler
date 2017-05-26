@@ -139,8 +139,7 @@
 		<span class="_mt30 _fs16 _clear _mb15">@lang('Products')</span>
 		@endif
 
-		@if($products->getResource()->getData()->total())
-		<div class="row _mb15">
+		<div class="row _mb15" ng-if="vm.stream.data.length">
 
 			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15" ng-repeat="product in vm.stream.data">
 				<a class="_bgw _b1 _brds3 _clear" href="@{{ product.url }}">
@@ -166,13 +165,10 @@
 				@lang('More products')
 			</span>
 		</div>
-		@else
 
-		<div class="_tac _pt15 _mt70 _c3">
+		<div class="_tac _pt15 _mt70 _c3" ng-if="!vm.stream.data.length">
 			<h5 class="_fw400">@lang('There is no products to show.')</h5>
 		</div>
-
-		@endif
 
 	</div>
 
