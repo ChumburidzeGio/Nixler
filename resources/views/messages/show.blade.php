@@ -28,7 +28,7 @@
 				    <div class="_clear">
 				        <a class="_title _c4" ng-href="@{{ msg.link }}">
 				            <span ng-bind="msg.author"></span>
-				            <small class="_c2" ng-bind="msg.time | timeAgo"></small>
+				            <small class="_c2 _ml5" ng-bind="msg.time | timeAgo"></small>
 				        </a>
 				        <p class="_c3 _anc" ng-bind-html="msg.body | to_trusted"></p>
 				    </div>

@@ -365,7 +365,7 @@ class ProductRepository extends BaseRepository {
 
         $facets = $this->transformSearchFacets(array_get($results, 'facets'), $ids);
 
-        $products = $this->findByIds($ids)->with('firstPhoto', 'owner')->paginate(20);
+        $products = $ids ? $this->findByIds($ids)->with('firstPhoto', 'owner')->paginate(20) : collect([]);
 
         $products = $this->transformToCollection($products);
 
