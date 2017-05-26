@@ -410,9 +410,9 @@ class ProductRepository extends BaseRepository {
     public function findByIds($ids)
     {
         if(!count($ids)) {
-            return [];
+            return collect([]);
         }
-        
+
         $ids_ordered = implode(',', $ids);
 
         return $this->model->whereIn('id', $ids)->where('status', 'active')->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
