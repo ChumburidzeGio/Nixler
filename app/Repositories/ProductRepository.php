@@ -537,7 +537,8 @@ class ProductRepository extends BaseRepository {
             $model = ProductTag::create([
                 'name' => $tag,
                 'slug' => $slug,
-                'user_id' => auth()->id()
+                'user_id' => auth()->id(),
+                'product_id' => $product->id
             ]);
         }
 

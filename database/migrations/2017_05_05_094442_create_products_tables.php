@@ -78,13 +78,13 @@ class CreateProductsTables extends Migration
         Schema::create('product_tags_t', function (Blueprint $table) {
 
             $table->increments('id');
-            $table->integer('tag_id')->unsigned();
+            $table->integer('product_tag_id')->unsigned();
             $table->string('name');
             $table->string('slug');
             $table->string('locale')->index();
 
-            $table->unique(['tag_id','locale']);
-            $table->foreign('tag_id')->references('id')->on('product_tags')->onDelete('cascade');
+            $table->unique(['product_tag_id','locale']);
+            $table->foreign('product_tag_id')->references('id')->on('product_tags')->onDelete('cascade');
 
         });
 
