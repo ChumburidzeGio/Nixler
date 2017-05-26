@@ -32,7 +32,7 @@
 </span>
 
 @can('update', $product)
-<div class="_tbs _ov _tar _bg5 _m5 _brds3  _pl5">
+<div class="_tbs _ov _tar _bg5 _brds3 _pl5 _mt15">
 
     <small class="_tb _crp _left">
         @lang('You can manage with this product')
