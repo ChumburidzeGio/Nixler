@@ -507,10 +507,10 @@ class ProductRepository extends BaseRepository {
      */
     public function syncTags($tags, Product $product)
     {
-        $tags = collect(json_decode($tags));
+        $tags = collect(json_decode($tags))->pluck('text');
 
         $ids = $tags->map(function ($tag) use ($product) {
-            $model = $this->updateOrCreateTag($tag->text, $product);
+            $model = $this->updateOrCreateTag($tag, $product);
             return $model->id;
         })->flatten();
 
