@@ -18,15 +18,17 @@ class MediaRepository extends BaseRepository {
     {
         return Media::class;
     }
-    
+
 
     /**
      * @param $data array
      * @return Article
      */
     public function generate ($media, $type, $place)
-    {   
-        return Cache::remember(md5(($media ? $media->id : '-').$type.$place), (60 * 24), function () use ($media, $type, $place) {
+    {
+        $hash = md5(($media ? $media->id : '-').$type.$place);
+
+        return Cache::remember($hash, (60 * 24), function () use ($media, $type, $place) {
 
             $default = config("filesystems.media.{$type}.default") ? : abort(404);
             $sizes = config("filesystems.media.{$type}.sizes.{$place}") ? : abort(404);

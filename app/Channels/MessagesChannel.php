@@ -8,7 +8,7 @@ use App\Entities\User;
 class MessagesChannel
 {
     /**
-     * Send the given notification.
+     * Notification channel to send message inside platform.
      *
      * @param mixed $notifiable
      * @param \Illuminate\Notifications\Notification $notification
@@ -29,10 +29,10 @@ class MessagesChannel
         $users = User::whereIn('id', [$messagable, $sender])->get();
 
         foreach ($users as $user) {
-            
+
             if(is_int($sender) && $user->id == $sender){
                 $sender = $user;
-            } 
+            }
 
             if(is_int($messagable) && $user->id == $messagable){
                 $messagable = $user;
