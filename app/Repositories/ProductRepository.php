@@ -510,7 +510,7 @@ class ProductRepository extends BaseRepository {
         $tags = collect(json_decode($tags));
 
         $ids = $tags->map(function ($tag) use ($product) {
-            $model = $this->updateOrCreateTag($tag, $product);
+            $model = $this->updateOrCreateTag($tag->text, $product);
             return $model->id;
         })->flatten();
 
