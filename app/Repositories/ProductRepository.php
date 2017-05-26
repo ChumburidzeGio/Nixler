@@ -385,8 +385,11 @@ class ProductRepository extends BaseRepository {
         $items = [];
 
         if(method_exists($products, 'items')) {
-            $items = collect($products->items())->map(function($item){
-                return [
+            $items = collect($products->items())->reject(function($item){
+                return !$item->owner;
+            })->mapWithKeys(function($item, $id){
+
+                return [[
                     'id'      => (int) $item->id,
                     'title'   => $item->title,
                     'url'   => $item->url(),
@@ -394,11 +397,12 @@ class ProductRepository extends BaseRepository {
                     'likes_count' => $item->likes_count,
                     'owner' => $item->owner->name,
                     'photo' => route('photo', [
-                        'id' => array_get($item->firstPhoto->first(), 'id', '-'),
+                        'id' => $item->firstPhoto ? array_get($item->firstPhoto->first(), 'id', '-') : '-',
                         'type' => 'product',
                         'place' => 'short-card'
                     ])
-                ];
+                ]];
+
             });
         }
 
