@@ -140,7 +140,7 @@ window.product = <?php echo json_encode([
 						<div class="col-sm-7 _mb15">
 							<small class="_clear _mb5">@lang('Tags')</small>
 
-							<tags-input ng-model="vm.tags" placeholder="@lang('Tags for product')" replace-spaces-with-dashes="0" key-property=""></tags-input>
+							<tags-input ng-model="vm.tags" placeholder="@lang('Tags for product')" replace-spaces-with-dashes="0" key-property="" add-on-paste="true"></tags-input>
 
 							<input type="hidden" name="tags" ng-value="vm.tags | json">
 
