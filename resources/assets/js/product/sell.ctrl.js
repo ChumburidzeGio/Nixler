@@ -2,11 +2,19 @@ angular.module('products').controller('SellCtrl', [
     '$http', 'anchorSmoothScroll', '$scope', function ($http, anchorSmoothScroll, $scope) {
 
         var vm = this;
-        vm.media = [];
+        var product = window.product;
 
+        vm.description = product.description;
+        vm.media = product.media;
+        vm.id = product.id;
+        vm.price = product.price;
+        vm.in_stock = product.in_stock;
+        vm.tags = product.tags;
+        vm.category = product.category;
+        vm.categories = product.categories;
 
         vm.variants = {
-            items: [],
+            items: product.variants,
             count: function(){
                 return this.items.length;
             },
@@ -28,17 +36,12 @@ angular.module('products').controller('SellCtrl', [
                     return self.indexOf(value) === index && value !== null;
                 });
 
-                var min = Math.min(...prices);
-                var max = Math.max(...prices);
-                
+                var min = parseFloat(Math.min(...prices)).toFixed(2);
+                var max = parseFloat(Math.max(...prices)).toFixed(2);
+
                 var price = '0.00';
 
                 if(min != 'Infinity' && max != '-Infinity'){
-                    
-                    if(!min + "".indexOf('.')) min = min + '.00';
-
-                    if(!max + "".indexOf('.')) max = max + '.00';
-
                     price = (min == max) ? min : min + ' - ' + max;
                 }
 

@@ -4,6 +4,20 @@
 
 <div class="container" ng-controller="SellCtrl as vm">
 
+<script>
+window.product = <?php echo json_encode([
+	'description' => old('description', $product->description),
+	'media' => old('media', $product->media),
+	'variants' => old("variants", $product->variants),
+	'id' => $product->id,
+	'price' => old('price', $product->price),
+	'in_stock' => old('in_stock', $product->in_stock),
+	'tags' => old('tags', $product->tags),
+	'category' => old('category', $product->category_id),
+	'categories' => $categories
+]); ?>;
+</script>
+
 	<div class="row">
 
 		<div class="col-sm-8 col-xs-12">
@@ -32,7 +46,7 @@
 			</div>
 			@endif
 
-			<form class="_mb2 _fg" name="product" action="{{ $product->link() }}" method="POST" ng-init="vm.id={{ $product->id }}">
+			<form class="_mb2 _fg" name="product" action="{{ $product->link() }}" method="POST">
 				{{ csrf_field() }}
 
 				<div class="_z013 _bgw _mb10 _brds2">
@@ -73,22 +87,11 @@
 								<div id="category">
 									<select selector
 									model="vm.category"
-									value-attr="value"
 									class="_b1 _bcg _brds3"
 									require="true"
-									group-attr="zone">
-									@foreach($categories as $category)
-									<optgroup label="{{ $category->name }}">
-										@foreach($category->children as $subcat)
-										<option value="{{ $subcat->id }}"
-											{{ old('category', $product->category_id) == $subcat->id ? 'selected' : ''}}>
-											{{ $subcat->name }}
-										</option>
-										@endforeach
-									</optgroup>
-									@endforeach
-									
-								</select>
+									value-attr="id"
+									options="vm.categories"
+									group-attr="zone"></select>
 							</div>
 
 							<input type="hidden" name="category" ng-value="vm.category">
@@ -107,7 +110,7 @@
 						@lang('Product description')
 					</small>
 
-					<textarea type="text" class="_b1 _bcg _fe _brds3 _mih70" msd-elastic ng-model="vm.description" rows="8" ng-init="vm.description='{{ old('description', addslashes($product->description)) }}'" id="description" name="description"></textarea>
+					<textarea type="text" class="_b1 _bcg _fe _brds3 _mih70" msd-elastic ng-model="vm.description" rows="8" id="description" name="description"></textarea>
 
 					@if ($errors->has('decription'))
 					<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('decription') }}</span>
@@ -119,7 +122,7 @@
 
 							<input value="{{ $product->currency }} @{{ vm.price }}" class="_b1 _bcg _fe _brds3 _fes" readonly ng-if="vm.variants.count()" type="text">
 
-							<input placeholder="" class="_b1 _bcg _fe _brds3 _fes" id="price" type="text" ng-currency min="1" ng-required="true" currency-symbol="{{ $product->currency }} " ng-model="vm.price" ng-init="vm.price={{ old('price', $product->price) }}" name="price" ng-if="!vm.variants.count()">
+							<input placeholder="" class="_b1 _bcg _fe _brds3 _fes" id="price" type="text" ng-currency min="1" ng-required="true" currency-symbol="{{ $product->currency }} " ng-model="vm.price" name="price" ng-if="!vm.variants.count()">
 
 							@if ($errors->has('price'))
 							<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('price') }}</span>
@@ -128,7 +131,7 @@
 						<div class="col-sm-2 _mb15">
 							<small class="_clear _pb5">@lang('In stock')</small>
 
-							<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="" ui-numeric-input min="0" max="500" max-length="3" ng-init="vm.in_stock={{ $product->in_stock }}" id="in_stock" name="in_stock" ng-readonly="vm.variants.count()">
+							<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.in_stock" placeholder="" ui-numeric-input min="0" max="500" max-length="3" id="in_stock" name="in_stock" ng-readonly="vm.variants.count()">
 
 							@if ($errors->has('in_stock'))
 							<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('in_stock') }}</span>
@@ -139,8 +142,7 @@
 
 							<tags-input ng-model="vm.tags" placeholder="@lang('Tags for product')" replace-spaces-with-dashes="0" key-property=""></tags-input>
 
-							<input type="hidden" name="tags" ng-value="vm.tags | json" 
-							ng-init="{{ old('tags', $product->tags) ? 'vm.tags='.$product->tags : '' }}">
+							<input type="hidden" name="tags" ng-value="vm.tags | json">
 
 							@if ($errors->has('tags'))
 							<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('tags') }}</span>
@@ -148,7 +150,7 @@
 						</div>
 
 
-						<div ng-init='vm.variants.items={{ old("variants", $product->variants) }}'>
+						<div>
 						<div class="col-xs-12 _mb15" ng-if="!vm.variants.count()">
 							<span class="_clear _fs14 _mb5">
 								@lang('Product Variants')
@@ -227,7 +229,7 @@
 				</div>
 
 
-				<div class="_tal _scr1 _p0 _pt10" ng-init="vm.media={{ old('media', $product->media) }}">
+				<div class="_tal _scr1 _p0 _pt10">
 
 					<div sv-root sv-part="vm.media">	
 						<label for="picker-input">

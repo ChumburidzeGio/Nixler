@@ -111,9 +111,11 @@ class ProductRepository extends BaseRepository {
             'owner_id' => $user->id
         ])->firstOrFail();
 
-        $product->variants = ProductVariant::where('product_id', $product->id)->get()->toJson();
+        $product->variants = ProductVariant::where('product_id', $product->id)->get();
 
-        $product->tags = ProductTag::where('product_id', $product->id)->get()->toJson();
+        $product->tags = ProductTag::where('product_id', $product->id)->get()->map(function($item){
+            return ['text' => $item->name];
+        });
 
         $product->media = $product->getMedia('photo')->map(function($media){
             return [
@@ -121,9 +123,17 @@ class ProductRepository extends BaseRepository {
                 'id' => $media->id,
                 'thumb' => url('media/'.$media->id.'/avatar/profile.jpg')
             ];
-        })->toJson();
+        });
 
-        $categories = ProductCategory::with('translations', 'children.translations')->orderBy('order')->get();
+        $categories = ProductCategory::with('translations', 'children.translations')->whereNull('parent_id')->orderBy('order')->get()->map(function($item){
+            return $item->children->map(function($subitem) use ($item){
+                return [
+                    'zone' => $item->name,
+                    'id' => $subitem->id,
+                    'label' => $subitem->name,
+                ];
+            });
+        })->collapse();
 
         return compact('product', 'categories', 'user');
     }
