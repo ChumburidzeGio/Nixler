@@ -166,7 +166,7 @@
 			</span>
 		</div>
 
-		<div class="_tac _pt15 _mt70 _c3" ng-if="!vm.stream.data.length">
+		<div class="_tac _pt15 _mt70 _c3" ng-if="!vm.stream.items.length">
 			<h5 class="_fw400">@lang('There is no products to show.')</h5>
 		</div>
 
