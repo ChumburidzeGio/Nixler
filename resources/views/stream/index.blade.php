@@ -139,9 +139,9 @@
 		<span class="_mt30 _fs16 _clear _mb15">@lang('Products')</span>
 		@endif
 
-		<div class="row _mb15" ng-if="vm.stream.data.length">
+		<div class="row _mb15" ng-if="vm.stream.items.length">
 
-			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15" ng-repeat="product in vm.stream.data">
+			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15" ng-repeat="product in vm.stream.items">
 				<a class="_bgw _b1 _brds3 _clear" href="@{{ product.url }}">
 
 					<img ng-src="@{{ product.photo }}" class="_db _w100">

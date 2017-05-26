@@ -20,8 +20,8 @@ angular.module('stream', [])
 			}
 
 			$http.post(vm.stream.hasMorePages).then(function(response){
-				angular.forEach(response.data.data, function(i,k){
-					vm.stream.data.push(i);
+				angular.forEach(response.data.items, function(i,k){
+					vm.stream.items.push(i);
 				});
 
 				vm.stream.hasMorePages = response.data.hasMorePages;
