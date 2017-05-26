@@ -36,7 +36,11 @@ trait HasMessages {
 
         return $this->threads()->has('messages')->with(['participants' => function($query) use ($user) {
             return $query->where('thread_participants.user_id', '<>', $user->id);
-        }, 'latestMessage'])->orderBy('updated_at', 'desc');
+        }, 'latestMessage'])
+        ->whereHas('participants', function ($query) use($user) {
+            return $query->where('thread_participants.user_id', '<>', $user->id);
+        })
+        ->orderBy('updated_at', 'desc');
     }
 
 
