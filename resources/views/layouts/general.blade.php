@@ -9,14 +9,6 @@
 
     <meta content="{{ config('app.name') }}" name="author" />
 
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-MH8TJZW');</script>
-    <!-- End Google Tag Manager -->
-
     <link type="application/opensearchdescription+xml" rel="search" href="/osd{{ config('app.locale') }}.xml">
 
     <!-- CSRF Token -->
@@ -44,6 +36,21 @@
     </script>
 
     <link id="favicon" rel="icon" type="image/png" sizes="64x64" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAh1BMVEUAAABVgKptkrZVgL9bgLZggL9chbhcgLtagbxdgL1cgLxbgb1bgLxdgb1agbtcgbtdgLxcgb1cgLxdgLtcgLxdgL1cgLxbgLxcgLxdgLxcgLxdgLxcgLxcgL1cgLxdgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxG47sgAAAALHRSTlMABgcMDhgZQEFCSElMTU91dnd6fIWHiImys7S+v8Dg4uPk5eby8/T4+fz9/qPzmuoAAACNSURBVHgBvZDdEoFQFEY3KRLyQxEpIT/W+z+f2XSR3RgzXVg335m1zrk58ptJWpa7cdNHvFg27nMJPW96ZWRCSqgzY2vCGVfH5VSTQc4HeVCFPYasCnfAkaOqg/R0qnAD+hKrWYmvU3uxlm5cFFFHEhOYv88LbGAzcBw/oR4eWFoH/hDyb58YZMYPpQ1PpmIwDYJOKekAAAAASUVORK5CYII=">
+
+    <!-- Facebook Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1227044830767339'); // Insert your pixel ID here.
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1227044830767339&ev=PageView&noscript=1"
+    /></noscript>
+    <!-- End Facebook Pixel Code -->
 
 </head>
 <body class="@yield('body_class')">
