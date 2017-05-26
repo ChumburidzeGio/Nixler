@@ -183,12 +183,13 @@
     "Sign in now": "Zaloguj się teraz",
     "Email or Username": "Email lub nazwa Użytkownika",
     "Password": "Hasło",
-    "Forgot password?": "Zapomniałeś/-aś hasła?",
+    "Forgot password?": "Nie pamiętasz hasła?",
     "Sign in with Facebook": "Zaloguj się przez Facebook",
-    "Don't have account yet?": "Nie masz jeszcze konta?",
-    "Join us": "Dołącz do nas",
+    "Don't have account yet?": "Nowy na Nixler?",
+    "Join us": "Zarejestruj się",
+    "Sign in": "Zaloguj się",
     "Register now": "Zarejestruj się teraz",
-    "Already have an account?": "Posiadasz już konto?",
+    "Already have an account?": "Masz konto?",
     "Your account successfully restored. Have a good day and thank you for coming back!": "Twoje konto zostało przywrócone. Miłego dnia i dziękujemy za powrót!",
     "Your product has been saved, you can anytime publish it from this page or \"My Products\" section.": "Twój produkt został zapisany, możesz w każdej chwili opublikować go na tej stronie lub w zakładce \"Moje produkty\"."
 }
