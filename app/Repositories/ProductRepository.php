@@ -277,9 +277,9 @@ class ProductRepository extends BaseRepository {
         $ids = (new RecommService)->similar($id, 5, auth()->id(), $props);
         
         if($ids) {
-            return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
+            return $this->model->whereIn('id', $ids)->with('firstPhoto')->where('status', 'active')->take(5)->get();
         } else {
-            return $this->model->where('owner_id', $owner_id)->where('id', '<>', $id)->with('firstPhoto')->take(5)->get();
+            return $this->model->where('owner_id', $owner_id)->where('id', '<>', $id)->where('status', 'active')->with('firstPhoto')->take(5)->get();
         }
         
     }
