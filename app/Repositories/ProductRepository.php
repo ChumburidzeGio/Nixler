@@ -57,7 +57,7 @@ class ProductRepository extends BaseRepository {
 
         $product->variants = ProductVariant::where('product_id', $product->id)->get();
 
-        $product->setRelation('similar', $this->similar($product->id));
+        $product->setRelation('similar', $this->similar($product->id, $product->owner_id));
 
         $product->trackActivity('product:viewed');
 
@@ -175,7 +175,7 @@ class ProductRepository extends BaseRepository {
         $product->save();
 
         if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
-            $product->notify(new ProductUpdated);
+            //$product->notify(new ProductUpdated);
             $product->markAsActive();
         }
 
@@ -269,31 +269,43 @@ class ProductRepository extends BaseRepository {
      *
      * @return array
      */
-    public function similar($id)
+    public function similar($id, $owner_id)
     {
         $props = auth()->guest() ? [] : [
-            'filter' => "'currency' == \"{auth()->user()->currency}\""
+            'filter' => "'currency' == \"".auth()->user()->currency."\""
         ];
 
         $ids = (new RecommService)->similar($id, 5, auth()->id(), $props);
         
-        return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
+        if($ids) {
+            return $this->model->whereIn('id', $ids)->with('firstPhoto')->take(5)->get();
+        } else {
+            return $this->model->where('owner_id', $owner_id)->where('id', '<>', $id)->with('firstPhoto')->take(5)->get();
+        }
+        
     }
 
 
     /**
      * @return \Illuminate\Http\Response
      */
-    public function getUserStream($cat = array('*'))
+    public function getUserStream()
     {
         $user = auth()->user();
 
-        if(is_string($cat)){
-            $products = $this->filterProductsByCategory($cat);
-        } elseif($user) {
+        if($user) {
+
             $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+
+            if(!$products->total() && !request()->has('page')) {
+                $user->pushInStream($this->getPopularProducts(20, 1), 'pop');
+                $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+            }
+
         } else {
+
             $products = $this->getPopularProducts();
+            
         }
 
         return $this->transformProducts($products);
@@ -348,28 +360,53 @@ class ProductRepository extends BaseRepository {
 
         $priceMax = $this->filterPrice(array_get($filters, 'price_max', 9999));
 
-        $params = [
-            //'customRanking' => ['desc(price)'],
-            'hitsPerPage' => 50,
-            'attributesToRetrieve' => ['objectID'],
-            //'attributesForFaceting' => ["price", "category_id"],
-            'attributesToHighlight' => [],
-            'facets' => ['price'],
-            'numericFilters' => ["price:{$priceMin} TO {$priceMax}"],
-            //'aroundLatLng' => '40.71, -74.01'
-        ];
+        if($query) {
 
-        if($category) {
-            $params['filters'] = "category_id:{$category}";
+            $results = $this->model->whereKeyword($query)->where('currency', 'PLN')->where('status', 'active')
+                ->limit(1000)->get(['id', 'price', 'category_id']);
+
+            $facets = collect([
+                'price' => $this->getPriceRangeForProducts($results)
+            ]); 
+
+            if($category) {
+                $results = $this->filterByCategory($results, $category);
+            }
+
+            if($priceMin || $priceMax != 9999) {
+                $results = $this->filterByPrice($results, $priceMin, $priceMax);
+            }
+
+            $currentPage = request()->input('page', 1);
+
+            $ids = $results->take(($currentPage * 20 + 1))->pluck('id')->toArray();
+
+            $products = count($ids) ? $this->findByIds($ids)->with('firstPhoto', 'owner')->simplePaginate(20) : collect([]);
+
+        } else {
+
+            $results = $this->model->where('currency', 'PLN')->where('status', 'active');
+
+            if($category) {
+
+                $category_ids = ProductCategory::where('id', $category)->orWhere('parent_id', $category)->pluck('id')->toArray();
+
+                $results->whereIn('category_id', $category_ids);
+
+            }
+
+            $productsForFaceting = $results->get(['id', 'price', 'category_id']);
+
+            $facets = collect([
+                'price' => $this->getPriceRangeForProducts($productsForFaceting)
+            ]); 
+
+            if($priceMin || $priceMax != 9999) {
+                $results->whereBetween('price', [$priceMin, $priceMax]);
+            }
+
+            $products = $results->with('firstPhoto', 'owner')->simplePaginate(20);
         }
-
-        $results = (new AlgoliaService)->search('products', $query, $params);
-
-        $ids = array_flatten(array_get($results, 'hits'));
-
-        $facets = $this->transformSearchFacets(array_get($results, 'facets'), $ids);
-
-        $products = $ids ? $this->findByIds($ids)->with('firstPhoto', 'owner')->paginate(20) : collect([]);
 
         $products = $this->transformProducts($products);
 
@@ -380,52 +417,84 @@ class ProductRepository extends BaseRepository {
     /**
      * @param $count integer
      */
-    public function transformProducts($products)
+    public function filterByCategory($collection, $id)
     {
-        $items = [];
+        $category_ids = ProductCategory::where('id', $id)->orWhere('parent_id', $id)->pluck('id')->toArray();
 
-        if(method_exists($products, 'items')) {
-            $items = collect($products->items())->reject(function($item){
-                return !$item->owner;
-            })->mapWithKeys(function($item, $id){
-
-                return [[
-                    'id'      => (int) $item->id,
-                    'title'   => $item->title,
-                    'url'   => $item->url(),
-                    'price' => $item->currency . ' ' . $item->price,
-                    'likes_count' => $item->likes_count,
-                    'owner' => $item->owner->name,
-                    'photo' => route('photo', [
-                        'id' => $item->firstPhoto ? array_get($item->firstPhoto->first(), 'id', '-') : '-',
-                        'type' => 'product',
-                        'place' => 'short-card'
-                    ])
-                ]];
-
-            });
-        }
-
-        return collect([
-            'hasMorePages' => $products->hasMorePages(),
-            'items' => $items
-        ]);
+        return $collection->filter(function ($item) use ($category_ids) {
+            return in_array($item->category_id, $category_ids);
+        });
     }
 
 
     /**
      * @param $count integer
      */
-    public function transformSearchFacets($facets, $ids)
+    public function filterByPrice($collection, $min, $max)
     {
-        if(!$facets || count($ids) < 10) {
-            return collect([]);
+        return $collection->filter(function ($item) use ($min, $max) {
+
+            $price = floatval($item->price);
+
+            return  $price >= $min && $price <= $max;
+
+        });
+    }
+
+
+    /**
+     * @param $count integer
+     */
+    public function transformProducts($products)
+    {
+        $items = [];
+
+        $nextPageUrl = false;
+
+        if(!method_exists($products, 'items')) {
+            return collect(compact('items', 'nextPageUrl'));
         }
 
-        $facets['price'][9999] = 0;
-        $facets['price'][0] = 0;
+        $items = collect($products->items())->reject(function($item){
+            return !$item->owner;
+        })->map(function($item, $id){
 
-        return collect($facets);
+            return [
+            'id'      => (int) $item->id,
+            'title'   => $item->title,
+            'url'   => $item->url(),
+            'price' => $item->currency . ' ' . $item->price,
+            'likes_count' => $item->likes_count,
+            'owner' => $item->owner->name,
+            'photo' => route('photo', [
+                'id' => $item->firstPhoto ? array_get($item->firstPhoto->first(), 'id', '-') : '-',
+                'type' => 'product',
+                'place' => 'short-card'
+            ])
+            ];
+
+        });
+
+        $nextPageUrl = count($items) ? $products->appends(request()->only(['cat', 'price_min', 'price_max', 'query']))->nextPageUrl() : false;
+
+        return collect(compact('items', 'nextPageUrl'));
+    }
+
+
+    /**
+     * @param $count integer
+     */
+    public function getPriceRangeForProducts($products)
+    {
+        $prices = $products->groupBy('price')->mapWithKeys(function($items, $price){
+            return [floatval($price) => count($items)];
+        })->sort();
+
+        if(!isset($prices->{'0'})){
+            $prices->prepend(0, 0);
+        }
+
+        return $prices->all();
     }
 
 
@@ -447,7 +516,7 @@ class ProductRepository extends BaseRepository {
     /**
      * @param $count integer
      */
-    public function getPopularProducts($count = 6)
+    public function getPopularProducts($count = 6, $justIds = false)
     {
         $ids = Activity::select('object', DB::raw('count(activities.object) as total'))
                     ->whereIn('verb', ['product:viewed', 'product:liked'])
@@ -456,20 +525,11 @@ class ProductRepository extends BaseRepository {
                     ->whereBetween('activities.created_at', [Carbon::now()->subWeek(), Carbon::now()])
                     ->pluck('object');
 
+        if($justIds) {
+            return $ids;
+        }
+
         return $this->model->whereIn('id', $ids)->with('firstPhoto', 'owner')->where('status', 'active')->paginate(20);
-    }
-
-
-    /**
-     * Filter products by category
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function filterProductsByCategory($cat)
-    {
-        $cats = ProductCategory::where('id', $cat)->orWhere('parent_id', $cat)->pluck('id')->toArray();
-
-        return $this->model->with('firstPhoto', 'owner')->where('status', 'active')->whereIn('category_id', $cats)->latest()->paginate(20);
     }
 
 

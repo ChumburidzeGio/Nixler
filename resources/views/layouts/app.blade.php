@@ -52,8 +52,7 @@
             <div class="_dib _oh _posr _brds3" style="width: 100%; max-width: 500px;margin-top: 7px;" id="search-container">
                 <form class="_fg _db _w100" action="{{ route('feed') }}">
                     <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="@lang('Search for products and accounts')" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
-                    @if(request()->has('cat'))<input name="cat" type="hidden" value="{{ request()->input('cat') }}">@endif
-                    <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
+                        <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
                 </form>
             </div>
 

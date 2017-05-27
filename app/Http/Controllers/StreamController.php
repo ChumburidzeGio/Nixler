@@ -54,7 +54,7 @@ class StreamController extends Controller
             return view('landing.page', compact('what', 'why', 'who'));
         }*/
 
-        if($request->has('query')){
+        if($request->has('query') || $request->has('cat')){
 
             $result = $this->productRepository->search($request->all());
             
@@ -67,7 +67,7 @@ class StreamController extends Controller
             }
 
         } else {
-            $products = $this->productRepository->getUserStream($request->input('cat'));
+            $products = $this->productRepository->getUserStream();
         }
 
         $categories = $this->productRepository->getProductCategories($request->input('cat'));

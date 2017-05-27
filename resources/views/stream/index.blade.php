@@ -14,25 +14,23 @@
 
 				<!--div class="_fs12 _ttu _pl15 _pb5">Categories</div-->
 
-				@if(request()->input('cat'))
-				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
+				<a href="{{ route('feed', request()->only(['price_min', 'price_max', 'query'])) }}" 
 					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
-					<i class="material-icons _fs18 _mr15 _va4">arrow_back</i> @lang('Go back')
+					@if(request()->input('cat'))
+						<i class="material-icons _fs18 _mr15 _va4">arrow_back</i> @lang('Go back')
+					@else
+						<i class="material-icons _fs18 _mr15 _va4">local_mall</i> @lang('All categories')
+					@endif
 				</a>
-				@else
-				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query')]) : route('feed') }}" 
-					class="_lim _hvrd _cg _brds3 _fs13{{ !request()->cat ? ' _hvrda' : '' }}">
-					<i class="material-icons _fs18 _mr15 _va4">local_mall</i> @lang('All categories')
-				</a>
-				@endif
-
+				
 				@foreach($categories as $cat)
-				<a href="{{ request()->has('query') ? route('feed', ['query' => request()->input('query'), 'cat' => $cat->id]) : route('feed', ['cat' => $cat->id]) }}"
+				<a href="{{ route('feed', 
+					array_merge(request()->only(['price_min', 'price_max', 'query']), ['cat' => $cat->id])
+				)}}"
 					class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == $cat->id ? ' _hvrda' : '' }}">
 					<i class="material-icons _fs18 _mr15 _va4">{{ $cat->icon or 'brightness_1' }}</i> {{ $cat->name }}
 				</a>
 				@endforeach
-
 
 				{{--<div class="_fs12 _ttu _pl15 _pt10 _pb5">Order</div>
 				<a href="{{ url('/new-product') }}" class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == 1 ? ' _hvra' : '' }}">
@@ -52,13 +50,14 @@
 		</div>
 		<div class="col-lg-9 col-md-10 col-xs-12">
 
-		@if(request()->has('query') && $facets->count() > 0)
+		@if(isset($facets) && $facets && $facets->count() > 0)
 
 			<script>window.facets = {!! $facets->toJson() !!};</script>
 
-			<div class="_db _tbs _ov">
-				<div class="_tb _crp">
+			<div class="_db _tbs _ov _mb5">
+				<div class="_tb _crp _pl5">
 					<span ng-click="vm.showPriceRange=!vm.showPriceRange" ng-class="{'_zi999': vm.showPriceRange}">
+						<i class="material-icons _fs17 _va3 _mr10">filter_list</i>
 						@lang('Price range')<i class="material-icons _fs17 _va5">expand_more</i>
 					</span>
 
@@ -103,6 +102,7 @@
 							<div class="_tb _crp _c4 _right _pr5 _fs15 _pb0" onclick="event.preventDefault();document.getElementById('search-filters-form').submit();">@lang('Apply')</div>
 							<form id="search-filters-form" action="{{ route('feed') }}">
 								<input name="query" type="hidden" value="{{ request()->input('query') }}">
+								<input name="cat" type="hidden" value="{{ request()->input('cat') }}">
 								<input name="price_min" type="hidden" ng-value="vm.filters.price.min">
 								<input name="price_max" type="hidden" ng-value="vm.filters.price.max">
 							</form>

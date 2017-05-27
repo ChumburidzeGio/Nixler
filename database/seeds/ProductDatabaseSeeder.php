@@ -9,35 +9,6 @@ use App\Repositories\ProductRepository;
 
 class ProductDatabaseSeeder extends Seeder
 {
-    
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function getCategory($binding)
-    {
-        $matching = [
-            'Electronics' => 24,
-            'Wireless Phone Accessory' => 14,
-            'Unlocked Phone' => 14,
-            'Personal Computers' => 23,
-            'Wireless Phone' => 14,
-            'Camera' => 15,
-            'Apparel' => 2,
-            'Shoes' => 3,
-            'Kindle Edition' => 66,
-            'Hardcover' => 66,
-            'Paperback' => 66,
-            'Health and Beauty' => 55,
-            'Kitchen' => 47,
-            'Misc.' => 87,
-        ];
-
-        return array_get($matching, $binding);
-
-    }
-
 
     /**
      * Run the database seeds.
@@ -47,54 +18,31 @@ class ProductDatabaseSeeder extends Seeder
     public function run(ProductRepository $repository)
     {
         Model::unguard();
+
+        $faker = Factory::create('en_US');
         
-        $items = array_merge(
-            array_get(Amazon::search('iphone')->json(), 'Items.Item'),
-            array_get(Amazon::search('samsung')->json(), 'Items.Item'),
-            array_get(Amazon::search('iphone 6')->json(), 'Items.Item'),
-            array_get(Amazon::search('macbook')->json(), 'Items.Item'),
-            array_get(Amazon::search('canon')->json(), 'Items.Item'),
-            array_get(Amazon::search('lexar')->json(), 'Items.Item'),
-            array_get(Amazon::search('POLO')->json(), 'Items.Item'),
-            array_get(Amazon::search('Robert Kent')->json(), 'Items.Item'),
-            array_get(Amazon::search('Hugo Boss')->json(), 'Items.Item')
-        );
+        //DB::transaction(function () use ($repository, $faker) {
 
-        DB::transaction(function () use ($items, $repository) {
+            auth()->login(User::inRandomOrder()->whereNotNull('currency')->first());
 
-            collect($items)->map(function($item) use ($repository) {
-
-                auth()->login(User::inRandomOrder()->whereNotNull('currency')->first());
-
+            for ($i=0; $i < 100; $i++) { 
+                
                 $product = $repository->create();
 
-                $features = array_get($item, 'ItemAttributes.Feature');
-                $colors = collect(['Black', 'Indigo', 'Red', 'Blue', 'Yellow', 'Orange', 'Cyan', 'Aero']);
-                $title = str_limit(array_get($item, 'ItemAttributes.Title'), 180);
-                $price = array_get($item, 'ItemAttributes.ListPrice.FormattedPrice');
-                $category = $this->getCategory(array_get($item, 'ItemAttributes.Binding'));
-
-                if(!$price) {
-                    return false;
-                }
-
                 $product = $repository->update([
-                    'title' => $title,
-                    'description' => is_array($features) ? implode(' ', $features) : $features,
-                    'price' => $price,
-                    'category' => $category,
+                    'title' => $faker->sentence(),
+                    'description' => $faker->text(),
+                    'price' => rand(1,2000),
+                    'category' => rand(1,20),
                     'in_stock' => rand(1,50),
-                    'variants' => json_encode($colors->random(rand(1,4))),
                     'action' => 'publish'
                 ], $product->id);
                 
-                print("\nCreated ".str_limit($product->title, 40).' for '.$product->price);
+                print("\n{$i}. Created ".str_limit($product->title, 40).' for '.$product->price);
 
-                if(array_get($item, 'LargeImage.URL')) $product->uploadPhoto(array_get($item, 'LargeImage.URL'), 'photo');
+            }
 
-            });
-
-        });
+        //});
 
     }
 

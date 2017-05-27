@@ -10,21 +10,21 @@ angular.module('stream', [])
 		};
 
 		vm.isMore = function(){
-			return vm.stream.hasMorePages;
+			return vm.stream.nextPageUrl;
 		};
 
 		vm.load = function(){
 
-			if(!vm.stream.hasMorePages){
+			if(!vm.stream.nextPageUrl){
 				return false;
 			}
 
-			$http.post(vm.stream.hasMorePages).then(function(response){
+			$http.post(vm.stream.nextPageUrl).then(function(response){
 				angular.forEach(response.data.items, function(i,k){
 					vm.stream.items.push(i);
 				});
 
-				vm.stream.hasMorePages = response.data.hasMorePages;
+				vm.stream.nextPageUrl = response.data.nextPageUrl;
 			});
 		};
 

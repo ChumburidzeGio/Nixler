@@ -8,7 +8,7 @@ use Cviebrock\EloquentSluggable\Sluggable;
 use Plank\Mediable\Mediable;
 use Plank\Metable\Metable;
 use MediaUploader;
-use Laravel\Scout\Searchable;
+use App\Traits\Searchable;
 use App\Entities\User;
 use App\Traits\NPerGroup;
 use App\Entities\Activity;
@@ -222,7 +222,7 @@ class Product extends Model
     {
         $array = $this->toArray();
 
-        return array_intersect_key($array, array_flip(['title', 'description']));
+        return array_intersect_key($array, array_flip(['id', 'title', 'description']));
     }
     
     

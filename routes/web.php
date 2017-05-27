@@ -1,7 +1,5 @@
 <?php
 
-use App\Services\AlgoliaService;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,23 +20,6 @@ Route::group(['middleware' => 'demoMode'], function () {
 	Route::impersonate();
 
 	Route::get('/policy', function(){
-
-		return (new AlgoliaService)->search('products', $query, [
-			//'customRanking' => ['desc(price)'],
-			'hitsPerPage' => 20,
-			'attributesToRetrieve' => ['objectID'],
-			'attributesForFaceting' => ["price", 'category_id', 'variants', 'tags'],
-			'attributesToHighlight' => [],
-			'facets' => [
-				'price', 'category_id', 'variants', 'tags'
-			],
-	  		//'facetFilters' => ["category:23"],
-	  		'numericFilters' => [
-	  			"price:300 TO 500"
-	  		],
-	  		//'aroundLatLng' => '40.71, -74.01'
-		]);
-
 		return view('policy.page');
 	});
 

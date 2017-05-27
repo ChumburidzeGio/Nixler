@@ -176,7 +176,8 @@ return [
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Nwidart\Modules\LaravelModulesServiceProvider::class,
-        DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class,
+        DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class,//DELETE
+        TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         Dimsav\Translatable\TranslatableServiceProvider::class,
         Prettus\Repository\Providers\RepositoryServiceProvider::class,

@@ -82,7 +82,7 @@ angular.module('utils', []).service('anchorSmoothScroll', function(){
         template: [
             '<div class="show-more-container"><ng-transclude></ng-transclude></div>',
             '<a href="#" class="show-more-expand _c4">{{ more }}</a>',
-            '<a href="#" class="show-more-collapse">{{ less }}</a>',
+            '<a href="#" class="show-more-collapse _c4">{{ less }}</a>',
         ].join(''),
         scope: {
             more: '@',
