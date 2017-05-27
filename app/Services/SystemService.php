@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use AlgoliaSearch\Client;
 use App\Notifications\ExceptionThrown;
 use Exception;
 

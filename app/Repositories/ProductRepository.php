@@ -17,7 +17,6 @@ use App\Entities\ShippingPrice;
 use App\Entities\Order;
 use Carbon\Carbon;
 use Ayeo\Price\Price;
-use App\Services\AlgoliaService;
 use App\Notifications\ProductUpdated;
 use App\Notifications\ProductDeleted;
 use Auth, DB;
@@ -492,6 +491,10 @@ class ProductRepository extends BaseRepository {
 
         if(!isset($prices->{'0'})){
             $prices->prepend(0, 0);
+        }
+
+        if(!isset($prices->{'9999'})){
+            $prices->put(9999, 0);
         }
 
         return $prices->all();

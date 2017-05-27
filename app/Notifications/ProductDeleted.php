@@ -5,7 +5,6 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Channels\AlgoliaChannel;
 use App\Channels\RecommChannel;
 
 class ProductDeleted extends Notification
@@ -20,15 +19,7 @@ class ProductDeleted extends Notification
      */
     public function via($notifiable)
     {
-        return [AlgoliaChannel::class, RecommChannel::class];
-    }
-
-    /**
-     * @return array
-     */
-    public function toAlgolia($product, $service)
-    {
-        return $service->deleteObject('products', $notifiable->id);
+        return [RecommChannel::class];
     }
 
     /**

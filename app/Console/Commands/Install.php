@@ -118,9 +118,8 @@ class Install extends Command
         $this->comment("All tables successfully dropped");
 
         $this->call('migrate');
-        $this->call('scout:mysql-index', [ 'model' => 'App\\Entities\\Product' ]);
-        $this->call('scout:mysql-index', [ 'model' => 'App\\Entities\\User' ]);
-
+        $this->call('scout:import App\\Entities\\Product');
+        $this->call('scout:import App\\Entities\\User');
     }
 
     /**

@@ -32,7 +32,7 @@ class ProductUpdated extends Notification
      */
     public function via($notifiable)
     {
-        return [AlgoliaChannel::class, RecommChannel::class];
+        return [RecommChannel::class];
     }
 
     /**
@@ -66,14 +66,6 @@ class ProductUpdated extends Notification
                 'lng' => $city->lng
             ],
         ];
-    }
-
-    /**
-     * @return array
-     */
-    public function toAlgolia($notifiable, $service)
-    {
-        return $service->addObject('products', $this->toArray($notifiable), $notifiable->id);
     }
 
     /**
