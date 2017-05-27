@@ -174,7 +174,7 @@ class ProductRepository extends BaseRepository {
         $product->save();
 
         if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
-            //$product->notify(new ProductUpdated);
+            $product->notify(new ProductUpdated);
             $product->markAsActive();
         }
 
