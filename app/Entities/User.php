@@ -57,7 +57,7 @@ class User extends Authenticatable
     {
         $array = $this->toArray();
 
-        return array_intersect_key($array, array_flip(['name', 'email']));
+        return array_intersect_key($array, array_flip(['id', 'name', 'email']));
     }
     
     /**
