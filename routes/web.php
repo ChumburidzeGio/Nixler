@@ -116,4 +116,8 @@ Route::group(['middleware' => 'demoMode'], function () {
 
 	Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
+	Route::get('/monitor', function(){
+		return app(\App\Monitors\MonitorFactory::class)->get();
+	});
+
 });

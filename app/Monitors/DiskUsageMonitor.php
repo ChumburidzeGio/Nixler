@@ -48,7 +48,7 @@ class DiskUsageMonitor extends BaseMonitor
      */
     public function getResult()
     {
-        return $this->getHumanReadableSize($this->usedSpace) . ' / ' . $this->getHumanReadableSize($this->totalSpace);
+        return $this->percentageUsed.'% used';
     }
 
 }
