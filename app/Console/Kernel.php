@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('response_times:update')->daily();
         $schedule->command('stream:update')->everyTenMinutes();
-        $schedule->command('server-monitor:run-checks')->everyMinute();
+        //$schedule->command('server-monitor:run-checks')->everyMinute();
         $schedule->command('backup:clean')->daily()->at('01:00');
         $schedule->command('backup:run')->daily()->at('02:00');
         $schedule->command('backup:monitor')->daily()->at('03:00');
