@@ -32,7 +32,7 @@ class SystemMonitor extends Command
     {
         $monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
-        if(!$monitors['hasErrors']) {
+        if($monitors['hasErrors']) {
 
             $fields = array_get($monitors, 'fields')->toArray();
 
