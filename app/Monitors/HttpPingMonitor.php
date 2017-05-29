@@ -55,9 +55,17 @@ class HttpPingMonitor extends BaseMonitor
     }
 
     /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return 'Http Ping';
+    }
+
+    /**
      * @return boolean
      */
-    public function isDangerouse()
+    public function hasErrors()
     {
         return ($this->responseCode != '200');
     }
@@ -67,7 +75,7 @@ class HttpPingMonitor extends BaseMonitor
      */
     public function getResult()
     {
-        return $this->isDangerouse() ? 
+        return $this->hasErrors() ? 
             ($this->responseCode ? $this->responseCode.' error' : $this->responseContent) : 
             'The request is OK';
     }

@@ -14,24 +14,14 @@ class Install extends Command
      *
      * @var string
      */
-    protected $signature = 'install';
+    protected $signature = 'nx:install';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
-
-    /**
-     * Create a new command instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $description = 'Setup system';
 
     /**
      * Execute the console command.
@@ -39,28 +29,6 @@ class Install extends Command
      * @return mixed
      */
     public function handle()
-    {
-        if ($this->confirm('Do you want to reset the system?')) {
-            $this->reset();
-        }
-
-        if ($this->confirm('Do you want to seed data in database for testing?')) {
-            $this->setFakeData();
-        }
-
-        $this->call('server-monitor:add-host');
-        
-        $this->call('optimize');
-        $this->call('cache:clear');
-        
-    }
-
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function reset()
     {
         $this->resetDB();
         $this->cleanStorage();
@@ -78,6 +46,10 @@ class Install extends Command
         $this->call('db:seed', [ '--class' => 'BlogDatabaseSeeder' ]);
 
         $this->createAccountsAndRoles();
+
+        $this->call('optimize');
+        $this->call('cache:clear');
+        
     }
 
     /**
@@ -163,112 +135,4 @@ class Install extends Command
         Bouncer::refresh();
     }
 
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function setFakeData()
-    {
-        app()->setLocale(config('app.fallback_locale'));
-        $this->call('db:seed');
-    }
-
-
-
-    /**
-     * Remove all tables from database
-     *
-     * @return mixed
-     */
-    private function setENV()
-    {
-
-        $this->call('key:generate');
-
-        $env = $this->svwq('What is the environment?', 'APP_ENV', 'anticipate', ['local', 'production', 'development']);
-
-        $this->svwq('Name of database?', 'DB_DATABASE');
-        $this->svwq('Port?', 'DB_PORT');
-        $this->svwq('Username?', 'DB_USERNAME');
-        $this->svwq('Password?', 'DB_PASSWORD');
-
-        if($env != 'production'){
-
-            $this->env('MAIL_DRIVER', 'mailtrap');
-            $this->env('MAIL_HOST', 'smtp.mailtrap.io');
-            $this->env('MAIL_PORT', '2525');
-
-            $this->svwq('Mailtrap username?', 'MAIL_USERNAME');
-            $this->svwq('Mailtrap password?', 'MAIL_PASSWORD');
-
-        } else {
-
-            $this->env('MAIL_DRIVER', 'mailgun');
-            $this->env('MAIL_HOST', 'smtp.mailgun.org');
-            $this->env('MAIL_PORT', '587');
-            $this->env('MAILGUN_DOMAIN', 'mail.nixler.pl');
-
-            $this->svwq('Mailgun secret?', 'MAILGUN_SECRET');
-
-        }
-
-        $this->svwq('Facebook APP ID?', 'FACEBOOK_APP_ID');
-        $this->svwq('Facebook APP secret?', 'FACEBOOK_APP_SECRET');
-        $this->svwq('Facebook APP redirect link?', 'FACEBOOK_APP_REDIRECT');
-
-        $this->svwq('Recomm DB name?', 'RECOMM_DB');
-        $this->svwq('Recomm DB key?', 'RECOMM_KEY');
-        
-        $this->svwq('Mailchimp API key?', 'MAILCHIMP_APIKEY');
-
-        $this->info('Enviroment variables has been succesfully set');
-
-    }
-
-
-    /**
-     * Write a new environment file with the given key.
-     *
-     * @param  string  $key
-     * @return void
-     */
-    protected function env($key, $val)
-    {
-        file_put_contents($this->laravel->environmentFilePath(), preg_replace(
-            $this->keyReplacementPattern($key),
-           $key."=".$val,
-            file_get_contents(app()->environmentFilePath())
-        ));
-    }
-
-
-    /**
-     * Write a new environment file with the given key.
-     *
-     * @param  string  $key
-     * @return void
-     */
-    protected function svwq($question, $key, $type = 'ask', $params = null, $val = null)
-    {
-        if($val = $this->{$type}($question, $params)){
-            
-            $this->env($key, $val);
-            
-        }
-
-        return $val;
-    }
-
-
-    /**
-     * Get a regex pattern that will match env APP_KEY with any random key.
-     *
-     * @return string
-     */
-    protected function keyReplacementPattern($key)
-    {
-        $escaped = preg_quote('='.env($key), '/');
-        return "/^{$key}{$escaped}/m";
-    }
 }

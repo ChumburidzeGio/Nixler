@@ -12,20 +12,28 @@ class MonitorFactory
     public static function get(array $filter = ['*'])
     {
         $monitors = [
-            'ssl' => SSLCertificateMonitor::class,
             'disk' => DiskUsageMonitor::class,
             'ping' => HttpPingMonitor::class,
+            'ssl' => SSLCertificateMonitor::class,
         ];
 
         if($filter != ['*']) {
             $monitors = array_intersect_key($monitors, array_flip($filter));
         }
 
-        return collect($monitors)->map(function($monitor) {
-            return [
-                'isDangerouse' => app($monitor)->isDangerouse(),
-                'getResult' => app($monitor)->getResult(),
-            ];
+        $fields = collect($monitors)->mapWithKeys(function($monitor) {
+
+            $monitor = app($monitor);
+
+            return [$monitor->getTitle() => (
+                $monitor->hasErrors() ? "`{$monitor->getResult()}`" : $monitor->getResult()
+            )];
         });
+
+        $hasErrors = !!collect($monitors)->filter(function($monitor){
+            return app($monitor)->hasErrors();
+        })->count();
+
+        return compact('fields', 'hasErrors');
     }
 }

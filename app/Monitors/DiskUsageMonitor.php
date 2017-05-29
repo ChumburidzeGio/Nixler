@@ -36,9 +36,17 @@ class DiskUsageMonitor extends BaseMonitor
     }
 
     /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return 'Disk Usage';
+    }
+
+    /**
      * @return boolean
      */
-    public function isDangerouse()
+    public function hasErrors()
     {
         return ($this->percentageUsed >= $this->alarmPercentage);
     }

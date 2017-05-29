@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Install::class,
+        \App\Console\Commands\Env::class,
+        \App\Console\Commands\SystemMonitor::class,
         \App\Console\Commands\UpdateStreams::class,
         \App\Console\Commands\UpdateResponseTimes::class,
         \App\Console\Commands\DownloadCountryData::class,
@@ -29,7 +31,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('response_times:update')->daily();
         $schedule->command('stream:update')->everyTenMinutes();
-        //$schedule->command('server-monitor:run-checks')->everyMinute();
+        $schedule->command('monitor')->everyMinute();
         $schedule->command('backup:clean')->daily()->at('01:00');
         $schedule->command('backup:run')->daily()->at('02:00');
         $schedule->command('backup:monitor')->daily()->at('03:00');

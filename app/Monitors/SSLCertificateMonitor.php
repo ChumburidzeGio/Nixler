@@ -65,9 +65,17 @@ class SSLCertificateMonitor extends BaseMonitor
     }
 
     /**
+     * @return string
+     */
+    public function getTitle()
+    {
+        return 'SSL Certificate';
+    }
+
+    /**
      * @return boolean
      */
-    public function isDangerouse()
+    public function hasErrors()
     {
         return ($this->status != 'Valid');
     }
