@@ -3,113 +3,84 @@
 namespace App\Monitors;
 
 use Carbon\Carbon;
-use EricMakesStuff\ServerMonitor\Events\SSLCertificateExpiring;
-use EricMakesStuff\ServerMonitor\Events\SSLCertificateInvalid;
-use EricMakesStuff\ServerMonitor\Events\SSLCertificateValid;
-use EricMakesStuff\ServerMonitor\Exceptions\InvalidConfiguration;
+use Exception;
 
 class SSLCertificateMonitor extends BaseMonitor
 {
-    /**  @var array */
-    protected $certificateInfo;
-
     /**  @var string */
-    protected $certificateExpiration;
-
-    /**  @var string */
-    protected $certificateDomain;
-
-    /**  @var array */
-    protected $certificateAdditionalDomains = [];
-
-    /**  @var int */
-    protected $certificateDaysUntilExpiration;
-
-    /**  @var string */
-    protected $url;
-
-    /**  @var array */
-    protected $alarmDaysBeforeExpiration = [28, 14, 7, 3, 2, 1, 0];
+    protected $status;
 
     /**
      * @param array $config
      */
-    public function __construct(array $config)
+    public function __construct()
     {
-        if (!empty($config['url'])) {
-            $this->url = $config['url'];
+        $url = parse_url('https://www.nixler.pl');
+
+        if (empty($url['scheme']) || $url['scheme'] != 'https') {
+            throw new Exception("Nixler is not secure!", 1);
         }
 
-        if (!empty($config['alarmDaysBeforeExpiration'])) {
-            $this->alarmDaysBeforeExpiration = $config['alarmDaysBeforeExpiration'];
-        }
-    }
-
-    /**
-     * @throws InvalidConfiguration
-     */
-    public function runMonitor()
-    {
-        $urlParts = $this->parseUrl($this->url);
-
-        try {
-            $this->certificateInfo = $this->downloadCertificate($urlParts);
-        } catch (\ErrorException $e) {
-            event(new SSLCertificateInvalid($this));
-            return false;
-        } catch (\Exception $e) {
-            throw InvalidConfiguration::urlCouldNotBeDownloaded();
-        }
-
-        $this->processCertificate($this->certificateInfo);
-
-        if ($this->certificateDaysUntilExpiration < 0
-            || ! $this->hostCoveredByCertificate($urlParts['host'], $this->certificateDomain, $this->certificateAdditionalDomains)) {
-            event(new SSLCertificateInvalid($this));
-        } elseif (in_array($this->certificateDaysUntilExpiration, $this->alarmDaysBeforeExpiration)) {
-            event(new SSLCertificateExpiring($this));
-        } else {
-            event(new SSLCertificateValid($this));
-        }
-    }
-
-    protected function downloadCertificate($urlParts)
-    {
+        //DOWNLOAD CERTIFICATE
         $streamContext = stream_context_create([
             "ssl" => [
                 "capture_peer_cert" => TRUE
             ]
         ]);
 
-        $streamClient = stream_socket_client("ssl://{$urlParts['host']}:443", $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $streamContext);
+        $streamClient = stream_socket_client("ssl://{$url['host']}:443", $errno, $errstr, 30, STREAM_CLIENT_CONNECT, $streamContext);
 
         $certificateContext = stream_context_get_params($streamClient);
 
-        return openssl_x509_parse($certificateContext['options']['ssl']['peer_certificate']);
-    }
+        $certificate = openssl_x509_parse($certificateContext['options']['ssl']['peer_certificate']);
+        //END DOWNLOAD CERTIFICATE
 
-    public function processCertificate($certificateInfo)
-    {
-        if (!empty($certificateInfo['subject']) && !empty($certificateInfo['subject']['CN'])) {
-            $this->certificateDomain = $certificateInfo['subject']['CN'];
+        //PROCESS CERTIFICATE
+        if (!empty($certificate['subject']) && !empty($certificate['subject']['CN'])) {
+            $certDomain = $certificate['subject']['CN'];
         }
 
-        if (!empty($certificateInfo['validTo_time_t'])) {
-            $validTo = Carbon::createFromTimestampUTC($certificateInfo['validTo_time_t']);
-            $this->certificateExpiration = $validTo->toDateString();
-            $this->certificateDaysUntilExpiration = - $validTo->diffInDays(Carbon::now(), false);
+        if (!empty($certificate['validTo_time_t'])) {
+            $validTo = Carbon::createFromTimestampUTC($certificate['validTo_time_t']);
+            $due = - $validTo->diffInDays(Carbon::now(), false);
         }
 
-        if (!empty($certificateInfo['extensions']) && !empty($certificateInfo['extensions']['subjectAltName'])) {
-            $this->certificateAdditionalDomains = [];
-            $domains = explode(', ', $certificateInfo['extensions']['subjectAltName']);
+        if (!empty($certificate['extensions']) && !empty($certificate['extensions']['subjectAltName'])) {
+            $additionalDomains = [];
+            $domains = explode(', ', $certificate['extensions']['subjectAltName']);
             foreach ($domains as $domain) {
-                $this->certificateAdditionalDomains[] = str_replace('DNS:', '', $domain);
+                $additionalDomains[] = str_replace('DNS:', '', $domain);
             }
         }
+        //END PROCESS CERTIFICATE
+
+        if ($due < 0 || ! $this->isHostCovered($url['host'], $certDomain, $additionalDomains)) {
+            $this->status = 'Invalid';
+        } elseif ($due < 20) {
+            $this->status = 'Expires in '.$due.' days';
+        } else {
+            $this->status = 'Valid';
+        }
+
     }
 
-    public function hostCoveredByCertificate($host, $certificateHost, array $certificateAdditionalDomains = [])
+    /**
+     * @return boolean
+     */
+    public function isDangerouse()
+    {
+        return ($this->status != 'Valid');
+    }
+
+    /**
+     * @return string
+     */
+    public function getResult()
+    {
+        return $this->status;
+    }
+
+    public function isHostCovered($host, $certificateHost, array $certificateAdditionalDomains = [])
     {
         if ($host == $certificateHost) {
             return true;
@@ -122,61 +93,16 @@ class SSLCertificateMonitor extends BaseMonitor
             return $certificateHost == $host;
         }
 
-        // Determine if the host domain is in the certificate's additional domains
-        return in_array($host, $certificateAdditionalDomains);
-    }
+        foreach ($certificateAdditionalDomains as $domain) {
+            if ($domain[0] == '*' && substr_count($host, '.') > 1) {
+                $domain = substr($domain, 1);
+                $host = substr($host, strpos($host, '.'));
+            }
 
-    protected function parseUrl($url)
-    {
-        if (empty($url)) {
-            throw InvalidConfiguration::noUrlConfigured();
+            if($domain == $host) {
+                return true;
+            }
         }
-
-        $urlParts = parse_url($url);
-
-        if (!$urlParts) {
-            throw InvalidConfiguration::urlCouldNotBeParsed();
-        }
-
-        if (empty($urlParts['scheme']) || $urlParts['scheme'] != 'https') {
-            throw InvalidConfiguration::urlNotSecure();
-        }
-
-        return $urlParts;
     }
 
-    public function getUrl()
-    {
-        return $this->url;
-    }
-
-    public function getCertificateInfo()
-    {
-        return $this->certificateInfo;
-    }
-
-    public function getCertificateExpiration()
-    {
-        return $this->certificateExpiration;
-    }
-
-    public function getCertificateDomain()
-    {
-        return $this->certificateDomain;
-    }
-
-    public function getCertificateDaysUntilExpiration()
-    {
-        return $this->certificateDaysUntilExpiration;
-    }
-
-    public function getAlarmDaysBeforeExpiration()
-    {
-        return $this->alarmDaysBeforeExpiration;
-    }
-
-    public function getCertificateAdditionalDomains()
-    {
-        return $this->certificateAdditionalDomains;
-    }
 }
