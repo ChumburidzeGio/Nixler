@@ -3,7 +3,7 @@
 </span>
 
 <span class="_cgr _clear _fs17 _pr10">
-   {{ $product->currency }} {{ $product->price }}
+   {{ $product->price_formated }}
 
    <div class="_tbs _ov _right _cg _mt3" ng-init="vm.liked={{ $product->isLiked() ? 1 : 0 }}">
 

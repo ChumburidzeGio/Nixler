@@ -8,7 +8,7 @@
                 {{ $product->title }}
             </span>
             <span class="_cg _clear _fs12  _telipsis _w100 _oh _pr10">
-                <b class="_ci">{{ $product->currency }} {{ $product->price }}</b> · {{ '@'.$product->owner_username }} · <i class="material-icons _fs13 _va2 _cg">favorite</i> {{ $product->likes_count }}
+                <b class="_ci">{{ $product->price_formated }}</b> · {{ '@'.$product->owner_username }} · <i class="material-icons _fs13 _va2 _cg">favorite</i> {{ $product->likes_count }}
             </span>
         </div>
 

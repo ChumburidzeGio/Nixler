@@ -247,9 +247,9 @@ class User extends Authenticatable
         if($avg > 20 || !$this->attributes['response_time']) return null;
 
         $times = [
-            15 => 'Very responsive to messages',
-            60 => 'Response within '.$avg.' minutes.',
-            3600 => 'Response within '.round(($avg / 60), -1).' hours.'
+            15 => __('Very responsive to messages.'),
+            60 => __('Response within :avg minutes.', compact('avg')),
+            3600 => __('Response within :hour hours.', ['hour' => round(($avg / 60), -1)])
         ];
 
         foreach ($times as $mins => $text) {

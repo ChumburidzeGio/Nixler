@@ -18,6 +18,7 @@ use App\Services\Markdown;
 use App\Entities\ProductCategory;
 use App\Entities\Comment;
 use App\Services\SystemService;
+use App\Services\CurrencyService;
 
 class Product extends Model
 {
@@ -109,6 +110,10 @@ class Product extends Model
         $this->attributes['description'] = strip_tags($value);
     }
 
+
+    public function getPriceFormatedAttribute(){
+        return app(CurrencyService::class)->get($this->attributes['currency'], $this->attributes['price']);
+    }
 
     public function getIsActiveAttribute(){
         return !!($this->attributes['status'] == 'active');

@@ -25,7 +25,7 @@
                             By <a href="{{ $order->product->owner->link() }}" class="_ci">{{ $order->product->owner->name }}</a>
                         </span>
                         <span class="_cbt8 _clear _telipsis _w100 _oh _pr10 _oh _fs13">
-                            {{ $order->currency }} {{ $order->product->price }}
+                            {{ $order->price_formated }}
                         </span>
                     </div>
                     @endif

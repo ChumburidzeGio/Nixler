@@ -39,7 +39,7 @@ class ProductController extends Controller
     {
         $product = $this->repository->findBySlug($id, $uid);
 
-        MetaTag::set('title', $product->title);
+        MetaTag::set('title', "{$product->title} · {$product->price_formated}");
         MetaTag::set('description', $product->description);
         MetaTag::set('image', $product->photo('full'));
         MetaTag::set('type', 'product');

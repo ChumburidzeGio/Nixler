@@ -196,5 +196,8 @@
     "Password": "პაროლი",
     "Already have an account?": "გაქვს ანგარიში?",
     "Your account successfully restored. Have a good day and thank you for coming back!": "თქვენი ანგარიში წარმატებით აღდგა. გისურვებთ სასიამოვნო დღეს და მადლობა დაბრუნებისათვის!",
-    "Your product has been saved, you can anytime publish it from this page or \"My Products\" section.": ""
+    "Your product has been saved, you can anytime publish it from this page or \"My Products\" section.": "",
+    "Very responsive to messages.": "",
+    "Response within :avg minutes.": "",
+    "Response within :hour hours.": ""
 }

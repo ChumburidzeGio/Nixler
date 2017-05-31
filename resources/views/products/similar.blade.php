@@ -8,6 +8,6 @@
 		<span class="_cbt8 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs15">
 			{{ $product->title }}
 		</span>
-		<span class="_cgr _clear _fs13  _telipsis _w100 _oh _pr10 _oh">{{ $product->currency }} {{ $product->price }}</span>
+		<span class="_cgr _clear _fs13  _telipsis _w100 _oh _pr10 _oh">{{ $product->price_formated }}</span>
 	</div>
 </a>
