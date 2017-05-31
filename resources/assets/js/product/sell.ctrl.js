@@ -60,11 +60,14 @@ angular.module('products').controller('SellCtrl', [
             }
         };
 
+
         $scope.$watch(function(){
             return vm.variants.items;
         }, function() {
-           vm.price = vm.variants.price();
-           vm.in_stock = vm.variants.in_stock();
+           if(vm.variants.items.length) {
+            vm.price = vm.variants.price();
+            vm.in_stock = vm.variants.in_stock();
+           }
         }, true);
 
         vm.selectMedia = function (event) {
