@@ -34,7 +34,7 @@ class Handler extends ExceptionHandler
     public function report(Exception $exception)
     {
         if ($this->shouldReport($exception)) {
-           app(SystemService::class)->reportException($exception);
+           return app(SystemService::class)->reportException($exception);
         }
 
         parent::report($exception);

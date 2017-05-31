@@ -29,14 +29,14 @@
 				@lang('We accept return')
 			</div>
 
-			<div class="_mb15 col-sm-12 _pl15 _pr15 _pt10 _bt1 form-group _m0">
+			<div class="_mb15 col-sm-12 _pl15 _pr15 _pt10 _bt1 form-group _m0 ng-cloak" ng-if="vm.has_return">
 				<small class="_clear _pb5">@lang('Return Policy')</small>
 				<textarea name="policy" type="text" class="_b1 _bcg _fe _brds3"
 				ng-disabled="!vm.has_return" msd-elastic ng-model="vm.policy"
 				placeholder="@lang('Please tell users about your return policy, in how many days is it possible to return product and what are the rules')" id="policy">{{ auth()->user()->getMeta('return_policy') }}</textarea>
 			</div>
 
-			<div class="col-sm-12 _mb15 _tar">
+			<div class="col-sm-12 _mb10 _tar _bt1 _pt10">
 				<button class="_btn _bga _cb _hvra _mr5" type="submit" id="update"> 
 					<i class="material-icons _mr5 _va5 _fs20">refresh</i> @lang('Update')
 				</button>

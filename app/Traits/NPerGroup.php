@@ -33,7 +33,7 @@ trait NPerGroup {
 
     // apply mysql variables
     $newQuery->addSelect(\DB::raw(
-      "@num := if(@group = {$groupTable}.{$group}, @num+1, 1) as {$numAlias}, @group := {$groupTable}.{$group} as {$groupAlias}"
+      "@num := if(@group = {$groupTable}.{$group}, @num, 1) as {$numAlias}, @group := {$groupTable}.{$group} as {$groupAlias}"
     ));
 
     if(is_null($order)) {

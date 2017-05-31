@@ -181,9 +181,13 @@ class ProductController extends Controller
     {
         $user = auth()->user();
 
+        debug("Order placing page for product {$id}");
+
         if(!$request->has('step')) {
 
             $data = $this->repository->getWithShippingByCity($id, $request->all());
+
+            debug("Showing order page for product with ID {$id}");
 
             return view('products.order', $data);
 
@@ -194,12 +198,16 @@ class ProductController extends Controller
                 'city_id' => 'required|numeric',
                 'address' => 'required|string',
                 'quantity' => 'required|numeric',
-                'variant' => 'required|nullable|numeric',
+                'variant' => 'nullable|numeric',
             ]);
 
             $this->userRepository->update($request->all());
 
+            debug("User data is updated {$id}");
+
             if($user->verified) {
+
+                debug("Verified user, so we just place order.");
 
                 $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
 
@@ -218,6 +226,8 @@ class ProductController extends Controller
             $user = $this->userRepository->update($request->all());
 
             $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
+
+            debug("User phone verified. Lets place order.");
 
             return redirect()->route('settings.orders', ['id' => $order->id]);
 

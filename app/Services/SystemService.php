@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Notifications\ExceptionThrown;
-use Exception;
+use Exception, Debugbar;
 
 class SystemService
 {
@@ -14,7 +14,7 @@ class SystemService
     public function reportException($e) {
 
         if (app()->environment('testing', 'local')) {
-            return dd($e);
+            return Debugbar::addThrowable($e);
         } 
 
         try {

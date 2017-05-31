@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Dusk\DuskServiceProvider;
 use Bouncer, Validator;
-use App\Observers\OrderObserver;
-use App\Entities\Order;
 use App\Observers\ActivityObserver;
 use App\Entities\Activity;
 use App\Observers\UserObserver;
@@ -28,8 +26,6 @@ class AppServiceProvider extends ServiceProvider
     {
         User::observe(UserObserver::class);
 
-        Order::observe(OrderObserver::class);
-        
         Activity::observe(ActivityObserver::class);
 
         Schema::defaultStringLength(191);

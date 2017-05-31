@@ -100,12 +100,13 @@
 
 ._cb { color: #000000; } /* color black */
 ._bgb { background: #000000; } /* background black */
-._bgbt1 { background: rgba(0,0,0,.1)!important;} /* background black transparent .2 */
-._bgbt2 { background: rgba(0,0,0,.2)!important;} /* background black transparent .2 */
-._bgbt3 { background: rgba(0,0,0,.3)!important;} /* background black transparent .3 */
-._bgbt4 { background: rgba(0,0,0,.4)!important;} /* background black transparent .4 */
-._bgbt5 { background: rgba(0,0,0,.5)!important;} /* background black transparent .5 */
-._bgbt6 { background: rgba(0,0,0,.6)!important;} /* background black transparent .6 */
+._bgbt05 { background: rgba(0,0,0,.05)!important;}
+._bgbt1 { background: rgba(0,0,0,.1)!important;}
+._bgbt2 { background: rgba(0,0,0,.2)!important;}
+._bgbt3 { background: rgba(0,0,0,.3)!important;}
+._bgbt4 { background: rgba(0,0,0,.4)!important;}
+._bgbt5 { background: rgba(0,0,0,.5)!important;}
+._bgbt6 { background: rgba(0,0,0,.6)!important;}
 ._bgbt7 { background: rgba(0,0,0,.7)!important;} /* background black transparent .7 */
 ._bgbt8 { background: rgba(0,0,0,.8)!important;} /* background black transparent .8 */
 ._bgbt9 { background: rgba(0,0,0,.9)!important;} /* background black transparent .9 */
@@ -224,7 +225,7 @@
 ._pl15{ padding-left:15px!important; }
 
 ._pb3 { padding-bottom:3px!important; }
-
+._p8x10{ padding: 8px 10px!important;}
 
 
 /*=================================

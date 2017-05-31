@@ -19,17 +19,11 @@ Route::group(['middleware' => 'demoMode'], function () {
 
 	Route::impersonate();
 
-	Route::get('/policy', function(){
-		return view('policy.page');
-	});
-
-
 	Route::get('new-article', 'BlogController@create')->name('articles.create')->middleware('can:create-articles');
 	Route::get('articles/{slug}', 'BlogController@show')->name('articles.show');
 	Route::get('articles/{slug}/edit', 'BlogController@edit')->name('articles.edit')->middleware('can:create-articles');
 	Route::post('articles/{slug}', 'BlogController@update')->name('articles.update')->middleware('can:create-articles');
 	Route::delete('articles/{slug}', 'BlogController@destroy')->name('articles.destroy')->middleware('can:create-articles');
-
 
 	Route::group(['middleware' => ['auth'], 'prefix' => 'im'], function()
 	{
@@ -69,10 +63,8 @@ Route::group(['middleware' => 'demoMode'], function () {
 		Route::delete('/{id}', 'MediaController@destroy');
 	});
 
-	Route::group([], function()
-	{
+	Route::group([], function() {
 	    Route::match(['get', 'post'], '/', 'StreamController@index')->name('feed');
-	    Route::match(['get'], '/discover', 'StreamController@discover')->name('discover')->middleware('auth');
 	});
 
 	Route::group([], function()
@@ -114,10 +106,14 @@ Route::group(['middleware' => 'demoMode'], function () {
 		Route::post('shipping/general', 'ShippingController@updateGeneral')->name('shipping.settings.general');
 	});
 
-	Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
+	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
 	Route::get('/monitor', function(){
-		return app(\App\Monitors\MonitorFactory::class)->get();
+
+		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
+
+		return $monitors['fields'];
+
 	});
 
 });

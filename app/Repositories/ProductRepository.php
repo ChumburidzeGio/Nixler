@@ -19,6 +19,7 @@ use Carbon\Carbon;
 use Ayeo\Price\Price;
 use App\Notifications\ProductUpdated;
 use App\Notifications\ProductDeleted;
+use App\Notifications\OrderStatusChanged;
 use Auth, DB;
 
 class ProductRepository extends BaseRepository {
@@ -710,9 +711,19 @@ class ProductRepository extends BaseRepository {
 
         $user = auth()->user();
 
-        if($product->has_variants) {
+        $variants_count = ProductVariant::where('product_id', $product->id)->count();
 
-            $variant = ProductVariant::where('product_id', $product->id)->findOrFail($variant);
+        if($product->has_variants && !$variants_count) {
+            $product->update([
+                'has_variants' => 0
+            ]);
+
+            logger()->error("Incorrect HasVariant attribute on product {$product->id}");
+        }
+
+        if($product->has_variants && $variants_count) {
+
+            $variant = ProductVariant::where('product_id', $product->id)->find($variant);
 
             $productPrice = Price::buildByGross($variant->price, 0, $product->currency);
 
@@ -744,9 +755,11 @@ class ProductRepository extends BaseRepository {
             'payment_method' => 'COD',
             'user_id' => $user->id,
             'product_id' => $product->id,
-            'product_variant' => $variant->name,
+            'product_variant' => $variant ? $variant->name : null,
             'merchant_id' => $product->owner_id
         ]);
+
+        $order->notify(new OrderStatusChanged());
 
         if($product->has_variants) {
 

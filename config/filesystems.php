@@ -106,7 +106,7 @@ return [
             'default' => public_path('img/image.jpg'),
             'sizes' => [
                 'full' => [null, 600],
-                'short-card' => [300, 300],
+                'short-card' => [300, 330],
             ]
         ]
     ]

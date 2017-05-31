@@ -14,7 +14,7 @@ class Install extends Command
      *
      * @var string
      */
-    protected $signature = 'nx:install';
+    protected $signature = 'install';
 
     /**
      * The console command description.
