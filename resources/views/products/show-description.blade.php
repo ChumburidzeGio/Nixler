@@ -27,7 +27,7 @@
 </span>
 
 
-<span class="visible-sm visible-xs"> 
+<span class="visible-sm visible-xs _mt10"> 
     @include('products.show-buy')
 </span>
 
@@ -89,7 +89,7 @@
                     {{ $product->owner->name }}
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
-                    <div class="_clear" show-more more="@lang('Read more')" less="@lang('Show less')" height="150">{!! $product->description_parsed !!}</div>
+                    <div class="_clear" show-more more="@lang('Read more')" less="@lang('Show less')" height="180">{!! $product->description_parsed !!}</div>
                 </p>
             </div>
         </div>
@@ -97,7 +97,7 @@
 
         <div id="tags" class="_mt10 _mb15 _clear">
             @foreach($product->tags as $tag)
-            <span class="_bgbt05 _brds3 _fs13 _c3 _mr10 _dib _p5 _pl10 _pr10"> {{ $tag->name }} </span>
+            <span class="_bgbt05 _brds3 _fs13 _c3 _mr10 _dib _p5 _pl10 _pr10 _mb10"> {{ $tag->name }} </span>
             @endforeach
         </div>
 
