@@ -50,7 +50,7 @@ class MediaRepository extends BaseRepository {
             } elseif(is_null($width)){
                 $basic->heighten($height, $func);
             } else {
-                $basic->fit($height, $width, $func);
+                $basic->fit($height, $width);
             }
 
             return $basic->encode('jpg', 90);
