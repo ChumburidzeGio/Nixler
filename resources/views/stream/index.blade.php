@@ -143,7 +143,7 @@
 
 		<div class="row _mb15" ng-if="vm.stream.items.length">
 
-			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15 _mb10" ng-repeat="product in vm.stream.items">
+			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15 _mb10 _crp" ng-repeat="product in vm.stream.items">
 				<a class="_clear" href="@{{ product.url }}">
 
 					<img ng-src="@{{ product.photo }}" class="_db _w100">
