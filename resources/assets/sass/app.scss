@@ -126,3 +126,23 @@
   float: none;
   vertical-align: top;
 }
+
+@media (min-width: 700px) {
+  #product-gallery > img {
+    max-width: 100%;
+    max-height: 500px;
+  }
+}
+
+@media (max-width: 700px) {
+  #product-gallery > img {
+    max-width: 100%;
+    max-height: 80vh;
+  }
+  #product-gallery > ul {
+    position: relative !important;
+  }
+  #product-gallery > ul > img {
+    display: inline-block;
+  }
+}

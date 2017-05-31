@@ -14,11 +14,11 @@
 
                     <div class="col-md-11">
                         @if($product->photo('full', 1))
-                        <div class="_clear _posr _bcg" style="height: 500px">
-                            <img src="{{ $product->photo('full') }}" class="_clear _hf _ma" 
-                            ng-init="vm.mediaBase='{{ url('media') }}/'" 
-                            ng-src="@{{ vm.media.mainPath() }}"
-                            ng-click="vm.media.next()">
+                        <div class="_clear _posr _bcg _tac" id="product-gallery">
+                                <img src="{{ $product->photo('full') }}" class="_clear _ma" 
+                                ng-init="vm.mediaBase='{{ url('media') }}/'" 
+                                ng-src="@{{ vm.media.mainPath() }}"
+                                ng-click="vm.media.next()">
 
                             <ul class="_pl5 _pr15 _pt10 _a8 _posa">
                                 @foreach($product->media as $key => $photo)

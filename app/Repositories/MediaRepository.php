@@ -48,7 +48,7 @@ class MediaRepository extends BaseRepository {
             if(is_null($height)){
                 $basic->widen($width, $func);
             } elseif(is_null($width)){
-                $basic->heighten($width, $func);
+                $basic->heighten($height, $func);
             } else {
                 $basic->fit($height, $width, $func);
             }
