@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('body_class', '_bgw')
+
 @section('content')
 
 <div class="container-fluid _m0 ng-cloak" ng-controller="StreamCtrl as vm" style="width: 100%">
@@ -141,13 +143,13 @@
 
 		<div class="row _mb15" ng-if="vm.stream.items.length">
 
-			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15" ng-repeat="product in vm.stream.items">
-				<a class="_bgw _b1 _brds3 _clear" href="@{{ product.url }}">
+			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15 _mb10" ng-repeat="product in vm.stream.items">
+				<a class="_clear" href="@{{ product.url }}">
 
 					<img ng-src="@{{ product.photo }}" class="_db _w100">
 
-					<div class="_pl15 _pr15 _pt10 _pb10">
-						<span class="_cb _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs13">
+					<div class="_pl5 _pr15 _pt10 _pb10">
+						<span class="_cb _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs14">
 							@{{ product.title }}
 						</span>
 						<span class="_cg _clear _fs12  _telipsis _w100 _oh _pr10">
