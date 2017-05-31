@@ -2,7 +2,8 @@
 /public/storage
 /public/hot
 /storage/*.key
-/storage/*.index
+/storage/products.index
+/storage/users.index
 /vendor
 Homestead.json
 Homestead.yaml

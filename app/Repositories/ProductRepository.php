@@ -620,7 +620,7 @@ class ProductRepository extends BaseRepository {
         $tag = trim($tag);
         $slug = str_slug($tag);
 
-        $model = ProductTag::whereTranslation('slug', $slug)->first();
+        $model = ProductTag::whereTranslation('slug', $slug)->where('product_id', $product->id)->first();
 
         if(!$model) {
             $model = ProductTag::create([
