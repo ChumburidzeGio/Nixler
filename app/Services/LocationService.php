@@ -50,17 +50,34 @@ class LocationService
      */
 	public function setLocaleByGeo(){
 
-		$geoData = $this->get();
-		$locale = array_get($geoData, 'locale');
+		$tld = $this->getTLD();
 
-		if($this->isAvailableLocaleKey($locale)){
+		if($tld == 'pl') {
+			$locale = 'pl';
+			$currency = 'PLN';
+			$country = 'PL';
+		}
+
+		elseif($tld == 'ge') {
+			$locale = 'ka';
+			$currency = 'GEL';
+			$country = 'GE';
+		}
+
+		else {
+			$locale = 'en';
+			$currency = 'USD';
+			$country = 'US';
+		}
+
+		if(auth()->guest()){
 			Session::put('locale', $locale);
-		} else {
-			$locale = null;
+			Session::put('currency', $currency);
+			Session::put('country', $country);
 		}
 
 		if(auth()->check()){
-			auth()->user()->update($geoData);
+			auth()->user()->update(compact('locale', 'currency', 'country'));
 		}
 
 		return $locale;
