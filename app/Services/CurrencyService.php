@@ -19,7 +19,7 @@ class CurrencyService {
             case 'GEL':
                 return "{$amount} ლარი";
             case 'PLN':
-                return "{$amount}zł";
+                return "{$amount} zł";
             default:
                 return "{$currency} {$amount}";
         }
