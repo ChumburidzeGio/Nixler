@@ -159,7 +159,7 @@
 
                 </span>
                 <a href="{{ url('/articles/help') }}" class="_li _fs13 _hvrd _cg"> @lang('Get help')</a>
-                <a href="{{ url('/articles/policy') }}" class="_li _fs13 _hvrd _cg"> @lang('Privacy Policy')</a>
+                <a href="{{ url('/articles/privacy') }}" class="_li _fs13 _hvrd _cg"> @lang('Privacy Policy')</a>
                 <a href="{{ url('/articles/terms') }}" class="_li _fs13 _hvrd _cg"> @lang('Terms of Service')</a>
                 <a href="{{ url('/articles/about') }}" class="_li _fs13 _hvrd _cg"> @lang('About Nixler') </a>
 
