@@ -7,11 +7,8 @@
  */
 'use strict';
 
-angular.module('yaru22.angular-timeago', []);
+angular.module('yaru22.angular-timeago', []).config(["timeAgoSettings", function(timeAgoSettings) {
 
-'use strict';
-
-angular.module('yaru22.angular-timeago').config(["timeAgoSettings", function(timeAgoSettings) {
   timeAgoSettings.strings['en'] = {
     prefixAgo: null,
     prefixFromNow: null,
@@ -30,11 +27,7 @@ angular.module('yaru22.angular-timeago').config(["timeAgoSettings", function(tim
     years: '%d years',
     numbers: []
   };
-}]);
 
-'use strict';
-
-angular.module('yaru22.angular-timeago').config(["timeAgoSettings", function(timeAgoSettings) {
   timeAgoSettings.strings['pl'] = {
     prefixAgo: null,
     prefixFromNow: null,
@@ -53,11 +46,7 @@ angular.module('yaru22.angular-timeago').config(["timeAgoSettings", function(tim
     years: '%d lat',
     numbers: []
   };
-}]);
 
-'use strict';
-
-angular.module('yaru22.angular-timeago').config(["timeAgoSettings", function(timeAgoSettings) {
   timeAgoSettings.strings['ka'] = {
     prefixAgo: null,
     prefixFromNow: null,
@@ -76,6 +65,7 @@ angular.module('yaru22.angular-timeago').config(["timeAgoSettings", function(tim
     years: '%d წლის',
     numbers: []
   };
+  
 }]);
 
 'use strict';
