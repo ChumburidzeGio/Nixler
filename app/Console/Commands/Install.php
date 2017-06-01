@@ -42,9 +42,6 @@ class Install extends Command
         $this->call('geoip:update');
         $this->info('Updated MaxMind database');
 
-        $this->call('db:seed', [ '--class' => 'CategoryDatabaseSeeder' ]);
-        $this->call('db:seed', [ '--class' => 'BlogDatabaseSeeder' ]);
-
         $this->createAccountsAndRoles();
 
         $this->call('optimize');

@@ -110,6 +110,8 @@ Route::group(['middleware' => 'demoMode'], function () {
 
 	Route::get('/monitor', function(){
 
+		return json_decode(file_get_contents(resource_path('docs/categories.json')));
+
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
 		return $monitors['fields'];

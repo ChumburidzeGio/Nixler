@@ -1,0 +1,415 @@
+[
+	{
+		"name:en": "Fashion",
+		"name:pl": "Moda",
+		"name:ka": "მოდა",
+		"icon": "wc",
+		"subcategories": [
+			{
+				"name:en": "Clothing",
+				"name:pl": "Ubrania",
+				"name:ka": "ტანსაცმელი"
+			},
+			{
+				"name:en": "Shoes",
+				"name:pl": "Buty",
+				"name:ka": "ფეხსაცმელი"
+			},
+			{
+				"name:en": "Accessories",
+				"name:pl": "Akcesoria",
+				"name:ka": "აქსესუარები"
+			},
+			{
+				"name:en": "Jewelry",
+				"name:pl": "Biżuteria",
+				"name:ka": "სამკაულები"
+			},
+			{
+				"name:en": "Watches",
+				"name:pl": "Zegarki",
+				"name:ka": "საათები"
+			},
+			{
+				"name:en": "Handbags & Wallets",
+				"name:pl": "Torebki i portfele",
+				"name:ka": "ხელჩანთები და საფულეები"
+			},
+			{
+				"name:en": "Bags",
+				"name:pl": "Torby",
+				"name:ka": "ჩანთები"
+			}
+		]
+	},
+	{
+		"name:en": "Electronics",
+		"name:pl": "Elektronika",
+		"name:ka": "ელექტრონიკა",
+		"icon": "phonelink",
+		"subcategories": [
+			{
+				"name:en": "Mobile Phones",
+				"name:pl": "Telefony",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Phone accessories",
+				"name:pl": "Akcesoria do telefonów",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Photo & Video",
+				"name:pl": "Fotografia i Kamery",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Headphones",
+				"name:pl": "Słuchawki",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Video Games",
+				"name:pl": "Gry",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Wireless Speakers",
+				"name:pl": "Głośniki",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Car Electronics",
+				"name:pl": "Elektronika samochodowa",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Musical Instruments",
+				"name:pl": "Instrumenty muzyczne",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Wearable Technology",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Computers",
+				"name:pl": "Komputery",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Tablets",
+				"name:pl": "Tabletki",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Monitors",
+				"name:pl": "Monitory",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Networking",
+				"name:pl": "Sieciowanie",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Computer Parts",
+				"name:pl": "Części komputera",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Software",
+				"name:pl": "Oprogramowanie",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Printers & Ink",
+				"name:pl": "Drukarki i atrament",
+				"name:ka": ""
+			},
+			{
+				"name:en": "TV",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Notebooks",
+				"name:pl": "Notebooki",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Drives & Storage",
+				"name:pl": "Napędy i magazynowanie",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Smart Home",
+				"name:pl": "Inteligentny dom",
+				"name:ka": ""
+			}
+		]
+	},
+	{
+		"name:en": "Home & Furniture",
+		"name:pl": "Dom i Meble",
+		"name:ka": "სახლი და ავეჯი",
+		"icon": "weekend",
+		"subcategories": [
+			{
+				"name:en": "Furniture",
+				"name:pl": "Meble",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Kitchen & Dining",
+				"name:pl": "Kuchnia i jadalnia",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Bath & Bedding",
+				"name:pl": "Łóżko i Pościel",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Home Decor",
+				"name:pl": "Wystrój domu",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Garden & Outdoor",
+				"name:pl": "Ogród i odkryty",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Lightning",
+				"name:pl": "Błyskawica",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Pet Supplies",
+				"name:pl": "Artykuły dla zwierząt",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Home improvement",
+				"name:pl": "Majsterkowanie w domu",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Home electronics",
+				"name:pl": "Elektronika domowa",
+				"name:ka": ""
+			}
+		]
+	},
+	{
+		"name:en": "Sports & Outdoors",
+		"name:pl": "Sport i Outdoors",
+		"name:ka": "",
+		"icon": "directions_bike",
+		"subcategories": [
+			{
+				"name:en": "Sports Clothing",
+				"name:pl": "Odzież sportowa",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Fitness & Bodybuilding",
+				"name:pl": "Fitness i kulturystyka",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Hunting & Fishing",
+				"name:pl": "Polowanie i wędkowanie",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Team Sports",
+				"name:pl": "Sporty drużynowe",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Fan Shop",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Camping & Hiking",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Cycling",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Scooters, Skateboards & Skates",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Sports Bags",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Water Sports",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Winter Sports",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Climbing",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Sport Accessories",
+				"name:pl": "",
+				"name:ka": ""
+			}
+		]
+	},
+	{
+		"name:en": "Health & Beauty",
+		"name:pl": "",
+		"name:ka": "",
+		"icon": "local_florist",
+		"subcategories": [
+			{
+				"name:en": "Makeup",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Skin Care",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Hair Care",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Fragrance",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Tools & Accessories",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Shave & Hair Removal",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Personal Care",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Oral Care",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Vitamins",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Minerals",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Supplements",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Herbal Supplements",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Weight Loss",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Sports Nutrition",
+				"name:pl": "",
+				"name:ka": ""
+			}
+		]
+	},
+	{
+		"name:en": "Kids & Baby",
+		"name:pl": "",
+		"name:ka": "",
+		"icon": "child_friendly",
+		"subcategories": [
+			{
+				"name:en": "Toys & Games",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Moms & Baby",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Diapers",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Baby food",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Carriages",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Bedspreads",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Baby car seats",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Hobby & Creativity",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "Children sport",
+				"name:pl": "",
+				"name:ka": ""
+			},
+			{
+				"name:en": "For school",
+				"name:pl": "",
+				"name:ka": ""
+			}
+		]
+	}
+]

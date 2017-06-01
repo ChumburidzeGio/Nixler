@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Repositories\BlogRepository;
+use App\Repositories\ProductRepository;
 
 class Update extends Command
 {
@@ -32,6 +33,8 @@ class Update extends Command
         $this->legal();
 
         $this->searchIndex();
+
+        $this->categories();
 
     }
 
@@ -67,6 +70,16 @@ class Update extends Command
     {
         $this->call('scout:import', ['model' => 'App\\Entities\\Product']);
         $this->call('scout:import', ['model' => 'App\\Entities\\User']);
+    }
+
+    /**
+     * Update categories list in database
+     *
+     * @return void
+     */
+    public function categories()
+    {
+        app(ProductRepository::class)->syncCategories();
     }
 
 }

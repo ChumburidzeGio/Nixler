@@ -39,7 +39,7 @@
 
 			<form ng-submit="vm.message()" class="_bt1 _pt5 _pb5 _posr _bgw _bcg">
 				<div class="_li _p5">
-					<textarea class="_fe _fs14 _bgw" msd-elastic placeholder="New messages text" ng-model="vm.text" rows="3" autofocus="" ng-keyup="$event.keyCode == 13 && vm.message()"></textarea>
+					<textarea class="_fe _fs14 _bgw" msd-elastic placeholder="@lang('New messages text')" ng-model="vm.text" rows="3" autofocus="" ng-keyup="$event.keyCode == 13 && vm.message()"></textarea>
 				</div>
 
 				<div class="_li _p10 _clear _pt0 _pb5 _a4">

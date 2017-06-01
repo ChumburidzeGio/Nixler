@@ -778,6 +778,60 @@ class ProductRepository extends BaseRepository {
 
 
     /**
+     * Sync categoires from json file with database
+     *
+     * @return void
+     */
+    public function syncCategories()
+    {
+        $categories = json_decode(file_get_contents(resource_path('docs/categories.json')), 1);
+
+        foreach ($categories as $key => $value) {
+
+            $category = $this->updateOrCreateCategory($value, $key);
+
+            foreach ($value['subcategories'] as $key => $value) {
+
+                $this->updateOrCreateCategory($value, $key, $category);
+
+            }
+        }
+    }
+
+
+    /**
+     * Update or create category
+     *
+     * @param $params array
+     * @param $key int
+     * @param $parent ProductCategory
+     *
+     * @return ProductCategory
+     */
+    public function updateOrCreateCategory($params, $key, $parent = null)
+    {
+        $category = ProductCategory::whereTranslation('name', array_get($params, 'name:en'), 'en')->first();
+
+        if(!$category) {
+            $category = ProductCategory::create([
+                'icon' => array_get($params, 'icon'),
+                'name:en' => array_get($params, 'name:en'),
+                'order' => $key,
+                'parent_id' => $parent ? $parent->id : null
+            ]);
+        }
+
+        $category->update([
+            'name:pl' => array_get($params, 'name:pl'),
+            'name:ka' => array_get($params, 'name:ka'),
+            'order' => $key
+        ]);
+
+        return $category;
+    }
+
+
+    /**
      * Get shippng price for particular city
      *
      * @param $city_id int
