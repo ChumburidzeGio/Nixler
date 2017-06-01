@@ -51,102 +51,102 @@
 			{
 				"name:en": "Mobile Phones",
 				"name:pl": "Telefony",
-				"name:ka": ""
+				"name:ka": "ტელეფონები"
 			},
 			{
 				"name:en": "Phone accessories",
 				"name:pl": "Akcesoria do telefonów",
-				"name:ka": ""
+				"name:ka": "ტელეფონის აქსესუარები"
 			},
 			{
 				"name:en": "Photo & Video",
 				"name:pl": "Fotografia i Kamery",
-				"name:ka": ""
+				"name:ka": "ფოტო & ვიდეო"
 			},
 			{
 				"name:en": "Headphones",
 				"name:pl": "Słuchawki",
-				"name:ka": ""
+				"name:ka": "ყურსასმენები"
 			},
 			{
 				"name:en": "Video Games",
 				"name:pl": "Gry",
-				"name:ka": ""
+				"name:ka": "ვიდეო თამაშები"
 			},
 			{
 				"name:en": "Wireless Speakers",
 				"name:pl": "Głośniki",
-				"name:ka": ""
+				"name:ka": "უსადენო დინამიკები"
 			},
 			{
 				"name:en": "Car Electronics",
 				"name:pl": "Elektronika samochodowa",
-				"name:ka": ""
+				"name:ka": "მანქანის ელექტრონიკა"
 			},
 			{
 				"name:en": "Musical Instruments",
 				"name:pl": "Instrumenty muzyczne",
-				"name:ka": ""
+				"name:ka": "მუსიკალური ინსტრუმენტები"
 			},
 			{
 				"name:en": "Wearable Technology",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "პორტატული ტექნიკა"
 			},
 			{
 				"name:en": "Computers",
 				"name:pl": "Komputery",
-				"name:ka": ""
+				"name:ka": "კომპიტერები"
 			},
 			{
 				"name:en": "Tablets",
 				"name:pl": "Tabletki",
-				"name:ka": ""
+				"name:ka": "პლანშეტები"
 			},
 			{
 				"name:en": "Monitors",
 				"name:pl": "Monitory",
-				"name:ka": ""
+				"name:ka": "მონიტორები"
 			},
 			{
 				"name:en": "Networking",
 				"name:pl": "Sieciowanie",
-				"name:ka": ""
+				"name:ka": "ქსელური აღჭურვილობა"
 			},
 			{
 				"name:en": "Computer Parts",
 				"name:pl": "Części komputera",
-				"name:ka": ""
+				"name:ka": "კომპ. ნაწილები"
 			},
 			{
 				"name:en": "Software",
 				"name:pl": "Oprogramowanie",
-				"name:ka": ""
+				"name:ka": "პროგრამები"
 			},
 			{
 				"name:en": "Printers & Ink",
 				"name:pl": "Drukarki i atrament",
-				"name:ka": ""
+				"name:ka": "პრინტერები და ოფისი"
 			},
 			{
 				"name:en": "TV",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": null
 			},
 			{
 				"name:en": "Notebooks",
 				"name:pl": "Notebooki",
-				"name:ka": ""
+				"name:ka": "ნოუთბუქები"
 			},
 			{
 				"name:en": "Drives & Storage",
 				"name:pl": "Napędy i magazynowanie",
-				"name:ka": ""
+				"name:ka": "მეხსიერების ბარათები"
 			},
 			{
 				"name:en": "Smart Home",
 				"name:pl": "Inteligentny dom",
-				"name:ka": ""
+				"name:ka": "ჭკვინი სახლი"
 			}
 		]
 	},
@@ -159,256 +159,256 @@
 			{
 				"name:en": "Furniture",
 				"name:pl": "Meble",
-				"name:ka": ""
+				"name:ka": "ავეჯი"
 			},
 			{
 				"name:en": "Kitchen & Dining",
 				"name:pl": "Kuchnia i jadalnia",
-				"name:ka": ""
+				"name:ka": "სამზარეულო"
 			},
 			{
 				"name:en": "Bath & Bedding",
 				"name:pl": "Łóżko i Pościel",
-				"name:ka": ""
+				"name:ka": "აბაზანა და საძინებელი"
 			},
 			{
 				"name:en": "Home Decor",
 				"name:pl": "Wystrój domu",
-				"name:ka": ""
+				"name:ka": "სახლის დეკორაცია"
 			},
 			{
 				"name:en": "Garden & Outdoor",
 				"name:pl": "Ogród i odkryty",
-				"name:ka": ""
+				"name:ka": "ბაღი და სახლგარეთ"
 			},
 			{
 				"name:en": "Lightning",
 				"name:pl": "Błyskawica",
-				"name:ka": ""
+				"name:ka": "განათება"
 			},
 			{
 				"name:en": "Pet Supplies",
 				"name:pl": "Artykuły dla zwierząt",
-				"name:ka": ""
+				"name:ka": "ცხოველებისთვის"
 			},
 			{
 				"name:en": "Home improvement",
 				"name:pl": "Majsterkowanie w domu",
-				"name:ka": ""
+				"name:ka": "რემონტისთვის"
 			},
 			{
 				"name:en": "Home electronics",
 				"name:pl": "Elektronika domowa",
-				"name:ka": ""
+				"name:ka": "სახლის ელექტრონიკა"
 			}
 		]
 	},
 	{
 		"name:en": "Sports & Outdoors",
 		"name:pl": "Sport i Outdoors",
-		"name:ka": "",
+		"name:ka": "ლაშქრობა და სპორტი",
 		"icon": "directions_bike",
 		"subcategories": [
 			{
 				"name:en": "Sports Clothing",
 				"name:pl": "Odzież sportowa",
-				"name:ka": ""
+				"name:ka": "სპორტული ტანსაცმელი"
 			},
 			{
 				"name:en": "Fitness & Bodybuilding",
 				"name:pl": "Fitness i kulturystyka",
-				"name:ka": ""
+				"name:ka": "ფიტნესი და ბოდიბილდინგი"
 			},
 			{
 				"name:en": "Hunting & Fishing",
 				"name:pl": "Polowanie i wędkowanie",
-				"name:ka": ""
+				"name:ka": "ნადირობა და თევზაობა"
 			},
 			{
 				"name:en": "Team Sports",
 				"name:pl": "Sporty drużynowe",
-				"name:ka": ""
+				"name:ka": "გუნდური თამაშები"
 			},
 			{
 				"name:en": "Fan Shop",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ფანებისთვის"
 			},
 			{
 				"name:en": "Camping & Hiking",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ლაშქრობა და ნადირობა"
 			},
 			{
 				"name:en": "Cycling",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ველოსიპედები"
 			},
 			{
 				"name:en": "Scooters, Skateboards & Skates",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "სკუტერები და სკეიტბორდები"
 			},
 			{
 				"name:en": "Sports Bags",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "სპორტ. ჩანთები"
 			},
 			{
 				"name:en": "Water Sports",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "წყლის სპორტი"
 			},
 			{
 				"name:en": "Winter Sports",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ზამთრის სპორტი"
 			},
 			{
 				"name:en": "Climbing",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "კლდეზე ცოცვა"
 			},
 			{
 				"name:en": "Sport Accessories",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "სპორტ. აქსესუარები"
 			}
 		]
 	},
 	{
 		"name:en": "Health & Beauty",
-		"name:pl": "",
-		"name:ka": "",
+		"name:pl": null,
+		"name:ka": "სილამაზე და ჯანმ.",
 		"icon": "local_florist",
 		"subcategories": [
 			{
 				"name:en": "Makeup",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "მაკიაჟი"
 			},
 			{
 				"name:en": "Skin Care",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "კანის მოვლა"
 			},
 			{
 				"name:en": "Hair Care",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "თმის მოვლა"
 			},
 			{
 				"name:en": "Fragrance",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "სუნამოები"
 			},
 			{
 				"name:en": "Tools & Accessories",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ხელსაწყოები"
 			},
 			{
 				"name:en": "Shave & Hair Removal",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "საპარსი საშვალებები"
 			},
 			{
 				"name:en": "Personal Care",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "პირადი ჰიგიენა"
 			},
 			{
 				"name:en": "Oral Care",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "პირის ღრუ"
 			},
 			{
 				"name:en": "Vitamins",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ვიტამინები"
 			},
 			{
 				"name:en": "Minerals",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "მინერალები"
 			},
 			{
 				"name:en": "Supplements",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "საკვები დანამატები"
 			},
 			{
 				"name:en": "Herbal Supplements",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "მცენარეული დანამატები"
 			},
 			{
 				"name:en": "Weight Loss",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "წონაში დაკლება"
 			},
 			{
 				"name:en": "Sports Nutrition",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "სპორტული კვება"
 			}
 		]
 	},
 	{
 		"name:en": "Kids & Baby",
-		"name:pl": "",
-		"name:ka": "",
+		"name:pl": null,
+		"name:ka": "საბავშვო",
 		"icon": "child_friendly",
 		"subcategories": [
 			{
 				"name:en": "Toys & Games",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "სათამაშოები და თამაშები"
 			},
 			{
 				"name:en": "Moms & Baby",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "დედები და ახალშობილები"
 			},
 			{
 				"name:en": "Diapers",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "პამპერსები"
 			},
 			{
 				"name:en": "Baby food",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ბავშვის კვება"
 			},
 			{
 				"name:en": "Carriages",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ეტლები"
 			},
 			{
 				"name:en": "Bedspreads",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "გადასაფარებლები"
 			},
 			{
 				"name:en": "Baby car seats",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "მანქანის სავარძლები"
 			},
 			{
 				"name:en": "Hobby & Creativity",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "ჰობი და შემოქმედება"
 			},
 			{
 				"name:en": "Children sport",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "საბავშვო სპორტი"
 			},
 			{
 				"name:en": "For school",
-				"name:pl": "",
-				"name:ka": ""
+				"name:pl": null,
+				"name:ka": "სასკოლო ინვენტარი"
 			}
 		]
 	}

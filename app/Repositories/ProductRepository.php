@@ -821,11 +821,11 @@ class ProductRepository extends BaseRepository {
             ]);
         }
 
-        $category->update([
+        $category->update(array_filter([
             'name:pl' => array_get($params, 'name:pl'),
             'name:ka' => array_get($params, 'name:ka'),
             'order' => $key
-        ]);
+        ], 'strlen'));
 
         return $category;
     }
