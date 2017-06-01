@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\Install::class,
+        \App\Console\Commands\Update::class,
         \App\Console\Commands\Env::class,
         \App\Console\Commands\SystemMonitor::class,
         \App\Console\Commands\UpdateStreams::class,

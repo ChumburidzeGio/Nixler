@@ -1,56 +1,58 @@
-Privacy is important. We respect yours. Our goal is to do more than we have to by law — we want to earn your trust that we are careful with your data.
-
-# General information
-This policy sets out our privacy practices and explains how we handle the information we collect when you visit and use our sites, services, mobile applications, products, and content (“Services”).
+Welcome to Nixler ("Nixler," "we," "us" or "our"). Nixler provides a comfortable, fast and simple way for you to buy and sell online through our shopping platform. This policy explains how we and some of the companies we work with collect, use, share and protect information in relation to our sites, products, and content (collectively, the "Service"). By using our Service you understand and agree that we are providing a platform for you to post content, including products, comments and other materials ("User Content"), to the Service and to share User Content publicly. Our Policy applies to all visitors, users, and others who access the Service ("Users").
 
 # What we may collect
-We collect information about what Nixler pages you access, information about your device (such as device or browser type), information you send us (such as an email address used to register or communicate with us), and referral information.
+Your profile information that you provide for your user profile (e.g., name, picture, e-mail, phone, address), order information, products, comments and other materials that you post to the Service.
 
-When you use Nixler Services, we may collect and store your Internet Protocol address. We may use this information to fight spam and other abuse; to personalize Nixler Services; or to generate aggregate, non-identifying information about how people use Nixler Services.
+Your Internet Protocol ("IP") address and browser type automatically recorded by our servers.
 
-When you create your Nixler account, and authenticate via a third-party service like Facebook, we may collect, store, and periodically update the contact lists associated with that third-party account, so you can connect with existing contacts from that service who are on Nixler.
+We use third-party analytics tools to help us measure traffic and usage trends for the Service. These tools collect information sent by your device or our Service, including the web pages you visit and other information that assists us in improving the Service. We collect and use this analytics information with analytics information from other Users so that it cannot reasonably be used to identify any particular individual User.
 
-# Email from Nixler
-Sometimes we’ll send administrative emails about account or service changes, or new policies. You can’t opt out of them. You can always opt out of non-administrative emails such as newsletter.
+# How we use your information
+In addition to some of the specific uses of information we describe in this Privacy Policy, we may use information that we receive to help you to efficiently access your information, provide personalized content and information to you and others, improve and monitor the effectiveness of our Service and to monitor metrics such as total number of visitors, traffic, and demographic patterns.
 
-We won’t email you to ask for your password or other account information. If you receive such an email, send it to us so we can investigate.
+# Sharing your information online
+We will not rent or sell your information to third parties outside Nixler without your consent, except as noted in this Policy.
 
-# Disclosure of your information
-As a rule, we don’t share your personal information outside the company.
+We may share your information with third-party organizations that help us provide the Service to you ("Service Providers"). Our Service Providers will be given access to your information as is reasonably necessary to provide the Service under reasonable confidentiality terms.
 
-We won’t sell your personal information.
+We may remove parts of data that can identify you and share anonymized data with other parties. We may also combine your information with other information in a way that it is no longer associated with you and share that aggregated information.
 
-We may share your personal information with third parties in limited circumstances, including: (1) with your consent; (2) to a vendor or partner who meets our data protection standards; or (3) when we have a good faith belief it is required by law, such as pursuant to a subpoena or other legal process.
+Any information or content that you voluntarily disclose for posting to the Service, such as User Content, becomes available to the public, as controlled by any applicable privacy settings that you set. To change your privacy settings on the Service, please change your profile setting. Once you have shared User Content or made it public, that User Content may be re-shared by others.
 
-If we’re going to share your information in response to legal process, we’ll give you advance notice so you can challenge it (for example by seeking court intervention), unless we’re prohibited from doing so by law or court order. We will object to requests for information about users of our site that we believe to be improper.
+If you remove information that you posted to the Service, copies may remain viewable in cached and archived pages of the Service.
 
-If we merge with another company such that your information will become subject to a different privacy policy, we’ll notify you before the transfer. You can opt out of the new policy by deleting your account during the notice period.
+We may access, preserve and share your information in response to a legal request (like a search warrant, court order or subpoena) if we have a good faith belief that the law requires us to do so. We may also access, preserve and share information when we have a good faith belief it is necessary to: detect, prevent and address fraud and other illegal activity; to protect ourselves, you and others.
+
+# How we store your information
+Nixler uses third-party vendors and hosting partners for hardware, software, networking, storage, and related technology we need to run Nixler. Your information collected through the Service may be stored and processed in the Germany or any other country in which Nixler or Service Providers maintain facilities.
+
+Nixler or its Service Providers may transfer information that we collect about you, including personal information across borders and from your country or jurisdiction to other countries or jurisdictions around the world. By registering for and using the Service you consent to the transfer of information to any country in which Nixler or its Service Providers maintain facilities and the use and disclosure of information about you as described in this Privacy Policy.
+
+We use commercially reasonable safeguards to help keep the information collected through the Service secure. However, Nixler cannot ensure the security of any information you transmit to Nixler or guarantee that information on the Service may not be accessed, disclosed, altered, or destroyed.
+
+Please do your part to help us. You are responsible for maintaining the secrecy of your unique password and account information, and for controlling access to emails between you and Nixler, at all times. Your privacy settings may also be affected by changes the social media services you connect to Nixler make to their services. We are not responsible for the functionality, privacy, or security measures of any other organization.
+
+# Your choice about your information
+You can update your account at any time by logging in and changing your profile settings.
+
+If you deactivate your account your profile won’t be visible to other people on Nixler and people won’t be able to search for you. Some information, such as messages you sent, may still be visible to others. If you’d like to come back to Nixler after you’ve deactivated your account, you can reactivate your account at anytime by logging in with your email and password or with other auth provider. Keep in mind, if you use your Nixler account to log into Nixler your account will be reactivated. This means your Nixler profile, including things like your products, orders, photos and followers, will be completely restored.
+
+Following deactivation of your account, Nixler or its Service Providers may retain information (including your profile information) and User Content for a commercially reasonable time for backup, archival, and/or audit purposes.
+
+# Children's privacy
+Nixler does not knowingly collect or solicit any information from anyone under the age of 13 or knowingly allow such persons to register for the Service. The Service and its content are not directed at children under the age of 13. In the event that we learn that we have collected personal information from a child under age 13 without parental consent, we will delete that information as quickly as possible. If you believe that we might have any information from or about a child under 13, please contact us.
+
+# Other websites and services
+We are not responsible for the practices employed by any websites or services linked to or from our Service, including the information or content contained within them. Please remember that when you use a link to go from our Service to another website or service, our Privacy Policy does not apply to those third-party websites or services. Your browsing and interaction on any third-party website or service, including those that have a link on our website, are subject to that third party's own rules and policies.
 
 # Cookies
-We use cookies and similar technologies such as pixels and local storage to recognize you when you return to our Services. We use them in various ways, for example to log you in, remember your preferences (such as default language), evaluate email effectiveness and personalize information.
+We may use cookies to recognize you when you return to our Services. We use them in various ways, for example to log you in, remember your preferences (such as default language) and personalize information. Some third-party services that we use may place their own cookies in your browser. This Privacy Policy covers use of cookies by Nixler only and not the use of cookies by third parties.
 
-We respect Do Not Track (“DNT”) settings in browsers. If you’re logged out of our Services and have DNT enabled, we will not set cookies. By logging in you are opting to allow Nixler to ignore the DNT setting and to use cookies in order to provide you a personalized experience.
+# Notifications from Nixler
+Sometimes we’ll send administrative emails about account or service changes, or new policies. You can’t opt out of them. We won’t email you to ask for your password or other account information. If you receive such an email, send it to us so we can investigate.
 
-Some third-party services that we use, such as [Cloudflare](https://www.cloudflare.com/security-policy/) or [Google Analytics](http://www.google.com/policies/privacy/partners/), may place their own cookies in your browser. This Privacy Policy covers use of cookies by Nixler only and not the use of cookies by third parties.
+# How to contact us
+If you have any questions about this Privacy Policy or the Service, please contact us at info@nixler.pl.
 
-# Data Storage
-
-Nixler uses third-party vendors and hosting partners, such as Digital Ocean, for hardware, software, networking, storage, and related technology we need to run Nixler. We maintain two types of logs: server logs and event logs.
-
-Like most internet companies, our servers automatically record each request made when someone visits our sites uses our apps.Our event logs record user actions on the site, such as clicking through stories or scrolling. Event logs do not contain IP addresses, user names, user addresses, or user email addresses. They do contain user IDs generated by Nixler, as well as descriptions of actions users take on the site. We may keep event logs indefinitely.
-
-# Modifying your personal information or deleting your account
-If you have a Nixler account, you can access and modify your personal information [here](/settings/account).
-
-To protect information from accidental or malicious destruction, we may not immediately delete residual copies from our active servers and may not remove information from our backup systems.
-
-If you delete your account, your account and content may be unrecoverable.
-
-# Data security
-We use encryption (HTTPS/TLS) to protect data transmitted to and from our site. However, no data transmission over the Internet is 100% secure, so we can’t guarantee security. You use the Service at your own risk, and you’re responsible for taking reasonable measures to secure your account (like using a strong password).
-
-# Changes to this Policy
-Nixler may periodically update this Policy. We’ll notify you about significant changes to it. The most current version of the policy will always be [here](/articles/policy).
-
-# Questions
-We welcome questions, concerns, and feedback about this policy at [info@nixler.pl](mailto:info@nixler.pl).
+# Changes to our privacy policy
+Nixler may modify or update this Privacy Policy from time to time, so please review it periodically. We may provide you additional forms of notice of modifications or updates as appropriate under the circumstances. Your continued use of Nixler or the Service after any modification to this Privacy Policy will constitute your acceptance of such modification.
