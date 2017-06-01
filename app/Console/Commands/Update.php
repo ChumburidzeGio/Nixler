@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Entities\Article;
+use App\Repositories\BlogRepository;
 
 class Update extends Command
 {
@@ -29,14 +29,29 @@ class Update extends Command
      */
     public function handle()
     {
-        $privacy = file_get_contents(resource_path('docs/privacy.en.md'));
+        $this->legal();
 
-        Article::updateOrCreate([
-            'slug' => 'privacy',
-            'user_id' => 1,
-        ], [
+    }
+
+    /**
+     * Update legal documents on service
+     *
+     * @return void
+     */
+    public function legal()
+    {
+        $privacy_en = file_get_contents(resource_path('docs/privacy.en.md'));
+
+        app(BlogRepository::class)->updateOrCreateBySlug('privacy', [
             'title:en' => 'Welcome to the Nixler Privacy Policy',
-            'body:en' => $privacy
+            'body:en' => $privacy_en
+        ]);
+
+        $terms_en = file_get_contents(resource_path('docs/terms.en.md'));
+
+        app(BlogRepository::class)->updateOrCreateBySlug('terms', [
+            'title:en' => 'Nixler Terms of Service',
+            'body:en' => $terms_en
         ]);
 
     }

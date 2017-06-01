@@ -75,5 +75,20 @@ class BlogRepository extends BaseRepository {
 
         return $model;
     }
+    
+
+    /**
+     * @param $data array
+     * @return Article
+     */
+    public function updateOrCreateBySlug($slug, $data, $user_id = 1)
+    {
+        $model = $this->model->updateOrCreate([
+            'slug' => $slug,
+            'user_id' => 1,
+        ], $data);
+
+        return $model;
+    }
 
 }

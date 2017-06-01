@@ -234,12 +234,18 @@ class UserRepository extends BaseRepository {
             $user->verified = true;
         }
 
-        $user->setMeta('address', array_get($data, 'address'));
+        if(array_get($data, 'address')){
+            $user->setMeta('address', array_get($data, 'address'));
+        }
+
+        if(array_get($data, 'headline')){
+            $user->setMeta('headline', array_get($data, 'headline'));
+        }
+
+        if(array_get($data, 'website')){
+            $user->setMeta('website', array_get($data, 'website'));
+        }
         
-        $user->setMeta('headline', array_get($data, 'headline'));
-
-        $user->setMeta('website', array_get($data, 'website'));
-
         $user->save();
 
         return $user;

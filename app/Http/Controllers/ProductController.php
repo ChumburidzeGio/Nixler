@@ -201,7 +201,9 @@ class ProductController extends Controller
                 'variant' => 'nullable|numeric',
             ]);
 
-            $this->userRepository->update($request->all());
+            $this->userRepository->update(
+                $request->only(['phone', 'city_id', 'address', 'quantity', 'variant'])
+            );
 
             debug("User data is updated {$id}");
 
@@ -223,7 +225,7 @@ class ProductController extends Controller
                 'pcode' => 'required|numeric|digits:6',
             ]);
 
-            $user = $this->userRepository->update($request->all());
+            $user = $this->userRepository->update($request->only(['pcode']));
 
             $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
 
