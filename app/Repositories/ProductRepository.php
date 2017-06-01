@@ -617,18 +617,13 @@ class ProductRepository extends BaseRepository {
      */
     public function updateOrCreateTag($tag, Product $product)
     {
-        $tag = trim($tag);
-        $slug = str_slug($tag);
-        $locale = app()->getLocale();
+        $name = trim($tag);
 
-        $model = ProductTag::whereTranslation('slug', $slug)->where('product_id', $product->id)->first();
+        $model = ProductTag::where('name', $name)->where('product_id', $product->id)->first();
 
         if(!$model) {
             $model = ProductTag::create([
-                'name:en' => $tag,
-                "name:{$locale}" => $tag,
-                'slug:en' => $slug,
-                "slug:{$locale}" => $slug,
+                'name' => $name,
                 'user_id' => auth()->id(),
                 'product_id' => $product->id
             ]);

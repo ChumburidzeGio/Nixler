@@ -32,6 +32,7 @@ class Update extends Command
         $this->legal();
 
         $this->searchIndex();
+
     }
 
     /**

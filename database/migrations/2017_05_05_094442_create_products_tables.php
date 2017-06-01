@@ -68,23 +68,10 @@ class CreateProductsTables extends Migration
         Schema::create('product_tags', function (Blueprint $table) {
 
             $table->increments('id');
+            $table->string('name');
             $table->integer('user_id');
             $table->integer('product_id');
             $table->timestamps();
-
-        });
-        
-
-        Schema::create('product_tags_t', function (Blueprint $table) {
-
-            $table->increments('id');
-            $table->integer('product_tag_id')->unsigned();
-            $table->string('name');
-            $table->string('slug');
-            $table->string('locale')->index();
-
-            $table->unique(['product_tag_id','locale']);
-            $table->foreign('product_tag_id')->references('id')->on('product_tags')->onDelete('cascade');
 
         });
 
