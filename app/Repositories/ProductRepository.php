@@ -463,7 +463,7 @@ class ProductRepository extends BaseRepository {
             'id'      => (int) $item->id,
             'title'   => $item->title,
             'url'   => $item->url(),
-            'price' => $item->currency . ' ' . $item->price,
+            'price' => $item->price_formated,
             'likes_count' => $item->likes_count,
             'owner' => $item->owner->name,
             'photo' => route('photo', [

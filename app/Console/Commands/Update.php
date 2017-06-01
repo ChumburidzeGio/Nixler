@@ -31,6 +31,7 @@ class Update extends Command
     {
         $this->legal();
 
+        $this->searchIndex();
     }
 
     /**
@@ -54,6 +55,17 @@ class Update extends Command
             'body:en' => $terms_en
         ]);
 
+    }
+
+    /**
+     * Update search indexes
+     *
+     * @return void
+     */
+    public function searchIndex()
+    {
+        $this->call('scout:import', ['model' => 'App\\Entities\\Product']);
+        $this->call('scout:import', ['model' => 'App\\Entities\\User']);
     }
 
 }
