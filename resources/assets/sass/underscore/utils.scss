@@ -323,8 +323,8 @@
          HOVER
 ==================================*/
 
-._hvrl, ._hvrd, ._thvrl, ._thvri, ._thvrd, ._thvro {
-    transition: background .3s ease, color .30s ease;
+._hvrl, ._hvrd, ._thvrl, ._thvri, ._thvrd, ._thvro, ._hvrcard {
+    transition: all .3s ease, color .30s ease;
     cursor: pointer;
 }
 ._hvrl:hover {
@@ -360,6 +360,12 @@
 }
 ._fcsbw:focus {
     background: #fff!important;
+}
+
+._hvrcard:hover {
+    box-shadow: rgba(0, 0, 0, 0.3) 0 2px 9px 0;
+    -webkit-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 9px 0;
+    -moz-box-shadow: rgba(0, 0, 0, 0.3) 0 2px 9px 0;
 }
 
 
