@@ -79,6 +79,10 @@ return [
 
     'locale' => 'pl',
 
+    'currency' => 'PLN',
+
+    'country' => 'PL',
+
     'countries' => ['GE', 'PL', 'UA', 'US'],
 
     /*

@@ -39,6 +39,14 @@ class LocationService
 
 		app()->setLocale($locale);
 
+		$currency = auth()->check() ? auth()->user()->currency : session('currency');
+
+		$country = auth()->check() ? auth()->user()->country : session('country');
+
+		config('app.currency', $currency);
+		
+		config('app.country', $country);
+
 		return $locale;
 	}
 

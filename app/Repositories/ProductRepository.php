@@ -362,7 +362,7 @@ class ProductRepository extends BaseRepository {
 
         if($query) {
 
-            $results = $this->model->whereKeyword($query)->where('currency', 'PLN')->where('status', 'active')
+            $results = $this->model->whereKeyword($query)->where('currency', config('app.currency'))->where('status', 'active')
                 ->limit(1000)->get(['id', 'price', 'category_id']);
 
             $facets = collect([
@@ -385,7 +385,7 @@ class ProductRepository extends BaseRepository {
 
         } else {
 
-            $results = $this->model->where('currency', 'PLN')->where('status', 'active');
+            $results = $this->model->where('currency', config('app.currency'))->where('status', 'active');
 
             if($category) {
 
@@ -533,7 +533,7 @@ class ProductRepository extends BaseRepository {
             return $ids;
         }
 
-        return $this->model->whereIn('id', $ids)->with('firstPhoto', 'owner')->where('status', 'active')->paginate(20);
+        return $this->model->whereIn('id', $ids)->with('firstPhoto', 'owner')->where('status', 'active')->where('currency', config('app.currency'))->paginate(20);
     }
 
 
