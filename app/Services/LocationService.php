@@ -22,8 +22,6 @@ class LocationService
 			throw new Exception("Error Processing Request ".request()->getHost(), 1);
 		}
 
-		config('app.url', request()->getHost());
-
 		$locale = null;
 
 		if(Linguist::workingLocale()){
@@ -49,9 +47,11 @@ class LocationService
 
 		$country = auth()->check() ? auth()->user()->country : session('country');
 
-		config('app.currency', $currency);
-		
-		config('app.country', $country);
+		config([
+			'app.url' => url('/'),
+			'app.currency' => $currency,
+			'app.country' => $country
+		]);
 
 		return $locale;
 	}
