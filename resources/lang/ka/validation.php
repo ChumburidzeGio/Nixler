@@ -120,7 +120,9 @@ return [
     */
 
     'attributes'           => [
-        //
+        'email' => 'ელ. ფოსტა',
+        'password' => 'პაროლი',
+        'name' => 'სახელი',
     ],
 
 ];
