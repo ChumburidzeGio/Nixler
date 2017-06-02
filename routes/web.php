@@ -110,8 +110,6 @@ Route::group(['middleware' => 'demoMode'], function () {
 
 	Route::get('/monitor', function(){
 
-		return config('app');
-
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
 		return $monitors['fields'];
