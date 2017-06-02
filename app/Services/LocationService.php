@@ -18,7 +18,7 @@ class LocationService
 
 		$segment = request()->segment(1);
 
-		if(!in_array(request()->getHttpHost(), ['https://www.nixler.pl', 'nixler.app', 'https://www.nixler.ge'])) {
+		if(!in_array(request()->getHttpHost(), ['www.nixler.pl', 'nixler.app', 'www.nixler.ge'])) {
 			throw new Exception("Error Processing Request ".request()->getHost(), 1);
 		}
 
