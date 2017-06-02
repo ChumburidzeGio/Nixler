@@ -4,7 +4,7 @@ namespace App\Services;
 
 use PeterColes\Languages\Maker as Languages;
 use App\Entities\Country;
-use Session, Cache, Linguist;
+use Session, Cache, Linguist, Exception;
 
 class LocationService
 {
@@ -17,6 +17,12 @@ class LocationService
 	public function findLocale(){
 
 		$segment = request()->segment(1);
+
+		if(!in_array(request()->getHttpHost(), ['https://www.nixler.pl', 'nixler.app', 'https://www.nixler.ge'])) {
+			throw new Exception("Error Processing Request ".request()->getHost(), 1);
+		}
+
+		config('app.url', request()->getHost());
 
 		$locale = null;
 
