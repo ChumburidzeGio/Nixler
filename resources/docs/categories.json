@@ -222,7 +222,7 @@
 			{
 				"name:en": "Hunting & Fishing",
 				"name:pl": "Polowanie i wędkowanie",
-				"name:ka": "ნადირობა და თევზაობა"
+				"name:ka": "ნადირობა & თევზაობა"
 			},
 			{
 				"name:en": "Team Sports",
@@ -237,7 +237,7 @@
 			{
 				"name:en": "Camping & Hiking",
 				"name:pl": null,
-				"name:ka": "ლაშქრობა და ნადირობა"
+				"name:ka": "ლაშქრობა"
 			},
 			{
 				"name:en": "Cycling",
@@ -247,7 +247,7 @@
 			{
 				"name:en": "Scooters, Skateboards & Skates",
 				"name:pl": null,
-				"name:ka": "სკუტერები და სკეიტბორდები"
+				"name:ka": "სკეიტბორდები"
 			},
 			{
 				"name:en": "Sports Bags",
@@ -340,7 +340,7 @@
 			{
 				"name:en": "Herbal Supplements",
 				"name:pl": null,
-				"name:ka": "მცენარეული დანამატები"
+				"name:ka": "მცენარ. დანამატები"
 			},
 			{
 				"name:en": "Weight Loss",
