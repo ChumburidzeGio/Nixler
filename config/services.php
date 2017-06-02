@@ -38,7 +38,7 @@ return [
     'facebook' => [
         'client_id' => env('FACEBOOK_APP_ID'),
         'client_secret' => env('FACEBOOK_APP_SECRET'),
-        'redirect' => env('FACEBOOK_APP_REDIRECT'),
+        'redirect' => 'auth/facebook/callback',
         'scopes' => ['user_birthday', 'user_location'],
         'fields' => ['name', 'email', 'gender', 'birthday', 'locale', 'timezone', 'updated_time', 'verified', 'location']
     ],

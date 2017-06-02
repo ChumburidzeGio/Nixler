@@ -8,16 +8,27 @@ use App\Http\Controllers\Controller;
 use App\Entities\Profile;
 use App\Entities\User;
 use App\Repositories\UserRepository;
-use Socialite;
+use Laravel\Socialite\SocialiteManager;
 
 class SocialAuthController extends Controller
 {
 
     protected $repository;
 
+    protected $socialite;
+
     public function __construct(UserRepository $repository) {
+
         parent::__construct();
+
         $this->repository = $repository;
+
+        config([
+            "services.facebook.redirect" => url(config("services.facebook.redirect"))
+        ]);
+
+        $this->socialite = app(SocialiteManager::class, ['app' => app()]);
+
     }
 
     public function redirect($provider)
@@ -26,7 +37,8 @@ class SocialAuthController extends Controller
             return redirect()->back();
         }
 
-        $socialite = Socialite::driver($provider);
+        $socialite = $this->socialite->driver($provider);
+
         $fields = config('services.'.$provider.'.fields');
         $scopes = config('services.'.$provider.'.scopes');
 
@@ -42,7 +54,7 @@ class SocialAuthController extends Controller
             return [];
         }
 
-        $provider = Socialite::driver($provider)->fields(config('services.'.$provider.'.fields'));
+        $provider = $this->socialite->driver($provider)->fields(config('services.'.$provider.'.fields'));
 
         $socialUser = $provider->user();
 
