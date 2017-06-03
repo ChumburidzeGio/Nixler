@@ -44,6 +44,8 @@ class LocationService
 
 		app()->setLocale($locale);
 
+		$timezone = auth()->check() ? auth()->user()->timezone : session('timezone');
+
 		$currency = auth()->check() ? auth()->user()->currency : session('currency');
 
 		$country = auth()->check() ? auth()->user()->country : session('country');
@@ -51,7 +53,8 @@ class LocationService
 		config([
 			'app.url' => url('/'),
 			'app.currency' => $currency,
-			'app.country' => $country
+			'app.country' => $country,
+			'app.timezone' => $timezone,
 		]);
 
 		return $locale;
@@ -71,28 +74,32 @@ class LocationService
 			$locale = 'pl';
 			$currency = 'PLN';
 			$country = 'PL';
+			$timezone = 'Europe/Warsaw';
 		}
 
 		elseif($tld == 'ge') {
 			$locale = 'ka';
 			$currency = 'GEL';
 			$country = 'GE';
+			$timezone = 'Asia/Tbilisi';
 		}
 
 		else {
 			$locale = 'en';
 			$currency = 'USD';
 			$country = 'US';
+			$timezone = 'UTC';
 		}
 
 		if(auth()->guest()){
 			Session::put('locale', $locale);
 			Session::put('currency', $currency);
 			Session::put('country', $country);
+			Session::put('timezone', $timezone);
 		}
 
 		if(auth()->check()){
-			auth()->user()->update(compact('locale', 'currency', 'country'));
+			auth()->user()->update(compact('locale', 'currency', 'country', 'timezone'));
 		}
 
 		return $locale;
