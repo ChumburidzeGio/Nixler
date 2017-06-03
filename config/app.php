@@ -83,7 +83,18 @@ return [
 
     'country' => 'PL',
 
-    'countries' => ['GE', 'PL', 'UA', 'US'],
+    'countries' => ['GE', 'PL', 'US'],
+
+    'locales_in_country' => [
+        'GE' => [
+            'ka' => 'ქართული',
+            'en' => 'English'
+        ],
+        'PL' => [
+            'pl' => 'polski',
+            'en' => 'English'
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------

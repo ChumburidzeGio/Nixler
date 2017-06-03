@@ -125,36 +125,19 @@
                     <i class="material-icons _fs16 _va4">translate</i> 
 
                     <span class="_right">
+
+                        @foreach(config('app.locales_in_country.'.config('app.country')) as $locale => $locale_name)
                             <a onclick="event.preventDefault();
-                            document.getElementById('setlcl812').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci">
-                            ქართული
-                            <form id="setlcl812" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                            document.getElementById('setlcl8{{ $locale }}').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci">
+                            {{ $locale_name }}
+                            <form id="setlcl8{{ $locale }}" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
                                 {{ csrf_field() }}
-                                <input type="hidden" name="locale" value="ka">
+                                <input type="hidden" name="locale" value="{{ $locale }}">
                             </form>
                         </a>
 
-                        <span class="_ml5 _mr5"> · </span>
-
-                            <a onclick="event.preventDefault();
-                            document.getElementById('setlcl813').submit();" href="/" class="_tb _fs13 _pl0 _pt0 _ci" id="setlcl813a">
-                            English
-                            <form id="setlcl813" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="locale" value="en">
-                            </form>
-                        </a>
-
-                        <span class="_ml5 _mr5"> · </span>
-
-                        <a onclick="event.preventDefault();
-                            document.getElementById('setlcl814').submit();" href="/" class="_tb _fs13 _cp _pt0 _ci">
-                            polski
-                            <form id="setlcl814" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
-                                {{ csrf_field() }}
-                                <input type="hidden" name="locale" value="pl">
-                            </form>
-                        </a>
+                        @if (!$loop->last) <span class="_ml5 _mr5"> · </span> @endif
+                        @endforeach
                     </span>
 
                 </span>
