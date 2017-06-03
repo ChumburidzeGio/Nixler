@@ -62,14 +62,14 @@
 @endif --}}
 
 @if(!$product->in_stock)
-<div class="_c3 _bg5 _p5 _pl15 _m5 _brds3">
+<div class="_cw _p5 _pl15 _mt15 _brds3 _fs13 _bgbl">
     @lang('Product is out of stock, please contact owner or check comments for more information.')
 </div>
 @endif
 
 
 @if(auth()->check() && $product->currency !== auth()->user()->currency)
-<div class="_c3 _bg5 _p5 _pl15 _m5 _brds3">
+<div class="_cw _p5 _pl15 _mt15 _brds3 _fs13 _bgbl">
     @lang('You can\'t buy product from this market because of difference in currency.')
 </div>
 @endif

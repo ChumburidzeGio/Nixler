@@ -342,12 +342,12 @@ window.product = <?php echo json_encode([
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">access_time</i> 
-			@lang('Added :date', ['date' => $product->created_at->diffForHumans()])
+			@lang('Added') <span ng-bind="'{{ $product->created_at }}' | timeAgo"></span>
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">update</i> 
-			@lang('Updated :date', ['date' => $product->updated_at->diffForHumans()])
+			@lang('Updated') <span ng-bind="'{{ $product->updated_at }}' | timeAgo"></span>
 		</a>
 
 	</div>

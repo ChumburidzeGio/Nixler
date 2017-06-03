@@ -166,33 +166,6 @@ class LocationService
 
 
 
-
-    /**
-     * Get all countries around the world
-     *
-     * @return object
-     */
-	public function getCountries(){
-		return Cache::remember('restcountries.all', (60 * 24 * 30), function () {
-		    return collect(json_decode(file_get_contents('https://restcountries.eu/rest/v1/all')));
-		});
-	}
-
-
-
-
-    /**
-     * Get country info by country code
-     *
-     * @return object
-     */
-	public function getCountryParamByCode($code, $param){
-		return $this->getCountries()->where('alpha2Code', $code)->pluck($param)->first();
-	}
-
-
-
-
     /**
      * Get user data by IP
      *

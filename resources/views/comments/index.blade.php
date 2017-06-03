@@ -8,7 +8,7 @@
      <div class="_li _p0 _media">
         <img class="_mr10 _left _brds3" src="{{ auth()->user()->avatar('comments') }}" height="40px" width="40px">
         <div class="_clear">
-            <textarea class="_fe _b1 _fs13 _brds3" msd-elastic="" placeholder="Your comment ..." ng-model="vm.comment_text" rows="3"  ng-click="showbtn=1" ng-keyup="$event.keyCode == 13 && vm.commentPush()"></textarea>
+            <textarea class="_fe _b1 _fs13 _brds3" msd-elastic="" placeholder="@lang('Your comment ...')" ng-model="vm.comment_text" rows="3"  ng-click="showbtn=1" ng-keyup="$event.keyCode == 13 && vm.commentPush()"></textarea>
         </div>
     </div>
 
@@ -29,7 +29,7 @@
     <div class="_clear">
         <span class="_title _c4">
             <span ng-bind="comment.author"></span>
-            <small class="_c2" ng-bind="comment.time | timeAgo"></small>
+            <small class="_c2 _ml5" ng-bind="comment.time | timeAgo"></small>
             <span ng-show="comment.can_delete" confirm-click="@lang('Are you sure?')" class="" ng-click="vm.delete(comment)">
                 <span class="_crp _fs12 _ls5 _c2 _mr10 _dib _p3 _pb0 _pt0 _brds3  _bg5 _right">delete</span>
             </span>
