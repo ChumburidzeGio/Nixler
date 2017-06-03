@@ -21,17 +21,7 @@ window.product = <?php echo json_encode([
 	<div class="row">
 
 		<div class="col-sm-8 col-xs-12">
-			@cannot('create', $product)
-			<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
-				@lang('Please for first add shipping information before you will able to publish new product')
-				<div class="_clear _mt10">
-					<a class="_btn _bga _cb _pr5 _hvrl" href="{{ route('shipping.settings') }}" id="shipping_settings_route">
-						@lang('Go to shipping settings') <i class="material-icons _ml5 _va7">chevron_right</i>
-					</a>
-				</div>
-			</div>
-			@endif
-
+			
 			@if(session('status'))
 			<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
 				{{ session('status') }}
@@ -46,8 +36,20 @@ window.product = <?php echo json_encode([
 			</div>
 			@endif
 
-			<form class="_mb2 _fg" name="product" action="{{ $product->link() }}" method="POST">
+			<form class="_mb2 _fg @cannot('create', $product) _posr @endcannot" name="product" action="{{ $product->link() }}" method="POST">
 				{{ csrf_field() }}
+
+				@cannot('create', $product)
+				<div class="_posa _af _bgwt6 _zi999"></div>
+				<div class="_bgw _p15 _fs15 _cb _posa _a0 _zi9999 _w70 _b1"> 
+					@lang('Please for first add shipping information before you will able to publish new product')
+					<div class="_clear _mt10">
+						<a class="_btn _bga _cb _pr5 _hvrl" href="{{ route('shipping.settings', ['ref' => 'product-edit']) }}" id="shipping_settings_route">
+							@lang('Go to shipping settings') <i class="material-icons _ml5 _va7">chevron_right</i>
+						</a>
+					</div>
+				</div>
+				@endcannot
 
 				<div class="_z013 _bgw _mb10 _brds2">
 
@@ -264,17 +266,17 @@ window.product = <?php echo json_encode([
 				@endif 
 
 				@if($product->is_active)
-				<a class="_btn _bg5 _cg _hvra _ml10 _left" onclick="event.preventDefault();
+				<!--a class="_btn _bg5 _cg _hvra _ml10 _left" onclick="event.preventDefault();
 				document.getElementById('status-change-form').submit();" href="/"> 
 				{{ $product->is_active ? __('Hide') : __('Show') }} 
-			</a>
+			</a-->
 			@endif
 
 		@if($product->just_created || $product->isInactive)
-		<button class="_btn _bg5 _cb _hvra _ml10" 
+		<!--button class="_btn _bg5 _cb _hvra _ml10" 
 			type="submit" name="action" value="schedule"> 
 			<i class="material-icons _mr5 _va5 _fs20">schedule</i> @lang('Schedule')
-		</button>
+		</button-->
 		@endif
 
 		@if($product->is_inactive)

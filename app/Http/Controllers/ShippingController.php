@@ -62,7 +62,7 @@ class ShippingController extends Controller
             'window_to' => $request->input('window_to'),
         ]);
 
-        return redirect()->route('shipping.settings');
+        return redirect()->route('shipping.settings', ['ref' => $request->input('ref')]);
     }
 
 
@@ -102,7 +102,7 @@ class ShippingController extends Controller
             $shipping->delete();
         }
 
-        return redirect()->route('shipping.settings');
+        return redirect()->route('shipping.settings', ['ref' => $request->input('ref')]);
     }
 
     /**
@@ -120,7 +120,7 @@ class ShippingController extends Controller
         
         $this->repository->settingsUpdate($request->all());
 
-        return redirect()->route('shipping.settings');
+        return redirect()->route('shipping.settings', ['ref' => $request->input('ref')]);
     }
 
 }

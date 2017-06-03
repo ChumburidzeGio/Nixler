@@ -5,10 +5,20 @@
 <div ng-controller="ShipSettingsCtrl as vm">
 	<script>window.cities = <?php echo json_encode($country->cities); ?></script>
 
+	@if(auth()->user()->shippingPrices()->count() && request()->input('ref') == 'product-edit')
+	<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
+		@lang('You can now sell the products. Let\'s just publish and we will take care of the rest!')
+		<div class="_clear _mt15">
+			<a class="_btn _bga _cb _mr5" href="{{ url('new-product') }}">@lang('Add new product')</a>
+		</div>
+	</div>
+	@endif
+
 	<div class="_z013 _bgw _brds2 _mb15 _clear">
 
 		<form class="_fg" name="product" action="{{ route('shipping.settings.general') }}" method="POST"">
 			{{ csrf_field() }}
+			<input type="hidden" name="ref" value="product-edit">
 
 			<div class="_p15 _bb1 _posr">
 				<h1 class="_fs18 _ci _lh1 _clear _telipsis _m0">
@@ -245,7 +255,7 @@
 
 			<div class="row">
 				<div class="col-sm-3 _mb15 _pt5">
-					Other regions
+					@lang('Other regions')
 					<input type="hidden" name="location_id" ng-value="{{ $country->id }}">
 				</div>
 
