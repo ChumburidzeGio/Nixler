@@ -322,7 +322,6 @@ class ProductRepository extends BaseRepository {
     }
 
 
-
     /**
      * @param $active integer
      * @return Category
