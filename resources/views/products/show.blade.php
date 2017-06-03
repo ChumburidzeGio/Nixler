@@ -96,12 +96,12 @@
 
 
 <script type="text/ng-template" id="/tmp/share.html">
-<div class="_bb1 _p15 _fs18 _pb10 _cb">__('Share')</div>
+<div class="_bb1 _p15 _fs18 _pb10 _cb">@lang('Share')</div>
 
         <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
             href="http://www.facebook.com/sharer/sharer.php?u=@{{ vm.url }}" target="_blank">
             <img class="_mr15 _va3 _brds1 _ml5" src="/img/facebook.svg" height="18px">
-            __('Share on :network', ['network' => 'Facebook'])
+            @lang('Share on :network', ['network' => 'Facebook'])
         </a>
 
         <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
@@ -109,7 +109,7 @@
             target="_blank">
 
             <img class="_mr15 _va3 _brds1 _ml5" src="/img/twitter.svg" height="18px">
-            __('Share on :network', ['network' => 'Twitter'])
+            @lang('Share on :network', ['network' => 'Twitter'])
 
         </a>
 
@@ -118,7 +118,7 @@
             target="_blank">
 
             <img class="_mr15 _va3 _brds1 _ml5" src="/img/vk.svg" height="18px">
-            __('Share on :network', ['network' => 'VK'])
+            @lang('Share on :network', ['network' => 'VK'])
         </a>
 
         <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
@@ -126,7 +126,7 @@
             target="_blank">
 
             <img class="_mr15 _va3 _brds1 _ml5" src="/img/gplus.svg" height="18px">
-            __('Share on :network', ['network' => 'Google+'])
+            @lang('Share on :network', ['network' => 'Google+'])
         </a>
 </script>
 @endsection
