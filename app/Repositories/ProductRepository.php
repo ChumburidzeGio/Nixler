@@ -20,6 +20,7 @@ use Ayeo\Price\Price;
 use App\Notifications\ProductUpdated;
 use App\Notifications\ProductDeleted;
 use App\Notifications\OrderStatusChanged;
+use Illuminate\Support\Facades\Cache;
 use Auth, DB;
 
 class ProductRepository extends BaseRepository {
@@ -271,17 +272,25 @@ class ProductRepository extends BaseRepository {
      */
     public function similar($id, $owner_id)
     {
-        $props = auth()->guest() ? [] : [
-            'filter' => "'currency' == \"".auth()->user()->currency."\""
-        ];
+        $hash = md5('similar'.$id.auth()->id());
 
-        $ids = (new RecommService)->similar($id, 5, auth()->id(), $props);
-        
-        if($ids) {
-            return $this->model->whereIn('id', $ids)->with('firstPhoto')->where('status', 'active')->take(5)->get();
-        } else {
-            return $this->model->where('owner_id', $owner_id)->where('id', '<>', $id)->where('status', 'active')->with('firstPhoto')->take(5)->get();
-        }
+        return Cache::remember($hash, (60 * 24), function () use ($id, $owner_id) {
+
+            $ids = (new RecommService)->similar($id, 5, auth()->id(), [
+                'filter' => "'currency' == \"".config('app.currency')."\""
+            ]);
+
+            if($ids) {
+                return $this->model->whereIn('id', $ids)->with('firstPhoto')->where('status', 'active')->take(5)->get();
+            } else {
+                return $this->model->where('id', '<>', $id)->where([
+                    'owner_id' => $owner_id,
+                    'status' => 'active',
+                    'currency' => config('app.currency'),
+                ])->with('firstPhoto')->take(5)->get();
+            }
+
+        });
         
     }
 
@@ -320,19 +329,25 @@ class ProductRepository extends BaseRepository {
      */
     public function getProductCategories($active)
     {
-        if($active){
-            $category = ProductCategory::find($active);
+        $hash = md5('getProductCategories'.$active.config('app.locale'));
 
-            if($category){
-                $children = ProductCategory::where('parent_id', $category->id)->with('translations')->get();
+        return Cache::remember($hash, (60 * 24), function () use ($active) {
 
-                return $children->count() || !$category->parent_id 
-                    ? $children 
-                    : ProductCategory::where('parent_id', $category->parent_id)->with('translations')->get();
+            if($active){
+                $category = ProductCategory::find($active);
+
+                if($category){
+                    $children = ProductCategory::where('parent_id', $category->id)->with('translations')->get();
+
+                    return $children->count() || !$category->parent_id 
+                        ? $children 
+                        : ProductCategory::where('parent_id', $category->parent_id)->with('translations')->get();
+                }
             }
-        }
 
-        return ProductCategory::whereNull('parent_id')->with('translations')->get();
+            return ProductCategory::whereNull('parent_id')->with('translations')->get();
+
+        });
     }
 
 
