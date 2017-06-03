@@ -28,6 +28,8 @@ class Markdown extends Parsedown
         # split text into lines
         $lines = explode("\n", $text);
 
+        $this->setBreaksEnabled(true);
+
         # iterate through lines to identify blocks
         $markup = $this->lines($lines);
 
