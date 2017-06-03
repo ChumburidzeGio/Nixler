@@ -49,7 +49,7 @@
 
                         <div class="form-group _m0">
 
-                                <input id="password-confirm" type="password" class="_b1 _bcg _fe _brds3" name="password_confirmation" required placeholder="@lang('Current password')">
+                                <input id="password-confirm" type="password" class="_b1 _bcg _fe _brds3" name="password_confirmation" required placeholder="@lang('Verify password')">
                         </div>
 
                          <button type="submit" class="_btn _bgi _cw _mt15 block">@lang('Join us')</button>

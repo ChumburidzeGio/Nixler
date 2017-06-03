@@ -1,10 +1,10 @@
 angular.module('settings', [])
 
 .controller('AccountSettingsCtrl', [
-	'$http', '$scope', '$timeout', '$window', 'ngDialog', function ($http, $scope, $timeout, $window, ngDialog) {
+	'$http', '$scope', '$timeout', '$window', 'ngDialog', '$filter', function ($http, $scope, $timeout, $window, ngDialog, $filter) {
 
 		var vm = this;
-		vm.cities = window.cities;
+		vm.cities = $filter('orderBy')(window.cities, 'label');;
 		
 		vm.deactivateAccount = function(){
 

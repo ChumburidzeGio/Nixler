@@ -88,8 +88,8 @@ return [
     'uploaded'             => 'Nie udało się wgrać pliku :attribute.',
     'url'                  => 'Format :attribute jest nieprawidłowy.',
     'ownpass'              => 'You current password is not correct.',
-    "phone" => "The :attribute field contains an invalid number.",
-    "phone_unique" => "The :attribute has already been taken.",
+    "phone" => "Pole telefonu zawiera nieprawidłowy numer",
+    "phone_unique" => "Taki telefon już występuje.",
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
