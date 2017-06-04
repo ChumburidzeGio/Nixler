@@ -17,7 +17,7 @@ class CommentController extends Controller
     public function index(Request $request)
     {
         $product = Product::findOrFail($request->target);
-        return $product->comments()->sortBy('most_recent')->paginate()->map(function($comment){
+        return $product->comments()->latest('id')->paginate()->map(function($comment){
             return [
                 'id' => $comment->id,
                 'avatar' => $comment->author->avatar('comments'),

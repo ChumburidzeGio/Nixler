@@ -52,7 +52,7 @@ class ProductRepository extends BaseRepository {
         $product->load('owner.shippingPrices', 'category');
         $product->owner->shippingPrices->load('location');
         $product->setRelation('media', $product->media('photo')->take(10)->get());
-        $product->setRelation('comments', $product->comments()->sortBy('most_recent')->paginate());
+        $product->setRelation('comments', $product->comments()->latest('id')->paginate());
 
         $product->tags = ProductTag::where('product_id', $product->id)->get();
 
