@@ -107,6 +107,7 @@ return [
             'sizes' => [
                 'full' => [null, 600],
                 'short-card' => [300, 330],
+                'similar' => [60, 60],
             ]
         ]
     ]
