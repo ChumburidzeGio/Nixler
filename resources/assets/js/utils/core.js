@@ -128,4 +128,17 @@ angular.module('utils', []).service('anchorSmoothScroll', function(){
             });
         },
   };
-});
+})
+
+.filter('money', ['$rootScope', '$filter', '$sce', function ($rootScope, $filter, $sce) {
+
+        return function (amount, currency, rtl) {
+
+            var amount = Math.round(amount),
+                currency = currency || window.nx.currencySymbol,
+                signAmount = amount < 0 ? '-' : '',
+                rtl = rtl || false;
+
+            return amount + ' ' + currency;
+        };
+    }]);

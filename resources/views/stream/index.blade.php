@@ -57,7 +57,7 @@
 			<script>window.facets = {!! $facets->toJson() !!};</script>
 
 			<div class="_db _tbs _ov _mb5">
-				<div class="_tb _crp _pl5">
+				<div class="_tb _crp _pl5" ng-if="vm.filters.price.avg">
 					<span ng-click="vm.showPriceRange=!vm.showPriceRange" ng-class="{'_zi999': vm.showPriceRange}">
 						<i class="material-icons _fs17 _va3 _mr10">filter_list</i>
 						@lang('Price range')<i class="material-icons _fs17 _va5">expand_more</i>
@@ -67,8 +67,8 @@
 
 					<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange" ng-init="vm.filters.price.min={{ request()->input('price_min') }};vm.filters.price.max={{ request()->input('price_max') }};">
 						<div class="_clear">
-							<span class="_fs17 _clear">@{{ vm.filters.price.min }}zł - @{{ vm.filters.price.max }}zł</span>
-							<span class="">@lang('The average price of product is') @{{ vm.filters.price.avg }}zł.</span>
+							<span class="_fs17 _clear">@{{ vm.filters.price.min | money }} - @{{ vm.filters.price.max | money }}</span>
+							<span>@lang('The average price of product is') @{{ vm.filters.price.avg | money }}.</span>
 						</div>
 
 						<rzslider
@@ -109,8 +109,6 @@
 								<input name="price_max" type="hidden" ng-value="vm.filters.price.max">
 							</form>
 						</div>
-
-						
 
 					</div>
 				</div>

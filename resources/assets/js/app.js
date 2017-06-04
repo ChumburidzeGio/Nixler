@@ -62,7 +62,7 @@
  app.factory('httpRequestInterceptor', function () {
  	return {
  		request: function (config) {
- 			config.headers['X-Token'] = window.Laravel.csrfToken;
+ 			config.headers['X-Token'] = window.nx.csrfToken;
  			return config;
  		}
  	};

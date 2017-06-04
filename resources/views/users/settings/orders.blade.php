@@ -8,7 +8,7 @@
             <div class="_bgw _z013 _brds3 _mb15">
 
                 <div class="_lh1 _p10 _pl15 _pr15 _cb _fs14 _bb1">@lang('Information about order') #{{ $order->id }}
-                    <span class="_pl5 _pr5 _c2 _bg5 _fs13 _brds3 _mr5 _dib _m5">{{ $order->status }}</span>
+                    <span class="_pl5 _pr5 _c2 _bg5 _fs13 _brds3 _mr5 _dib _m5">@lang($order->status)</span>
                 </div>
 
 
@@ -60,14 +60,14 @@
                     <li class="_clear">
                         <span class="_cg">@lang('Shipping cost')</span>:  
                         <span>
-                            {{ $order->currency }} {{ $order->shipping_cost }}
+                            {{ money($order->currency, $order->shipping_cost) }}
                         </span>
                     </li>
 
                     <li class="_clear">
                         <span class="_cg">@lang('Total')</span>:  
                         <span>
-                            {{ $order->currency }} {{ $order->amount }}
+                            {{ money($order->currency, $order->amount) }}
                         </span>
                     </li>
 
@@ -124,7 +124,7 @@
                          {{ csrf_field() }}
 
                         @can('update-status', [$order, 'confirmed'])
-                        <button type="submit" class="_c2 _bg5 _brds3 _btn" name="status" value="confirmed">@lang('Confirm')</button>
+                        <button type="submit" class="_c2 _bg5 _brds3 _btn _mr10" name="status" value="confirmed">@lang('Confirm')</button>
                         @endcan
 
                         @can('update-status', [$order, 'rejected'])
@@ -165,15 +165,15 @@
                         <i class="material-icons _mr15 _va7 _fs18 _left _mt5">
                             {{ $item->user_id == auth()->id() ? 'call_made' : 'call_received'}}
                         </i> 
-                        Order #{{ $item->id }} ({{ $item->currency }} {{ $item->amount }})
+                        Order #{{ $item->id }} ({{ money($item->currency, $item->amount) }})
                         <span class="_pl5 _pr5 _c2 _fs13 _brds3 _mr5 _dib _m5 _bg5">
-                            {{ $item->status }}
+                            @lang($item->status)
                         </span>
                         @if($item->product)
                         <div class="_clear _fs13"> {{ $item->product->title }} </div>
                         @endif
                         <div class="_clear _fs13 _c2">
-                            @lang('Delivery at') {{ $item->shipping_window_from->format('F jS') }} - {{ $item->shipping_window_to->format('F jS') }} · {{ $item->currency }} {{ $item->shipping_cost }}
+                            @lang('Delivery at') {{ $item->shipping_window_from->format('F jS') }} - {{ $item->shipping_window_to->format('F jS') }} @lang('for') {{ money($item->currency, $item->shipping_cost) }}
                         </div>
                     </div>
 
