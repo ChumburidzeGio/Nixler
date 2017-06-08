@@ -51,12 +51,12 @@ class OnePointNinetyOne
 
         $products->map(function($product) {
 
-            if(!$product->is_active) {
+            if(!$product->is_active && $product->status && $product->status == 'active') {
                 $product->is_active = true;
                 $product->save();
             }
 
-            if(!$product->media_id){
+            if($product->is_active){
                 app(ProductRepository::class)->refreshFeaturedMediaForProduct($product);
             }
 
