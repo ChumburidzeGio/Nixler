@@ -27,7 +27,7 @@ trait Merchant {
      */
     public function followCallback($target)
     {   
-        $products = $target->products()->take(10)->orderBy('likes_count', 'desc')->where('status', 'active')->pluck('id');
+        $products = $target->products()->take(10)->orderBy('likes_count', 'desc')->active()->pluck('id');
         $this->pushInStream($products, 'user:'.$target->id);
     }
 

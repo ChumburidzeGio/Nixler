@@ -29,21 +29,7 @@ class MessagesController extends Controller
      */
     public function index()
     {
-        $threads = auth()->user()->hermes()->take(10)->get()->map(function($item) {
-
-            $message = !is_null($item->latestMessage) ? $item->latestMessage->first() : null;
-            $ps = $item->participants;
-
-            return [
-                'link' => route('thread', ['id' => $item->id]),
-                'photo' => $ps->first() ? $ps->first()->avatar('comments') : null,
-                'name' => $ps->pluck('name')->implode(', '),
-                'message' => $message ? $message->body : '',
-                'last_replied' =>$message ? !!($message->user_id == auth()->user()->id) : false,
-                'unread' => $item->unread
-            ];
-
-        });
+        $threads = $this->repository->getAllThreads();
 
         return view('messages.index', compact('threads'));
     }
@@ -55,15 +41,15 @@ class MessagesController extends Controller
      */
     public function store($id, Request $request)
     {
-        $new_msg = auth()->user()->messageIn($id, $request->input('message'));
+        $message = $this->repository->findThreadByIdAndSendMessage($id, $request->input('message'));
 
         return [
-            'id' => $new_msg->id,
+            'id' => $message->id,
             'photo' => auth()->user()->avatar('message'),
-            'body' => $new_msg->body,
+            'body' => $message->body_parsed,
             'author' => auth()->user()->name,
             'link' => auth()->user()->link(),
-            'time' => $new_msg->created_at->format('c'),
+            'time' => $message->created_at->format('c'),
             'own' => true
         ];
     }
@@ -98,7 +84,7 @@ class MessagesController extends Controller
             return [
                 'id' => $item->id,
                 'photo' => array_get($pcps, $item->user_id)->avatar('message'),
-                'body' => $item->body,
+                'body' => $item->body_parsed,
                 'time' => $item->created_at->format('c'),
                 'author' => array_get($pcps, $item->user_id)->name,
                 'link' => array_get($pcps, $item->user_id)->link(),
@@ -115,7 +101,11 @@ class MessagesController extends Controller
     public function redirectToConversation($id)
     {
         $target = User::findOrFail($id);
-        $thread = auth()->user()->findOrCreateThreadWith($target);
+
+        $user = auth()->user();
+
+        $thread = $this->repository->findOrCreateThreadBetween($user, $target);
+
         return redirect()->route('thread', ['id' => $thread->id]);
     }
 }

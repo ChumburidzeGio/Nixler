@@ -21,8 +21,6 @@ class CreateProductsTables extends Migration
             $table->string('owner_username');
             $table->string('slug')->nullable();
 
-            $table->string('status')->nullable();
-            $table->enum('type', ['product', 'ticket'])->default('product');
             $table->string('title')->nullable();
             $table->text('description')->nullable();
 
@@ -32,10 +30,11 @@ class CreateProductsTables extends Migration
             $table->string('buy_link')->nullable();
 
             $table->integer('category_id')->unsigned()->nullable();
+            $table->integer('media_id')->unsigned()->nullable();
 
             $table->integer('likes_count')->default(0);
             $table->integer('sales_count')->default(0);
-            $table->boolean('is_used')->default(0);
+            $table->boolean('is_active')->default(0);
             $table->boolean('has_variants')->default(0);
             $table->timestamps();
 

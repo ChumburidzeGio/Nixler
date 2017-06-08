@@ -37,7 +37,9 @@ class Thread extends Model
      */
     public function latestMessage()
     {
-        return $this->messages()->orderBy('id','desc')->nPerGroup(null, 'thread_id', 1);
+        return $this->messages()->latest('id')->nPerGroup(null, 'thread_id', 1);
+
+        //->nPerGroup(null, 'thread_id', 1);
     }
     
     /**
@@ -72,21 +74,6 @@ class Thread extends Model
         ]);
     }
     
-    /**
-     * Add message to conversation
-     */
-    public function message($text, $model)
-    {
-        $this->participants()->where('users.id', '<>', $model->id)->get()->map(function($user){
-            $user->setMeta('has_messages', true);
-        });
-
-        return Message::create([
-            'user_id' => $model->id,
-            'thread_id' => $this->id,
-            'body' => $text
-        ]);
-    }
     
     /**
      * Add message to conversation
@@ -107,5 +94,21 @@ class Thread extends Model
             'last_read' => (new \Carbon\Carbon)
         ]);
     }
-    
+
+
+    /**
+     * Get all threads which has at last one participant appart from 
+     * current user, to load just messages with existing accounts.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeWithParticipantsExcept($query, $user)
+    {
+        return $query->whereHas('participants', function ($query) use ($user) {
+            return $query->where('thread_participants.user_id', '<>', $user->id);
+        })->with(['participants' => function($query) use ($user) {
+            return $query->where('thread_participants.user_id', '<>', $user->id);
+        }]);
+    }
 }

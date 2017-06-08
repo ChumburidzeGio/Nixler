@@ -41,6 +41,18 @@ class RegisterController extends Controller
     }
 
     /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegistrationForm()
+    {
+        $this->meta('title', __('Join us'));
+
+        return view('auth.register');
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
@@ -51,7 +63,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|min:6|confirmed',
+            'password' => 'required|min:6',
         ]);
     }
 

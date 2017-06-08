@@ -80,7 +80,7 @@ return [
             'sizes' => [
                 'profile' => [120, 120],
                 'nav' => [25, 25],
-                'aside' => [60, 60],
+                'aside' => [80, 80],
                 'product' => [80, 80],
                 'comments' => [40, 40],
                 'message' => [38, 38],

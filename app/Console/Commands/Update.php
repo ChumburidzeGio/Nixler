@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Repositories\BlogRepository;
 use App\Repositories\ProductRepository;
+use App\Upgrade\OnePointNinetyOne;
 
 class Update extends Command
 {
@@ -36,6 +37,7 @@ class Update extends Command
 
         $this->categories();
 
+        $this->upgradeToLatest();
     }
 
     /**
@@ -80,6 +82,47 @@ class Update extends Command
     public function categories()
     {
         app(ProductRepository::class)->syncCategories();
+    }
+
+
+    /**
+     * Update categories list in database
+     *
+     * @return void
+     */
+    public function availableVersions()
+    {
+        return collect([
+            '1.91' => OnePointNinetyOne::class
+        ]);
+    }
+
+
+    /**
+     * Update categories list in database
+     *
+     * @return void
+     */
+    public function upgradeToLatest()
+    {
+        $this->availableVersions()->map(function($version, $key){
+
+            if(floatval($key) <= floatval(config('app.version'))) {
+                return false;
+            }
+
+            $this->comment("Upgrading to version $key");
+
+            app($version)->upgrade();
+
+            $this->call('env', [
+                'key' => 'APP_VERSION',
+                'value' => $key
+            ]);
+
+            $this->info("Upgraded to version $key");
+
+        });
     }
 
 }

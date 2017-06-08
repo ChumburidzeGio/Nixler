@@ -51,11 +51,17 @@ class Env extends Command
      */
     protected function env($key, $val)
     {
-        file_put_contents($this->laravel->environmentFilePath(), preg_replace(
-            $this->keyReplacementPattern($key),
-           $key."=".$val,
-            file_get_contents(app()->environmentFilePath())
-        ));
+        $path = app()->environmentFilePath();
+
+        $content = file_get_contents($path);
+
+        $replacement = $key."=".$val;
+
+        $pattern = $this->keyReplacementPattern($key);
+
+        $content = str_contains($content, $key) ? preg_replace($pattern, $replacement, $content) : "$content\n$replacement";
+
+        file_put_contents($path, $content);
     }
 
 

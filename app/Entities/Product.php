@@ -10,6 +10,7 @@ use Plank\Metable\Metable;
 use MediaUploader;
 use App\Traits\Searchable;
 use App\Entities\User;
+use App\Entities\Media;
 use App\Traits\NPerGroup;
 use App\Entities\Activity;
 use App\Traits\Actable;
@@ -19,6 +20,8 @@ use App\Entities\ProductCategory;
 use App\Entities\Comment;
 use App\Services\SystemService;
 use App\Services\CurrencyService;
+use Illuminate\Support\Collection;
+use Cocur\Slugify\Slugify;
 
 class Product extends Model
 {
@@ -27,7 +30,7 @@ class Product extends Model
     public $table = 'products';
     
     protected $fillable  = [
-        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category_id', 'in_stock', 'buy_link', 'id_used', 'has_variants'
+        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category_id', 'in_stock', 'buy_link', 'id_used', 'has_variants', 'is_active'
     ];
 
 
@@ -35,8 +38,11 @@ class Product extends Model
      *  Get the avatar
      */
     public function photo($type, $nullable = false){
-        $media = $this->firstMedia('photo');
-        return ($nullable && !$media) ? null : url('media/'.($media ? $media->id : '-').'/product/'.$type.'.jpg');
+
+        $media_id = $this->attributes['media_id'] ?: '-';
+
+        return ($nullable && !$this->attributes['media_id']) ? null : url("media/{$media_id}/product/{$type}.jpg");
+
     }
 
 
@@ -49,7 +55,20 @@ class Product extends Model
     {
         return [
             'slug' => [
-                'source' => 'title'
+                'source' => 'title',
+                'unique' => true,
+                'method' => function ($string, $separator) {
+                    return app(Slugify::class)->slugify($string);
+                },
+                'separator' => '',
+                'uniqueSuffix' => function ($slug, $separator, Collection $list) {
+
+                    $owner_id = $this->attributes['owner_id'];
+
+                    $count = Product::where('slug', $slug)->count();
+
+                    return $count ? '-'.$count : '';
+                }
             ]
         ];
     }
@@ -82,7 +101,7 @@ class Product extends Model
             ->where('mediable_type', get_class($this))->nPerGroup('mediables', 'mediable_id', 1, 'order');
     }
 
-    
+
     /**
      *  Relationships
      */
@@ -115,36 +134,19 @@ class Product extends Model
         return app(CurrencyService::class)->get($this->attributes['currency'], $this->attributes['price']);
     }
 
-    public function getIsActiveAttribute(){
-        return !!($this->attributes['status'] == 'active');
-    }
-
     public function getIsInactiveAttribute(){
-        return !!($this->attributes['status'] == 'inactive');
-    }
-
-    public function getIsSoldoutAttribute(){
-        return !!($this->attributes['status'] == 'soldout');
+        return !$this->attributes['is_active'];
     }
 
     public function getJustCreatedAttribute(){
         return ($this->created_at == $this->updated_at);
     }
 
-    public function markAsSold(){
-
-        if(!$this->is_active) return false;
-
-        $this->status = 'soldout';
-
-        return $this->update();
-    }
-
     public function markAsActive(){
 
         if($this->is_active) return false;
 
-        $this->status = 'active';
+        $this->is_active = true;
 
         $this->update();
 
@@ -155,7 +157,7 @@ class Product extends Model
 
         if($this->is_inactive) return false;
 
-        $this->status = 'inactive';
+        $this->is_active = false;
 
         auth()->user()->streamsRemove($this->id);
 
@@ -261,6 +263,18 @@ class Product extends Model
             'text' => $text,
             'rate' => $rate
         ]);
+    }
+
+
+    /**
+     * Get just active records
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', 1);
     }
     
 }

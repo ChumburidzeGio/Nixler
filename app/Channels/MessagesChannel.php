@@ -3,7 +3,7 @@
 namespace App\Channels;
 
 use Illuminate\Notifications\Notification;
-use App\Entities\User;
+use App\Repositories\MessengerRepository;
 
 class MessagesChannel
 {
@@ -26,21 +26,6 @@ class MessagesChannel
 
         $message = array_get($params, 'message');
 
-        $users = User::whereIn('id', [$messagable, $sender])->get();
-
-        foreach ($users as $user) {
-
-            if(is_int($sender) && $user->id == $sender){
-                $sender = $user;
-            }
-
-            if(is_int($messagable) && $user->id == $messagable){
-                $messagable = $user;
-            }
-        }
-
-        $thread = $sender->findOrCreateThreadWith($messagable);
-
-        $sender->messageIn($thread->id, $message);
+        app(MessengerRepository::class)->sendMessageById($sender, $messagable, $message);
     }
 }

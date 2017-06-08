@@ -4,7 +4,7 @@
 
 <div ng-controller="AccountSettingsCtrl as vm">
 	<script>window.cities = <?php echo json_encode($cities); ?></script>
-	<div class="_bs012 _bgw _mb15 _db">
+	<div class="_bs012 _bgw _mb15 _db" id="general">
 
 		<div class="_p15 _bb1 _posr">
 			<h2 class="_fs16 _cg _lh1 _db _telipsis _m0 _ml5">
@@ -180,7 +180,7 @@
 
 
 
-		<div class="_bs012 _bgw _mb15 _clear">
+		<div class="_bs012 _bgw _mb15 _clear" id="password">
 
 			<div class="_p15 _bb1 _posr">
 				<h2 class="_fs16 _cg _lh1 _db _telipsis _m0 _ml5">

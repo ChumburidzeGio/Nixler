@@ -30,10 +30,11 @@ trait NPerGroup {
     // make sure column aliases are unique
     $groupAlias = "{$table}_grp";//. md5(time());
     $numAlias = "{$table}_rn";// . md5(time());
+    $numOpperation = !is_null($order) ? "@num" : "@num+1";
 
     // apply mysql variables
     $newQuery->addSelect(\DB::raw(
-      "@num := if(@group = {$groupTable}.{$group}, @num, 1) as {$numAlias}, @group := {$groupTable}.{$group} as {$groupAlias}"
+      "@num := if(@group = {$groupTable}.{$group}, {$numOpperation}, 1) as {$numAlias}, @group := {$groupTable}.{$group} as {$groupAlias}"
     ));
 
     if(is_null($order)) {

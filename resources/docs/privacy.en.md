@@ -24,7 +24,7 @@ If you remove information that you posted to the Service, copies may remain view
 We may access, preserve and share your information in response to a legal request (like a search warrant, court order or subpoena) if we have a good faith belief that the law requires us to do so. We may also access, preserve and share information when we have a good faith belief it is necessary to: detect, prevent and address fraud and other illegal activity; to protect ourselves, you and others.
 
 # How we store your information
-Nixler uses third-party vendors and hosting partners for hardware, software, networking, storage, and related technology we need to run Nixler. Your information collected through the Service may be stored and processed in the Germany or any other country in which Nixler or Service Providers maintain facilities.
+Nixler uses third-party vendors and hosting partners for hardware, software, networking, storage, and related technology we need to run Nixler. Your information collected through the Service may be stored and processed in Germany or any other country in which Nixler or Service Providers maintain facilities.
 
 Nixler or its Service Providers may transfer information that we collect about you, including personal information across borders and from your country or jurisdiction to other countries or jurisdictions around the world. By registering for and using the Service you consent to the transfer of information to any country in which Nixler or its Service Providers maintain facilities and the use and disclosure of information about you as described in this Privacy Policy.
 

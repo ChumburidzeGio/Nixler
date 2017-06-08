@@ -20,8 +20,8 @@
 				    </span>
 				</div>
 
-				<div class="_p10">
-				<div class="_media _clear _p3 _mt10" ng-repeat="msg in vm.thread.messages | orderBy:'id'">
+				<div class="_p10" id="msg-body">
+				<div class="_media _clear _p3 _mt10 msg-item" ng-repeat="msg in vm.thread.messages | orderBy:'id'">
 				    <a ng-href="@{{ msg.link }}">
 				    	<img class="_mr10 _left _brds3" ng-src="@{{ msg.photo }}" height="38px" width="38px">
 				    </a>
@@ -30,7 +30,7 @@
 				            <span ng-bind="msg.author"></span>
 				            <small class="_c2 _ml5" ng-bind="msg.time | timeAgo"></small>
 				        </a>
-				        <p class="_c3 _anc" ng-bind-html="msg.body | to_trusted"></p>
+				        <p class="_c3 _anc text" ng-bind-html="msg.body | to_trusted"></p>
 				    </div>
 				</div>
 				</div>

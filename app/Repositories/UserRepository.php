@@ -42,13 +42,13 @@ class UserRepository extends BaseRepository {
         }
 
         $user->liked_count = $user->liked()->count();
-        $user->selling_count = $user->products()->where('status', 'active')->count();
+        $user->selling_count = $user->products()->active()->count();
         $user->followers_count = $user->followers()->count();
         $user->followings_count = $user->followings()->count();
         $user->media_count = $user->media()->unordered()->count();
 
         if($tab == 'products'){
-            $data = $user->products()->where('status', 'active')->withMedia()->take(20)->get();
+            $data = $user->products()->active()->withMedia()->take(20)->get();
             $view = 'products';
         }
         elseif($tab == 'followers'){

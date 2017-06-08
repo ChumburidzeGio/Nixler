@@ -87,8 +87,17 @@ class ProductRepository extends BaseRepository {
     {
         $user = auth()->user();
 
+        $model = $this->model->where([
+            'is_active' => 0,
+            'owner_id' => $user->id,
+        ])->latest('id')->first();
+
+        if($model) {
+            return $model;
+        } 
+        
         return $this->model->create([
-            'status' => 'inactive',
+            'is_active' => 0,
             'currency' => $user->currency,
             'owner_id' => $user->id,
             'owner_username' => $user->username,
@@ -174,13 +183,29 @@ class ProductRepository extends BaseRepository {
         }
 
         $product->save();
-
+        
         if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
             $product->notify(new ProductUpdated);
             $product->markAsActive();
         }
 
         return $product;
+    }
+    
+
+
+    /**
+     * @param $product Product
+     * @param ? $user \App\Entities\User
+     * @return boolean
+     */
+    public function refreshFeaturedMediaForProduct($product, $user = null)
+    {
+        $media = $product->firstMedia('photo');
+
+        $product->media_id = $media ? $media->id : null;
+
+        return $product->save();
     }
     
 
@@ -197,17 +222,21 @@ class ProductRepository extends BaseRepository {
 
         $product = $user->products()->findOrFail($id);
 
-        return $product->uploadPhoto($file, 'photo');
+        $media = $product->uploadPhoto($file, 'photo');
+
+        $this->refreshFeaturedMediaForProduct($product);
+
+        return $media;
     }
     
-
 
     /**
      * @param $product_id integer
      * @param $media_id integer
+     * @param ? $user \App\Entities\User
      * @return \App\Entities\Media
      */
-    public function removeMediaFromProductById($id, $file, $user = null)
+    public function removeMediaFromProductById($product_id, $media_id, $user = null)
     {
         $user = $user ? : auth()->user();
 
@@ -215,7 +244,11 @@ class ProductRepository extends BaseRepository {
 
         $media = $product->media()->findOrFail($media_id);
         
-        return $media->delete();
+        $deleted = $media->delete();
+
+        $this->refreshFeaturedMediaForProduct($product);
+
+        return $deleted;
     }
     
 
@@ -240,6 +273,8 @@ class ProductRepository extends BaseRepository {
             });
             $product->syncMedia($media, 'photo');
         }
+
+        $this->refreshFeaturedMediaForProduct($product);
     }
 
 
@@ -281,13 +316,12 @@ class ProductRepository extends BaseRepository {
             ]);
 
             if($ids) {
-                return $this->model->whereIn('id', $ids)->with('firstPhoto')->where('status', 'active')->take(5)->get();
+                return $this->model->whereIn('id', $ids)->active()->take(5)->get();
             } else {
-                return $this->model->where('id', '<>', $id)->where([
+                return $this->model->where('id', '<>', $id)->active()->where([
                     'owner_id' => $owner_id,
-                    'status' => 'active',
                     'currency' => config('app.currency'),
-                ])->with('firstPhoto')->take(5)->get();
+                ])->take(5)->get();
             }
 
         });
@@ -304,11 +338,11 @@ class ProductRepository extends BaseRepository {
 
         if($user) {
 
-            $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+            $products = $user->stream()->with('owner')->latest()->paginate(20);
 
             if(!$products->total() && !request()->has('page')) {
                 $user->pushInStream($this->getPopularProducts(20, 1), 'pop');
-                $products = $user->stream()->with('firstPhoto', 'owner')->latest()->paginate(20);
+                $products = $user->stream()->with('owner')->latest()->paginate(20);
             }
 
         } else {
@@ -376,7 +410,7 @@ class ProductRepository extends BaseRepository {
 
         if($query) {
 
-            $results = $this->model->whereKeyword($query)->where('currency', config('app.currency'))->where('status', 'active')
+            $results = $this->model->whereKeyword($query)->where('currency', config('app.currency'))->active()
                 ->limit(1000)->get(['id', 'price', 'category_id']);
 
             $facets = collect([
@@ -395,11 +429,11 @@ class ProductRepository extends BaseRepository {
 
             $ids = $results->take(($currentPage * 20 + 1))->pluck('id')->toArray();
 
-            $products = count($ids) ? $this->findByIds($ids)->with('firstPhoto', 'owner')->simplePaginate(20) : collect([]);
+            $products = count($ids) ? $this->findByIds($ids)->with('owner')->simplePaginate(20) : collect([]);
 
         } else {
 
-            $results = $this->model->where('currency', config('app.currency'))->where('status', 'active');
+            $results = $this->model->where('currency', config('app.currency'))->active();
 
             if($category) {
 
@@ -419,7 +453,7 @@ class ProductRepository extends BaseRepository {
                 $results->whereBetween('price', [$priceMin, $priceMax]);
             }
 
-            $products = $results->with('firstPhoto', 'owner')->simplePaginate(20);
+            $products = $results->with('owner')->simplePaginate(20);
         }
 
         $products = $this->transformProducts($products);
@@ -481,7 +515,7 @@ class ProductRepository extends BaseRepository {
             'likes_count' => $item->likes_count,
             'owner' => $item->owner->name,
             'photo' => route('photo', [
-                'id' => $item->firstPhoto ? array_get($item->firstPhoto->first(), 'id', '-') : '-',
+                'id' => $item->media_id ?: '-',
                 'type' => 'product',
                 'place' => 'short-card'
             ])
@@ -527,7 +561,7 @@ class ProductRepository extends BaseRepository {
 
         $ids_ordered = implode(',', $ids);
 
-        return $this->model->whereIn('id', $ids)->where('status', 'active')->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
+        return $this->model->whereIn('id', $ids)->active()->orderByRaw(DB::raw("FIELD(id, $ids_ordered)"));
     }
 
 
@@ -547,7 +581,7 @@ class ProductRepository extends BaseRepository {
             return $ids;
         }
 
-        return $this->model->whereIn('id', $ids)->with('firstPhoto', 'owner')->where('status', 'active')->where('currency', config('app.currency'))->paginate(20);
+        return $this->model->whereIn('id', $ids)->with('owner')->active()->where('currency', config('app.currency'))->paginate(20);
     }
 
 
@@ -684,13 +718,15 @@ class ProductRepository extends BaseRepository {
             })->first();
 
             if($shipping) {
-                $delivery = $shipping['window_from'] == $shipping['window_to'] 
-                ? "{$shipping['window_from']} day" 
-                : "{$shipping['window_from']}-{$shipping['window_to']} days";
+                $days = $shipping['window_from'] == $shipping['window_to'] 
+                ? "{$shipping['window_from']}" 
+                : "{$shipping['window_from']}-{$shipping['window_to']}";
 
-                $price = $shipping['price'] == '0.00' ? 'free' : $shipping['currency'].$shipping['price'];
+                $cost = $shipping['price'] == '0.00' ? __('for free') : __('for :cost', ['cost' => money($shipping['currency'], $shipping['price'])]);
 
-                $shipping_text = "Delivery in {$delivery} for {$price}";
+                $shipping_text =  $shipping['window_from'] == $shipping['window_to']
+                    ? __("Delivery in :days day :cost", compact('days', 'cost'))
+                    : __("Delivery in :days days :cost", compact('days', 'cost'));
                 
                 $shipping_price = $shipping['price'];
             }

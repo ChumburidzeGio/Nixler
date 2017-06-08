@@ -80,38 +80,33 @@ class OrderStatusChanged extends Notification
      */
     public function toMessages($notifiable)
     {
-        $data = [
-            'from' => 1
-        ];
-
         switch ($notifiable->status) {
             case 'created':
-                $data['to'] = $notifiable->merchant()->first()->id;
-                $data['message'] = "Someone bought your product! Please go to order page and confirm the order. If the product is out of stock or you cant deliver you can also cancel the order.\n".$notifiable->url();
+                $message = "Someone bought your product! Please go to [order page](:url) and confirm the order. If the product is out of stock or you cant deliver you can also cancel the order.";
                 break;
                 
             case 'confirmed':
-                $data['to'] = $notifiable->user()->first()->id;
-                $data['message'] = "Merchant confirmed your order. Please go to orders page for more information.\n".$notifiable->url();
+                $message = "Merchant confirmed your order. Please go to [order page](:url) for more information.";
                 break;
                 
             case 'rejected':
-                $data['to'] = $notifiable->user()->first()->id;
-                $data['message'] = "Merchant rejected your order. Please go to orders page for more information.\n".$notifiable->url();
+                $message = "Merchant rejected your order. Please go to [order page](:url) for more information.";
                 break;
                 
             case 'sent':
-                $data['to'] = $notifiable->user()->first()->id;
-                $data['message'] = "Merchant set status of your order as sent. Please go to orders page for more information.\n".$notifiable->url();
+                $message = "Merchant set status of your order as sent. Please go to [order page](:url) for more information.";
                 break;
 
             case 'closed':
-                $data['to'] = $notifiable->merchant()->first()->id;
-                $data['message'] = "The order #".$notifiable->id." is closed. Please go to orders page for more information.\n".$notifiable->url();
+                $message = "Merchant closed your order. Please go to [order page](:url) for more information.";
                 break;
         }
 
-        return $data;
+        return [
+            'from' => 1,
+            'to' => ($notifiable->statu == 'created') ? $notifiable->merchant()->first()->id : $notifiable->user()->first()->id,
+            'message' => __($message, ['url' => $notifiable->url()]) 
+        ];
 
     }
 

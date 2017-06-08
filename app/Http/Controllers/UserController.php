@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Entities\User;
 use App\Repositories\UserRepository;
 use App\Repositories\MediaRepository;
-use MetaTag;
 
 class UserController extends Controller
 {
@@ -38,10 +37,10 @@ class UserController extends Controller
 
         $user = $data['user'];
 
-        MetaTag::set('title', $user->name." ({$user->username})");
-        MetaTag::set('description', $user->headline);
-        MetaTag::set('image', $user->avatar('profile'));
-        MetaTag::set('type', 'profile');
+        $this->meta('title', $user->name." ({$user->username})");
+        $this->meta('description', $user->headline);
+        $this->meta('image', $user->avatar('profile'));
+        $this->meta('type', 'profile');
         
         return view('users.profile.'.$data['view'], $data);
     }

@@ -5,10 +5,28 @@ namespace Tests;
 use Laravel\Dusk\TestCase as BaseTestCase;
 use Facebook\WebDriver\Remote\RemoteWebDriver;
 use Facebook\WebDriver\Remote\DesiredCapabilities;
+use Faker\Factory;
 
 abstract class DuskTestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    /**
+     * Prepare for Dusk test execution.
+     *
+     * @beforeClass
+     * @return void
+     */
+    public function faker($key = null)
+    {
+        $faker = Factory::create();
+
+        if($key) {
+            return $faker->{$key};
+        }
+
+        return $faker;
+    }
 
     /**
      * Prepare for Dusk test execution.

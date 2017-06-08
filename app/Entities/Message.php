@@ -5,6 +5,7 @@ namespace App\Entities;
 use Illuminate\Database\Eloquent\Model;
 use Watson\Validating\ValidatingTrait;
 use App\Traits\NPerGroup;
+use App\Services\Markdown;
 use DB;
 
 class Message extends Model
@@ -29,6 +30,10 @@ class Message extends Model
     
     public function getIsOwnAttribute(){
         return (auth()->user()->id == $this->user_id);
+    }
+    
+    public function getBodyParsedAttribute(){
+        return app(Markdown::class)->text($this->attributes['body']);
     }
     
     /**

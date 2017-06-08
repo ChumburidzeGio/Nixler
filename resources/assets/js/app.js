@@ -26,7 +26,6 @@
  require('./comments/core');
  require('./messages/core');
  require('./nav/nav.ctrl');
- require('./address/core');
  require('./order/core');
  require('./stream/core');
  require('./settings/core');
@@ -36,7 +35,6 @@
  var app = angular.module('nx', [
  	'utils',
     'products', 
-    'address', 
     'nav', 
     'ng-currency', 
     'monospaced.elastic', 

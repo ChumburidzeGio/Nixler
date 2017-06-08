@@ -4,6 +4,8 @@ namespace App\Repositories;
 
 use App\Repositories\BaseRepository;
 use App\Entities\User;
+use App\Entities\Message;
+use App\Entities\Participant;
 use Carbon\Carbon;
 use stdClass;
 
@@ -23,27 +25,62 @@ class MessengerRepository extends BaseRepository {
     /**
      * Find thread by ID
      */
+    public function getAllThreads()
+    {
+        $user = auth()->user();
+
+        $user->notifications_count = 0;
+
+        $user->save();
+
+        $threads = $user->threads()->has('messages')->with('latestMessage')->withParticipantsExcept($user)->latest('id')->take(10)->get();
+
+        return $threads->map(function($item) {
+
+            $message = !is_null($item->latestMessage) ? $item->latestMessage->first() : null;
+            $ps = $item->participants;
+
+            return [
+                'link' => route('thread', ['id' => $item->id]),
+                'photo' => $ps->first() ? $ps->first()->avatar('comments') : null,
+                'name' => $ps->pluck('name')->implode(', '),
+                'message' => $message ? strip_tags($message->body_parsed) : '',
+                'last_replied' =>$message ? !!($message->user_id == auth()->user()->id) : false,
+                'unread' => $item->unread
+            ];
+
+        });
+    }
+
+
+    /**
+     * Find thread by ID
+     */
     public function findThreadById($id)
     {
         $user = auth()->user();
 
-        $rThread = $user->thread($id);
+        $rThread = $user->threads()->with(['participants'])->findOrFail($id);   
+
+        $messages = $rThread->messages()->latest('id')->paginate();
+
+        $rThread->markAsRead();
 
         $thread = new stdClass;
+        
         $thread->id = $rThread->id;
+
         $thread->title = $rThread->subject ? : $rThread->participants->filter(function($user){
             return ($user->id != auth()->user()->id);
         })->pluck('name')->implode(', ');
 
         $participantsKeyed = $rThread->participants->keyBy('id');
 
-        $messages = /*$this->groupMessages(*/$rThread->messages/*)*/;
-
         $thread->messages = $messages->map(function($item) use ($participantsKeyed) {
             return [
                 'id' => $item->id,
                 'photo' => array_get($participantsKeyed, $item->user_id)->avatar('message'),
-                'body' => nl2br($item->body),
+                'body' => $item->body_parsed,
                 'time' => $item->created_at->format('c'),
                 'author' => array_get($participantsKeyed, $item->user_id)->name,
                 'link' => array_get($participantsKeyed, $item->user_id)->link(),
@@ -60,7 +97,7 @@ class MessengerRepository extends BaseRepository {
             ];
         });
 
-        $thread->messages_count = $rThread->messages()->count();
+        $thread->messages_count = $messages->total();
 
         return $thread;
     }
@@ -138,6 +175,111 @@ class MessengerRepository extends BaseRepository {
         }
 
         return $messages->values();
+    }
+
+
+    /**
+     * Find users by Id and exchange message between them
+     */
+    public function findOrCreateThreadBetween($sender, $messagable)
+    {
+        $thread = $sender->threads()->whereHas('participants', function ($query) use($messagable) {
+            $query->where('thread_participants.user_id', $messagable->id);
+        })->first();
+
+        if(!$thread){
+
+            $thread = $sender->threads()->create([
+                'is_private' => true
+            ]);
+
+            $thread->addParticipant($sender);
+
+            $thread->addParticipant($messagable);
+        }
+
+        return $thread;
+    }
+
+
+    /**
+     * Find users by Id and exchange message between them
+     */
+    public function sendMessageById($sender, $messagable, $message)
+    {
+        $users = User::whereIn('id', [$messagable, $sender])->get();
+
+        foreach ($users as $user) {
+
+            if(is_int($sender) && $user->id == $sender){
+                $sender = $user;
+            }
+
+            if(is_int($messagable) && $user->id == $messagable){
+                $messagable = $user;
+            }
+        }
+
+        $thread = $this->findOrCreateThreadBetween($sender, $messagable);
+
+        return $this->sendMessageToThread($thread, $sender, $message);
+    }
+
+
+    /**
+     * Find users by Id and exchange message between them
+     */
+    public function findThreadByIdAndSendMessage($id, $message, $user = null)
+    {
+        $user = $user ?: auth()->user();
+
+        $thread = $user->threads()->findOrFail($id);
+
+        return $this->sendMessageToThread($thread, $user, $message);
+    }
+
+
+    /**
+     * Find users by Id and exchange message between them
+     */
+    public function sendMessageToThread($thread, $sender, $message)
+    {
+        $thread->participants()->where('users.id', '<>', $sender->id)->get()->map(function($user){
+            $this->refreshNotificationsCount($user);
+        });
+
+        Participant::where('user_id', $sender->id)->where('thread_id', $thread->id)->update([
+            'last_read' => (new \Carbon\Carbon)
+        ]);
+
+        return Message::create([
+            'user_id' => $sender->id,
+            'thread_id' => $thread->id,
+            'body' => $message
+        ]);
+    }
+
+
+    /**
+     * Find users by Id and exchange message between them
+     */
+    public function refreshNotificationsCount($user = null)
+    {
+        $user = is_null($user) ? auth()->user() : $user;
+
+        $count = $user->threads()->get()->filter(function($thread) {
+
+            if(strtotime($thread->pivot->last_read) < strtotime($thread->updated_at)) {
+                return true;
+            }
+
+            return false;
+
+        })->count();
+
+        $user->notifications_count = $count;
+
+        $user->save();
     }
 
 }

@@ -45,8 +45,8 @@ class HttpPingMonitor extends BaseMonitor
      */
     public function setResponseCodeAndContentOnException($e)
     {
-        if(method_exists($e, 'getResponse') && $response = $e->getResponse() && $response instanceof ResponseInterface) {
-            return $this->responseCode = $response->getStatusCode();
+        if(method_exists($e, 'getResponse') && $e->getResponse() instanceof ResponseInterface) {
+            return $this->responseCode = $e->getResponse()->getStatusCode();
         }
 
         $this->responseCode = null;

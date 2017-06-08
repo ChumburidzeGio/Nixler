@@ -14,6 +14,8 @@ return [
 
     'name' => 'Nixler',
 
+    'version' => env('APP_VERSION', '1.90'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -92,6 +94,9 @@ return [
         ],
         'PL' => [
             'pl' => 'polski',
+            'en' => 'English'
+        ],
+        'US' => [
             'en' => 'English'
         ],
     ],

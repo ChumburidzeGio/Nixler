@@ -11,7 +11,8 @@ use App\Entities\Order;
 use App\Entities\ShippingPrice;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
-use MetaTag;
+use App\Http\Requests\UpdateProduct;
+use App\Http\Requests\OrderProduct;
 
 class ProductController extends Controller
 {
@@ -39,10 +40,10 @@ class ProductController extends Controller
     {
         $product = $this->repository->findBySlug($id, $uid);
 
-        MetaTag::set('title', "{$product->title} · {$product->price_formated}");
-        MetaTag::set('description', $product->description);
-        MetaTag::set('image', $product->photo('full'));
-        MetaTag::set('type', 'product');
+        $this->meta('title', "{$product->title} · {$product->price_formated}");
+        $this->meta('description', $product->description);
+        $this->meta('image', $product->photo('full'));
+        $this->meta('type', 'product');
 
         return view('products.show', compact('product'));
     }
@@ -75,21 +76,8 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function update($id, Request $request)
+    public function update($id, UpdateProduct $request)
     {
-        $this->validate($request, [
-              'title' => 'required|string|max:180',
-              'description' => 'string|nullable',
-              'variants' => 'json',
-              'action' => 'required|in:schedule,publish',
-              'media' => 'json',
-              'tags' => 'json',
-              'variants' => 'json',
-              'category' => 'required|string',
-              'in_stock' => 'required|numeric',
-              'buy_link' => 'nullable|url',
-        ]);
-
         $this->repository->update($request->all(), $id);
 
         $isPublish = ($request->input('action') == 'publish');
@@ -177,59 +165,36 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function order($id, Request $request)
+    public function order($id, OrderProduct $request)
     {
         $user = auth()->user();
-
-        debug("Order placing page for product {$id}");
 
         if(!$request->has('step')) {
 
             $data = $this->repository->getWithShippingByCity($id, $request->all());
 
-            debug("Showing order page for product with ID {$id}");
-
             return view('products.order', $data);
 
         } elseif($request->input('step') == 2) {
-
-            $this->validate($request, [
-                'phone' => ['phone:'.$user->country, 'phone_unique:'.$user->country],
-                'city_id' => 'required|numeric',
-                'address' => 'required|string',
-                'quantity' => 'required|numeric',
-                'variant' => 'nullable|numeric',
-            ]);
 
             $this->userRepository->update(
                 $request->only(['phone', 'city_id', 'address', 'quantity', 'variant'])
             );
 
-            debug("User data is updated {$id}");
-
             if($user->verified) {
-
-                debug("Verified user, so we just place order.");
 
                 $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
 
                 return redirect()->route('settings.orders', ['id' => $order->id]);
-
             }
 
             return view('products.order-step2', compact('id'));
 
         } elseif($request->input('step') == 3) {
 
-            $this->validate($request, [
-                'pcode' => 'required|numeric|digits:6',
-            ]);
-
             $user = $this->userRepository->update($request->only(['pcode']));
 
             $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
-
-            debug("User phone verified. Lets place order.");
 
             return redirect()->route('settings.orders', ['id' => $order->id]);
 

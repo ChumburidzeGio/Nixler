@@ -140,7 +140,7 @@ class LocationRepository {
         ]);
             
         foreach ($region->getCities() as $city) {
-            $this->donwloadCity($city, $lang, $country_id, $model->id);
+            $this->donwloadCity($geonamesCode, $lang, $country_id, $model->id);
         }
     }
 
@@ -148,17 +148,17 @@ class LocationRepository {
     /**
      * @return void
      */
-    function donwloadCity($city, $lang, $country_id, $region_id)
+    function donwloadCity($geonamesCode, $lang, $country_id, $region_id)
     {
-        $geonames = app(GeonamesService::class)->get($city->geonamesCode);
+        $geonames = app(GeonamesService::class)->get($geonamesCode);
 
-        if(!isset($geonames->fcodeName) || $geonames->fcodeName == 'populated place') {
+        if(!isset($geonames->fcodeName) || ($geonames->fcodeName == 'populated place' && $lang != 'ka')) {
             return false;
         }
 
-        $translation = app(GeonamesService::class)->getName($city->geonamesCode, $lang, $geonames);
+        $translation = app(GeonamesService::class)->getName($geonamesCode, $lang, $geonames);
 
-        $model = $this->updateOrCreateCity($city->geonamesCode, $lang, [
+        $model = $this->updateOrCreateCity($geonamesCode, $lang, [
             'country_id' => $country_id,
             'region_id' => $region_id,
             'population' => $geonames->population,

@@ -28,8 +28,10 @@
 
                 <a href="{{ route('threads') }}" class="_tb _posr">
                     <i class="material-icons _cinherit _fs20 _mt10">message</i> 
-                    @if(auth()->user()->getMeta('has_messages'))
-                    <span class="_p5 _brds50 _bgr _a2 _posa _mt15 _mr5"></span>
+                    @if(auth()->user()->notifications_count)
+                    <span class="_brds50 _a2 _posa _fs11 _cw _bgr" id="msg-badge">
+                        {{ auth()->user()->notifications_count }}
+                    </span>
                     @endif
                 </a>
 
@@ -73,8 +75,8 @@
                         <div class="_mt30">
                             <a href="{{ Auth::check() ? auth()->user()->link() : url('/login') }}" 
                                 class="_lh1 _et2 _cw _thvrw _fw600">
-                                <img src="{{  Auth::check() ? auth()->user()->avatar('aside') : url('media/-/avatar/aside.jpg') }}" 
-                                class="_mb10 _clear _brds3" height="60" width="60">
+                                <img ng-src="{{  Auth::check() ? auth()->user()->avatar('aside') : url('/avatars/1/aside') }}" 
+                                class="_mb10 _clear _brds3 _z013" height="80" width="80">
                                 {{ Auth::check() ? auth()->user()->name : __('Sign in to access your account') }}
                             </a>
                             <a href="{{ Auth::check() ? auth()->user()->url : url('/register') }}">
@@ -83,7 +85,7 @@
                                 </small>
                             </a>
                         </div>
-                        <img src="{{ url('img/aside.jpg') }}" class="_af _posa _zi-1 _w100">
+                        <img ng-src="{{  Auth::check() ? auth()->user()->avatar('aside') : url('/avatars/1/aside') }}" class="_af _posa _zi-1 _w100 _blr30">
                         <div class="_bgbt2 _af _posa _zi-1"></div>
                     </span>
 

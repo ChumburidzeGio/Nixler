@@ -1,9 +1,9 @@
-<span class="_c2 _lh1 _mb0 _fs18 _mt5 _clear">
+<h1 class="_c2 _lh1 _m0 _fs18 _mt5 _clear _fw400 _mb10">
     {{ $product->title }}
-</span>
+</h1>
 
-<span class="_cgr _clear _fs17 _pr10">
-   {{ $product->price_formated }}
+<span class="_cgr _clear _pr10">
+   <h2 class="_fs17 _m0 _fw400 _dib">{{ $product->price_formated }}</h2>
 
    <div class="_tbs _ov _right _cg _mt3" ng-init="vm.liked={{ $product->isLiked() ? 1 : 0 }}">
 
@@ -82,11 +82,11 @@
 
         <div class="_media _clear _p3">
             <a href="{{ $product->owner->link() }}">
-                <img class="_mr15 _left _brds50" src="{{ $product->owner->avatar('product') }}" height="45px" width="45px">
+                <img class="_mr15 _left _brds50" src="{{ $product->owner->avatar('product') }}" height="45px" width="45px" alt="{{ $product->owner->name }}">
             </a>
             <div class="_clear">
-                <a class="_c3 _fs18" href="{{ $product->owner->link() }}">
-                    {{ $product->owner->name }}
+                <a class="_c3" href="{{ $product->owner->link() }}">
+                    <h3 class="_fs18 _m0 _fw400">{{ $product->owner->name }}</h3>
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
                     <div class="_clear" show-more more="@lang('Read more')" less="@lang('Show less')" height="180">{!! $product->description_parsed !!}</div>

@@ -12,8 +12,8 @@
 
 					<div class="_tbs _ov _fs16 _p10 _pl15">@lang('Messages')</div>
 						@if(count($threads))
-						<a class="_media _clear _p10 _hvrl" ng-repeat="thread in vm.threads" ng-href="@{{ thread.link }}" ng-class="{'_bg5':thread.unread}">
-								<img ng-src="@{{ thread.photo }}" class="_mr15 _left _brds3">
+						<a class="_media _clear _p10 _pl15 _hvrl" ng-repeat="thread in vm.threads" ng-href="@{{ thread.link }}" ng-class="{'_bgwt8':thread.unread}">
+								<img ng-src="@{{ thread.photo }}" class="_mr15 _left _brds3" height="40px" width="40px">
 								<div class="_clear _pr10">
 									<span class="_c2" ng-bind="thread.name"></span>
 									<small class="_sub _cg _clear">

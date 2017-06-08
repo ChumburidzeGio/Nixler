@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('timezone')->nullable();
             $table->boolean('verified')->default(0);
             $table->integer('response_time')->nullable();
+            $table->unsignedInteger('notifications_count')->default(0);
             $table->bigInteger('phone')->nullable()->index();
             $table->rememberToken();
             $table->timestamps();

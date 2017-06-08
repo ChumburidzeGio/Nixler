@@ -34,7 +34,7 @@
  </div>
  <div class="_tac _pb15 _bb1">
   <div class="_posr">
-    <img src="{{ $user->avatar('profile') }}" class="_brds3 _dib _ma _mb10 _b1 _bcw _bw2 _clear _mt-50" height="120px" width="120px">
+    <img src="{{ $user->avatar('profile') }}" class="_brds3 _dib _ma _mb10 _b1 _bcw _bw2 _clear _mt-50" height="120px" width="120px" alt="{{ $user->name }}">
 
     @if(auth()->check() && auth()->user()->id == $user->id)
     <form id="avatar-upload-form" action="{{ route('user.uploadPhoto', ['id' => $user->username]) }}" 
@@ -56,7 +56,7 @@
  @endif
 </div>
 
-<span class="_lh1 _et2 _fs24 _clear _c2 _lh1">{{ $user->name }}</span>
+<h1 class="_lh1 _et2 _fs24 _c2 _lh1 _fw400 _m0 _mb5 _mt10">{{ $user->name }}</h1>
 <p class="_clear _fs14 _cbt8">
  @if(!$user->getMeta('headline'))
  @lang('Member since'): {{ $user->created_at->format('F jS, Y') }}

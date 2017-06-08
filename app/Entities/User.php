@@ -140,11 +140,12 @@ class User extends Authenticatable
     {   
         return $this->hasOne(Country::class, 'iso_code', 'country');
     }
-
     
-    /**
-     *  Relationships
-     */
+    public function threads()
+    {
+        return $this->belongsToMany(Thread::class, 'thread_participants', 'user_id', 'thread_id')->withPivot('last_read');
+    }
+
     public function products()
     {   
         return $this->hasMany(Product::class, 'owner_id');

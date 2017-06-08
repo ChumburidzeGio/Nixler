@@ -38,18 +38,21 @@
 
                         <div class="form-group _m0 _mb10{{ $errors->has('password') ? ' has-error' : '' }}">
 
-                                <input id="password" type="password" class="_b1 _bcg _fe _brds3" name="password" required placeholder="@lang('Password')">
+                                <div class="_posr">
+                                    <input id="password" type="@{{ password_visible ? 'text' : 'password' }}" 
+                                        class="_b1 _bcg _fe _brds3" name="password" ng-model="password" 
+                                        required placeholder="@lang('Password')">
+                                    <span class="_a3 _mr15 _posa _crp _fs11 _ttu _cbl _fw600" 
+                                        ng-show="password.length"
+                                        ng-click="password_visible=!password_visible"
+                                        ng-bind="password_visible ? '@lang('Hide')' : '@lang('Show')'"></span>
+                                </div>
 
                                 @if ($errors->has('password'))
                                     <span class="help-block _mb _mt0">
                                         <span class="_fs13 _lh1">{{ $errors->first('password') }}</span>
                                     </span>
                                 @endif
-                        </div>
-
-                        <div class="form-group _m0">
-
-                                <input id="password-confirm" type="password" class="_b1 _bcg _fe _brds3" name="password_confirmation" required placeholder="@lang('Verify password')">
                         </div>
 
                          <button type="submit" class="_btn _bgi _cw _mt15 block">@lang('Join us')</button>
@@ -70,6 +73,15 @@
 
                     </div>
             </div>
+
+
+            <div class="_tac _anc _fs13">
+                @lang('By clicking Join us or Sign in with Facebook, I agree to Nixler\'s <a href=":terms">Terms of Service</a> and <a href=":privacy">Privacy Policy</a>.', [
+                    'terms' => url('articles/terms'),
+                    'privacy' => url('articles/privacy'),
+                ])
+            </div>
+
         </div>
     </div>
 </div>

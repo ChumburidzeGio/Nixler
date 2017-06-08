@@ -15,7 +15,7 @@ class CurrencyService {
 
         switch ($currency) {
             case 'USD':
-                return "${$amount}";
+                return "\${$amount}";
             case 'GEL':
                 return "{$amount} ლარი";
             case 'PLN':

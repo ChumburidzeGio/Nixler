@@ -11,11 +11,11 @@
 |
 */
 
-Route::demoAccess('/access');
+//Route::demoAccess('/access');
 
 Auth::routes(); 
 
-Route::group(['middleware' => 'demoMode'], function () {
+//Route::group(['middleware' => 'demoMode'], function () {
 
 	Route::impersonate();
 
@@ -116,4 +116,4 @@ Route::group(['middleware' => 'demoMode'], function () {
 
 	});
 
-});
+//});

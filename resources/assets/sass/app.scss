@@ -146,3 +146,15 @@
     display: inline-block;
   }
 }
+
+
+#msg-badge {
+    height: 17px;
+    width: 17px;
+    margin: 9px 4px;
+}
+
+
+#msg-body .msg-item .text a {
+    color: #4285F4;
+}

@@ -3,7 +3,19 @@
 @section('layout')
 
 <div ng-controller="ShipSettingsCtrl as vm">
-	<script>window.cities = <?php echo json_encode($country->cities); ?></script>
+	<script>
+		window.cities = <?php echo json_encode($country->cities); ?>;
+	</script>
+
+	<script>window.settings = <?php echo json_encode([
+		'delivery_full' => old('delivery_full', auth()->user()->getMeta('delivery_full', 0)),
+		'has_return' => old('has_return', auth()->user()->getMeta('has_return', 0)),
+		'policy' => old('policy', auth()->user()->getMeta('return_policy', 0)),
+		'location_id' => old('location_id'),
+		'price' => old('price'),
+		'window_from' => old('window_from'),
+		'window_to' => old('window_to'),
+	]); ?></script>
 
 	@if(auth()->user()->shippingPrices()->count() && request()->input('ref') == 'product-edit')
 	<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
@@ -26,15 +38,15 @@
 				</h1>
 			</div>
 
-			<div class="_li _hvrl row" ng-click="vm.delivery_full=!vm.delivery_full" ng-init="vm.delivery_full={{ auth()->user()->getMeta('delivery_full', 0) }}" id="delivery_full">
-				<i class="material-icons _left _mr15 _fs20 _c2 _anim1 _ml15 _va7" ng-class="{'_c4': vm.delivery_full }" ng-bind="vm.delivery_full ? 'check_box' : 'check_box_outline_blank'"></i>
+			<div class="_li _hvrl row" ng-click="vm.delivery_full=!vm.delivery_full" id="delivery_full">
+				<i class="material-icons _left _mr15 _fs20 _c2 _anim1 _ml15 _va7" ng-class="{'_c4': vm.delivery_full }" ng-bind="vm.delivery_full ? 'check_box' : 'check_box_outline_blank'">check_box</i>
 				<input type="hidden" name="delivery_full" ng-value="vm.delivery_full | boolean">
 				@lang('Delivery accross the country')
 				
 			</div>
 
-			<div class="_li _hvrl row" ng-click="vm.has_return=!vm.has_return" ng-init="vm.has_return={{ auth()->user()->getMeta('has_return', 0) }}" id="has_return">
-				<i class="material-icons _left _mr15 _fs20 _c2 _anim1 _ml15 _va7" ng-class="{'_c4': vm.has_return }" ng-bind="vm.has_return ? 'check_box' : 'check_box_outline_blank'"></i>
+			<div class="_li _hvrl row" ng-click="vm.has_return=!vm.has_return" id="has_return">
+				<i class="material-icons _left _mr15 _fs20 _c2 _anim1 _ml15 _va7" ng-class="{'_c4': vm.has_return }" ng-bind="vm.has_return ? 'check_box' : 'check_box_outline_blank'">check_box</i>
 				<input type="hidden" name="has_return" ng-value="vm.has_return | boolean">
 				@lang('We accept return')
 			</div>
@@ -43,7 +55,8 @@
 				<small class="_clear _pb5">@lang('Return Policy')</small>
 				<textarea name="policy" type="text" class="_b1 _bcg _fe _brds3"
 				ng-disabled="!vm.has_return" msd-elastic ng-model="vm.policy"
-				placeholder="@lang('Please tell users about your return policy, in how many days is it possible to return product and what are the rules')" id="policy">{{ auth()->user()->getMeta('return_policy') }}</textarea>
+				placeholder="@lang('Please tell users about your return policy, in how many days is it possible to return product and what are the rules')" id="policy">
+				</textarea>
 			</div>
 
 			<div class="col-sm-12 _mb10 _tar _bt1 _pt10">
@@ -75,7 +88,7 @@
 
 					<div class="col-sm-3 _mb15" ng-if="vm.cities">
 						<select id="city" selector model="vm.location_id" value-attr="id" label-attr="name" class="_b1 _bcg _brds3"
-						options="vm.cities" placeholder="@lang('Location')" ng-init="{{ old('location_id') ? 'vm.location_id='.old('location_id') : ''}}">
+						options="vm.cities" placeholder="@lang('Location')">
 					</select>
 
 					<input type="hidden" name="location_id" ng-value="vm.location_id">
@@ -86,7 +99,7 @@
 				</div>
 				
 				<div class="col-sm-2 _mb15">
-					<input ng-init="{{ old('price') ? 'vm.price='.old('price') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" 
+					<input class="_b1 _bcg _fe _brds3 _fes" type="text" 
 					ng-currency min="1" ng-required="true" currency-symbol="{{ $country->currency_symbol }} " 
 					ng-model="vm.price" placeholder="@lang('Price')" name="price">
 
@@ -98,7 +111,7 @@
 				</div>
 
 				<div class="col-sm-2 _mb15">
-					<input ng-init="{{ old('window_from') ? 'vm.from='.old('window_from') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.from" placeholder="@lang('From')" ui-numeric-input min="0" max="60" max-length="2" id="add_window_from">
+					<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.from" placeholder="@lang('From')" ui-numeric-input min="0" max="60" max-length="2" id="add_window_from">
 
 					<input type="hidden" name="window_from" ng-value="vm.from">
 
@@ -108,7 +121,7 @@
 				</div>
 
 				<div class="col-sm-2 _mb15">
-					<input ng-init="{{ old('window_to') ? 'vm.to='.old('window_to') : ''}}" class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.to" placeholder="@lang('To')" ui-numeric-input min="0" max="60" max-length="2" id="add_window_to"> 
+					<input class="_b1 _bcg _fe _brds3 _fes" type="text" ng-required="true" ng-model="vm.to" placeholder="@lang('To')" ui-numeric-input min="0" max="60" max-length="2" id="add_window_to"> 
 
 					<input type="hidden" name="window_to" ng-value="vm.to">
 
@@ -137,7 +150,7 @@
 <div class="_z013 _bgw _brds2 _mt15">
 
 	<div class="_p15 _posr">
-		<h1 class="_fs18 _ci _lh1 _clear _telipsis _m0">
+		<h1 class="_fs18 _ci _lh1 _telipsis _m0">
 			@lang('Shipping locations')
 		</h1>
 	</div>
@@ -308,5 +321,6 @@
 	</div>
 	@endif
 
+</div>
 </div>
 @endsection

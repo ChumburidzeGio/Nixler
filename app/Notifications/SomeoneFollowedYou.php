@@ -46,7 +46,7 @@ class SomeoneFollowedYou extends Notification
         return [
             'from' => 1,
             'to' => $notifiable->id,
-            'message' => $this->actor->name." started following you \n".$this->actor->link()
+            'message' => __("[:name](:url) started following you.", ['name' => $this->actor->name, 'url' => $this->actor->link()])
         ];
 
     }

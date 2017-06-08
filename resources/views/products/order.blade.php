@@ -62,10 +62,10 @@ window.price = <?php echo $product->price; ?>;
 
                         <div class="col-xs-12">
                         <div class="_clear _c3 _bg5 _p10 _brds3 ng-cloak" ng-if="vm.city && !vm.city.shipping">
-                                @lang('Shipping is not available in this city.')' <a class="_c4" href="{{ route('find-thread', ['id' => $product->owner->id]) }}">@lang('Ask the seller')</a> @lang('about delivery to your city or choose another one.')
+                                @lang('Shipping is not available in this city.')' <a class="_cbl" href="{{ route('find-thread', ['id' => $product->owner->id]) }}">@lang('Ask the seller')</a> @lang('about delivery to your city or choose another one.')
                         </div>
 
-                            <p class="_clear _fs13 _c2 _mb0 _tac _mt5 ng-cloak" ng-if="vm.city.shipping_price">@lang('You will pay on delivery') {{ $product->currency }} <span ng-bind="vm.price()"></span>.</p>
+                            <p class="_clear _fs13 _c2 _mb0 _tac _mt5 ng-cloak" ng-if="vm.city.shipping_price">@lang('You will pay on delivery') <span ng-bind="vm.price() | money "></span>.</p>
 
 
                         <button type="submit" class="_btn _bga _cb _mt15 block _fs15" ng-disabled="!vm.city.shipping">

@@ -9,3 +9,5 @@ Homestead.json
 Homestead.yaml
 .env
 composer.lock
+npm-debug.log
+.env.dusk.local

@@ -214,5 +214,17 @@
     "Add new product": "Dodaj produkt",
     "Other regions": "Pozostałe miasta",
     "Oops!": "",
-    "We can't seem to find the page you're looking for.": ""
+    "We can't seem to find the page you're looking for.": "",
+    "Someone bought your product! Please go to [order page](:url) and confirm the order. If the product is out of stock or you cant deliver you can also cancel the order.": "",
+    "Merchant confirmed your order. Please go to [order page](:url) for more information.": "",
+    "Merchant rejected your order. Please go to [order page](:url) for more information.": "",
+    "Merchant set status of your order as sent. Please go to [order page](:url) for more information.": "",
+    "Merchant closed your order. Please go to [order page](:url) for more information.": "",
+    "[:name](:url) started following you.": "",
+    "Delivery in :days day :cost": "",
+    "Delivery in :days days :cost": "",
+    "for free": "",
+    "for :cost": "",
+    "By clicking Join us or Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": "",
+    "By clicking Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": ""
 }

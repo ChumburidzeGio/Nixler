@@ -18,7 +18,8 @@
                                 <img src="{{ $product->photo('full') }}" class="_clear _ma" 
                                 ng-init="vm.mediaBase='{{ url('media') }}/'" 
                                 ng-src="@{{ vm.media.mainPath() }}"
-                                ng-click="vm.media.next()">
+                                ng-click="vm.media.next()"
+                                alt="{{ $product->title }}">
 
                             <ul class="_pl5 _pr15 _pt10 _a8 _posa">
                                 @foreach($product->media as $key => $photo)
@@ -28,7 +29,8 @@
                                 class="_mr10 _mb10 _z013 _brds2 _crp _clear" 
                                 ng-class="{'_b1 _bca _bw2':(vm.mainPhoto == {{ $key }})}"
                                 ng-init="vm.media.add({{ $key }},{{ $photo->id }})"
-                                ng-click="vm.mainPhoto={{ $key }}">    
+                                ng-click="vm.mainPhoto={{ $key }}"
+                                alt="{{ $product->title }}">    
                                 @endforeach
                             </ul>
 
