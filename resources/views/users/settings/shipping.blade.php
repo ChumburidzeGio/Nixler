@@ -11,7 +11,7 @@
 		'delivery_full' => !!old('delivery_full', auth()->user()->getMeta('delivery_full', 0)),
 		'has_return' => !!old('has_return', auth()->user()->getMeta('has_return', 0)),
 		'has_sku' => !!old('has_sku', auth()->user()->getMeta('has_sku', 0)),
-		'policy' => old('policy', auth()->user()->getMeta('policy', 0)),
+		'policy' => old('policy', auth()->user()->getMeta('policy', '')),
 		'location_id' => old('location_id'),
 		'price' => old('price'),
 		'window_from' => old('window_from'),
@@ -60,8 +60,7 @@
 
 			<div class="_mb15 col-sm-12 _pl15 _pr15 _pt10 _bt1 form-group _m0">
 				<small class="_clear _pb5">@lang('Terms & Conditions')</small>
-				<textarea name="policy" type="text" class="_b1 _bcg _fe _brds3"
-				ng-disabled="!vm.has_return" msd-elastic ng-model="vm.policy"
+				<textarea name="policy" type="text" class="_b1 _bcg _fe _brds3" msd-elastic ng-model="vm.policy"
 				placeholder="@lang('Describe your return policy and shipping conditions')" id="policy">
 				</textarea>
 			</div>
