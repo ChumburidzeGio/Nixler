@@ -8,6 +8,7 @@
     <meta name="referrer" content="origin-when-cross-origin">
 
     <meta content="{{ config('app.name') }}" name="author" />
+    <meta property="fb:app_id" content="{{ config('services.facebook.client_id') }}" />
 
     <link type="application/opensearchdescription+xml" rel="search" href="/osd{{ config('app.locale') }}.xml">
 
