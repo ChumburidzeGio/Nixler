@@ -14,12 +14,6 @@ class Controller extends BaseController
 
     public function __construct(){
     	
-    	if(request()->isMethod('get')){
-    		$this->meta('title', __('Buy and Sell Online Clothes, Shoes, Electronics & more'));
-	    	$this->meta('description', __('Sign up and find the best offers from shops in your area or become a seller and get the new channel of sales for free.'));
-	        $this->meta('image', url('/img/meta.jpg'));
-	        $this->meta('type', 'website');
-	    }
 
     }
 
