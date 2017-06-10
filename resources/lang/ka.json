@@ -230,5 +230,13 @@
     "ID of product in your stock": "პროდუქტის ნომერი თქვენს საწყობში",
     "Add to products SKU (stock-keeping unit)": "SKU (საწყობის ნომერი) პროდუქტებზე",
     "SKU": "",
-    "My Products": "ჩემი პროდუქტები"
+    "My Products": "ჩემი პროდუქტები",
+    "about": "კომპანიაზე",
+    "terms": "წესები",
+    "Follow us": "გამოგვიწერეთ",
+    "Call us": "დაგვირეკეთ",
+    "Drop line": "მოგვწერეთ",
+    "Welcome to Nixler!": "მოგესალმებით ნიქსლერზე!",
+    "Nixler is a shopping platform, where you can easily publish your product and sell online for free.": "ნიქსლერი არის სავაჭრო პალტფორმა, სადაც შეგიძლიათ უფასოდ გამოაქვეყნოთ საკუთარი პროდუქცია და გაყიდოთ ონლიან.",
+    "Nixler aims to create free trading space where anyone will be able to buy and sell online simply and safely.": "ნიქსლერი მიზნად ისახავს შექმნას თავისუფალი სავაჭრო სივრცე და ხალხს თუ კომპანიებს მისცეს საშუალება იყიდონ და გაყიდონ ონალინ მარტივად და უსაფრთხოდ."
 }

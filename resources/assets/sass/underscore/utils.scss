@@ -36,7 +36,11 @@
     float: none;
 }
 
-
+@media (max-width: 768px){
+    ._left-sm {
+        float: left!important;
+    }
+}
 
 
 
@@ -128,6 +132,7 @@
 ._cw { color: #FFFFFF; } /* color white */
 ._bgwd1 { background: #f1f0f0; }
 ._bgw { background: #FFFFFF; } /* background white */
+._bgcrm { background: #fdfdfd; } /* background creamy */
 
 ._bgwt2 { background: rgba(246,248,248,.20)!important; } /* background transparent .2 */
 ._bgwt4 { background: rgba(246,248,248,.40)!important; } /* background transparent .4 */
@@ -405,6 +410,8 @@
 ._mih150 { min-height: 150px; }
 ._mih200 { min-height: 200px; }
 ._mih250 { min-height: 250px; }
+._mih90vh { min-height: 90vh }
+._mih100vh { min-height: 100vh }
 
 
 /*=================================

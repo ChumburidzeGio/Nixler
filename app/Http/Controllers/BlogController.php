@@ -73,4 +73,22 @@ class BlogController extends Controller
 
         return view('articles.show', compact('article'));
     }
+
+
+    /**
+     * Show the application welcome page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function welcome()
+    {   
+        $what = collect(trans('landing.what.items'))->chunk(2);
+
+        $why = collect(trans('landing.why.items'))->chunk(3);
+
+        $who = collect(trans('landing.who.items'))->chunk(3);
+
+        return view('landing.page', compact('what', 'why', 'who'));
+    }
+
 }

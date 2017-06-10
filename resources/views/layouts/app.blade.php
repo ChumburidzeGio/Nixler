@@ -2,7 +2,7 @@
 
 @section('app')
     
-    <div class="_pb15">
+    <div class="_pb15 _mih100vh">
         <nav class="_clear _b0 _bgw _bb1 _cb _ma _tac _mb15" ng-controller="NavCtrl as vm">
 
         @if(session('message'))
@@ -146,10 +146,10 @@
                     </span>
 
                 </span>
-                <a href="{{ url('/articles/help') }}" class="_li _fs13 _hvrd _cg"> @lang('Get help')</a>
+                <!--a href="{{ url('/articles/help') }}" class="_li _fs13 _hvrd _cg"> @lang('Get help')</a-->
                 <a href="{{ url('/articles/privacy') }}" class="_li _fs13 _hvrd _cg"> @lang('Privacy Policy')</a>
                 <a href="{{ url('/articles/terms') }}" class="_li _fs13 _hvrd _cg"> @lang('Terms of Service')</a>
-                <a href="{{ url('/articles/about') }}" class="_li _fs13 _hvrd _cg"> @lang('About Nixler') </a>
+                <a href="{{ url('/about') }}" class="_li _fs13 _hvrd _cg"> @lang('About Nixler') </a>
 
 
             </ul>
@@ -158,4 +158,48 @@
 
 </div>
 
+
+<div id="footer" class="_clear _ci _tal _pb10 _pt10  _mt15 _fs13">
+    <div class="container">
+        <div class="_p15 _pt5 _mb15">
+        <span class="col-xs-4"><a href="/">Nixler</a> © 2017</span>
+            <span class="col-sm-4 col-xs-12 _mb5">
+                <a href="{{ url('about') }}" class="_mr10 _crp">@lang('about')</a>
+                <a href="{{ url('articles/terms') }}" class="_mr10 _crp">@lang('terms')</a>
+            </span>
+            <div class="col-sm-4">
+                <div class="_tbs _right _dib _pl0 _left-sm">
+                    <a onclick="event.preventDefault();
+                    document.getElementById('setlcl813').submit();" href="/" class="_tb _pl0 _pt0">
+                    English
+                    <form id="setlcl813" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                        {{ csrf_field() }}
+                        <input type="hidden" name="locale" value="en">
+                    </form>
+                </a>
+
+                <a onclick="event.preventDefault();
+                document.getElementById('setlcl814').submit();" href="/" class="_tb _pt0 _crp">
+                polski
+                <form id="setlcl814" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="locale" value="pl">
+                </form>
+            </a>
+
+                <a onclick="event.preventDefault();
+                document.getElementById('setlcl815').submit();" href="/" class="_tb _pt0 _crp">
+                ქართული
+                <form id="setlcl815" action="{{ url('/settings/locale') }}" method="POST" class="_d0">
+                    {{ csrf_field() }}
+                    <input type="hidden" name="locale" value="ka">
+                </form>
+            </a>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
 @endsection

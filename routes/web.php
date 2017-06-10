@@ -107,6 +107,7 @@ Auth::routes();
 		Route::post('shipping/general', 'ShippingController@updateGeneral')->name('shipping.settings.general');
 	});
 
+	Route::get('/about', 'BlogController@welcome');
 	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
 	Route::get('/monitor', function(){
