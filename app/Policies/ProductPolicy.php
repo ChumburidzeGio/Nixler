@@ -44,6 +44,18 @@ class ProductPolicy
     }
 
     /**
+     * Determine if the user can add the stock-keeping unit to product.
+     *
+     * @param  User  $user
+     * @param  Product  $product
+     * @return bool
+     */
+    public function addSku(User $user, Product $product)
+    {
+        return !!(auth()->check() && $user->getMeta('has_sku'));
+    }
+
+    /**
      * Determine if the user can view the product.
      *
      * @param  User  $user

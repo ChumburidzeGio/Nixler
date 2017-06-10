@@ -18,10 +18,9 @@
 					<i class="material-icons _mr15 _va6 _fs20">work</i> 
 					@lang('Merchant settings')
 				</a>
-				<!--a class="_lim _hvrd _cg _brds3{{ request()->is('*/products') ? ' _hvrda' : ''}}" href="{{ route('settings.orders') }}">
-					<i class="material-icons _mr15 _va6 _fs20">store</i> 
-					My products
-				</a-->
+				<a class="_lim _hvrd _cg _brds3{{ request()->is('stock') ? ' _hvrda' : ''}}" href="{{ route('stock') }}">
+					<i class="material-icons _mr15 _va6 _fs20">store_mall_directory</i> @lang('My Products')
+				</a>
 		</div>
 
 		<div class="col-md-9">

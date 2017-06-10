@@ -26,8 +26,8 @@
     "Keep in mind, if you use your Nixler account to log into Nixler your account will be reactivated. This means your Nixler profile, including things like your followers, products, photos and orders, will be completely restored.": "საიტზე ავტორიზაციის შემთხვევაში თქვენი ინფორმაცია, თქვენი პროდუქტები, სურათები, შეკვეთები სრულად აღდგება.",
     "Delivery accross the country": "მიტანის სერვისი ქვეყნის მაშტაბით",
     "We accept return": "შესაძლებელია პროდუქტის დაბრუნება",
-    "Return Policy": "დაბრუნების პოლიტიკა",
-    "Please tell users about your return policy, in how many days is it possible to return product and what are the rules": "რამდენი დღის განმავლობაშია შესაძლებელია პროდუქტის მიბრუნება და რა პირობებია.",
+    "Terms & Conditions": "პირობები",
+    "Describe your return policy and shipping conditions": "აღწერეთ პროდუქციის დაბრუნების და მიტანის პირობები",
     "Update": "განახლება",
     "Delete": "წაშლა",
     "Add new shipping location": "გადაზიდვის ახალი მიმართულების დამატება",
@@ -226,5 +226,9 @@
     "for free": " უფასოდ",
     "for :cost": ". ფასი: :cost",
     "By clicking Join us or Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": "რეგისტრაციაზე ან Facebook-ით ავტორიზაციაზე დაჭერით თქვენ ეთანხმებით ნიქსლერის <a href=\":terms\">სამომხმარებლო შეთანხმებას</a> და <a href=\":privacy\">კონფიდენციალურობის პოლიტიკას</a>.",
-    "By clicking Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": "Facebook-ით ავტორიზაციაზე დაჭერით თქვენ ეთანხმებით ნიქსლერის <a href=\":terms\">სამომხმარებლო შეთანხმებას</a> და <a href=\":privacy\">კონფიდენციალურობის პოლიტიკას</a>."
+    "By clicking Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": "Facebook-ით ავტორიზაციაზე დაჭერით თქვენ ეთანხმებით ნიქსლერის <a href=\":terms\">სამომხმარებლო შეთანხმებას</a> და <a href=\":privacy\">კონფიდენციალურობის პოლიტიკას</a>.",
+    "ID of product in your stock": "პროდუქტის ნომერი თქვენს საწყობში",
+    "Add to products SKU (stock-keeping unit)": "SKU (საწყობის ნომერი) პროდუქტებზე",
+    "SKU": "",
+    "My Products": "ჩემი პროდუქტები"
 }

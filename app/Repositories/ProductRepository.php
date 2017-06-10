@@ -927,4 +927,30 @@ class ProductRepository extends BaseRepository {
         $product->delete();
     }
 
+
+    /**
+     * Get all products by user.
+     *
+     * @return Product
+     */
+    public function indexStock()
+    {
+        $user = auth()->user();
+
+        return $this->model->where('owner_id', $user->id)->paginate(150);
+    }
+
+
+    /**
+     * Delete all inactive products
+     *
+     * @return boolean
+     */
+    public function cleanStorage()
+    {
+        $yesterday = Carbon::now()->subDays(1);
+
+        return $this->model->where('is_active', false)->whereNull('slug')->whereNull('media_id')->where('created_at', '<=', $yesterday)->delete();
+    }
+
 }

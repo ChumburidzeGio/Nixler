@@ -6,14 +6,14 @@ use Illuminate\Console\Command;
 use App\Services\SystemService;
 use App\Notifications\ServerStatus;
 
-class SystemMonitor extends Command
+class Monitor extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'monitor';
+    protected $signature = 'nx:monitor';
 
     /**
      * The console command description.

@@ -228,6 +228,18 @@ window.product = <?php echo json_encode([
 					</div>
 					@endcan
 
+					@can('addSku', $product)
+					<div class="col-sm-12 _mb15">
+						<small class="_clear _pb5">@lang('SKU')</small>
+
+						<input id="sku" type="text" name="sku" minlength="1" maxlength="40" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ old('sku', $product->sku) }}" placeholder="@lang('ID of product in your stock')"> 
+
+						@if ($errors->has('sku'))
+						<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('sku') }}</span>
+						@endif
+					</div>
+					@endcan
+
 				</div>
 
 

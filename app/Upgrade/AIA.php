@@ -9,7 +9,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\LocationRepository;
 use App\Entities\Region;
 
-class OnePointNinetyOne
+class AIA
 {
     /**
      * Bootstrap any application services.

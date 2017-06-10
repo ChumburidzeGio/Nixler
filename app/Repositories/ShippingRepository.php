@@ -47,7 +47,8 @@ class ShippingRepository extends BaseRepository {
               
               $country_price = $this->settingsUpdate([
                 'delivery_full' => 1,
-                'has_return' => 1,
+                'has_return' => 0,
+                'has_sku' => 0,
                 'policy' => '',
               ]);
 
@@ -74,7 +75,9 @@ class ShippingRepository extends BaseRepository {
 
         $user->setMeta('delivery_full', array_get($data, 'delivery_full'));
         $user->setMeta('has_return', array_get($data, 'has_return'));
-        $user->setMeta('return_policy', array_get($data, 'policy'));
+        $user->setMeta('has_sku', array_get($data, 'has_sku'));
+        $user->setMeta('policy', strip_tags(array_get($data, 'policy')));
+        $user->save();
 
         if(!array_get($data, 'delivery_full')){
 

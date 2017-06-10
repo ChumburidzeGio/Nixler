@@ -48,6 +48,7 @@ Auth::routes();
 		Route::post('/products/{id}/like', 'ProductController@like')->middleware('auth')->name('product:like');
 		Route::post('products/{id}/order', 'ProductController@order')->name('order');
 		Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
+		Route::get('/stock', 'ProductController@stock')->name('stock');
 	});
 
 	Route::group(['prefix' => 'comments'], function()
@@ -109,6 +110,8 @@ Auth::routes();
 	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
 	Route::get('/monitor', function(){
+
+		return \App\Entities\Product::where('is_active', false)->whereNull('slug')->whereNull('media_id')->get();
 
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 

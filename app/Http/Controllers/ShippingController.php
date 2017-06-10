@@ -115,6 +115,7 @@ class ShippingController extends Controller
         $this->validate($request, [
               'delivery_full' => 'required|in:1,0',
               'has_return' => 'required|in:1,0',
+              'has_sku' => 'required|in:1,0',
               'policy' => 'nullable|string',
         ]);
         

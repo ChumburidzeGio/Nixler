@@ -26,8 +26,8 @@
     "Keep in mind, if you use your Nixler account to log into Nixler your account will be reactivated. This means your Nixler profile, including things like your followers, products, photos and orders, will be completely restored.": "Pamiętaj, że po zalogowaniu się do Nixler Twoje konto zostanie reaktywowane. Oznacza to, że Twój profil na Nixler, włącznie z tym, co obserwujesz, produktami i zamówieniami, będzie całkowicie przywrócony",
     "Delivery accross the country": "Dostawa w całym kraju",
     "We accept return": "Przyjmujemy zwroty",
-    "Return Policy": "Zasady zwrotów",
-    "Please tell users about your return policy, in how many days is it possible to return product and what are the rules": "Opisz użytkownikom Twoją politykę zwrotów - w ciągu ilu dni jest możliwy zwrot produktu i na jakich zasadach",
+    "Terms & Conditions": "",
+    "Describe your return policy and shipping conditions": "",
     "Update": "Zaktualizuj",
     "Delete": "Usuń",
     "Add new shipping location": "Dodaj nowe miejsce dostawy",
@@ -226,5 +226,9 @@
     "for free": "",
     "for :cost": "",
     "By clicking Join us or Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": "",
-    "By clicking Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": ""
+    "By clicking Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": "",
+    "ID of product in your stock": "",
+    "Add to products SKU (stock-keeping unit)": "",
+    "SKU": "",
+    "My Products": ""
 }

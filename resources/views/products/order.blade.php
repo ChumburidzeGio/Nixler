@@ -77,6 +77,9 @@ window.price = <?php echo $product->price; ?>;
 
                  </div>
             </div>
+
+            <p class="_fs13 _tac">{!! nl2br($product->owner->merchant_terms) !!}</p>
+
         </div>
     </div>
 </div>

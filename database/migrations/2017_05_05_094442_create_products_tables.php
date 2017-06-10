@@ -28,6 +28,7 @@ class CreateProductsTables extends Migration
             $table->string('currency', 5)->default('usd');
             $table->integer('in_stock')->default(0);
             $table->string('buy_link')->nullable();
+            $table->string('sku', 40)->nullable();
 
             $table->integer('category_id')->unsigned()->nullable();
             $table->integer('media_id')->unsigned()->nullable();

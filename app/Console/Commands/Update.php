@@ -3,9 +3,12 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use App\Repositories\UserRepository;
 use App\Repositories\BlogRepository;
 use App\Repositories\ProductRepository;
-use App\Upgrade\OnePointNinetyOne;
+use App\Repositories\MessengerRepository;
+use App\Upgrade\AIA;
+use App\Upgrade\AIB;
 
 class Update extends Command
 {
@@ -14,14 +17,14 @@ class Update extends Command
      *
      * @var string
      */
-    protected $signature = 'update';
+    protected $signature = 'nx:update {--static} {--full}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update information on server or in database';
+    protected $description = 'Update Nixler';
 
 
     /**
@@ -31,13 +34,29 @@ class Update extends Command
      */
     public function handle()
     {
-        $this->legal();
+        app(UserRepository::class)->updateStreams();
 
-        $this->searchIndex();
+        info('Streams updated succesfully!');
 
-        $this->categories();
+        if($this->option('full')) {
 
-        $this->upgradeToLatest();
+            app(MessengerRepository::class)->updateResponseTimes();
+
+            app(ProductRepository::class)->cleanStorage();
+
+        }
+
+        if($this->option('static')) {
+
+            $this->legal();
+
+            $this->searchIndex();
+
+            $this->categories();
+
+            $this->upgradeToLatest();
+
+        }
     }
 
     /**
@@ -93,7 +112,8 @@ class Update extends Command
     public function availableVersions()
     {
         return collect([
-            '1.91' => OnePointNinetyOne::class
+            '1.91' => AIA::class,
+            '1.92' => AIB::class,
         ]);
     }
 

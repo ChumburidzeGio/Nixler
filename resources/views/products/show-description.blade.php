@@ -89,7 +89,11 @@
                     <h3 class="_fs18 _m0 _fw400">{{ $product->owner->name }}</h3>
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
-                    <div class="_clear" show-more more="@lang('Read more')" less="@lang('Show less')" height="180">{!! $product->description_parsed !!}</div>
+                    <div class="_clear" show-more more="@lang('Read more')" less="@lang('Show less')" height="180">
+                        {!! $product->description_parsed !!}
+
+                        <p class="_mt10 _fs13">{!! nl2br($product->owner->merchant_terms) !!}</p>
+                    </div>
                 </p>
             </div>
         </div>

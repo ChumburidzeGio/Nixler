@@ -223,4 +223,17 @@ class ProductController extends Controller
         return redirect()->route('settings.orders', ['id' => $order->id]);
     }
 
+
+    /**
+     * Update the specified resource in storage.
+     * @param  Request $request
+     * @return Response
+     */
+    public function stock()
+    {
+        $products = $this->repository->indexStock();
+
+        return view('products.stock', compact('products'));
+    }
+
 }

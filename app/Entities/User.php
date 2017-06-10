@@ -263,6 +263,16 @@ class User extends Authenticatable
     }
 
 
+
+
+    /**
+     *  Terms & Conditions of merchant
+     */
+    public function getMerchantTermsAttribute(){
+        return $this->getMeta('policy');
+    }
+
+
     /**
      * @return bool
      */

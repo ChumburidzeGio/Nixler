@@ -8,9 +8,10 @@
 	</script>
 
 	<script>window.settings = <?php echo json_encode([
-		'delivery_full' => old('delivery_full', auth()->user()->getMeta('delivery_full', 0)),
-		'has_return' => old('has_return', auth()->user()->getMeta('has_return', 0)),
-		'policy' => old('policy', auth()->user()->getMeta('return_policy', 0)),
+		'delivery_full' => !!old('delivery_full', auth()->user()->getMeta('delivery_full', 0)),
+		'has_return' => !!old('has_return', auth()->user()->getMeta('has_return', 0)),
+		'has_sku' => !!old('has_sku', auth()->user()->getMeta('has_sku', 0)),
+		'policy' => old('policy', auth()->user()->getMeta('policy', 0)),
 		'location_id' => old('location_id'),
 		'price' => old('price'),
 		'window_from' => old('window_from'),
@@ -30,7 +31,7 @@
 
 		<form class="_fg" name="product" action="{{ route('shipping.settings.general') }}" method="POST"">
 			{{ csrf_field() }}
-			<input type="hidden" name="ref" value="product-edit">
+			<input type="hidden" name="ref" value="{{ request()->input('ref') }}">
 
 			<div class="_p15 _bb1 _posr">
 				<h1 class="_fs18 _ci _lh1 _clear _telipsis _m0">
@@ -51,11 +52,17 @@
 				@lang('We accept return')
 			</div>
 
-			<div class="_mb15 col-sm-12 _pl15 _pr15 _pt10 _bt1 form-group _m0 ng-cloak" ng-if="vm.has_return">
-				<small class="_clear _pb5">@lang('Return Policy')</small>
+			<div class="_li _hvrl row" ng-click="vm.has_sku=!vm.has_sku" id="has_sku">
+				<i class="material-icons _left _mr15 _fs20 _c2 _anim1 _ml15 _va7" ng-class="{'_c4': vm.has_sku }" ng-bind="vm.has_sku ? 'check_box' : 'check_box_outline_blank'">check_box</i>
+				<input type="hidden" name="has_sku" ng-value="vm.has_sku | boolean">
+				@lang('Add to products SKU (stock-keeping unit)')
+			</div>
+
+			<div class="_mb15 col-sm-12 _pl15 _pr15 _pt10 _bt1 form-group _m0">
+				<small class="_clear _pb5">@lang('Terms & Conditions')</small>
 				<textarea name="policy" type="text" class="_b1 _bcg _fe _brds3"
 				ng-disabled="!vm.has_return" msd-elastic ng-model="vm.policy"
-				placeholder="@lang('Please tell users about your return policy, in how many days is it possible to return product and what are the rules')" id="policy">
+				placeholder="@lang('Describe your return policy and shipping conditions')" id="policy">
 				</textarea>
 			</div>
 
