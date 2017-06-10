@@ -58,7 +58,7 @@
       ga('send', 'pageview');
 
     </script>
-    
+
     @include('cookieConsent::index')
 </body>
 </html>
