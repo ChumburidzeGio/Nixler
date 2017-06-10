@@ -30,7 +30,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('nx:update', ['--full' => true])->daily();
         $schedule->command('nx:update')->everyTenMinutes();
-        $schedule->command('nx:optimize')->everyMinute();
+        $schedule->command('nx:monitor')->everyTenMinutes();
         $schedule->command('backup:clean')->daily()->at('01:00');
         $schedule->command('backup:run')->daily()->at('02:00');
         $schedule->command('backup:monitor')->daily()->at('03:00');
