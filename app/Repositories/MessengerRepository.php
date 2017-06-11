@@ -132,7 +132,7 @@ class MessengerRepository extends BaseRepository {
 
             $times = [];
 
-            $messages = array_values(array_filter($messages));
+            $messages = array_values(array_filter($messages->toArray()));
 
             foreach ($messages as $key => $message) {
 
