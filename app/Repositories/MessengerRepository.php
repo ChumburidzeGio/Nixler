@@ -126,7 +126,7 @@ class MessengerRepository extends BaseRepository {
     {
         $times = $user->threads->map(function($thread) use ($user) {
 
-            $messages = $thread->latestFiveMessage->toArray();
+            $messages = $thread->latestFiveMessage;
 
             $messages = $this->groupMessages($messages);
 
@@ -159,7 +159,7 @@ class MessengerRepository extends BaseRepository {
     {
         foreach ($messages as $key => $message) {
 
-            if(isset($messages[$key + 1]->user_id) && $messages[$key + 1]->user_id == $message->user_id){
+            if(isset($messages[$key + 1]) && $messages[$key + 1]->user_id == $message->user_id){
 
                 $diff = strtotime($messages[$key + 1]->updated_at) - strtotime($message->updated_at);
 
