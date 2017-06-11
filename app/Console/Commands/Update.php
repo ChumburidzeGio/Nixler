@@ -9,6 +9,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\MessengerRepository;
 use App\Upgrade\AIA;
 use App\Upgrade\AIB;
+use App\Upgrade\AIC;
 
 class Update extends Command
 {
@@ -114,6 +115,7 @@ class Update extends Command
         return collect([
             '1.91' => AIA::class,
             '1.92' => AIB::class,
+            '1.93' => AIC::class,
         ]);
     }
 
