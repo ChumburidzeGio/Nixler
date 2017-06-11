@@ -65,9 +65,13 @@ class Product extends Model
 
                     $owner_id = $this->attributes['owner_id'];
 
-                    $count = Product::where('slug', $slug)->count();
+                    $suffix = Product::where('slug', $slug)->count();
 
-                    return $count ? '-'.$count : '';
+                    while (Product::where('slug', $slug.'-'.$suffix)->count() > 0) {
+                       $suffix++;
+                    }
+
+                    return $suffix ? '-'.$suffix : '';
                 }
             ]
         ];
