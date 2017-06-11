@@ -162,10 +162,10 @@
 <div id="footer" class="_clear _ci _tal _pb10 _pt10  _mt15 _fs13">
     <div class="container">
         <div class="_p15 _pt5 _mb15">
-        <span class="col-xs-4"><a href="/">Nixler</a> © 2017</span>
+        <span class="col-xs-4 _cg"><a href="/" class="_ci">Nixler</a> © 2017</span>
             <span class="col-sm-4 col-xs-12 _mb5">
-                <a href="{{ url('about') }}" class="_mr10 _crp">@lang('about')</a>
-                <a href="{{ url('articles/terms') }}" class="_mr10 _crp">@lang('terms')</a>
+                <a href="{{ url('about') }}" class="_mr5 _crp">@lang('about')</a> ·
+                <a href="{{ url('articles/terms') }}" class="_mr10 _crp _ml5">@lang('terms')</a>
             </span>
             <div class="col-sm-4">
                 <div class="_tbs _right _dib _pl0 _left-sm">

@@ -55,8 +55,8 @@ class ProductUpdated extends Notification
             'in_stock' => intval($notifiable->in_stock),
             'currency' => $notifiable->currency,
             'description' => $notifiable->description,
-            'variants' => ProductVariant::where('product_id', $notifiable->id)->get()->pluck('name'),
-            'tags' => ProductTag::where('product_id', $notifiable->id)->get()->pluck('name'),
+            'variants' => ProductVariant::where('product_id', $notifiable->id)->get()->pluck('name')->toArray(),
+            'tags' => ProductTag::where('product_id', $notifiable->id)->get()->pluck('name')->toArray(),
             'likes_count' => $notifiable->likes_count,
             'owner' => $owner->name,
             'county' => $owner->country,
@@ -79,7 +79,8 @@ class ProductUpdated extends Notification
 
         unset($data['_geoloc']);
         unset($data['county']);
+        unset($data['created_at']);
 
-        return $service->addObject($this->toArray($notifiable), $notifiable->id);
+        return $service->addObject($data, $notifiable->id);
     }
 }

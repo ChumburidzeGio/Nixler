@@ -175,6 +175,7 @@ class ProductRepository extends BaseRepository {
             'category_id' => array_get($attributes, 'category'),
             'buy_link' => array_get($attributes, 'buy_link'),
             'is_used' => array_get($attributes, 'is_used', 0),
+            'sku' => array_get($attributes, 'sku'),
         ]);
 
         if(!$product->has_variants){
@@ -937,7 +938,7 @@ class ProductRepository extends BaseRepository {
     {
         $user = auth()->user();
 
-        return $this->model->where('owner_id', $user->id)->paginate(150);
+        return $this->model->where('owner_id', $user->id)->latest('id')->paginate(150);
     }
 
 

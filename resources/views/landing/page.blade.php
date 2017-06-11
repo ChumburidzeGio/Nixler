@@ -42,7 +42,7 @@
                 <i class="material-icons _fs40 _left _mt5 _mr10">phone</i>
                 <div class="_pl15 _pr15 _pb10 _oh">
                     <span class="_c2 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs18">
-                        +995 591815010
+                        +995 577262170
                     </span>
                     <span class="_clear _fs13  _telipsis _w100 _oh _pr10 _oh">@lang('Call us')</span>
                 </div>

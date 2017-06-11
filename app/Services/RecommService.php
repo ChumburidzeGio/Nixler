@@ -6,6 +6,7 @@ use Recombee\RecommApi\Client;
 use Recombee\RecommApi\Requests as Reqs;
 use Recombee\RecommApi\Exceptions as Ex;
 use App\Services\SystemService;
+use App\Services\DeleteItem;
 
 class RecommService {
 
@@ -59,6 +60,40 @@ class RecommService {
         }
             
         return $this->send($request);
+    }
+
+
+    /**
+     * List empty items
+     *
+     * @return string
+     */
+    public function listEmptyItems()
+    {   
+        $items = new Reqs\ListItems([
+            'filter' => "'currency' == null"
+        ]);
+
+        return $this->send($items);
+    }
+
+
+    /**
+     * Remove empty items
+     *
+     * @return string
+     */
+    public function removeEmptyItems()
+    {   
+        $ids = $this->listEmptyItems();
+
+        $requests = [];
+
+        foreach ($ids as $id) {
+            array_push($requests, new Reqs\DeleteItem($id));
+        }
+
+        return $this->send(new Reqs\Batch($requests));
     }
 
 
@@ -117,14 +152,8 @@ class RecommService {
      * @return string
      */
     public function addObject($content, $objectId)
-    {   
-        $addItem = new Reqs\AddItem($objectId);
-
-        $setValues = new Reqs\SetItemValues($objectId, $content, [
-          'cascadeCreate' => true
-        ]);
-
-        return $this->send(new Reqs\Batch([$addItem, $setValues]));
+    {
+        return $this->send(new Reqs\SetItemValues($objectId, $content, ['cascadeCreate' => true]));
     }
 
 

@@ -37,6 +37,7 @@ class UpdateProduct extends FormRequest
             'category' => 'required|string',
             'in_stock' => 'required|numeric',
             'buy_link' => 'nullable|url',
+            'sku' => 'nullable|string',
         ];
     }
 }

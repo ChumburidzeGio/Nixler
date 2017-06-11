@@ -112,8 +112,6 @@ Auth::routes();
 
 	Route::get('/monitor', function(){
 
-		return \App\Entities\Product::where('is_active', false)->whereNull('slug')->whereNull('media_id')->get();
-
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
 		return $monitors['fields'];

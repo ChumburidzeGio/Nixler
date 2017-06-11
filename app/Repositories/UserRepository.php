@@ -274,11 +274,11 @@ class UserRepository extends BaseRepository {
     {
         $city = $user->city()->first();
 
-        $locationFilter = $city ? " and earth_distance('lat','lng',\"{$city->lat}\",\"{$city->lng}\") < 50000" : "";
+        $locationFilter = $city ? " and earth_distance('lat','lng', ".floatval($city->lat).", ".floatval($city->lng).") < 50000" : "";
 
         $followings = $user->followings()->take(20)->pluck('follow_id')->implode(',');
 
-        $relationshipBooster = "if 'user_id' in \"{$followings}\" 1 else 0.5";
+        $relationshipBooster = "if 'user_id' in {{$followings}} then 1 else 0.5";
 
         $recommendations = (new RecommService)->recommendations($user->id, 50, [
             'filter' => "'currency' == \"{$user->currency}\"{$locationFilter}",

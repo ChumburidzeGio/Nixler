@@ -2,7 +2,7 @@
 
 @section('layout')
 
-<div ng-controller="ShipSettingsCtrl as vm">
+<div>
 
 		@if(isset($order))
             <div class="_bgw _z013 _brds3 _mb15">

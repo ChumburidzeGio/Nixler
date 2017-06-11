@@ -30,7 +30,7 @@ class Product extends Model
     public $table = 'products';
     
     protected $fillable  = [
-        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category_id', 'in_stock', 'buy_link', 'id_used', 'has_variants', 'is_active'
+        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category_id', 'in_stock', 'buy_link', 'id_used', 'has_variants', 'is_active', 'sku'
     ];
 
 

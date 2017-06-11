@@ -151,6 +151,18 @@ window.product = <?php echo json_encode([
 							@endif
 						</div>
 
+					@can('addSku', $product)
+					<div class="col-sm-12 _mb15">
+						<small class="_clear _pb5">@lang('SKU')</small>
+
+						<input id="sku" type="text" name="sku" minlength="1" maxlength="40" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ old('sku', $product->sku) }}" placeholder="@lang('ID of product in your stock')"> 
+
+						@if ($errors->has('sku'))
+						<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('sku') }}</span>
+						@endif
+					</div>
+					@endcan
+
 
 						<div>
 						<div class="col-xs-12 _mb15" ng-if="!vm.variants.count()">
@@ -224,18 +236,6 @@ window.product = <?php echo json_encode([
 
 						@if ($errors->has('buy_link'))
 						<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('buy_link') }}</span>
-						@endif
-					</div>
-					@endcan
-
-					@can('addSku', $product)
-					<div class="col-sm-12 _mb15">
-						<small class="_clear _pb5">@lang('SKU')</small>
-
-						<input id="sku" type="text" name="sku" minlength="1" maxlength="40" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ old('sku', $product->sku) }}" placeholder="@lang('ID of product in your stock')"> 
-
-						@if ($errors->has('sku'))
-						<span class="_pt1 _pb1 _clear _cr">{{ $errors->first('sku') }}</span>
 						@endif
 					</div>
 					@endcan
@@ -328,6 +328,29 @@ window.product = <?php echo json_encode([
 	<div class="_card _z013 _bgw _oh _p0"> 
 
 		<span class="_fs13 _clear _li _bb1 _cb">
+			<i class="material-icons _mr10 _va5 _fs18">link</i> @lang('Useful links')
+		</span>
+
+		<a class="_hvr1 _fs13 _clear _lim _hvrl" href="{{ route('stock') }}" target="_bank">
+			<i class="material-icons _mr10 _va5 _fs18 _cbl">store_mall_directory</i> 
+			@lang('My Products')
+		</a>
+
+		<a class="_hvr1 _fs13 _clear _lim _hvrl" href="{{ route('settings.orders') }}" target="_bank">
+			<i class="material-icons _mr10 _va5 _fs18 _cbl">shopping_basket</i> 
+			@lang('Orders')
+		</a>
+
+		<a class="_hvr1 _fs13 _clear _lim _hvrl" href="{{ route('shipping.settings') }}" target="_bank">
+			<i class="material-icons _mr10 _va5 _fs18 _cbl">work</i> 
+			@lang('Merchant settings')
+		</a>
+
+	</div>
+
+	<div class="_card _z013 _bgw _oh _p0 _mt15"> 
+
+		<span class="_fs13 _clear _li _bb1 _cb">
 			<i class="material-icons _mr10 _va5 _fs18">trending_up</i> @lang('Product Statistics')
 		</span>
 
@@ -364,7 +387,7 @@ window.product = <?php echo json_encode([
 
 	</div>
 
-	{{-- <div class="_card _z013 _bgw _oh _p0 _mt15"> 
+	<div class="_card _z013 _bgw _oh _p0 _mt15"> 
 
 		<span class="_fs13 _clear _li _bb1 _cb">
 			@lang('Markdown support')
@@ -384,7 +407,7 @@ window.product = <?php echo json_encode([
 			<span class="_cg _clear">@lang('Highlight')</span>
 			<code>`Carefully` crack the eggs.</code>
 		</div>
-	</div> --}}
+	</div>
 
 
 </div>

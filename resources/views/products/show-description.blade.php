@@ -1,4 +1,4 @@
-<h1 class="_c2 _lh1 _m0 _fs18 _mt5 _clear _fw400 _mb10">
+<h1 class="_c2 _lh1 _m0 _fs18 _mt5 _db _fw400 _mb10">
     {{ $product->title }}
 </h1>
 

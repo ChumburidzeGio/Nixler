@@ -237,6 +237,13 @@
     "Call us": "დაგვირეკეთ",
     "Drop line": "მოგვწერეთ",
     "Welcome to Nixler!": "მოგესალმებით ნიქსლერზე!",
-    "Nixler is a shopping platform, where you can easily publish your product and sell online for free.": "ნიქსლერი არის სავაჭრო პალტფორმა, სადაც შეგიძლიათ უფასოდ გამოაქვეყნოთ საკუთარი პროდუქცია და გაყიდოთ ონლიან.",
-    "Nixler aims to create free trading space where anyone will be able to buy and sell online simply and safely.": "ნიქსლერი მიზნად ისახავს შექმნას თავისუფალი სავაჭრო სივრცე და ხალხს თუ კომპანიებს მისცეს საშუალება იყიდონ და გაყიდონ ონალინ მარტივად და უსაფრთხოდ."
+    "Nixler is a shopping platform, where you can easily publish your product and sell online for free.": "ნიქსლერი არის სავაჭრო პალტფორმა, სადაც შეგიძლიათ უფასოდ გამოაქვეყნოთ საკუთარი პროდუქცია და გაყიდოთ ონლაინ.",
+    "Nixler aims to create free trading space where anyone will be able to buy and sell online simply and safely.": "ნიქსლერი მიზნად ისახავს შექმნას თავისუფალი სავაჭრო სივრცე და ხალხს თუ კომპანიებს მისცეს საშუალება იყიდონ და გაყიდონ ონალინ მარტივად და უსაფრთხოდ.",
+    "Markdown support": "მარკდაუნის მხარდაჭერა",
+    "Nixler uses Markdown for formatting. Here are the basics.": "ნიქსლერი იყენებს იყენებს სპეციალურ სინტაქსს ტექსტის ფორმატირებისათვის. ქვემოთ არის მოყვანილი რამდენიმე მაგალითი.",
+    "Header": "სათაური",
+    "Bold": "მუქი",
+    "Emphasis": "დახრილი",
+    "Highlight": "ნათელი",
+    "Useful links": "სასარგებლო ბმულები"
 }
