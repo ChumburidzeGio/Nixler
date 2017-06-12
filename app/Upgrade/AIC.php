@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use App\Entities\Product;
 use App\Entities\Activity;
+use App\Entities\User;
 use App\Notifications\ProductUpdated;
 use App\Services\RecommService;
 
