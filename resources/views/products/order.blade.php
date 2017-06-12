@@ -38,7 +38,8 @@ window.city_id = <?php echo old('city_id', 0); ?>;
                         
                         <div class="col-xs-5 _mb15">
                             <small class="_clear _pb1">@lang('Your address')</small>
-                            <input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="@lang('Street address, block, flat')" name="address" required value="{{ old('address') }}">
+                            <input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="@lang('Street address, block, flat')" name="address" required 
+                                value="{{ old('address', auth()->user()->getMeta('address')) }}">
 
                             @if ($errors->has('address'))
                             <span class="_pt1 _pb1 _clear _cr">{{ $errors->first('address') }}</span>
@@ -52,7 +53,7 @@ window.city_id = <?php echo old('city_id', 0); ?>;
                                 placeholder="" 
                                 name="phone" 
                                 required
-                                value="{{ old('phone') }}"
+                                value="{{ old('phone', auth()->user()->phone) }}"
                                 onkeyup="this.value=this.value.replace(/[^\d+]/,'')">
 
                             @if ($errors->has('phone'))
