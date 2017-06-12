@@ -110,6 +110,27 @@ Auth::routes();
 	Route::get('/about', 'BlogController@welcome');
 	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
+	Route::get('/recc', function(){
+
+		$user = auth()->user();
+
+		$city = $user->city()->first();
+
+        $locationFilter = $city ? " and earth_distance('lat','lng', ".floatval($city->lat).", ".floatval($city->lng).") < 50000" : "";
+
+        $followings = $user->followings()->take(20)->pluck('follow_id')->implode(',');
+
+        $relationshipBooster = "if 'user_id' in {{$followings}} then 1 else 0.5";
+
+        $recommendations = app(\App\Services\RecommService::class)->recommendations($user->id, 50, [
+            'filter' => "'currency' == \"{$user->currency}\"{$locationFilter}",
+            'booster' => $relationshipBooster
+        ]);
+
+		return $recommendations;
+
+	});
+
 	Route::get('/monitor', function(){
 
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
