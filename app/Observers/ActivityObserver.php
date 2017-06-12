@@ -15,7 +15,7 @@ class ActivityObserver
      */
     public function created(Activity $activity)
     {
-        (new RecommService)->push($activity->actor, $activity->object, $activity->verb);
+        $activity->push();
     }
 
     /**
@@ -26,6 +26,6 @@ class ActivityObserver
      */
     public function deleting(Activity $activity)
     {
-        (new RecommService)->remove($activity->actor, $activity->object, $activity->verb);
+        $activity->remove();
     }
 }

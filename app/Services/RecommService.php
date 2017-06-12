@@ -26,9 +26,9 @@ class RecommService {
      *
      * @return string
      */
-    public function push($actor, $object, $verb)
+    public function push($actor, $object, $verb, $timestamp)
     {   
-        $params = ['cascadeCreate' => true];
+        $params = ['cascadeCreate' => true, 'timestamp' => $timestamp];
 
         if ($verb == 'product:liked') {
             $request = new Reqs\AddBookmark($actor, $object, $params);
@@ -47,14 +47,16 @@ class RecommService {
      *
      * @return string
      */
-    public function remove($actor, $object, $verb)
+    public function remove($actor, $object, $verb, $timestamp)
     {   
+        $params = ['timestamp' => $timestamp];
+        
         if ($verb == 'product:liked') {
-            $request = new Reqs\DeleteBookmark($actor, $object);
+            $request = new Reqs\DeleteBookmark($actor, $object, $params);
         } elseif ($verb == 'product:purchased') {
-            $request = new Reqs\DeletePurchase($actor, $object);
+            $request = new Reqs\DeletePurchase($actor, $object, $params);
         } elseif ($verb == 'product:viewed') {
-            $request = new Reqs\DeleteDetailView($actor, $object);
+            $request = new Reqs\DeleteDetailView($actor, $object, $params);
         }
             
         return $this->send($request);

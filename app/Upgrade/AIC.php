@@ -5,6 +5,7 @@ namespace App\Upgrade;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use App\Entities\Product;
+use App\Entities\Activity;
 use App\Notifications\ProductUpdated;
 use App\Services\RecommService;
 
@@ -29,8 +30,16 @@ class AIC
      */
     public function upgrade()
     {
-    	Product::active()->get()->map(function($product){
+        User::all()->map(function($user){
+            (new RecommService)->addUser($user);
+        });
+
+        Product::active()->get()->map(function($product){
             $product->notify(new ProductUpdated);
+        });
+
+    	Activity::all()->map(function($activity){
+            $activity->push();
         });
 
         app(RecommService::class)->removeEmptyItems();

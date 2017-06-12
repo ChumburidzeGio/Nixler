@@ -112,6 +112,8 @@ Auth::routes();
 
 	Route::get('/recc', function(){
 
+		return app(\App\Services\RecommService::class)->addProps();
+
 		$user = auth()->user();
 
 		$city = $user->city()->first();
