@@ -693,11 +693,13 @@ class ProductRepository extends BaseRepository {
     {
         $product = $this->model->findOrFail($id);
 
-        $product->load('owner.shippingPrices', 'owner.country.cities');
+        $product->load('owner.shippingPrices');
 
         $prices = $product->owner->shippingPrices;
 
         $cities = $product->owner->country()->first()->cities;
+
+        $cities->load('translations');
 
         $cities->transform(function($city) use ($prices) {
 

@@ -6,6 +6,7 @@
 <script>
 window.cities = <?php echo $cities->toJson(); ?>;
 window.price = <?php echo $product->price; ?>;
+window.city_id = <?php echo old('city_id', 0); ?>;
 </script>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -37,7 +38,7 @@ window.price = <?php echo $product->price; ?>;
                         
                         <div class="col-xs-5 _mb15">
                             <small class="_clear _pb1">@lang('Your address')</small>
-                            <input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="@lang('Street address, block, flat')" name="address" required>
+                            <input class="_b1 _bcg _fe _brds3 _fes" type="text" placeholder="@lang('Street address, block, flat')" name="address" required value="{{ old('address') }}">
 
                             @if ($errors->has('address'))
                             <span class="_pt1 _pb1 _clear _cr">{{ $errors->first('address') }}</span>
@@ -51,7 +52,8 @@ window.price = <?php echo $product->price; ?>;
                                 placeholder="" 
                                 name="phone" 
                                 required
-                                onkeyup="this.value=this.value.replace(/[^\d]/,'')">
+                                value="{{ old('phone') }}"
+                                onkeyup="this.value=this.value.replace(/[^\d+]/,'')">
 
                             @if ($errors->has('phone'))
                             <span class="help-block _mb _mt0">
@@ -62,7 +64,7 @@ window.price = <?php echo $product->price; ?>;
 
                         <div class="col-xs-12">
                         <div class="_clear _c3 _bg5 _p10 _brds3 ng-cloak" ng-if="vm.city && !vm.city.shipping">
-                                @lang('Shipping is not available in this city.')' <a class="_cbl" href="{{ route('find-thread', ['id' => $product->owner->id]) }}">@lang('Ask the seller')</a> @lang('about delivery to your city or choose another one.')
+                                @lang('Shipping is not available in this city.') <a class="_cbl" href="{{ route('find-thread', ['id' => $product->owner->id]) }}">@lang('Ask the seller')</a> @lang('about delivery to your city or choose another one.')
                         </div>
 
                             <p class="_clear _fs13 _c2 _mb0 _tac _mt5 ng-cloak" ng-if="vm.city.shipping_price">@lang('You will pay on delivery') <span ng-bind="vm.price() | money "></span>.</p>

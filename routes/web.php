@@ -46,7 +46,7 @@ Auth::routes();
 		Route::post('/products/{id}/status', 'ProductController@changeStatus')->middleware('auth')->name('product:update:status');
 		Route::post('/products/{id}/schedule', 'ProductController@schedule')->middleware('auth')->name('product:schedule');
 		Route::post('/products/{id}/like', 'ProductController@like')->middleware('auth')->name('product:like');
-		Route::post('products/{id}/order', 'ProductController@order')->middleware('auth')->name('order');
+		Route::match(['get', 'post'], 'products/{id}/order', 'ProductController@order')->middleware('auth')->name('order');
 		Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 		Route::get('/stock', 'ProductController@stock')->name('stock');
 	});
