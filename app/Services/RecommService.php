@@ -258,7 +258,12 @@ class RecommService {
      */
     public function send($request, $default = [])
     {	
-        return $this->client->send($request);
+        try {
+            return $this->client->send($request);
+        } catch(\Exception $e) {
+            app(SystemService::class)->reportException($e);
+            return $default;
+        }
     }
 
 }
