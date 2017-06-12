@@ -122,10 +122,7 @@ Auth::routes();
 
         $relationshipBooster = "if 'user_id' in {{$followings}} then 1 else 0.5";
 
-        $recommendations = app(\App\Services\RecommService::class)->recommendations($user->id, 50, [
-            'filter' => "'currency' == \"{$user->currency}\"{$locationFilter}",
-            'booster' => $relationshipBooster
-        ]);
+        $recommendations = app(\App\Services\RecommService::class)->recommendations($user->id, 50);
 
 		return $recommendations;
 
