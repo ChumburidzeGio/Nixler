@@ -33,7 +33,7 @@ class MessengerRepository extends BaseRepository {
 
         $user->save();
 
-        $threads = $user->threads()->has('messages')->with('latestMessage')->withParticipantsExcept($user)->latest('id')->take(10)->get();
+        $threads = $user->threads()->has('messages')->with('latestMessage')->withParticipantsExcept($user)->latest('updated_at')->take(10)->get();
 
         return $threads->map(function($item) {
 
