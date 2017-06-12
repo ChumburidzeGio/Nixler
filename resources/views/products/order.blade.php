@@ -6,7 +6,7 @@
 <script>
 window.cities = <?php echo $cities->toJson(); ?>;
 window.price = <?php echo $product->price; ?>;
-window.city_id = <?php echo old('city_id', auth()->user()->city_id); ?>;
+window.city_id = <?php echo old('city_id', auth()->user()->city_id) ? : 0; ?>;
 </script>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
