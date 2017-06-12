@@ -104,7 +104,7 @@ class OrderStatusChanged extends Notification
 
         return [
             'from' => 1,
-            'to' => ($notifiable->statu == 'created') ? $notifiable->merchant()->first()->id : $notifiable->user()->first()->id,
+            'to' => ($notifiable->status == 'created') ? $notifiable->merchant()->first()->id : $notifiable->user()->first()->id,
             'message' => __($message, ['url' => $notifiable->url()]) 
         ];
 
