@@ -281,7 +281,7 @@ class UserRepository extends BaseRepository {
         $relationshipBooster = "if 'user_id' in {{$followings}} then 1 else 0.5";
 
         $recommendations = (new RecommService)->recommendations($user->id, 50, [
-            'filter' => "'currency' == \"{$user->currency}\"{$locationFilter}",
+            'filter' => "'currency' == \"{$user->currency}\"",
             'booster' => $relationshipBooster
         ]);
 
