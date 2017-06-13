@@ -26,6 +26,17 @@ class UserObserver
      * @param  User  $user
      * @return void
      */
+    public function created(User $user)
+    {
+        $this->repository->recommendProducts($user);
+    }
+
+    /**
+     * Listen to the User created event.
+     *
+     * @param  User  $user
+     * @return void
+     */
     public function updating(User $user)
     {
         if ($user->username != $user->getOriginal('username')) {
@@ -34,10 +45,6 @@ class UserObserver
                 'owner_username' => $user->username
             ]);
 
-        }
-
-        if ($user->currency != $user->getOriginal('currency')) {
-            $this->repository->recommendProducts($user);
         }
     }
 
