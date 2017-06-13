@@ -210,7 +210,13 @@ class ProductController extends Controller
     {
         $user = auth()->user();
 
-        $order = Order::where('id', $id)->where('user_id', $user->id)->firstOrFail();
+        $order = Order::where([
+                'id' => $id,
+                'user_id' => $user->id
+            ])->orWhere([
+                'id' => $id,
+                'merchant_id' => $user->id
+            ])->firstOrFail();
 
         $status = $request->input('status');
 
