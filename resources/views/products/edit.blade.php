@@ -62,7 +62,7 @@ window.product = <?php echo json_encode([
 							@endif
 						</h1>
 						@if($product->slug)
-						<a href="{{ $product->url() }}" class="_a3 _mr15" target="_blank">
+						<a href="{{ $product->url() }}" class="_a3 _mr15" target="_blank" id="view-product">
 							<i class="material-icons _fs18 _va4">open_in_new</i> @lang('View product')
 						</a>
 						@endif

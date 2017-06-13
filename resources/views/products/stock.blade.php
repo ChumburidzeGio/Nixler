@@ -28,6 +28,7 @@
 
 			</span>
 
+			<div id="products">
 			@foreach($products as $product)
 			<a class="_lim _clear _pl15 _pr15 _hvrl _bt1 _bcg" href="{{ route('product.edit', ['id' => $product->id]) }}">
 
@@ -54,6 +55,7 @@
 
 			</a>
 			@endforeach
+			</div>
 
 		</div>
 

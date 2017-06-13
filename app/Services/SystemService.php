@@ -13,10 +13,6 @@ class SystemService
 
     public function reportException($e) {
 
-        if (app()->environment('testing', 'local')) {
-            return Debugbar::addThrowable($e);
-        } 
-
         try {
            $this->notify(new ExceptionThrown($e));
         } 

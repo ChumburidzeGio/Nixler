@@ -59,6 +59,7 @@ class ProductUpdate extends BasePage
             '@variant-in_stock' => '#variants [ng-model="variant.in_stock"]',
             '@media-selector' => '#picker-input',
             '@button' => '#publish',
+            '@product-link' => '#view-product',
         ];
     }
     
@@ -86,5 +87,7 @@ class ProductUpdate extends BasePage
             ->press('@button')
             ->pause(100)
             ->assertSee('Your product has been saved');
+
+        $browser->screenshot('product-create');
     }
 }

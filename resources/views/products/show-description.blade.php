@@ -10,6 +10,7 @@
 
         <a class="_tb _crp _anim1 _fs13 _ls5 _fw600 _cbt6 _left _p0 _pr15" 
            ng-class="{'_c4':vm.liked}"
+           id="like"
            {{ auth()->guest() ? 'href='.route('login') : 'ng-click=vm.like()' }}>
            <i class="material-icons _fs18 _va5 _mr5">favorite</i> 
            <span ng-show="vm.likes_count" class="ng-cloak">
@@ -19,7 +20,7 @@
         </span>
         </a>
 
-        <span class="_tb _crp _anim1 _fs13 _ls5 _fw600 _cbt6 _left _p0" ng-click="vm.share()">
+        <span class="_tb _crp _anim1 _fs13 _ls5 _fw600 _cbt6 _left _p0" ng-click="vm.share()" id="share">
             <i class="material-icons _fs18 _va5 _mr5">share</i> 
         </span>
 </div>

@@ -4,7 +4,7 @@
 <script>window.comments_target = <?php echo $id; ?></script>
 
 @can('create', \App\Entities\Comment::class)
-<form ng-submit="vm.commentPush()" class="_p3 _fg">
+<form ng-submit="vm.commentPush()" class="_p3 _fg" id="comment-form">
      <div class="_li _p0 _media">
         <img class="_mr10 _left _brds3" src="{{ auth()->user()->avatar('comments') }}" height="40px" width="40px">
         <div class="_clear">
@@ -24,17 +24,19 @@
 </a>
 @endcannot
 
-<div class="_media _clear _p3 _mt10 _pb0" ng-repeat="comment in vm.comments">
-    <img class="_mr10 _left _brds3" ng-src="@{{ comment.avatar }}">
-    <div class="_clear">
-        <span class="_title _c4">
-            <span ng-bind="comment.author"></span>
-            <small class="_c2 _ml5" ng-bind="comment.time | timeAgo"></small>
-            <span ng-show="comment.can_delete" confirm-click="@lang('Are you sure?')" class="" ng-click="vm.delete(comment)">
-                <span class="_crp _fs12 _ls5 _c2 _mr10 _dib _p3 _pb0 _pt0 _brds3  _bg5 _right">delete</span>
+<div id="comments">
+    <div class="_media _clear _p3 _mt10 _pb0" ng-repeat="comment in vm.comments">
+        <img class="_mr10 _left _brds3" ng-src="@{{ comment.avatar }}">
+        <div class="_clear">
+            <span class="_title _c4">
+                <span ng-bind="comment.author"></span>
+                <small class="_c2 _ml5" ng-bind="comment.time | timeAgo"></small>
+                <span ng-show="comment.can_delete" confirm-click="@lang('Are you sure?')" class="" ng-click="vm.delete(comment)">
+                    <span class="_crp _fs12 _ls5 _c2 _mr10 _dib _p3 _pb0 _pt0 _brds3  _bg5 _right">delete</span>
+                </span>
             </span>
-        </span>
-        <p class="_c3 _mb5" ng-bind-html="comment.text"></p>
+            <p class="_c3 _mb5" ng-bind-html="comment.text"></p>
+        </div>
     </div>
 </div>
 

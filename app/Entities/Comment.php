@@ -13,7 +13,7 @@ class Comment extends Model
     public $table = 'comments';
     
     protected $fillable  = [
-        'user_id',  'target_id', 'text'
+        'user_id',  'target_id', 'text', 'target_type'
     ];
 
     protected $with = ['author'];

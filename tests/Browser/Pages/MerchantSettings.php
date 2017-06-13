@@ -92,5 +92,7 @@ class MerchantSettings extends BasePage
             ->pause(100)
             ->assertSee($browser->click('@cities')->text("@city"));
 
+        $browser->screenshot('ms-location');
+
     }
 }

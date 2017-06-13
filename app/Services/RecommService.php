@@ -258,6 +258,10 @@ class RecommService {
      */
     public function send($request, $default = [])
     {	
+        if (!app()->environment('development', 'production')) {
+            return $default;
+        }
+
         try {
             return $this->client->send($request);
         } catch(\Exception $e) {
