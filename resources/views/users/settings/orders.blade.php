@@ -38,7 +38,7 @@
                     </li>
 
                     <li class="_clear">
-                        <span class="_cg">@lang('Delivery')</span>: {{ $order->shipping_window_from->format('F jS') }} - {{ $order->shipping_window_to->format('F jS') }} ({{ money($order->currency, $order->shipping_cost) }})
+                        <span class="_cg">@lang('Delivery')</span>: {{ $order->shipping_window_from->format('F jS') }} - {{ $order->shipping_window_to->formatLocalized('%d %B %Y') }} ({{ money($order->currency, $order->shipping_cost) }})
                     </li>
 
                     <li class="_clear">
@@ -178,7 +178,7 @@
                         <div class="_clear _fs13"> {{ $item->product->title }} </div>
                         @endif
                         <div class="_clear _fs13 _c2">
-                            @lang('Delivery at') {{ $item->shipping_window_from->format('F jS') }} - {{ $item->shipping_window_to->format('F jS') }} @lang('for') {{ money($item->currency, $item->shipping_cost) }}
+                            @lang('Delivery at') {{ $item->shipping_window_from->formatLocalized('%d %B %Y') }} - {{ $item->shipping_window_to->formatLocalized('%d %B %Y') }} @lang('for') {{ money($item->currency, $item->shipping_cost) }}
                         </div>
                     </div>
 

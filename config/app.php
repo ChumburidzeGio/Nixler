@@ -101,6 +101,11 @@ return [
         ],
     ],
 
+    'lang_to_locale' => [
+        'ka' => 'ka_GE.utf8',
+        'pl' => 'pl_PL.utf8',
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale

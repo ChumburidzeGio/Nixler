@@ -62,7 +62,7 @@
 <h1 class="_lh1 _et2 _fs24 _c2 _lh1 _fw400 _m0 _mb5 _mt10">{{ $user->name }}</h1>
 <p class="_clear _fs14 _cbt8">
  @if(!$user->getMeta('headline'))
- @lang('Member since'): {{ $user->created_at->format('F jS, Y') }}
+ @lang('Member since'): {{ $user->created_at->formatLocalized('%d %B %Y') }}
  @else
  {{ $user->getMeta('headline') }}
  @endif

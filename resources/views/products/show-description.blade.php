@@ -86,11 +86,12 @@
                 <img class="_mr15 _left _brds50" src="{{ $product->owner->avatar('product') }}" height="45px" width="45px" alt="{{ $product->owner->name }}">
             </a>
             <div class="_clear">
-                <a class="_c3" href="{{ $product->owner->link() }}">
+                <a class="_c2" href="{{ $product->owner->link() }}">
                     <h3 class="_fs18 _m0 _fw400">{{ $product->owner->name }}</h3>
+                     <small class="_mt5 _cg _fs12">@lang('Published on :date', ['date' => $product->created_at->formatLocalized('%d %B %Y')])</small>
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
-                    <div class="_clear" show-more more="@lang('Read more')" less="@lang('Show less')" height="180">
+                    <div class="_clear _c2" show-more more="@lang('Read more')" less="@lang('Show less')" height="180">
                         {!! $product->description_parsed !!}
 
                         <p class="_mt10 _fs13">{!! nl2br($product->owner->merchant_terms) !!}</p>

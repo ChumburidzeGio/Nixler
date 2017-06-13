@@ -4,6 +4,7 @@ namespace App\Services;
 
 use PeterColes\Languages\Maker as Languages;
 use App\Entities\Country;
+use Carbon\Carbon;
 use Session, Cache, Linguist, Exception;
 
 class LocationService
@@ -43,6 +44,10 @@ class LocationService
 		}
 
 		app()->setLocale($locale);
+
+		Carbon::setLocale($locale);
+
+		setlocale(LC_TIME, config('app.lang_to_locale.'.$locale));
 
 		$timezone = auth()->check() ? auth()->user()->timezone : session('timezone');
 

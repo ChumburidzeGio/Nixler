@@ -250,5 +250,6 @@
     "Sales": "გაყიდვა",
     "Stock": "რაოდენობა",
     "Public": "გამოქვეყნდა",
-    "inactive": "უმოქმედო"
+    "inactive": "უმოქმედო",
+    "Published on :date": "გამოვეყნების თარიღი :date"
 }
