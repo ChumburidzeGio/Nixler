@@ -164,7 +164,7 @@ class User extends Authenticatable
      *  Change the avatar of model
      */
     public function city(){
-       return $this->hasMany(City::class, 'id');
+       return $this->hasOne(City::class, 'id', 'city_id');
     }
 
 

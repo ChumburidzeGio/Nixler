@@ -1,10 +1,13 @@
 @extends('layouts.app')
 
+@section('body_class', '_bgw')
+
 @section('content')
-<div class="container" ng-controller="ProfileCtrl as vm">
+  
+<div style="margin-top: -15px;" ng-controller="ProfileCtrl as vm" class="_clear">
   <div class="col-xs-12 _p0">
 
-    <div class="_bgw _b1 _brds3 _clear">
+    <div class="_bgcrm _bb1 _clear">
       <div class="_posr">
 
         @if($user->firstMedia('cover'))
@@ -32,7 +35,7 @@
      </form>
      @endif
  </div>
- <div class="_tac _pb15 _bb1">
+ <div class="_tac _pb15">
   <div class="_posr">
     <img src="{{ $user->avatar('profile') }}" class="_brds3 _dib _ma _mb10 _b1 _bcw _bw2 _clear _mt-50" height="120px" width="120px" alt="{{ $user->name }}">
 
@@ -96,7 +99,7 @@
 @endif
 </div>
 
-<div class="_tbs  _tal _pt4 _fw600 _pl5">
+<div class="_tbs _tal _pt4 _fw600 _pl5 container">
   <a class="_fs12 _tb{{$tab == 'profile' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link() }}">
     @lang('Liked') <span class="_fw300 _ml5">{{ $user->liked_count }}</span>
 </a>
@@ -118,7 +121,7 @@
 
         </div>
 
-        <div class="_mt15 _pt5">
+        <div class="_mt15 _pt5 container">
 
             
             @yield('user_content')

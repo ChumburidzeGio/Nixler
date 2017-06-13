@@ -104,7 +104,7 @@ class SettingsController extends Controller
             ])->orWhere([
                 'id' => $request->input('id'),
                 'merchant_id' => $user->id
-            ])->with('product', 'product.owner')->firstOrFail();
+            ])->with('product', 'product.owner', 'user')->firstOrFail();
         } else {
             $orders = Order::where('user_id', $user->id)->orWhere('merchant_id', $user->id)->with('product')->latest()->paginate();
         }

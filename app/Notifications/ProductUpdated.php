@@ -45,7 +45,7 @@ class ProductUpdated extends Notification
     {
         $owner = $notifiable->owner()->first();
         
-        $city = $owner->city()->first();
+        $city = $owner->city;
 
         return [
             'price' => floatval($notifiable->price),

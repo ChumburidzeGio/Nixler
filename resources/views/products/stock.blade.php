@@ -15,15 +15,14 @@
 			<span class="_clear _pl15 _pr15 _mt5 _mb10 _c2">
 
 				<div class="row">
-					<div class="{{ auth()->user()->getMeta('has_sku') ? 'col-xs-4' : 'col-xs-6' }}">Product</div>
-					<div class="col-xs-2">Price</div>
+					<div class="{{ auth()->user()->getMeta('has_sku') ? 'col-xs-4' : 'col-xs-6' }}">@lang('Product')</div>
+					<div class="col-xs-2">@lang('Price')</div>
 					@if(auth()->user()->getMeta('has_sku'))
 					<div class="col-xs-2">SKU</div>
 					@endif
-					<div class="col-xs-1">Likes</div>
-					<div class="col-xs-1">Sales</div>
-					<div class="col-xs-1">Stock</div>
-					<div class="col-xs-1">Public</div>
+					<div class="col-xs-1">@lang('Likes')</div>
+					<div class="col-xs-1 _oh">@lang('Sales')</div>
+					<div class="col-xs-2 _oh">@lang('Stock')</div>
 				</div>
 
 			</span>
@@ -34,6 +33,9 @@
 
 				<div class="row">
 					<div class="{{ auth()->user()->getMeta('has_sku') ? 'col-xs-4' : 'col-xs-6' }}">
+						@if($product->is_inactive)
+						<span class="_bga _fs11 _cw _brds3 _a3 _posa _pl5 _pr5 _c2">@lang('inactive')</span>
+						@endif
 						<img src="{{ $product->photo('similar') }}" class="_z013 _brds2 _dib _left" height="30" width="30" alt="{{ $product->title }}">
 
 						<div class="_pl15 _pr15 _oh _pt5">
@@ -49,8 +51,7 @@
 					@endif
 					<span class="_oh col-xs-1 _pt5">{{ $product->likes_count }}</span>
 					<span class="_oh col-xs-1 _pt5">{{ $product->sales_count }}</span>
-					<span class="_oh col-xs-1 _pt5">{{ $product->in_stock }}</span>
-					<span class="_oh col-xs-1 _pt5">{{ $product->is_active ? 'Yes' : 'No' }}</span>
+					<span class="_oh col-xs-2 _pt5">{{ $product->in_stock }}</span>
 				</div>
 
 			</a>

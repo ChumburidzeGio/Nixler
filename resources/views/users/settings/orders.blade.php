@@ -38,36 +38,41 @@
                     </li>
 
                     <li class="_clear">
-                        <span class="_cg">@lang('Delivery')</span>: {{ $order->shipping_window_from->format('F jS') }} - {{ $order->shipping_window_to->format('F jS') }}
-                    </li>
-
-                    @if($order->address)
-                    <li class="_clear _telipsis">
-                        <span class="_cg">@lang('Address')</span>:  
-                        <span>
-                            {{ $order->address }}
-                        </span>
-                    </li>
-                    @endif
-
-                    <li class="_clear">
-                        <span class="_cg">@lang('Quantity')</span>:  
-                        <span>
-                            {{ $order->quantity }}
-                        </span>
-                    </li>
-
-                    <li class="_clear">
-                        <span class="_cg">@lang('Shipping cost')</span>:  
-                        <span>
-                            {{ money($order->currency, $order->shipping_cost) }}
-                        </span>
+                        <span class="_cg">@lang('Delivery')</span>: {{ $order->shipping_window_from->format('F jS') }} - {{ $order->shipping_window_to->format('F jS') }} ({{ money($order->currency, $order->shipping_cost) }})
                     </li>
 
                     <li class="_clear">
                         <span class="_cg">@lang('Total')</span>:  
                         <span>
                             {{ money($order->currency, $order->amount) }}
+                        </span>
+                    </li>
+
+                    <li class="_clear _mb15">
+                        <span class="_cg">@lang('Quantity')</span>:  
+                        <span>
+                            {{ $order->quantity }}
+                        </span>
+                    </li>
+
+                    <li class="_clear _telipsis">
+                        <span class="_cg">@lang('Name')</span>:  
+                        <span>
+                            {{ $order->user->name }}
+                        </span>
+                    </li>
+
+                    <li class="_clear _telipsis">
+                        <span class="_cg">@lang('Phone')</span>:  
+                        <span>
+                            +{{ $order->user->phone }}
+                        </span>
+                    </li>
+
+                    <li class="_clear _telipsis">
+                        <span class="_cg">@lang('Address')</span>:  
+                        <span>
+                            {{ $order->user->city->name }}, {{ $order->address }}
                         </span>
                     </li>
 

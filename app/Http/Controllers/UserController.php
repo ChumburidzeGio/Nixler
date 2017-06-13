@@ -42,7 +42,7 @@ class UserController extends Controller
         $this->meta('image', $user->avatar('profile'));
         $this->meta('type', 'profile');
         
-        return view('users.profile.'.$data['view'], $data);
+        return $req->isMethod('post') ? $data['data']->toJson() : view('users.profile.'.$data['view'], $data);
     }
 
 

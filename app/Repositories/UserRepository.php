@@ -48,7 +48,9 @@ class UserRepository extends BaseRepository {
         $user->media_count = $user->media()->unordered()->count();
 
         if($tab == 'products'){
-            $data = $user->products()->active()->withMedia()->take(20)->get();
+            $data = app(ProductRepository::class)->transformProducts(
+                $user->products()->active()->withMedia()->paginate(20)
+            );
             $view = 'products';
         }
         elseif($tab == 'followers'){
@@ -64,7 +66,9 @@ class UserRepository extends BaseRepository {
             $view = 'media';
         }
         else {
-            $data = $user->liked()->withMedia()->take(20)->get();
+            $data = app(ProductRepository::class)->transformProducts(
+                $user->liked()->withMedia()->paginate(20)
+            );
             $view = 'products';
         }
 
@@ -272,9 +276,9 @@ class UserRepository extends BaseRepository {
      */
     public function recommendProducts(User $user)
     {
-        $city = $user->city()->first();
+        //$city = $user->city;
 
-        $locationFilter = $city ? " and earth_distance('lat','lng', ".floatval($city->lat).", ".floatval($city->lng).") < 50000" : "";
+        //$locationFilter = $city ? " and earth_distance('lat','lng', ".floatval($city->lat).", ".floatval($city->lng).") < 50000" : "";
 
         $followings = $user->followings()->take(20)->pluck('follow_id')->implode(',');
 

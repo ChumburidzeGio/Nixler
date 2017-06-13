@@ -55,7 +55,6 @@
     "Delivery": "მიწოდება",
     "Address": "მისამართი",
     "Quantity": "რაოდენობა",
-    "Shipping cost": "მიწოდების ფასი",
     "Total": "ჯამი",
     "Product ordered": "პროდუქტი შეკვეთილია",
     "Confirmed by merchant": "დამოწმებულია გამყიდველის მიერ",
@@ -240,10 +239,16 @@
     "Nixler is a shopping platform, where you can easily publish your product and sell online for free.": "ნიქსლერი არის სავაჭრო პალტფორმა, სადაც შეგიძლიათ უფასოდ გამოაქვეყნოთ საკუთარი პროდუქცია და გაყიდოთ ონლაინ.",
     "Nixler aims to create free trading space where anyone will be able to buy and sell online simply and safely.": "ნიქსლერი მიზნად ისახავს შექმნას თავისუფალი სავაჭრო სივრცე და ხალხს თუ კომპანიებს მისცეს საშუალება იყიდონ და გაყიდონ ონალინ მარტივად და უსაფრთხოდ.",
     "Markdown support": "მარკდაუნის მხარდაჭერა",
-    "Nixler uses Markdown for formatting. Here are the basics.": "ნიქსლერი იყენებს იყენებს სპეციალურ სინტაქსს ტექსტის ფორმატირებისათვის. ქვემოთ არის მოყვანილი რამდენიმე მაგალითი.",
+    "Nixler uses Markdown for formatting. Here are the basics.": "ნიქსლერი იყენებს სპეციალურ სინტაქსს ტექსტის ფორმატირებისათვის. ქვემოთ არის მოყვანილი რამდენიმე მაგალითი.",
     "Header": "სათაური",
     "Bold": "მუქი",
     "Emphasis": "დახრილი",
     "Highlight": "ნათელი",
-    "Useful links": "სასარგებლო ბმულები"
+    "Useful links": "სასარგებლო ბმულები",
+    "Product": "პროდუქტი",
+    "Likes": "ლაიქი",
+    "Sales": "გაყიდვა",
+    "Stock": "რაოდენობა",
+    "Public": "გამოქვეყნდა",
+    "inactive": "უმოქმედო"
 }

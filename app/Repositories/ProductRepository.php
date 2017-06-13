@@ -524,7 +524,7 @@ class ProductRepository extends BaseRepository {
 
         });
 
-        $nextPageUrl = count($items) ? $products->appends(request()->only(['cat', 'price_min', 'price_max', 'query']))->nextPageUrl() : false;
+        $nextPageUrl = count($items) ? $products->appends(request()->only(['cat', 'price_min', 'price_max', 'query', 'tab']))->nextPageUrl() : false;
 
         return collect(compact('items', 'nextPageUrl'));
     }
@@ -822,9 +822,11 @@ class ProductRepository extends BaseRepository {
 
             $product->decrement('in_stock', $quantity);
 
-            $product->update();
-
         }
+
+        $product->increment('sales_count', $quantity);
+
+        $product->update();
 
         return $order;
     }

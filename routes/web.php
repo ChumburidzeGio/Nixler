@@ -70,7 +70,7 @@ Auth::routes();
 
 	Route::group([], function()
 	{
-		Route::get('/@{id}', 'UserController@find')->name('user');
+		Route::match(['get', 'post'], '/@{id}', 'UserController@find')->name('user');
 		Route::post('@{id}/follow', 'UserController@follow')->name('user.follow');
 		Route::post('@{id}/photos', 'UserController@uploadPhoto')->name('user.uploadPhoto');
 
