@@ -17,4 +17,3 @@ To run scheduled tasks we need to setup cron jobs. From the root of project run 
 #Allow multilingual dates
 `locale -a` to check which locations are allowed, next do `sudo locale-gen id_ID.UTF-8` to install your locale and do `sudo dpkg-reconfigure locales` to publish it.
 Reboot your system (`vagrant reload`) and enjoy
-
