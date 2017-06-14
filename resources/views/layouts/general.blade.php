@@ -77,7 +77,9 @@
     })(window,document,window['_fs_namespace'],'script','user');
     </script>
 
-    @include('cookieConsent::index')
+    @if(config('app.country') != 'GE')
+        @include('cookieConsent::index')
+    @endif
 </body>
 </html>
 
