@@ -25,11 +25,7 @@ class CommentController extends Controller
                 'id' => $comment->id,
                 'avatar' => $comment->author->avatar('comments'),
                 'author' => $comment->author->name,
-                'attachment' => !$comment->media_id ? null : route('photo', [
-                    'id' => $comment->media_id ?: '-',
-                    'type' => 'product',
-                    'place' => 'comment-attachment'
-                ]),
+                'attachment' => media($comment, 'product', 'comment-attachment', null),
                 'text' => nl2br(str_limit($comment->text, 1000)),
                 'time' => $comment->created_at->format('c'),
                 'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
@@ -88,11 +84,7 @@ class CommentController extends Controller
             'id' => $comment->id,
             'avatar' => $comment->author->avatar('comments'),
             'author' => $comment->author->name,
-            'attachment' => !$comment->media_id ? null : route('photo', [
-                'id' => $comment->media_id ?: '-',
-                'type' => 'product',
-                'place' => 'comment-attachment'
-            ]),
+            'attachment' => media($comment, 'product', 'comment-attachment', null),
             'text' => nl2br(str_limit($comment->text, 1000)),
             'time' => $comment->created_at->format('c'),
             'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0

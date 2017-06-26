@@ -74,11 +74,7 @@ class ProductRepository extends BaseRepository {
                 'id' => $comment->id,
                 'avatar' => $comment->author->avatar('comments'),
                 'author' => $comment->author->name,
-                'attachment' => !$comment->media_id ? null : route('photo', [
-                    'id' => $comment->media_id ?: '-',
-                    'type' => 'product',
-                    'place' => 'comment-attachment'
-                ]),
+                'attachment' => media($comment, 'product', 'comment-attachment', null),
                 'text' => nl2br(str_limit($comment->text, 1000)),
                 'time' => $comment->created_at->format('c'),
                 'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
@@ -525,17 +521,13 @@ class ProductRepository extends BaseRepository {
         })->map(function($item, $id){
 
             return [
-            'id'      => (int) $item->id,
-            'title'   => $item->title,
-            'url'   => $item->url(),
-            'price' => $item->price_formated,
-            'likes_count' => $item->likes_count,
-            'owner' => $item->owner->name,
-            'photo' => route('photo', [
-                'id' => $item->media_id ?: '-',
-                'type' => 'product',
-                'place' => 'short-card'
-            ])
+                'id'      => (int) $item->id,
+                'title'   => $item->title,
+                'url'   => $item->url(),
+                'price' => $item->price_formated,
+                'likes_count' => $item->likes_count,
+                'owner' => $item->owner->name,
+                'photo' => media($item, 'product', 'short-card')
             ];
 
         });

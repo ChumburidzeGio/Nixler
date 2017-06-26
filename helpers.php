@@ -11,14 +11,18 @@ if (! function_exists('money')) {
 
 if (! function_exists('media')) {
 
-    function media($media, $type, $place) {
+    function media($media, $type, $place, $default = '-') {
 
     	if(is_object($media) && $media) {
-    		$media = isset($media->id) ? $media->id : $media->media_id;
+    		$media = (isset($media->id) && $media->getTable() == 'media') ? $media->id : $media->media_id;
     	}
 
+        if(is_null($default) && !$media) {
+            return null;
+        }
+
         return route('photo', [
-        	'id' => $media ?? '-',
+        	'id' => $media ?? $default,
         	'type' => $type,
         	'place' => $place,
         ]);
