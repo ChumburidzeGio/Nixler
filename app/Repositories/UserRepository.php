@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Repositories\BaseRepository;
 use App\Entities\User;
+use App\Entities\Metric;
 use App\Notifications\SomeoneFollowedYou;
 use App\Repositories\LocationRepository;
 use App\Repositories\ProductRepository;
@@ -12,9 +13,10 @@ use App\Services\Facebook;
 use App\Services\PhoneService;
 use App\Services\RecommService;
 use App\Services\SystemService;
+use App\Services\AnalyticsService;
 use App\Notifications\SendVerificationCode;
 use Carbon\Carbon;
-use Session;
+use Session, DB;
 
 class UserRepository extends BaseRepository {
 
@@ -54,16 +56,21 @@ class UserRepository extends BaseRepository {
             $view = 'products';
         }
         elseif($tab == 'followers'){
-            $data = $user->followers()->take(20)->get();
+            $data = $user->followers()->isFollowing()->take(20)->get();
             $view = 'people';
         }
         elseif($tab == 'followings'){
-            $data = $user->followings()->take(20)->get();
+
+            $data = $user->followings()->isFollowing()->take(20)->get();
             $view = 'people';
         }
         elseif($tab == 'photos'){
             $data = $user->media()->take(20)->get();
             $view = 'media';
+        }
+        elseif($tab == 'about'){
+            $data = [];
+            $view = 'about';
         }
         else {
             $data = app(ProductRepository::class)->transformProducts(
@@ -83,16 +90,21 @@ class UserRepository extends BaseRepository {
     {
         $target = $this->model->whereUsername($username)->firstOrFail();
         $user = auth()->user();
-        
+
         if($user->id !== $target->id){
 
             if($user->isFollowing($target->id)){
+
                 $user->unfollow($target->id);
-                $user->unfollowCallback($target);
+
+                $products = $target->products()->take(10)->orderBy('likes_count', 'desc')->active()->pluck('id');
+
+                $user->pushInStream($products, 'user:'.$target->id);
+
             } else {
                 $user->follow($target->id);
                 $target->notify(new SomeoneFollowedYou($user));
-                $user->followCallback($target);
+                $user->streamRemoveBySource('user:'.$target->id);
             } 
 
         }
@@ -184,7 +196,7 @@ class UserRepository extends BaseRepository {
      */
     public function findOrCreateUserByFacebookProfile(Profile $account, $user)
     {
-        $model = $this->model->whereEmail($user->getEmail())->withTrashed()->first();
+        $model = $this->model->whereEmail($user->getEmail())->whereNotNull('email')->withTrashed()->first();
 
         if(is_null($model)){
             $model = $account->user()->create([
@@ -194,7 +206,7 @@ class UserRepository extends BaseRepository {
         }
 
         if($account->wasRecentlyCreated && !$model->firstMedia('avatar')){
-            $model->changeAvatar($user->getAvatar());
+            $model->uploadPhoto($user->getAvatar(), 'avatar');
         }
 
         $account->update([
@@ -282,16 +294,19 @@ class UserRepository extends BaseRepository {
 
         $followings = $user->followings()->take(20)->pluck('follow_id')->implode(',');
 
-        $relationshipBooster = "if 'user_id' in {{$followings}} then 1 else 0.5";
-
         $recommendations = (new RecommService)->recommendations($user->id, 50, [
             'filter' => "'currency' == \"{$user->currency}\"",
-            'booster' => $relationshipBooster
+            'booster' => 
+                "(if 'user_id' in {{$followings}} then 20 else 0)". // User follows the seller - 20
+                " + (if 'category_id' < 30 then 5 else 0)". // Category is Fashion or Techinics - 5
+                " + (if size('description') > 50 then 7 else 0)". // Size of description contains more then 50 characters - 7
+                " + (if 'likes_count' > 0 then ('likes_count' * 0.5) else 0)",// On like - 0.5
+            'rotationRate' => '0.1'
         ]);
 
         $products = app(ProductRepository::class)->findByIds($recommendations)->pluck('id');
 
-        $user->pushInStream($recommendations, 'recs');
+        $user->pushInStream($products, 'recs');
     }
 
 
@@ -308,6 +323,66 @@ class UserRepository extends BaseRepository {
         $models->map(function($model){
             $this->recommendProducts($model);
         });
+    }
+
+
+    /**
+     * Refresh analytics data from GA
+     *
+     * @return boolean
+     */
+    public function updateAnalytics()
+    {
+        $metrics = app(AnalyticsService::class)->getBasicAnalyticsForPopularMerchants();
+
+        return $metrics->map(function($metric) {
+            return $this->findByIdAndSetAnalytics(...$metric);
+        });
+    }
+
+
+    /**
+     * Refresh analytics data from GA
+     *
+     * @return boolean
+     */
+    public function findByIdAndSetAnalytics($username, $data)
+    {
+        $user = $this->model->where('username', $username)->first();
+
+        if(!$user) {
+            return false;
+        }
+
+        foreach ($data as $metric => $values) {
+
+            $values->map(function($value, $key) use ($user, $metric) {
+
+                $metric = Metric::firstOrCreate([
+                    'object_id' => $user->id,
+                    'object_type' => get_class($user),
+                    'key' => $metric,
+                    'date' => date('Y-m-d'),
+                    'target' => $key
+                ], [
+                    'value' => $value
+                ]);
+
+            });
+            
+        }
+
+    }
+
+
+    /**
+     * Search in users
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search($query)
+    {
+        return $this->model->whereKeyword($query)->take(6)->get();
     }
 
 }

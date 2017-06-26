@@ -7,9 +7,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class StatusChangedNotificationEmail extends Mailable
 {
-
+    /**
+     * @var string
+     */
     public $url;
 
+    /**
+     * @var string
+     */
     public $status;
 
     /**
@@ -20,6 +25,7 @@ class StatusChangedNotificationEmail extends Mailable
     public function __construct($url, $status)
     {
         $this->url = $url;
+
         $this->status = $status;
     }
 

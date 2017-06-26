@@ -16,11 +16,10 @@ class Country extends Model
         'currency', 'calling_code', 'language', 'gini', 'capital', 'currency_symbol'
     ];
     
-    
     public $translatedAttributes = ['name'];
     
     /**
-     * 
+     * Country cities
      *
      * @return collection
      */
@@ -30,7 +29,7 @@ class Country extends Model
     }
 
     /**
-     * 
+     * Country regions/states
      *
      * @return collection
      */

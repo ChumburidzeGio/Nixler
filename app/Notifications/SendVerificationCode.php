@@ -52,7 +52,13 @@ class SendVerificationCode extends Notification
         return (new NexmoMessage)
                     ->content('Verification code: '.$this->code);
     }
-
+    
+    /**
+     * Get the Slack representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return SlackMessage
+     */
     public function toSlack(): SlackMessage
     {
         return (new SlackMessage)->content('Verification code for '.auth()->user()->name.': '.$this->code);

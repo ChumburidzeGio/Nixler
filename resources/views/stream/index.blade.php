@@ -11,8 +11,8 @@
 
 	<div class="row">
 
-		<div class="col-sm-2 hidden-xs hidden-sm">
-			<div class="">
+		<div class="col-lg-2 col-md-2 col-xs-12">
+			<div class="_tbs _mb15" id="categories-filter">
 
 				<!--div class="_fs12 _ttu _pl15 _pb5">Categories</div-->
 
@@ -29,7 +29,7 @@
 				<a href="{{ route('feed', 
 				array_merge(request()->only(['price_min', 'price_max', 'query']), ['cat' => $cat->id])
 				)}}"
-				class="_lim _hvrd _cg _brds3 _fs13{{ request()->cat == $cat->id ? ' _hvrda' : '' }}">
+				class="_lim _hvrd _cg _brds3 _telepsis _fs13{{ request()->cat == $cat->id ? ' _hvrda' : '' }}">
 				<i class="material-icons _fs18 _mr15 _va4">{{ $cat->icon or 'brightness_1' }}</i> {{ $cat->name }}
 			</a>
 			@endforeach
@@ -56,7 +56,7 @@
 
 		<script>window.facets = {!! $facets->toJson() !!};</script>
 
-		<div class="_db _tbs _ov _mb5">
+		<div class="_db _tbs _ov _mb5" id="price-filter">
 			<div class="_tb _crp _pl5" ng-if="vm.filters.price.avg">
 				<span ng-click="vm.showPriceRange=!vm.showPriceRange" ng-class="{'_zi999': vm.showPriceRange}">
 					<i class="material-icons _fs17 _va3 _mr10">filter_list</i>
@@ -65,7 +65,7 @@
 
 				<div class="_af _bgwt2 _zi999" ng-if="vm.showPriceRange" ng-click="vm.showPriceRange=0"></div>
 
-				<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange" ng-init="vm.filters.price.min={{ request()->input('price_min') }};vm.filters.price.max={{ request()->input('price_max') }};">
+				<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange" ng-init="vm.filters.price.min={{ request()->input('price_min', 0) }};vm.filters.price.max={{ request()->input('price_max', 9999) }};">
 					<div class="_clear">
 						<span class="_fs17 _clear">@{{ vm.filters.price.min | money }} - @{{ vm.filters.price.max | money }}</span>
 						<span>@lang('The average price of product is') @{{ vm.filters.price.avg | money }}.</span>

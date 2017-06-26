@@ -2,10 +2,30 @@ angular.module('comments', []).controller('CommentsCtrl', [
 	'$http', '$scope', function ($http, $scope) {
 
 		var vm = this;
-		vm.comments = window.comments.data;
-		vm.target = window.comments_target;
+		vm.comments = window.product.comments;
+		vm.target = window.product.id;
 		vm.sending = false;
 		vm.page = 1;
+
+		vm.selectMedia = function (event) {
+			var files = event.target.files;
+			if (!files[0]) return;
+			vm.comment_media = files[0];
+
+			if(vm.comment_media.size > 2000000){
+				vm.comment_media = null;
+				return false;
+			}
+
+			var reader = new FileReader();
+
+			reader.onload = function(event) {
+	            vm.comment_media_b = event.target.result;
+	            $scope.$apply();
+	        };
+
+			reader.readAsDataURL(vm.comment_media);
+		};
 
 		vm.commentPush = function(){
 
@@ -13,15 +33,31 @@ angular.module('comments', []).controller('CommentsCtrl', [
 
 			vm.sending = true;
 
-			$http.post('/comments', {
-				prev: vm.comments.length ? vm.comments[0].id : null,
-				target: vm.target,
-				text: vm.comment_text
+			var fd = new FormData();
+
+			if(vm.comment_media) {
+				fd.append('file', vm.comment_media);
+			};
+
+			fd.append('prev', vm.comments.length ? vm.comments[0].id : null);
+
+			fd.append('target', vm.target);
+
+			fd.append('text', vm.comment_text);
+
+			$http({
+				method  : 'POST',
+				url     : '/comments',
+				data    : fd,
+				headers : {
+					'Content-Type': undefined
+				}
 			}).then(function(response){
 				vm.comments.unshift(response.data);
 				vm.comment_text = '';
 				$scope.$parent.vm.comments_count += 1;
 				vm.sending = false;
+				vm.removeAttachment();
 			}, function(){
 				vm.sending = false;
 			});
@@ -48,12 +84,17 @@ angular.module('comments', []).controller('CommentsCtrl', [
 				angular.forEach(response.data, function(i,k){
 					$scope.$parent.vm.comments_count -= 1;
 					angular.forEach(vm.comments, function(item,key){
-	                    if(item.id == comment.id){
-	                        vm.comments.splice(key,1);
-	                    }
-	                });
+						if(item.id == comment.id){
+							vm.comments.splice(key,1);
+						}
+					});
 				});
 			});
-		}
+		};
+
+		vm.removeAttachment = function(){
+			vm.comment_media_b = false;
+			vm.comment_media = false;
+		};
 
 	}]);

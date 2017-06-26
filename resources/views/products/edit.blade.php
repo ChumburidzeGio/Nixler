@@ -23,7 +23,7 @@ window.product = <?php echo json_encode([
 		<div class="col-sm-8 col-xs-12">
 			
 			@if(session('status'))
-			<div class="_card _z013 _mb15 _bgw _p15 _fs15 _cb"> 
+			<div class="_card _z013 _mb15 _p15 {{ session('buttons') ? '_cb' : '_cw _bgbl _fs13'}}"> 
 				{{ session('status') }}
 				@if(session('buttons'))
 				<div class="_clear _mt15">
@@ -229,7 +229,7 @@ window.product = <?php echo json_encode([
 						</div>
 
 					@can('sellExternally', $product)
-					<div class="col-sm-12 _mb15">
+					<div class="col-sm-12 _mb15 _mt10">
 						<small class="_clear _pb5">@lang('Link to buy product')</small>
 
 						<input id="buy_link" type="text" name="buy_link" minlength="2" maxlength="90" class="_b1 _bcg _fe _brds3 _fes" autocomplete="off" value="{{ old('buy_link', $product->buy_link) }}" placeholder="https://www.example.com/product-x.html"> 
@@ -278,17 +278,17 @@ window.product = <?php echo json_encode([
 				@endif 
 
 				@if($product->is_active)
-				<!--a class="_btn _bg5 _cg _hvra _ml10 _left" onclick="event.preventDefault();
+				<a class="_btn _bg5 _cg _hvra _ml10 _left" onclick="event.preventDefault();
 				document.getElementById('status-change-form').submit();" href="/"> 
 				{{ $product->is_active ? __('Hide') : __('Show') }} 
-			</a-->
+			</a>
 			@endif
 
 		@if($product->just_created || $product->isInactive)
-		<!--button class="_btn _bg5 _cb _hvra _ml10" 
+		<button class="_btn _bg5 _cb _hvra _ml10" 
 			type="submit" name="action" value="schedule"> 
 			<i class="material-icons _mr5 _va5 _fs20">schedule</i> @lang('Schedule')
-		</button-->
+		</button>
 		@endif
 
 		@if($product->is_inactive)
@@ -362,7 +362,7 @@ window.product = <?php echo json_encode([
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">shopping_basket</i>
-			@lang(':amount Sales', ['amount' => $product->getMeta('sales', 0)])
+			@lang(':amount Sales', ['amount' => $product->sales_count])
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
@@ -370,9 +370,14 @@ window.product = <?php echo json_encode([
 			@lang(':amount Likes', ['amount' => $product->likes_count])
 		</a>
 
-		<a class="_hvr1 _fs13 _clear _lim">
+		<!--a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">comment</i> 
-			@lang(':amount Comments', ['amount' => $product->getMeta('comments', 0)])
+			@lang(':amount Comments', ['amount' => $product->comments_count])
+		</a-->
+
+		<a class="_hvr1 _fs13 _clear _lim">
+			<i class="material-icons _mr10 _va5 _fs18">remove_red_eye</i> 
+			@lang(':amount Views', ['amount' => $product->views_count])
 		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
@@ -392,20 +397,20 @@ window.product = <?php echo json_encode([
 		<span class="_fs13 _clear _li _bb1 _cb">
 			@lang('Markdown support')
 		</span>
-		<div class="_p10">
+		<div class="_p10 _fs13 _pl15 _pr15">
 			@lang('Nixler uses Markdown for formatting. Here are the basics.')
 			<hr class="_mt5 _mb5">
 			<span class="_cg _clear">@lang('Header')</span>
-			<code># Material & Care</code>
+			<code>@lang('# Material & Care')</code>
 			<hr class="_mt5 _mb5">
 			<span class="_cg _clear">@lang('Bold')</span>
-			<code>*100 day* return policy</code>
+			<code>@lang('*100 day* return policy')</code>
 			<hr class="_mt5 _mb5">
 			<span class="_cg _clear">@lang('Emphasis')</span>
-			<code>Whisk the eggs _vigorously_.</code>
+			<code>@lang('Whisk the eggs _vigorously_.')</code>
 			<hr class="_mt5 _mb5">
 			<span class="_cg _clear">@lang('Highlight')</span>
-			<code>`Carefully` crack the eggs.</code>
+			<code>@lang('`Carefully` crack the eggs.')</code>
 		</div>
 	</div>
 

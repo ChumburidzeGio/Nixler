@@ -7,8 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class VerificationMail extends Mailable
 {
-
+    /**
+     * @var integer
+     */
     public $code;
+
     /**
      * Create a new message instance.
      *

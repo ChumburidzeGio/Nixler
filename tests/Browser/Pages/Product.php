@@ -87,7 +87,5 @@ class Product extends BasePage
         $browser->script('window.scrollTo(0, 500);');
 
         $browser->waitFor('@first-comment-text')->assertSeeIn('@first-comment-text', $text);
-
-        $browser->screenshot('product-comment');
     }
 }

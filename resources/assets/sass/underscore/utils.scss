@@ -102,6 +102,10 @@
     box-shadow: 0 1px 2px rgba(0,0,0,.2);
 }
 
+._bs-1 {
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+}
+
 
 
 /*=================================
@@ -109,7 +113,6 @@
 ==================================*/
 ._bginherit{ background: inherit !important; }
 ._cinherit{ color: inherit !important; }
-
 
 ._bg0 { background: transparent!important; } /* background transparent */
 
@@ -149,6 +152,8 @@
 ._cwt7 { color: rgba(255,255,255,.7)!important;} /* color white transparent .7 */
 ._cwt6 { color: rgba(255,255,255,.6)!important;} /* color white transparent .6 */
 
+._cg2 { color: #737373 !important; }
+
 ._cg { color: #58666e!important; } /* color gray */
 ._bgg { background: #58666e!important; } /* background gray */
 ._bggd { background: #323940!important; } /* background gray dark */
@@ -173,14 +178,13 @@
 ._bgdp { background: #685D9F!important; } /* color deep pruple */
 
 ._cr { color: #F44336!important; } /* color red */
-._crd { color: #e81c4f!important; } /* color red dark */
 ._bgr { background: #F44336!important; } /* color red */
 ._bgrd { background: #e81c4f!important; } /* color red dark */
 
 ._cgr { color: #4caf50!important; } /* color green */
 ._bggr { background: #4caf50!important; } /* color green */
 	
-
+._c-1 { color: #2a5885; }
 
 
 /*=================================
@@ -290,6 +294,7 @@
 ._ov{ overflow: visible!important; }
 ._oh{ overflow: hidden!important; }
 ._oa{ overflow: auto!important; }
+._os{ overflow: scroll!important; }
 
 
 
@@ -410,8 +415,14 @@
 ._mih150 { min-height: 150px; }
 ._mih200 { min-height: 200px; }
 ._mih250 { min-height: 250px; }
-._mih90vh { min-height: 90vh }
-._mih100vh { min-height: 100vh }
+._mih70vh { min-height: 70vh; }
+._mah70vh { max-height: 70vh; }
+._mah85vh { max-height: 85vh; }
+._mih90vh { min-height: 90vh; }
+._mih100vh { min-height: 100vh; }
+._h100vh { height: 100vh; }
+._h80vh { height: 80vh; }
+._h70vh { height: 70vh; }
 
 
 /*=================================
@@ -453,7 +464,10 @@
     vertical-align: -6px;
 }
     
-
+._btn:disabled {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
 
 /*=================================
          BORDER
@@ -609,6 +623,7 @@
 
 ._lhl { line-height: 1 !important; }
 ._lh13 { line-height: 1.3 !important; }
+._lh33px { line-height:33px!important; }
 
 
 /*=================================
@@ -624,6 +639,8 @@
 ._va5 { vertical-align: -5px !important; }
 ._va6 { vertical-align: -6px !important; }
 ._va7 { vertical-align: -7px !important; }
+._va8 { vertical-align: -8px !important; }
+._va9 { vertical-align: -9px !important; }
 
 
 
@@ -667,6 +684,12 @@
 
 ._fe._fes {
     height: 34px;
+}
+
+._fehidden {
+    visibility: hidden;
+    position:absolute;
+    width:0;
 }
 
 ._fe:not(select){
@@ -734,3 +757,89 @@ select._fe{
 @media (max-width: 420px){
     ._cxxs12 { width: 100%; }
 }
+
+
+/*=================================
+       
+==================================*/
+._lst {
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+    padding: 6px 0;
+    position: relative;
+    font-size: 13px;
+}
+
+._lst ._lsti {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 32px;
+    line-height: 31px;
+    padding: 0 5px 0 20px;
+    color: #2a5885;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    outline: none;
+    cursor: pointer;
+}
+
+._lst ._lsti.active {
+    border-left: 2px solid #6285af;
+    padding-left: 18px;
+    color: #4D5061;
+    font-weight: 600;
+    -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
+    text-decoration: none;
+    background-color: #f0f2f5;
+}
+
+._lst ._lsti:hover {
+    text-decoration: none;
+    background-color: #f0f2f5;
+}
+
+._lst .material-icons {
+    color: #555;
+    margin-right: 11px;
+    vertical-align: -4px;
+    font-size: 18px;
+}
+
+._lst ._lsti.active .material-icons {
+    color: #4D5061;
+}
+
+/*=================================
+       
+==================================*/
+._crd {
+    display: block;
+    position: relative;
+    background: #fff;
+    border-radius: 2px;
+    box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+}
+
+._crd-header {
+    margin: 0px;
+    font-weight: inherit;
+    display: block;
+    background: #fafbfc;
+    padding: 0 20px;
+    height: 50px;
+    line-height: 50px;
+    border-bottom: 1px solid #e7e8ec;
+    border-radius: 2px 2px 0 0;
+    font-size: 16px;
+    outline: none;
+    color: #000;
+    text-transform: capitalize;
+}
+
+._crd-content {}

@@ -2,6 +2,9 @@
 
 namespace App\Monitors;
 
+use App\Services\SystemService;
+use App\Notifications\ServerStatus;
+
 class MonitorFactory
 {
     /**
@@ -33,6 +36,14 @@ class MonitorFactory
         $hasErrors = !!collect($monitors)->filter(function($monitor){
             return app($monitor)->hasErrors();
         })->count();
+
+        if($hasErrors) {
+
+            app(SystemService::class)->notify(new ServerStatus(
+                $fields->toArray()
+            ));
+
+        }
 
         return compact('fields', 'hasErrors');
     }

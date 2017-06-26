@@ -23,17 +23,6 @@ class MessagesController extends Controller
         $this->repository = $repository;
     }
 
-
-    /**
-     * @return Response
-     */
-    public function index()
-    {
-        $threads = $this->repository->getAllThreads();
-
-        return view('messages.index', compact('threads'));
-    }
-
     /**
      * @param  Request $request
      * @param  int $id
@@ -58,11 +47,13 @@ class MessagesController extends Controller
      * @param  int $id
      * @return Response
      */
-    public function show($id)
+    public function show($id = null)
     {
-        $thread = $this->repository->findThreadById($id);
+        $threads = $this->repository->getAllThreads();
 
-        return view('messages.show', compact('thread'));
+        $thread = $id ? $this->repository->findThreadById($id) : '';
+
+        return view('messages.index', compact('threads', 'thread'));
     }
 
 
@@ -106,6 +97,6 @@ class MessagesController extends Controller
 
         $thread = $this->repository->findOrCreateThreadBetween($user, $target);
 
-        return redirect()->route('thread', ['id' => $thread->id]);
+        return redirect()->route('threads', ['id' => $thread->id]);
     }
 }

@@ -1,0 +1,84 @@
+#msg-badge {
+  height: 17px;
+  width: 17px;
+  margin: 9px 4px;
+}
+
+
+#msg-body .msg-item .text a {
+  color: #4285F4;
+}
+
+#about-header img {
+  margin-top: -15px;
+  max-height: 400px;
+  max-width: 100%;
+}
+
+#threads ._os {
+  height: calc(75vh + 61px);
+}
+
+#thread-messages ._os {
+  height:75vh;
+}
+
+#thread-messages #form-placeholder {
+  height: 61px;
+}
+
+@media (min-width: 990px) {
+
+  #threads {
+    border-right: 1px solid #d8d8d8;
+  }
+
+  #threads .header > a {
+    display: none;
+  }
+  
+}
+
+@media (max-width: 990px) {
+
+  #thread-messages, #threads {
+    padding: 0;
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0;
+    right: 0;
+    z-index: 9999 !important;
+    overflow: auto !important;
+    background: #FFFFFF;
+    width: 100%;
+  }
+
+  body.im-page {
+    overflow: hidden;
+  }
+
+  #thread-messages-content ._os {
+    height: calc(100vh - 61px - 46px);
+  }
+
+  #thread-messages-threads, #threads ._os {
+    height: 100vh!important;
+    max-height: 100vh!important;
+  }
+
+  #threads {
+    z-index: 99999 !important;
+  }
+
+  #threads .header > i {
+    display: none;
+  }
+
+}
+
+
+#thread-messages .text h4 {
+  font-size: 16px;
+  margin: 3px 2px 10px;
+}

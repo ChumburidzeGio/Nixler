@@ -129,6 +129,7 @@
     ":amount Sales": ":amount Sprzedane",
     ":amount Likes": ":amount Polubione",
     ":amount Comments": ":amount Komentarze",
+    ":amount Views": "",
     "Added": "Dodano",
     "Updated": "Zaktualizowano",
     "Confirm your phone": "Potwierdź telefon",

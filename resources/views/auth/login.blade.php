@@ -6,7 +6,10 @@
         <div class="col-md-6 col-md-offset-3">
             <div class="panel panel-default _b0 _z013">
                 <div class="panel-heading _oh _posr _tac">
-                    <a href="javascript:history.back()" class="_posa _a8 _pt10 _ml15"><i class="material-icons _fs18 _mr10 _va4">arrow_back</i> @lang('Go back')</a>
+                    <a href="javascript:history.back()" class="_posa _a8 _pt10 _ml15">
+                        <i class="material-icons _fs18 _mr10 _va4">arrow_back</i>
+                        <span class="hidden-xs">@lang('Go back')</span>
+                    </a>
                     @lang('Sign in now')
                 </div>
                 <div class="panel-body _pb5 _bb1">
@@ -55,7 +58,7 @@
                  </div>
                  <div class="_tac">
 
-                    <a href="{{ url('/auth/facebook') }}" class="_btn _bgi _cw _mt15 _z013 _pt5 _pb5 _thvrw" style="background:#3b5998">
+                    <a href="{{ url('/auth/facebook') }}" class="_btn _bgi _cw _mt15 _z013 _pt5 _pb5 _thvrw fb-bg">
                         <img class="_mr5 _va3 _brds1" src="/img/facebook-lite.svg" height="15px"> 
                         @lang('Sign in with Facebook')
                     </a>

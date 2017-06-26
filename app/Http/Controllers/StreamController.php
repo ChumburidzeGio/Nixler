@@ -7,7 +7,6 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Entities\Product;
 use App\Entities\ProductCategory;
-use App\Repositories\StreamRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 
@@ -17,12 +16,10 @@ class StreamController extends Controller
     /**
      * @var PostRepository
      */
-    protected $repository;
     protected $productRepository;
 
-    public function __construct(StreamRepository $repository, ProductRepository $productRepository){
+    public function __construct(ProductRepository $productRepository){
         parent::__construct();
-        $this->repository = $repository;
         $this->productRepository = $productRepository;
     }
 
@@ -63,7 +60,7 @@ class StreamController extends Controller
             $facets = array_get($result, 'facets');
 
             if(!$request->has('cat')){
-                $users = $this->repository->searchUsers($request->input('query'));
+                $users = app(UserRepository::class)->search($request->input('query'));
             }
 
         } else {

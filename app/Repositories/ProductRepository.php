@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Repositories\BaseRepository;
 use App\Entities\ProductCategory;
 use App\Services\RecommService;
+use App\Services\AnalyticsService;
 use Illuminate\Container\Container as App;
 use App\Entities\Product;
 use League\Fractal\Manager;
@@ -13,6 +14,7 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Entities\Activity;
 use App\Entities\ProductVariant;
 use App\Entities\ProductTag;
+use App\Entities\Metric;
 use App\Entities\ShippingPrice;
 use App\Entities\Order;
 use Carbon\Carbon;
@@ -56,7 +58,12 @@ class ProductRepository extends BaseRepository {
 
         $product->tags = ProductTag::where('product_id', $product->id)->get();
 
-        $product->variants = ProductVariant::where('product_id', $product->id)->get();
+        $product->variants = ProductVariant::where('product_id', $product->id)->orderBy('price')->get()->map(function($item) use($product) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name.' - '.money($product->currency, $item->price)
+            ];
+        });
 
         $product->setRelation('similar', $this->similar($product->id, $product->owner_id));
 
@@ -67,6 +74,11 @@ class ProductRepository extends BaseRepository {
                 'id' => $comment->id,
                 'avatar' => $comment->author->avatar('comments'),
                 'author' => $comment->author->name,
+                'attachment' => !$comment->media_id ? null : route('photo', [
+                    'id' => $comment->media_id ?: '-',
+                    'type' => 'product',
+                    'place' => 'comment-attachment'
+                ]),
                 'text' => nl2br(str_limit($comment->text, 1000)),
                 'time' => $comment->created_at->format('c'),
                 'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
@@ -313,7 +325,11 @@ class ProductRepository extends BaseRepository {
         return Cache::remember($hash, (60 * 24), function () use ($id, $owner_id) {
 
             $ids = (new RecommService)->similar($id, 5, auth()->id(), [
-                'filter' => "'currency' == \"".config('app.currency')."\""
+                'filter' => "'currency' == \"".config('app.currency')."\"",
+                'booster' => 
+                    " + (if 'category_id' == context_item[\"category_id\"] then 20 else 0)". // Category is the same - 20
+                    " + (if size('description') > 50 then 7 else 0)". // Size of description contains more then 50 characters - 7
+                    " + (if 'likes_count' > 0 then ('likes_count' * 0.5) else 0)",// On like - 0.5
             ]);
 
             if($ids) {
@@ -339,11 +355,11 @@ class ProductRepository extends BaseRepository {
 
         if($user) {
 
-            $products = $user->stream()->with('owner')->latest()->paginate(20);
+            $products = $user->stream()->active()->with('owner')->latest()->paginate(20);
 
             if(!$products->total() && !request()->has('page')) {
                 $user->pushInStream($this->getPopularProducts(20, 1), 'pop');
-                $products = $user->stream()->with('owner')->latest()->paginate(20);
+                $products = $user->stream()->active()->with('owner')->latest()->paginate(20);
             }
 
         } else {
@@ -689,11 +705,19 @@ class ProductRepository extends BaseRepository {
      *
      * @return array
      */
-    public function getWithShippingByCity($id)
+    public function getWithShippingByCity($id, $params)
     {
         $product = $this->model->findOrFail($id);
 
         $product->load('owner.shippingPrices');
+
+        if(array_get($params, 'variant')){
+
+            $variant = ProductVariant::where('product_id', $product->id)->findOrFail(array_get($params, 'variant'));
+
+            $product->price = $variant->price;
+
+        }
 
         $prices = $product->owner->shippingPrices;
 
@@ -921,13 +945,56 @@ class ProductRepository extends BaseRepository {
      *
      * @return float
      */
+    public function hide($id)
+    {
+        if (app()->runningInConsole()){
+            
+            $product = $this->model->findOrFail($id);
+
+        } else {
+
+            $user = auth()->user();
+
+            $product = $user->products()->findOrFail($id);
+
+        }
+
+        $product->markAsInactive();
+        
+    }
+
+
+    /**
+     * Get shippng price for particular city
+     *
+     * @param $city_id int
+     * @param $merchant_id int
+     *
+     * @return float
+     */
     public function delete($id)
     {
-        $user = auth()->user();
+        if (app()->runningInConsole()){
+            
+            $product = $this->model->findOrFail($id);
 
-        $product = $user->products()->findOrFail($id);
-        
+        } else {
+
+            $user = auth()->user();
+
+            $product = $user->products()->findOrFail($id);
+
+        }
+
         $product->notify(new ProductDeleted);
+
+        $product->comments()->delete();
+        
+        $product->media()->delete();
+
+        $product->meta()->delete();
+
+        $product->activities()->delete();
 
         $product->delete();
     }
@@ -956,6 +1023,47 @@ class ProductRepository extends BaseRepository {
         $yesterday = Carbon::now()->subDays(1);
 
         return $this->model->where('is_active', false)->whereNull('slug')->whereNull('media_id')->where('created_at', '<=', $yesterday)->delete();
+    }
+
+
+    /**
+     * Refresh analytics data from GA
+     *
+     * @return boolean
+     */
+    public function updateAnalytics()
+    {
+        $metrics = app(AnalyticsService::class)->getBasicAnalyticsForPopularProducts();
+
+        return $metrics->map(function($metric) {
+            return $this->findByIdAndSetAnalytics(...$metric);
+        });
+    }
+
+
+    /**
+     * Refresh analytics data from GA
+     *
+     * @return boolean
+     */
+    public function findByIdAndSetAnalytics($slug, $username, $data)
+    {
+        $product = $this->model->where('slug', $slug)->where('owner_username', $username)->first();
+
+        if(!$product) {
+            return false;
+        }
+
+        foreach ($data as $key => $value) {
+
+            if($key == 'views') {
+                $product->increment('views_count', $value);
+            }
+            
+        }
+
+        $product->save();
+
     }
 
 }

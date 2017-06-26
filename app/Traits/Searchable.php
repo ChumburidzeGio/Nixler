@@ -21,6 +21,8 @@ trait Searchable {
     		return $builder;
     	}
     	
+        $query = $query . " " . str_slug($query);
+
     	$tnt = new TNTSearch();
 
         $driver = config('database.default');

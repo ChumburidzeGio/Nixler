@@ -3,26 +3,14 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Watson\Validating\ValidatingTrait;
-use DB;
 
 class Thread extends Model
 {
-    use ValidatingTrait;
-
     public $table = 'threads';
 
     protected $fillable  = [
         'subject', 'is_private'
     ];
-
-    protected $rules = [
-        'subject'   => 'string',
-        'is_private'   => 'required|boolean'
-    ];
-
-    protected $throwValidationExceptions = true;
-
     
     /**
      * Show comments for model

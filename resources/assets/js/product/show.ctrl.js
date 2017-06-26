@@ -2,10 +2,11 @@ angular.module('products').controller('ShowCtrl', [
     '$http', '$scope', 'ngDialog', '$timeout', function ($http, $scope, ngDialog, $timeout) {
 
         var vm = this;
+        vm.product = window.product;
         vm.media = {};
         vm.mainPhoto = 0;
-        vm.quantities = window.quantities;
-        vm.variants = window.variants;
+        vm.quantities = vm.product.quantities;
+        vm.variants = vm.product.variants;
 
         vm.media = {
         	add: function(id,mid){
@@ -20,13 +21,20 @@ angular.module('products').controller('ShowCtrl', [
       };
 
       vm.like = function(){
-        $http.post('/products/'+vm.id+'/like').then(function(response){
-            vm.liked = response.data.success;
-            if(vm.liked) vm.likes_count++;
-            else vm.likes_count--;
-        });
-    }
 
+        $http.post('/products/'+vm.product.id+'/like').then(function(response){
+
+            vm.product.liked = response.data.success;
+
+            if(vm.product.liked){ 
+              vm.product.likes_count++;
+          } else {
+              vm.product.likes_count--;
+          }
+
+      });
+
+    }
 
     vm.share = function(){
 
@@ -46,13 +54,9 @@ angular.module('products').controller('ShowCtrl', [
 
     }
 
-    vm.selectDefaults = function(){
-      vm.quantity = 1;
-      vm.variant = vm.variants.length ? vm.variants[0].id : 0;
-    }
-
     $timeout(function(){
-      vm.selectDefaults();
-    }, 100);
+      vm.quantity = 1;
+      vm.variant = vm.variants.length ? vm.variants[0] : 0;
+  }, 100);
     
 }]);

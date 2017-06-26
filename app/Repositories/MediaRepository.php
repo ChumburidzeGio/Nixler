@@ -59,4 +59,57 @@ class MediaRepository extends BaseRepository {
 
     }
 
+
+    /**
+     * @param $data array
+     * @return Article
+     */
+    public function combo($media_ids, $size = 600)
+    {
+        $medias = $this->model->whereIn('id', $media_ids)->get();
+
+        if(!$medias->count()) {
+            return false;
+        }
+
+        if($medias->count() == 1) {
+
+            $partial = Image::make($medias->first()->getAbsolutePath());
+
+            $partial->fit($size, $size);
+
+            return $partial;
+
+        }
+
+        if($medias->count() !== 4) {
+            $medias->take(2);
+        }
+
+        $img = Image::canvas($size, $size);
+
+        $placements = ($medias->count() == 4) ? [
+            'bottom-right', 'top-right', 'top-left', 'bottom-left'
+        ] : [
+            'left', 'right'
+        ];
+
+        $partial_width = $size / 2;
+
+        $partial_height = ($medias->count() == 4) ? $size / 2 : $size;
+
+        foreach ($medias as $key => $media) {
+
+            $partial = Image::make($media->getAbsolutePath());
+
+            $partial->fit($partial_width, $partial_height);
+
+            $img->insert($partial, array_get($placements, $key));
+
+        }
+
+        return $img;
+
+    }
+
 }

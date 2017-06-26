@@ -4,7 +4,19 @@
 
 @section('content')
 
-<div class="container" ng-controller="ShowCtrl as vm" ng-init="vm.id='{{ $product->id }}'">
+<script type="text/javascript">
+    window.product = <?php echo json_encode([
+        'id' => $product->id,
+        'liked' => $product->isLiked(),
+        'likes_count' => $product->likes_count,
+        'quantities' => [1,2,3,4,5,6,7,8],
+        'variants' => $product->variants,
+        'comments' => $product->comments->items(),
+        'comments_count' => $product->comments->total(),
+    ]) ?>;
+</script>
+
+<div class="container" ng-controller="ShowCtrl as vm">
 
     <div class="col-md-12 _p0">
         <div class="row">
@@ -15,11 +27,11 @@
                     <div class="col-md-11">
                         @if($product->photo('full', 1))
                         <div class="_clear _posr _bcg _tac" id="product-gallery">
-                                <img src="{{ $product->photo('full') }}" class="_clear _ma" 
-                                ng-init="vm.mediaBase='{{ url('media') }}/'" 
-                                ng-src="@{{ vm.media.mainPath() }}"
-                                ng-click="vm.media.next()"
-                                alt="{{ $product->title }}">
+                            <img src="{{ $product->photo('full') }}" class="_clear _ma" 
+                            ng-init="vm.mediaBase='{{ url('media') }}/'" 
+                            ng-src="@{{ vm.media.mainPath() }}"
+                            ng-click="vm.media.next()"
+                            alt="{{ $product->title }}">
 
                             <ul class="_pl5 _pr15 _pt10 _a8 _posa">
                                 @foreach($product->media as $key => $photo)
@@ -37,98 +49,80 @@
                         </div>
                         @endif
 
+                        <div class="_pl5 _pr10 _pb10 _posr _pt10 row">
+                            <div class="col-md-8">
+                                @include('products.show-description')
+                                <div class="_clear _mb10 _pt10">
+                                    <span class="_fs12 _ttu _mb10 _clear">
+                                     <span ng-bind="vm.product.comments_count">{{ $product->comments->total() }}</span> @lang('Comments')
+                                 </span>
+                                 @include('comments.index')
+                             </div>
 
-        <div class="_pl5 _pr10 _pb10 _posr _pt10 row">
-            <div class="col-md-8">
-            
-            @include('products.show-description')
+                         </div>
 
-<div class="_clear _mb10 _pt10">
+                         <div class="col-md-4">
 
-
-    <span class="_fs12 _ttu _mb10 _clear">
-       <span ng-init="vm.comments_count={{ $product->comments->total() }}" ng-bind="vm.comments_count">{{ $product->comments->total() }}</span> @lang('Comments')
-   </span>
-   @include('comments.index', ['comments' => $product->comments, 'id' => $product->id])
-</div>
+                            <div class="visible-md visible-lg"> 
+                                @include('products.show-buy')
+                            </div>
 
 
+                            @if($product->similar->count())
 
+                            <span class="_fs12 _ttu _mb5 _clear _mt15">
+                                @lang('More products')
+                            </span>
 
+                            <div class="_clear">
+                                @each('products.similar', $product->similar, 'product')
+                            </div>
+                            @endif
 
-
-           </div>
-           <div class="col-md-4">
-            
-            <div class="visible-md visible-lg"> 
-                @include('products.show-buy')
+                        </div>
+                        
+                    </div>
+                </div>
             </div>
-
-
-        @if($product->similar->count())
-
-        <span class="_fs12 _ttu _mb5 _clear _mt15">
-            @lang('More products')
-        </span>
-
-        <div class="_clear">
-            @each('products.similar', $product->similar, 'product')
         </div>
-        @endif
-
-
-           </div>
-       </div>
-
-
-       
-
-</div>
-
-</div>
-
-
-</div>
-
-</div>
-
+    </div>
 </div>
 </div>
 
 
 
 <script type="text/ng-template" id="/tmp/share.html">
-<div class="_bb1 _p15 _fs18 _pb10 _cb">@lang('Share')</div>
+    <div class="_bb1 _p15 _fs18 _pb10 _cb">@lang('Share')</div>
 
-        <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
-            href="http://www.facebook.com/sharer/sharer.php?u=@{{ vm.url }}" target="_blank">
-            <img class="_mr15 _va3 _brds1 _ml5" src="/img/facebook.svg" height="18px">
-            @lang('Share on :network', ['network' => 'Facebook'])
-        </a>
+    <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
+    href="http://www.facebook.com/sharer/sharer.php?u=@{{ vm.url }}" target="_blank">
+    <img class="_mr15 _va3 _brds1 _ml5" src="/img/facebook.svg" height="18px">
+    @lang('Share on :network', ['network' => 'Facebook'])
+</a>
 
-        <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
-            href="https://twitter.com/intent/tweet?url=@{{ vm.url }}&text=@{{ text }}" 
-            target="_blank">
+<a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
+href="https://twitter.com/intent/tweet?url=@{{ vm.url }}&text=@{{ text }}" 
+target="_blank">
 
-            <img class="_mr15 _va3 _brds1 _ml5" src="/img/twitter.svg" height="18px">
-            @lang('Share on :network', ['network' => 'Twitter'])
+<img class="_mr15 _va3 _brds1 _ml5" src="/img/twitter.svg" height="18px">
+@lang('Share on :network', ['network' => 'Twitter'])
 
-        </a>
+</a>
 
-        <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
-            href="http://vk.com/share.php?url=@{{ vm.url }}" 
-            target="_blank">
+<a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
+href="http://vk.com/share.php?url=@{{ vm.url }}" 
+target="_blank">
 
-            <img class="_mr15 _va3 _brds1 _ml5" src="/img/vk.svg" height="18px">
-            @lang('Share on :network', ['network' => 'VK'])
-        </a>
+<img class="_mr15 _va3 _brds1 _ml5" src="/img/vk.svg" height="18px">
+@lang('Share on :network', ['network' => 'VK'])
+</a>
 
-        <a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
-            href="https://plus.google.com/share?url=@{{ vm.url }}" 
-            target="_blank">
+<a class="_crp _cb _pl15 _pr15 _li _hvrd _fs15" 
+href="https://plus.google.com/share?url=@{{ vm.url }}" 
+target="_blank">
 
-            <img class="_mr15 _va3 _brds1 _ml5" src="/img/gplus.svg" height="18px">
-            @lang('Share on :network', ['network' => 'Google+'])
-        </a>
+<img class="_mr15 _va3 _brds1 _ml5" src="/img/gplus.svg" height="18px">
+@lang('Share on :network', ['network' => 'Google+'])
+</a>
 </script>
 @endsection

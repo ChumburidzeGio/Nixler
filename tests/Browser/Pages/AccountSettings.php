@@ -70,8 +70,6 @@ class AccountSettings extends BasePage
             ->click('@button-general')
             ->assertInputValue('@name', 'TestUserName')
             ->assertSee('Confirmation code');
-
-        $browser->screenshot('as-general');
     }
     
     /**
@@ -89,7 +87,5 @@ class AccountSettings extends BasePage
             ->value('@password-new', $newPassword)
             ->value('@password-repeat', $newPassword)
             ->click('@button-general');
-
-        $browser->screenshot('as-password');
     }
 }

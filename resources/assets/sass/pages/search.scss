@@ -1,0 +1,32 @@
+#search-container {
+  width: 100%; max-width: 500px;margin-top: 7px;
+}
+
+#search-container #search {
+  padding-left: 45px; height: 34px;
+}
+
+#search-container i {
+  margin-top: 8px;
+}
+
+@media (max-width: 800px) {
+  #search-container {
+    max-width: 370px!important;
+  }
+}
+
+@media (max-width: 650px){
+  #search-container {
+    max-width: 100%!important;
+  }
+}
+
+@media (max-width: 990px){
+  #categories-filter ._lim {
+    display: inline-block;
+  }
+  #price-filter {
+    margin: -15px 10px 10px !important;
+  }
+}

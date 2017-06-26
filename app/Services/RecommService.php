@@ -259,7 +259,7 @@ class RecommService {
     public function send($request, $default = [])
     {	
         if (!app()->environment('development', 'production')) {
-            return $default;
+            ///return $default;
         }
 
         try {

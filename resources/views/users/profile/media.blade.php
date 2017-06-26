@@ -5,12 +5,10 @@
 
 
 
-	@if(count($data))
-
-		@foreach($data as $photo)
+	@forelse($data as $photo)
 
 			<div class="col-md-3 _pb15">
-				<div class="_bgw _b1 _brds3 _posr">
+				<a class="_bgw _b1 _brds3 _posr _clear" href="{{ $photo->photo('full') }}" target="_blank">
 
 					@can('update', $user)
 					<div class="_p5 _brds3 _a2 _bgbt2 _m10 _fs13 _cw _fw600 _pb0">
@@ -30,18 +28,16 @@
 							#{{ $photo->pivot->tag }}
 					</div>
 
-				</div>
+				</a>
 			</div>
 
-		@endforeach
-
-	@else
+		@empty
 
 		<div class="_tac _pt15 _mt70 _c3">
 			<h5 class="_fw400">@lang('There is no media to show').</h5>
 		</div>
 
-	@endif
+	@endforelse
 
 
 

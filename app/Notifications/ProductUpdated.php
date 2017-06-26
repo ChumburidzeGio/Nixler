@@ -5,7 +5,6 @@ namespace App\Notifications;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Channels\AlgoliaChannel;
 use App\Channels\RecommChannel;
 use App\Entities\ProductVariant;
 use App\Entities\ProductTag;
@@ -45,8 +44,6 @@ class ProductUpdated extends Notification
     {
         $owner = $notifiable->owner()->first();
         
-        $city = $owner->city;
-
         return [
             'price' => floatval($notifiable->price),
             'title' => $notifiable->title,
@@ -61,23 +58,18 @@ class ProductUpdated extends Notification
             'owner' => $owner->name,
             'county' => $owner->country,
             'created_at' => intval($notifiable->created_at->format('U')),
-            '_geoloc' => [
-                'lat' => $city->lat,
-                'lng' => $city->lng
-            ],
         ];
     }
-
+    
     /**
-     * @return array
+     * Get the Recommend representation of the notification.
+     *
+     * @param  mixed  $notifiable
      */
     public function toRecomm($notifiable, $service)
     {
         $data = $this->toArray($notifiable);
 
-        $data = array_merge($data, array_get($data, '_geoloc'));
-
-        unset($data['_geoloc']);
         unset($data['county']);
         unset($data['created_at']);
 

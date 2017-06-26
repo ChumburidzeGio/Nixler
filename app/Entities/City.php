@@ -21,7 +21,6 @@ class City extends Model
         'id', 'name'
     ];
 
-
     /**
      * The attributes that should be cast to native types.
      *

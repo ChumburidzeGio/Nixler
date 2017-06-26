@@ -7,9 +7,13 @@ use App\Repositories\UserRepository;
 use App\Repositories\BlogRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\MessengerRepository;
+use App\Notifications\SystemUpdated;
+use App\Entities\User;
 use App\Upgrade\AIA;
 use App\Upgrade\AIB;
 use App\Upgrade\AIC;
+use App\Upgrade\AID;
+use Notification;
 
 class Update extends Command
 {
@@ -18,7 +22,7 @@ class Update extends Command
      *
      * @var string
      */
-    protected $signature = 'nx:update {--static} {--full}';
+    protected $signature = 'nx:update';
 
     /**
      * The console command description.
@@ -35,29 +39,13 @@ class Update extends Command
      */
     public function handle()
     {
-        app(UserRepository::class)->updateStreams();
+        $this->legal();
 
-        info('Streams updated succesfully!');
+        $this->searchIndex();
 
-        if($this->option('full')) {
+        $this->categories();
 
-            app(MessengerRepository::class)->updateResponseTimes();
-
-            app(ProductRepository::class)->cleanStorage();
-
-        }
-
-        if($this->option('static')) {
-
-            $this->legal();
-
-            $this->searchIndex();
-
-            $this->categories();
-
-            $this->upgradeToLatest();
-
-        }
+        $this->upgradeToLatest();
     }
 
     /**
@@ -116,6 +104,7 @@ class Update extends Command
             '1.91' => AIA::class,
             '1.92' => AIB::class,
             '1.93' => AIC::class,
+            '1.94' => AID::class,
         ]);
     }
 
@@ -137,6 +126,8 @@ class Update extends Command
 
             app($version)->upgrade();
 
+            $this->sendSystemUpdatedNotification(app($version));
+
             $this->call('env', [
                 'key' => 'APP_VERSION',
                 'value' => $key
@@ -145,6 +136,28 @@ class Update extends Command
             $this->info("Upgraded to version $key");
 
         });
+    }
+
+
+    /**
+     * Update categories list in database
+     *
+     * @return void
+     */
+    public function sendSystemUpdatedNotification($updater)
+    {
+        if(!method_exists($updater, 'messages')) {
+            return false;
+        }
+
+        foreach ($updater->messages() as $locale => $message) {
+
+            $users = User::where('locale', $locale)->get();
+
+            Notification::send($users, new SystemUpdated($message));
+            
+        }
+        
     }
 
 }

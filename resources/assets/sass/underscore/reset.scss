@@ -14,3 +14,9 @@ input:focus {
 ._li .material-icons {
 	vertical-align: middle;
 }
+
+
+::-webkit-input-placeholder {color:#929eb0;}
+::-moz-placeholder          {color:#929eb0;}/* Firefox 19+ */
+:-moz-placeholder           {color:#929eb0;}/* Firefox 18- */
+:-ms-input-placeholder      {color:#929eb0;}

@@ -49,6 +49,7 @@
 
     <script src="{{ url('js/app.js') }}"></script>
 
+    @if(app()->environment('production', 'development'))
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -76,6 +77,7 @@
         ';path=/;expires='+new Date(0).toUTCString();i=d.indexOf('.');if(i<0)break;d=d.slice(i+1)}}};
     })(window,document,window['_fs_namespace'],'script','user');
     </script>
+    @endif
 
     @if(config('app.country') != 'GE')
         @include('cookieConsent::index')

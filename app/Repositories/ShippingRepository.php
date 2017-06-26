@@ -105,4 +105,21 @@ class ShippingRepository extends BaseRepository {
         return $country_price;
     }
 
+
+    /**
+     * Create new phone model
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function paymentSettingsUpdate($data, $user = null)
+    {
+        $user = $user ? : auth()->user();
+
+        $user->setMeta('cod', array_get($data, 'cod'));
+        $user->setMeta('bank_transaction', array_get($data, 'bank_transaction'));
+        $user->setMeta('bank_credentials', strip_tags(array_get($data, 'bank_credentials')));
+        $user->save();
+
+    }
+
 }

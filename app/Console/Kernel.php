@@ -4,6 +4,10 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Repositories\UserRepository;
+use App\Repositories\ProductRepository;
+use App\Repositories\MessengerRepository;
+use App\Monitors\MonitorFactory;
 
 class Kernel extends ConsoleKernel
 {
@@ -16,8 +20,6 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\Install::class,
         \App\Console\Commands\Update::class,
         \App\Console\Commands\Env::class,
-        \App\Console\Commands\Monitor::class,
-        \App\Console\Commands\DownloadCountryData::class,
     ];
 
     /**
@@ -28,12 +30,45 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('nx:update', ['--full' => true])->daily();
-        $schedule->command('nx:update')->everyTenMinutes();
-        $schedule->command('nx:monitor')->everyTenMinutes();
+        $schedule->call('\App\Console\Kernel@dailySchedule')->daily();
+
+        $schedule->call('\App\Console\Kernel@everyTenMinutesSchedule')->everyTenMinutes();
+
         $schedule->command('backup:clean')->daily()->at('01:00');
         $schedule->command('backup:run')->daily()->at('02:00');
         $schedule->command('backup:monitor')->daily()->at('03:00');
+    }
+
+    /**
+     * Commands to be executed daily
+     *
+     * @return void
+     */
+    public function dailySchedule()
+    {
+        app(MessengerRepository::class)->updateResponseTimes();
+
+        app(ProductRepository::class)->cleanStorage();
+
+        app(UserRepository::class)->updateAnalytics();
+
+        info('Daily schedule executed succesfully.');
+    }
+
+    /**
+     * Commands to be executed every ten minutes
+     *
+     * @return void
+     */
+    public function everyTenMinutesSchedule()
+    {
+        app(UserRepository::class)->updateStreams();
+
+        app(ProductRepository::class)->updateAnalytics();
+
+        app(MonitorFactory::class)->get();
+
+        info('Every ten minutes schedule executed succesfully.');
     }
 
     /**

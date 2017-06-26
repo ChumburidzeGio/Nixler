@@ -10,7 +10,7 @@ use App\Services\LocationService;
 use App\Services\PhoneService;
 use App\Repositories\UserRepository;
 use App\Entities\Order;
-use stdClass;
+use stdClass, Lava;
 
 class SettingsController extends Controller
 {
@@ -76,8 +76,7 @@ class SettingsController extends Controller
 
         $this->repository->setPassword($request->input('new_password'));
 
-        return redirect('settings/password')->with('status', 
-                            trans('users.settings.password.updated_status'));
+        return redirect()->back()->with('status', trans('users.settings.password.updated_status'));
     }
     
     public function updateLocale(Request $request)

@@ -35,12 +35,13 @@ class CreateProductsTables extends Migration
 
             $table->integer('likes_count')->default(0);
             $table->integer('sales_count')->default(0);
+            $table->integer('comments_count')->default(0)->unsigned();
+            $table->integer('views_count')->default(0)->unsigned();
             $table->boolean('is_active')->default(0);
             $table->boolean('has_variants')->default(0);
             $table->timestamps();
 
         });
-        
 
         Schema::create('product_cats', function (Blueprint $table) {
 

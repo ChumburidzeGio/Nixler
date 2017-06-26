@@ -12,9 +12,6 @@ class MessagesChannel
      *
      * @param mixed $notifiable
      * @param \Illuminate\Notifications\Notification $notification
-     *
-     * @throws \NotificationChannels\Trello\Exceptions\InvalidConfiguration
-     * @throws \NotificationChannels\Trello\Exceptions\CouldNotSendNotification
      */
     public function send($notifiable, Notification $notification)
     {

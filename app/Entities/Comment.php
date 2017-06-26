@@ -3,29 +3,19 @@
 namespace App\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-use Watson\Validating\ValidatingTrait;
-use DB;
+use Plank\Mediable\Mediable;
 
 class Comment extends Model
 {
-    use ValidatingTrait;
+    use Mediable;
     
     public $table = 'comments';
     
     protected $fillable  = [
-        'user_id',  'target_id', 'text', 'target_type'
+        'user_id',  'target_id', 'text', 'target_type', 'media_id'
     ];
 
     protected $with = ['author'];
-
-    protected $rules = [
-        'user_id'   => 'required|numeric',
-        'target_id'   => 'required|numeric',
-        'text'   => 'required|string',
-    ];
-
-    protected $throwValidationExceptions = true;
-
 
     /**
      * Show comments for model
@@ -34,6 +24,5 @@ class Comment extends Model
     {
         return $this->belongsTo(config('auth.providers.users.model'), 'user_id', 'id');
     }
-
 
 }

@@ -5,16 +5,16 @@
 <span class="_cgr _clear _pr10">
    <h2 class="_fs17 _m0 _fw400 _dib">{{ $product->price_formated }}</h2>
 
-   <div class="_tbs _ov _right _cg _mt3" ng-init="vm.liked={{ $product->isLiked() ? 1 : 0 }}">
+   <div class="_tbs _ov _right _cg _mt3">
 
 
         <a class="_tb _crp _anim1 _fs13 _ls5 _fw600 _cbt6 _left _p0 _pr15" 
-           ng-class="{'_c4':vm.liked}"
+           ng-class="{'_c4':vm.product.liked}"
            id="like"
            {{ auth()->guest() ? 'href='.route('login') : 'ng-click=vm.like()' }}>
            <i class="material-icons _fs18 _va5 _mr5">favorite</i> 
-           <span ng-show="vm.likes_count" class="ng-cloak">
-            (<span ng-bind="vm.likes_count" ng-init="vm.likes_count={{ $product->likes_count }}">
+           <span ng-show="vm.product.likes_count" class="ng-cloak">
+            (<span ng-bind="vm.product.likes_count"">
             {{ $product->likes_count }}
         </span>)
         </span>
@@ -87,8 +87,13 @@
             </a>
             <div class="_clear">
                 <a class="_c2" href="{{ $product->owner->link() }}">
-                    <h3 class="_fs18 _m0 _fw400">{{ $product->owner->name }}</h3>
-                     <small class="_mt5 _cg _fs12">@lang('Published on :date', ['date' => $product->created_at->formatLocalized('%d %B %Y')])</small>
+                    <!--button class="_btn _bg5 _c2 _right _ttu" style="line-height: 29px;">
+                        <i class="material-icons _fs20 _va6">add</i>
+                        @lang('Follow')
+                    </button-->
+                    <h3 class="_fs18 _m0 _fw400 _dib">{{ $product->owner->name }}</h3>
+                    <br>
+                    <small class="_mt5 _cg _fs12">@lang('Published on :date', ['date' => $product->created_at->formatLocalized('%d %B %Y')])</small>
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
                     <div class="_clear _c2" show-more more="@lang('Read more')" less="@lang('Show less')" height="180">

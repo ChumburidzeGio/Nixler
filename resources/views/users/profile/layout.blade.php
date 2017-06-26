@@ -11,7 +11,7 @@
       <div class="_posr">
 
         @if($user->firstMedia('cover'))
-        <img src="{{ $user->cover('profile') }}" class="_clear _w100 _z013" height="130px">
+        <img src="{{ media($user->firstMedia('cover'), 'cover', 'profile') }}" class="_clear _w100 _z013" height="130px">
         @else
         <div class="_w100 _bgg _clear" style="height:130px"></div> 
         @endif
@@ -100,6 +100,9 @@
 </div>
 
 <div class="_tbs _tal _pt4 _fw600 _pl5 container">
+<a class="_fs12 _tb{{$tab == 'about' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('about') }}">
+    @lang('About')
+</a>
   <a class="_fs12 _tb{{$tab == 'profile' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link() }}">
     @lang('Liked') <span class="_fw300 _ml5">{{ $user->liked_count }}</span>
 </a>

@@ -1,19 +1,11 @@
 angular.module('messages', []).controller('ThreadsCtrl', [
-	'$http', '$scope', function ($http, $scope) {
-
-		var vm = this;
-		vm.threads = window.threads;
-		vm.page = 1;
-
-	}])
-
-
-.controller('ThreadCtrl', [
 	'$http', '$scope', '$interval', function ($http, $scope, $interval) {
 
 		var vm = this;
+		vm.threads = window.threads;
 		vm.thread = window.thread;
 		vm.sending = false;
+		vm.page = 1;
 
 		vm.message = function(){
 
@@ -35,10 +27,10 @@ angular.module('messages', []).controller('ThreadsCtrl', [
 
 		vm.pushMessage = function(message, isNew = true){
 
-	        if (!vm.thread.messages.inArray(function(e) { return e.id === message.id; })) {
-	            vm.thread.messages.push(message);
-	            if(isNew) vm.thread.messages_count += 1;
-	        }
+			if (!vm.thread.messages.inArray(function(e) { return e.id === message.id; })) {
+				vm.thread.messages.push(message);
+				if(isNew) vm.thread.messages_count += 1;
+			}
 
 		}
 
@@ -62,30 +54,33 @@ angular.module('messages', []).controller('ThreadsCtrl', [
 			});
 		}
 
+		vm.inputHasMessage = function(){
+	        return angular.isString(vm.text) ? !!vm.text.replace(/^\s+|\s+$/g, '') : false;
+		}
+
 		$interval(function(){
 			vm.load(1);
 		}, 30000);
-
 
 	}])
 
 
 .directive("ngHeight", ['$window', function ($window) {
-		return function(scope, element, attrs) {
-			var nd = 240;
-			if(attrs.max) nd = attrs.max;
+	return function(scope, element, attrs) {
+		var nd = 240;
+		if(attrs.max) nd = attrs.max;
 
-			element.css('max-height',  $window.innerHeight - nd +'px');
-			angular.element($window).bind("resize", function() {
-				var ch = $window.innerHeight - nd;
-				element.css('max-height', ch +'px');
+		element.css('max-height',  $window.innerHeight - nd +'px');
+		angular.element($window).bind("resize", function() {
+			var ch = $window.innerHeight - nd;
+			element.css('max-height', ch +'px');
             //if(ch < element[0].height) {
             //console.log(ch, $window.innerHeight, element[0]);
             //    element.css('width', '100%');
             //}
         });
-		};
-	}]);
+	};
+}]);
 
 
 

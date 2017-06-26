@@ -18,11 +18,23 @@ class ServerStatus extends Notification
         $this->data = $data;
     }
 
+    /**
+     * Get the notification channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array|string
+     */
     public function via()
     {
         return ['slack'];
     }
-
+    
+    /**
+     * Get the Slack representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return SlackMessage
+     */
     public function toSlack(): SlackMessage
     {
         return (new SlackMessage)->attachment(function ($attachment) {

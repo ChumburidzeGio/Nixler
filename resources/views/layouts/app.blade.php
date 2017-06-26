@@ -2,7 +2,7 @@
 
 @section('app')
     
-    <div class="_pb15 _mih100vh">
+    <div class="_pb15 _mih90vh">
         <nav class="_clear _b0 _bgw _bb1 _cb _ma _tac _mb15" ng-controller="NavCtrl as vm">
 
         @if(session('message'))
@@ -51,10 +51,10 @@
                 @endif
             </div>
 
-            <div class="_dib _oh _posr _brds3" style="width: 100%; max-width: 500px;margin-top: 7px;" id="search-container">
+            <div class="_dib _oh _posr _brds3" id="search-container">
                 <form class="_fg _db _w100" action="{{ route('feed') }}">
-                    <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="@lang('Search for products and accounts')" style="padding-left: 45px; height: 34px;" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
-                        <i class="material-icons _a8 _fs20 _ml15" style="margin-top: 8px;">search</i>
+                    <input class="_fe _b1 _bw2 _bcgt _bgwt9 _fcsbuy _fcsbw" placeholder="@lang('Search for products and accounts')" name="query" minlength="3" required="" value="{{ request()->input('query') }}" id="search">
+                        <i class="material-icons _a8 _fs20 _ml15">search</i>
                 </form>
             </div>
 
@@ -95,12 +95,13 @@
                         <i class="material-icons _fs20 _mr15">person</i> @lang('Profile')
                     </a>
                     <a href="{{ route('threads') }}" class="_li _fs13 _hvrd _cg">
-                        <span class="_posr _dib">
                             <i class="material-icons _fs20 _mr15">message</i>
-                            @if(auth()->user()->getMeta('has_messages'))
-                            <span class="_p5 _brds50 _bgr _a2 _posa _mr5"></span>
+                            @lang('Messages')
+                            @if(auth()->user()->notifications_count)
+                            <span class="_right _fs11 _cw _bgr _brds3 _p3 _pl5 _pr5">
+                                {{ auth()->user()->notifications_count }}
+                            </span>
                             @endif
-                        </span> @lang('Messages')
                     </a>
                     <a href="{{ route('settings.orders') }}" class="_li _fs13 _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">shopping_basket</i> @lang('Orders')

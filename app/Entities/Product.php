@@ -30,7 +30,10 @@ class Product extends Model
     public $table = 'products';
     
     protected $fillable  = [
-        'title', 'description',  'price', 'status', 'currency', 'owner_id', 'owner_username', 'category_id', 'in_stock', 'buy_link', 'id_used', 'has_variants', 'is_active', 'sku', 'sales_count'
+        'title', 'description',  'price', 'status', 'currency', 
+        'owner_id', 'owner_username', 'category_id', 'in_stock', 
+        'buy_link', 'id_used', 'has_variants', 'is_active', 'sku', 
+        'sales_count', 'comments_count', 'views_count'
     ];
 
 
@@ -163,7 +166,7 @@ class Product extends Model
 
         $this->is_active = false;
 
-        auth()->user()->streamsRemove($this->id);
+        $this->owner->streamsRemove($this->id);
 
         return $this->update();
     }

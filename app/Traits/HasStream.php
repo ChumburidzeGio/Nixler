@@ -59,17 +59,6 @@ trait HasStream {
     
     
     /**
-     * Get stream by someone of model by type
-     *
-     * @return collection
-     */
-    public function stream()
-    {   
-        return $this->belongsToMany(Product::class, 'feeds', 'user_id', 'object_id');
-    }
-    
-    
-    /**
      * Unpublish object from feeds
      *
      * @return void

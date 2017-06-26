@@ -50,6 +50,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('phone', function ($attribute, $value, $parameters) {
 
             $phone = PhoneService::parse($value, array_first($parameters));
+            
             return $phone->is_valid;
             
         });

@@ -7,8 +7,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 class SoldNotificationEmail extends Mailable
 {
-
+    /**
+     * @var string
+     */
     public $url;
+
     /**
      * Create a new message instance.
      *

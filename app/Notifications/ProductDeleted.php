@@ -21,9 +21,11 @@ class ProductDeleted extends Notification
     {
         return [RecommChannel::class];
     }
-
+    
     /**
-     * @return array
+     * Get the Recommend representation of the notification.
+     *
+     * @param  mixed  $notifiable
      */
     public function toRecomm($product, $service)
     {

@@ -19,11 +19,23 @@ class ExceptionThrown extends Notification
         $this->exception = $exception;
     }
 
+    /**
+     * Get the notification channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array|string
+     */
     public function via()
     {
         return ['slack'];
     }
-
+    
+    /**
+     * Get the Slack representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return SlackMessage
+     */
     public function toSlack(): SlackMessage
     {
         $e = $this->exception;

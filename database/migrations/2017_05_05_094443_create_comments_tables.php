@@ -19,6 +19,7 @@ class CreateCommentsTables extends Migration
             $table->integer('user_id')->unsigned();
             $table->morphs('target');
             $table->text('text')->nullable();
+            $table->integer('media_id')->unsigned()->nullable();
             $table->timestamps();
 
         });

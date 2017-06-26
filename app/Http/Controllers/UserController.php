@@ -29,7 +29,7 @@ class UserController extends Controller
      */
     public function find($id, Request $req)
     {   
-        $tab_whitelist = ['products', 'followers', 'followings', 'photos'];
+        $tab_whitelist = ['products', 'followers', 'followings', 'photos', 'about'];
 
         $tab = $req->has('tab') && in_array($req->input('tab'), $tab_whitelist) ? $req->input('tab') : 'profile';
 
@@ -55,7 +55,9 @@ class UserController extends Controller
      */
     public function follow($id, Request $request)
     {   
-        return redirect($this->repository->follow($id)->link());
+        $this->repository->follow($id);
+
+        return redirect()->back();
     }
 
 

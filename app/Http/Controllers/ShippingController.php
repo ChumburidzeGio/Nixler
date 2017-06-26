@@ -124,4 +124,22 @@ class ShippingController extends Controller
         return redirect()->route('shipping.settings', ['ref' => $request->input('ref')]);
     }
 
+    /**
+     * Update the specified resource in storage.
+     * @param  Request $request
+     * @return Response
+     */
+    public function updatePayment(Request $request)
+    {
+        $this->validate($request, [
+              'cod' => 'required|in:1,0',
+              'bank_transaction' => 'required|in:1,0',
+              'bank_credentials' => 'nullable|string',
+        ]);
+        
+        $this->repository->paymentSettingsUpdate($request->all());
+
+        return redirect()->route('shipping.settings', ['ref' => $request->input('ref')]);
+    }
+
 }

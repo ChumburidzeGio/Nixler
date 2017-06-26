@@ -100,6 +100,7 @@ return [
                 'thumb' => [100, 100],
                 'thumb_s' => [50, 50],
                 'order_cover' => [460, 460],
+                'full' => [null, 600],
             ] 
         ],
         'product' => [
@@ -108,6 +109,7 @@ return [
                 'full' => [null, 600],
                 'short-card' => [300, 330],
                 'similar' => [60, 60],
+                'comment-attachment' => [530, null],
             ]
         ]
     ]

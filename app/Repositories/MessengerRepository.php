@@ -33,7 +33,7 @@ class MessengerRepository extends BaseRepository {
 
         $user->save();
 
-        $threads = $user->threads()->has('messages')->with('latestMessage')->withParticipantsExcept($user)->latest('updated_at')->take(10)->get();
+        $threads = $user->threads()->has('messages')->with('latestMessage')->withParticipantsExcept($user)->latest('updated_at')->paginate(30);
 
         return $threads->map(function($item) {
 
@@ -41,7 +41,8 @@ class MessengerRepository extends BaseRepository {
             $ps = $item->participants;
 
             return [
-                'link' => route('thread', ['id' => $item->id]),
+                'id' => $item->id,
+                'link' => route('threads', ['id' => $item->id]),
                 'photo' => $ps->first() ? $ps->first()->avatar('comments') : null,
                 'name' => $ps->pluck('name')->implode(', '),
                 'message' => $message ? strip_tags($message->body_parsed) : '',
@@ -185,7 +186,12 @@ class MessengerRepository extends BaseRepository {
     {
         $thread = $sender->threads()->whereHas('participants', function ($query) use($messagable) {
             $query->where('thread_participants.user_id', $messagable->id);
-        })->first();
+        })->where('is_private', true)->first();
+
+        if($thread && $thread->participants()->count() > 2) {
+            $thread->delete();
+            $thread = null;
+        }
 
         if(!$thread){
 
@@ -244,13 +250,13 @@ class MessengerRepository extends BaseRepository {
      */
     public function sendMessageToThread($thread, $sender, $message)
     {
-        $thread->participants()->where('users.id', '<>', $sender->id)->get()->map(function($user){
-            $this->refreshNotificationsCount($user);
-        });
-
         Participant::where('user_id', $sender->id)->where('thread_id', $thread->id)->update([
             'last_read' => (new \Carbon\Carbon)
         ]);
+        
+        $thread->participants()->where('users.id', '<>', $sender->id)->get()->map(function($user){
+            $this->refreshNotificationsCount($user);
+        });
 
         return Message::create([
             'user_id' => $sender->id,

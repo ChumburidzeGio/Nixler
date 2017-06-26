@@ -4,8 +4,6 @@ namespace App\Entities;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use App\Traits\Merchant;
-use App\Traits\HasMessages;
 use App\Traits\HasStream;
 use Intervention\Image\ImageManagerStatic as Image;
 use Overtrue\LaravelFollow\FollowTrait;
@@ -22,16 +20,17 @@ use App\Entities\Country;
 use App\Entities\City;
 use App\Entities\Product;
 use App\Entities\ShippingPrice;
-use Laravel\Scout\Searchable;
+use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
 use Lab404\Impersonate\Models\Impersonate;
 use App\Services\SystemService;
+use DB;
 
 
 class User extends Authenticatable
 {
-    use Notifiable, Mediable, Metable, FollowTrait, Merchant, HasMessages, HasStream, Sluggable, Searchable, SoftDeletes, HasRolesAndAbilities, Impersonate;
+    use Notifiable, Mediable, Metable, FollowTrait, HasStream, Sluggable, Searchable, SoftDeletes, HasRolesAndAbilities, Impersonate;
 
     /**
      * Return the sluggable configuration array for this model.
@@ -79,7 +78,6 @@ class User extends Authenticatable
         'name', 'email', 'password', 'currency', 'country', 'locale', 'timezone', 'city_id'
     ];
 
-
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -88,7 +86,6 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
-
 
     /**
      * The attributes that should be mutated to dates.
@@ -106,24 +103,20 @@ class User extends Authenticatable
         return $this->hasMany(Profile::class, 'user_id');
     }
 
-
     public function emails()
     {   
         return $this->hasMany(Email::class, 'user_id');
     }
-
 
     public function phones()
     {   
         return $this->hasMany(Phone::class, 'user_id');
     }
 
-
     public function sessions()
     {   
         return $this->hasMany(Session::class, 'user_id');
     }
-
 
     public function addresses()
     {   
@@ -134,7 +127,6 @@ class User extends Authenticatable
     {   
         return $this->hasMany(ShippingPrice::class, 'user_id');
     }
-
 
     public function country()
     {   
@@ -150,24 +142,20 @@ class User extends Authenticatable
     {   
         return $this->hasMany(Product::class, 'owner_id');
     }
-
-
-    /**
-     *  Change the avatar of model
-     */
-    public function changeAvatar($source){
-       return $this->uploadPhoto($source, 'avatar');
+    
+    public function liked()
+    {   
+        return $this->belongsToMany(Product::class, 'activities', 'actor', 'object')->where('verb', 'product:liked');
     }
 
+    public function stream()
+    {   
+        return $this->belongsToMany(Product::class, 'feeds', 'user_id', 'object_id');
+    }
 
-    /**
-     *  Change the avatar of model
-     */
     public function city(){
        return $this->hasOne(City::class, 'id', 'city_id');
     }
-
-
 
     /**
      *  Upload photo to model
@@ -204,8 +192,6 @@ class User extends Authenticatable
     }
 
 
-
-
     /**
      *  Get the avatar
      */
@@ -213,13 +199,6 @@ class User extends Authenticatable
         return url('avatars/'.$this->attributes['id'].'/'.$place);
     }
 
-    /**
-     *  Get the cover
-     */
-    public function cover($place){
-        $media = $this->firstMedia('cover');
-        return url('media/'.($media ? $media->id : '-').'/cover/'.$place.'.jpg');
-    }
 
     /**
      *  Get the cover
@@ -279,6 +258,26 @@ class User extends Authenticatable
     public function canImpersonate()
     {
         return $this->can('impersonate');
+    }
+
+
+    /**
+     * Get about all users if we follow
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeIsFollowing($query)
+    {
+        if(auth()->guest()) {
+            return $query->select('users.id', 'name', 'username', DB::raw('0 as following'));
+        }
+
+        return $query->leftJoin('followers as me', function ($join) {
+                    $join->on('me.follow_id', '=', 'followers.follow_id')
+                         ->where('me.user_id', '=', auth()->id());
+                })
+                ->select('users.id', 'name', 'username', DB::raw('case when me.id is null then 0 else 1 end as following'));
     }
 
 

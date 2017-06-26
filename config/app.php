@@ -14,7 +14,7 @@ return [
 
     'name' => 'Nixler',
 
-    'version' => env('APP_VERSION', '1.90'),
+    'version' => env('APP_VERSION', '1.93'),
 
     /*
     |--------------------------------------------------------------------------
@@ -219,6 +219,8 @@ return [
         App\Providers\GoogleDriveServiceProvider::class,
         Spatie\DemoMode\DemoModeServiceProvider::class,
         Torann\LaravelMetaTags\MetaTagsServiceProvider::class,
+        Spatie\Analytics\AnalyticsServiceProvider::class,
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*
@@ -290,6 +292,8 @@ return [
         'Linguist'  => Keevitaja\Linguist\Facades\LinguistFacade::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'MetaTag'   => Torann\LaravelMetaTags\Facades\MetaTag::class,
+        'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
+        'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
         //'BotMan' => Mpociot\BotMan\Facades\BotMan::class,
     ],
 
