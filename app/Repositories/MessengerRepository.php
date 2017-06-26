@@ -253,16 +253,18 @@ class MessengerRepository extends BaseRepository {
         Participant::where('user_id', $sender->id)->where('thread_id', $thread->id)->update([
             'last_read' => (new \Carbon\Carbon)
         ]);
+
+        $message = Message::create([
+            'user_id' => $sender->id,
+            'thread_id' => $thread->id,
+            'body' => $message
+        ]);
         
         $thread->participants()->where('users.id', '<>', $sender->id)->get()->map(function($user){
             $this->refreshNotificationsCount($user);
         });
 
-        return Message::create([
-            'user_id' => $sender->id,
-            'thread_id' => $thread->id,
-            'body' => $message
-        ]);
+        return $message;
     }
 
 

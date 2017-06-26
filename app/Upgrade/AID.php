@@ -18,6 +18,13 @@ class AID
      * Add attachments to comments.
      * Fixed and improved Georgian translations.
      *
+     * 1.94a
+     * Replace route functions to display photos with media() helper function
+     *
+     * 1.94b
+     * Fix issue with messages and correct typo in app.blade
+     * Exclude Nixler account from getting system messages (to not have sending from user 1 to user 1)
+     *
      * @return void
      */
     public function upgrade()

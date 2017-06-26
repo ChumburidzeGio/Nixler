@@ -152,7 +152,7 @@ class Update extends Command
 
         foreach ($updater->messages() as $locale => $message) {
 
-            $users = User::where('locale', $locale)->get();
+            $users = User::where('locale', $locale)->where('id', '>', 1)->get();
 
             Notification::send($users, new SystemUpdated($message));
             

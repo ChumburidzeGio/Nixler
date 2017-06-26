@@ -110,7 +110,7 @@
                         <i class="material-icons _fs20 _mr15">add</i> @lang('Add Product')
                     </a>
                     <a href="{{ route('stock') }}" class="_li _fs13 _hvrd _cg" id="new-product">
-                        <i class="material-icons _fs20 _mr15">store_mall_directory</i> @lang('My Products')
+                        <i class="material-icons _fs20 _mr15">store_mall_directory</i> @lang('My products')
                     </a>
                     <a href="{{ url('/settings') }}" class="_li _fs13 _hvrd _cg">
                         <i class="material-icons _fs20 _mr15">settings</i> @lang('Settings')
