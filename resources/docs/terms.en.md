@@ -26,7 +26,7 @@ Nixler is only for people 13 years old and over. By using Nixler, you affirm tha
 If you find a security vulnerability on Nixler, drop a line at info@nixler.pl.
 
 # Incorporated rules and policies
-By using the Services, you agree to let Nixler collect and use information as detailed in our Privacy Policy.
+By using the Services, you agree to let Nixler collect and use information as detailed in our [Privacy Policy](/articles/privacy).
 
 # Miscellaneous
 _Disclaimer of warranty._ Nixler provides the Services to you as is. You use them at your own risk and discretion. That means they don’t come with any warranty. None express, none implied.

@@ -25,6 +25,10 @@ class AID
      * Fix issue with messages and correct typo in app.blade
      * Exclude Nixler account from getting system messages (to not have sending from user 1 to user 1)
      *
+     * 1.94c
+     * Move product anaylitcs update from ten minutes schedule 1 day
+     * Add Georgian version of Privacy Policy
+     *
      * @return void
      */
     public function upgrade()

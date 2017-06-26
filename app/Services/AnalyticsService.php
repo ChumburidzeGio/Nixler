@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use Spatie\Analytics\Period;
+use Analytics;
 use App\Entities\User;
 use App\Entities\Metric;
+use Carbon\Carbon;
 use Lava;
 
 class AnalyticsService
@@ -14,7 +16,7 @@ class AnalyticsService
     {
         $period = Period::days(1);
 
-        $response = \Analytics::performQuery($period, 'ga:pageviews', [
+        $response = Analytics::performQuery($period, 'ga:pageviews', [
             'dimensions' => 'ga:pagePath',
             'filters' => "ga:pagePath=@/@",
         ]);

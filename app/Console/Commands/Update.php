@@ -56,10 +56,13 @@ class Update extends Command
     public function legal()
     {
         $privacy_en = file_get_contents(resource_path('docs/privacy.en.md'));
+        $privacy_ka = file_get_contents(resource_path('docs/privacy.ka.md'));
 
         app(BlogRepository::class)->updateOrCreateBySlug('privacy', [
             'title:en' => 'Welcome to the Nixler Privacy Policy',
-            'body:en' => $privacy_en
+            'title:ka' => 'კონფიდენციალურობის პოლიტიკა',
+            'body:en' => $privacy_en,
+            'body:ka' => $privacy_ka
         ]);
 
         $terms_en = file_get_contents(resource_path('docs/terms.en.md'));

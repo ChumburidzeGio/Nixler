@@ -52,6 +52,8 @@ class Kernel extends ConsoleKernel
 
         app(UserRepository::class)->updateAnalytics();
 
+        app(ProductRepository::class)->updateAnalytics();
+
         info('Daily schedule executed succesfully.');
     }
 
@@ -63,8 +65,6 @@ class Kernel extends ConsoleKernel
     public function everyTenMinutesSchedule()
     {
         app(UserRepository::class)->updateStreams();
-
-        app(ProductRepository::class)->updateAnalytics();
 
         app(MonitorFactory::class)->get();
 
