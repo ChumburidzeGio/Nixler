@@ -401,9 +401,11 @@ class UserRepository extends BaseRepository {
 
             $carbon = Carbon::createFromTimestamp($session->last_activity);
 
+            $geoip = geoip($session->ip_address);
+
             return [
                 'id' => $session->id,
-                'location' => array_get(geoip($session->ip_address), 'country') ?? 'Undefined',
+                'location' => array_get($geoip, 'country'). ' ' .array_get($geoip, 'city'),
                 'user_agent' => $agent->browser(),
                 'ip_address' => $session->ip_address,
                 'time' => $carbon->diffForHumans(),
