@@ -90,6 +90,7 @@ Auth::routes();
 
 			Route::get('orders', 'SettingsController@orders')->name('settings.orders');
 			Route::get('analytics', 'SettingsController@analytics')->name('settings.analytics');
+			Route::get('sessions', 'SettingsController@sessions')->name('settings.sessions');
 
 			//Locale
 			Route::post('locale', 'SettingsController@updateLocale');

@@ -38,7 +38,7 @@
 				</a>
 				</div>
 				@else
-				<div class="_posr _clear _mih250 _tac">
+				<div class="_posr _clear _mih250 _tac _os">
 					<div class="_a0 _posa">
 						<span class="_fs16 _c2">@lang('A list of dialogs is empty.')</span><br>
 						@lang('To contact someone go to profile of this person and click "Message"')

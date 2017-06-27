@@ -24,7 +24,7 @@
 					@lang('My products')
 				</a>
 
-				<!--a class="_lsti {{ request()->is('stock') ? 'active' : ''}}" href="{{ route('stock') }}">
+				<!--a class="_lsti {{ request()->is('*/sessions') ? 'active' : ''}}" href="{{ route('settings.sessions') }}">
 					<i class="material-icons">important_devices</i>
 					@lang('Sessions')
 				</a-->

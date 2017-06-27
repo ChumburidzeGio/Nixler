@@ -63,3 +63,4 @@ Reboot your system (`vagrant reload`) and enjoy
 # Resources
 
 * [Georgian Technical Dictionary](http://techdict.ge/)
+* [CSS Hues](https://webkul.github.io/coolhue/)

@@ -385,4 +385,43 @@ class UserRepository extends BaseRepository {
         return $this->model->whereKeyword($query)->take(6)->get();
     }
 
+
+    /**
+     * Search in users
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function getSessions()
+    {
+        return DB::table('sessions')->where('user_id', auth()->id())->get()->map(function($session) {
+
+            $agent = app('agent');
+
+            $agent->setUserAgent($session->user_agent);
+
+            $carbon = Carbon::createFromTimestamp($session->last_activity);
+
+            return [
+                'id' => $session->id,
+                'location' => array_get(geoip($session->ip_address), 'country') ?? 'Undefined',
+                'user_agent' => $agent->browser(),
+                'ip_address' => $session->ip_address,
+                'time' => $carbon->diffForHumans(),
+                'is_current' => (session()->getId() == $session->id) ? 'Current session' : ''
+            ];
+        });
+    }
+
+
+
+    /**
+     * Search in users
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function killSessionById($id)
+    {
+        return session()->getHandler()->destroy($id);
+    }
+
 }

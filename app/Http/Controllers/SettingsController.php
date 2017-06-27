@@ -111,4 +111,17 @@ class SettingsController extends Controller
         return view('users.settings.orders', compact('user', 'order', 'orders'));
     }
 
+    /**
+     * Show the specified resource.
+     * @return Response
+     */
+    public function sessions(Request $request)
+    {
+        $user = auth()->user();
+       
+        $sessions = $this->repository->getSessions();
+        
+        return view('users.settings.sessions', compact('sessions'));
+    }
+
 }

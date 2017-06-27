@@ -29,6 +29,9 @@ class AID
      * Move product anaylitcs update from ten minutes schedule 1 day
      * Add Georgian version of Privacy Policy
      *
+     * 1.95d
+     * Add Sessions to settings
+     *
      * @return void
      */
     public function upgrade()
