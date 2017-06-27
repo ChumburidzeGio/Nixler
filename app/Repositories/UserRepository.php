@@ -405,7 +405,11 @@ class UserRepository extends BaseRepository {
 
             $user_agent = $agent->browser();
 
-            $user_agent .= ' on ' . $agent->platform();
+            $platform = $agent->platform();
+            
+            $platform_version = $agent->version($platform);
+
+            $user_agent .= ' on ' . $platform . ' ' .$platform_version;
 
             if(!$agent->isDesktop()) {
                 $user_agent .= '(' . $agent->device() . ')';
