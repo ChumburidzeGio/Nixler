@@ -34,14 +34,7 @@
             @empty
             <div class="_posr _clear _mih250 _tac">
                 <div class="_a0 _posa">
-                    <span class="_fs16 _c2">@lang('A list of orders is empty.')</span><br>
-                    @lang('Here will appear orders when you will buy something or when someone will buy your products.')<br>
-
-                    <a class="_btn _bga _c2 _mt15" style="line-height: 29px;" href="{{ route('feed') }}">
-                        @lang('Start shopping')
-                        <i class="material-icons _fs20 _va6">chevron_right</i>
-                    </a>
-
+                    <span class="_fs16 _c2">@lang('A list of sessons is empty.')</span><br>
                 </div>
             </div>
 

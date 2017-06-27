@@ -403,10 +403,18 @@ class UserRepository extends BaseRepository {
 
             $geoip = geoip($session->ip_address);
 
+            $user_agent = $agent->browser();
+
+            $user_agent .= ' on ' . $agent->platform();
+
+            if(!$agent->isDesktop()) {
+                $user_agent .= '(' . $agent->device() . ')';
+            }
+
             return [
                 'id' => $session->id,
                 'location' => array_get($geoip, 'country'). ', ' .array_get($geoip, 'city'),
-                'user_agent' => $agent->browser(). ' on '. $agent->device(),
+                'user_agent' => $user_agent,
                 'ip_address' => $session->ip_address,
                 'time' => $carbon->diffForHumans(),
                 'is_current' => (session()->getId() == $session->id) ? 'Current session' : ''
