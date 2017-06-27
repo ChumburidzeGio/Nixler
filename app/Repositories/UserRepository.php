@@ -405,8 +405,8 @@ class UserRepository extends BaseRepository {
 
             return [
                 'id' => $session->id,
-                'location' => array_get($geoip, 'country'). ' ' .array_get($geoip, 'city'),
-                'user_agent' => $agent->browser(),
+                'location' => array_get($geoip, 'country'). ', ' .array_get($geoip, 'city'),
+                'user_agent' => $agent->browser(). ' on '. $agent->device(),
                 'ip_address' => $session->ip_address,
                 'time' => $carbon->diffForHumans(),
                 'is_current' => (session()->getId() == $session->id) ? 'Current session' : ''
