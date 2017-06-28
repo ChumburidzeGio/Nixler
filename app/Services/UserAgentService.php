@@ -31,13 +31,7 @@ class UserAgentService
 	 */
 	function parse( $u_agent = null ) {
 
-		if( is_null($u_agent) ) {
-			if( isset($_SERVER['HTTP_USER_AGENT']) ) {
-				$u_agent = $_SERVER['HTTP_USER_AGENT'];
-			} else {
-				throw new \InvalidArgumentException('parse_user_agent requires a user agent');
-			}
-		}
+		$u_agent = $u_agent ?? request()->header('User-Agent');
 
 		$platform = null;
 		$browser  = null;
@@ -51,31 +45,8 @@ class UserAgentService
 
 		if( preg_match('/\((.*?)\)/im', $u_agent, $parent_matches) ) {
 
-			preg_match_all('/(?P<platform>BB\d+;|Android|CrOS|Tizen|iPhone|iPad|iPod|Linux|Macintosh|Windows(\ Phone)?|Silk|linux-gnu|BlackBerry|PlayBook|(New\ )?Nintendo\ (WiiU?|3?DS)|Xbox(\ One)?)
-				(?:\ [^;]*)?
-				(?:;|$)/imx', $parent_matches[1], $result, PREG_PATTERN_ORDER);
+			$platform = $this->getPlatform($parent_matches);
 
-			$priority           = array( 'Xbox One', 'Xbox', 'Windows Phone', 'Tizen', 'Android' );
-
-			$result['platform'] = array_unique($result['platform']);
-
-			if( count($result['platform']) > 1 ) {
-
-				if( $keys = array_intersect($priority, $result['platform']) ) {
-					$platform = reset($keys);
-				} else {
-					$platform = $result['platform'][0];
-				}
-
-			} elseif( isset($result['platform'][0]) ) {
-				$platform = $result['platform'][0];
-			}
-		}
-
-		if( $platform == 'linux-gnu' ) {
-			$platform = 'Linux';
-		} elseif( $platform == 'CrOS' ) {
-			$platform = 'Chrome OS';
 		}
 
 		preg_match_all('%(?P<browser>Camino|Kindle(\ Fire)?|Firefox|Iceweasel|Safari|MSIE|Trident|AppleWebKit|TizenBrowser|Chrome|
@@ -215,5 +186,46 @@ class UserAgentService
 		}
 
 		return array( 'platform' => $platform ?: null, 'browser' => $browser ?: null, 'version' => $version ?: null, 'platform_version' => $platform_version ?: null );
+	}
+
+
+	/**
+	 * Parses platform
+	 *
+	 * @return string
+	 */
+	function getPlatform( $parent_matches ) {
+
+		$platform = null;
+
+		preg_match_all('/(?P<platform>BB\d+;|Android|CrOS|Tizen|iPhone|iPad|iPod|Linux|Macintosh|Windows
+			(\ Phone)?|Silk|linux-gnu|BlackBerry|PlayBook|(New\ )?Nintendo\ (WiiU?|3?DS)|Xbox(\ One)?)
+			(?:\ [^;]*)?
+			(?:;|$)/imx', $parent_matches[1], $result, PREG_PATTERN_ORDER);
+
+		$priority = array( 'Xbox One', 'Xbox', 'Windows Phone', 'Tizen', 'Android' );
+
+		$result['platform'] = array_unique($result['platform']);
+
+		if( count($result['platform']) > 1 ) {
+
+			if( $keys = array_intersect($priority, $result['platform']) ) {
+				$platform = reset($keys);
+			} else {
+				$platform = $result['platform'][0];
+			}
+
+		} elseif( isset($result['platform'][0]) ) {
+			$platform = $result['platform'][0];
+		}
+
+		if( $platform == 'linux-gnu' ) {
+			$platform = 'Linux';
+		} elseif( $platform == 'CrOS' ) {
+			$platform = 'Chrome OS';
+		}
+
+		return $platform;
+
 	}
 }

@@ -20,8 +20,8 @@ trait Searchable {
     	if(!$query) {
     		return $builder;
     	}
-    	
-        $query = $query . " " . str_slug($query);
+
+        $query = str_slug($query) !== $query ? $query . " " . str_slug($query) : $query;
 
     	$tnt = new TNTSearch();
 
@@ -41,7 +41,7 @@ trait Searchable {
 
 		$ids_ordered = implode(',', $ids);
 
-    	return $ids ? $builder->whereIn('id', $ids)->orderBy(DB::raw("FIELD(id, $ids_ordered)")) : $builder;
+    	return $ids ? $builder->whereIn('id', $ids)->orderBy(DB::raw("FIELD(id, $ids_ordered)")) : $builder->whereNull('id');
     }
     
 }
