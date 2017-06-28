@@ -2,7 +2,7 @@
     "name": "nixler/web",
     "description": "Nixler main web app.",
     "keywords": ["nixler", "shopping"],
-    "version": "1.90",
+    "version": "1.94",
     "license": "",
     "type": "project",
     "require": {
@@ -25,7 +25,6 @@
         "guzzlehttp/guzzle": "^6.2",
         "intervention/image": "^2.3",
         "intervention/imagecache": "^2.3",
-        "jenssegers/agent": "^2.5",
         "keen-io/keen-io": "^2.5",
         "keevitaja/linguist": "^1.0",
         "khill/lavacharts": "^3.1",

@@ -14,6 +14,7 @@ use App\Services\PhoneService;
 use App\Services\RecommService;
 use App\Services\SystemService;
 use App\Services\AnalyticsService;
+use App\Services\UserAgentService;
 use App\Notifications\SendVerificationCode;
 use Carbon\Carbon;
 use Session, DB;
@@ -393,35 +394,21 @@ class UserRepository extends BaseRepository {
      */
     public function getSessions()
     {
-        return DB::table('sessions')->where('user_id', auth()->id())->get()->map(function($session) {
-
-            $agent = app('agent');
-
-            $agent->setUserAgent($session->user_agent);
+        $sessions = DB::table('sessions')->where('user_id', auth()->id())->whereNotNull('user_id')->get();
+        
+        return $sessions->map(function($session) {
 
             $carbon = Carbon::createFromTimestamp($session->last_activity);
 
             $geoip = geoip($session->ip_address);
 
-            $user_agent = $agent->browser();
-
-            $platform = $agent->platform();
-            
-            $platform_version = $agent->version($platform);
-
-            $user_agent .= ' on ' . $platform . ' ' .$platform_version;
-
-            if(!$agent->isDesktop()) {
-                $user_agent .= '(' . $agent->device() . ')';
-            }
-
             return [
                 'id' => $session->id,
                 'location' => array_get($geoip, 'country'). ', ' .array_get($geoip, 'city'),
-                'user_agent' => $user_agent,
+                'user_agent' => app(UserAgentService::class)->forHumans($session->user_agent),
                 'ip_address' => $session->ip_address,
                 'time' => $carbon->diffForHumans(),
-                'is_current' => (session()->getId() == $session->id) ? 'Current session' : ''
+                'is_current' => (session()->getId() == $session->id)
             ];
         });
     }

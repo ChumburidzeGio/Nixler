@@ -10,23 +10,26 @@
             <div class="row">
                 <div class="col-xs-2">@lang('IP Address')</div>
                 <div class="col-xs-3">@lang('Location')</div>
-                <div class="col-xs-3">@lang('User Agent')</div>
+                <div class="col-xs-4">@lang('User Agent')</div>
                 <div class="col-xs-2">@lang('Time')</div>
-                <div class="col-xs-2"></div>
             </div>
 
         </span>
 
         <div id="orders">
             @forelse($sessions as $session)
-            <span class="_lim _clear _pl15 _pr15 _hvrl _bt1 _bcg">
+            <span class="_lim _clear _pl15 _pr15 _hvrl _bt1 _bcg{{ $session['is_current'] ? ' _bgwt8' : '' }}">
 
                 <div class="row">
-                    <span class="_oh col-xs-2">{{ $session['ip_address'] }}</span>
+                    <span class="_oh col-xs-2">
+                        @if($session['is_current'])
+                        <span class="_p5 _bggr _brds50 _dib"></span> 
+                        @endif
+                        {{ $session['ip_address'] }}
+                    </span>
                     <span class="_oh col-xs-3 _oh">{{ $session['location'] }}</span>
-                    <span class="_oh col-xs-3 _oh">{{ $session['user_agent'] }}</span>
+                    <span class="_oh col-xs-4 _oh">{{ $session['user_agent'] }}</span>
                     <span class="_oh col-xs-2">{{ $session['time'] }}</span>
-                    <span class="_oh col-xs-2">{{ $session['is_current'] }}</span>
                 </div>
 
             </span>
