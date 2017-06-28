@@ -21,7 +21,7 @@
             <span class="_lim _clear _pl15 _pr15 _hvrl _bt1 _bcg{{ $session['is_current'] ? ' _bgwt8' : '' }}">
 
                 <div class="row">
-                    <span class="_oh col-xs-2">
+                    <span class="_oh col-xs-2 _telipsis">
                         @if($session['is_current'])
                         <span class="_p5 _bggr _brds50 _dib"></span> 
                         @endif
