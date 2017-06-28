@@ -32,6 +32,9 @@ class AID
      * 1.95d
      * Add Sessions to settings
      *
+     * 1.95e
+     * Add 500 error page and fix issue with search
+     *
      * @return void
      */
     public function upgrade()
