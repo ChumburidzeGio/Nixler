@@ -103,6 +103,7 @@ class ProductRepository extends BaseRepository {
         $model = $this->model->where([
             'is_active' => 0,
             'owner_id' => $user->id,
+            'in_stock' => 1
         ])->latest('id')->first();
 
         if($model) {
@@ -701,7 +702,7 @@ class ProductRepository extends BaseRepository {
             'product_id' => $product->id,
             'name' => array_get($variant, 'name'),
             'price' => array_get($variant, 'price'),
-            'in_stock' => array_get($variant, 'in_stock', 0),
+            'in_stock' => array_get($variant, 'in_stock', 1),
         ]);
 
         $model->save();
