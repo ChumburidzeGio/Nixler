@@ -202,7 +202,10 @@ class Product extends Model
 
         try {
 
+            dd(file_get_contents($source));
+            
             Image::configure(array('driver' => 'gd'));
+
             $image = Image::make($source)->resize(null, 900, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();

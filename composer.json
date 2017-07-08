@@ -26,6 +26,7 @@
         "guzzlehttp/guzzle": "^6.2",
         "intervention/image": "^2.3",
         "intervention/imagecache": "^2.3",
+        "jaybizzle/crawler-detect": "1.*",
         "keen-io/keen-io": "^2.5",
         "keevitaja/linguist": "^1.0",
         "khill/lavacharts": "^3.1",

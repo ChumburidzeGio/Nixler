@@ -12,7 +12,9 @@ use App\Observers\UserObserver;
 use App\Entities\User;
 use App\Services\PhoneService;
 use Illuminate\Support\Facades\Response as ResponseFacade;
+use Illuminate\Support\Facades\Request as RequestFacade;
 use Illuminate\Http\Response;
+use Jaybizzle\CrawlerDetect\CrawlerDetect;
 use Hash;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +43,14 @@ class AppServiceProvider extends ServiceProvider
             $response->header('Expires', gmdate('D, d M Y H:i:s \G\M\T', time() + 86400));
             $response->header('Last-Modified', ($media ? $media->updated_at->format('D, d M Y H:i:s \G\M\T') : time()));
             return $response;
+        });
+
+        RequestFacade::macro('isRobot', function () {
+            
+            $CrawlerDetect = new CrawlerDetect;
+
+            return $CrawlerDetect->isCrawler();
+            
         });
         
         Validator::extend('ownpass', function ($attribute, $value, $parameters) {

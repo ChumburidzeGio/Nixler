@@ -60,6 +60,7 @@
       ga('send', 'pageview');
     </script>
 
+    @if(!request()->isRobot())
     <script>
     window['_fs_debug'] = false;
     window['_fs_host'] = 'fullstory.com';
@@ -77,6 +78,7 @@
         ';path=/;expires='+new Date(0).toUTCString();i=d.indexOf('.');if(i<0)break;d=d.slice(i+1)}}};
     })(window,document,window['_fs_namespace'],'script','user');
     </script>
+    @endif
     @endif
 
     @if(config('app.country') != 'GE')

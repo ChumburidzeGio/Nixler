@@ -115,14 +115,6 @@ Auth::routes();
 
 	Route::get('/monitor', function(){
 
-		$product = \App\Entities\Product::active()->first();
-
-		$actor = auth()->user();
-
-		$seller = $product->owner;
-
-		return $seller->notify(new \App\Notifications\CommentedOnProduct($actor, $product));
-
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
 		return $monitors['fields'];
