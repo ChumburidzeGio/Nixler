@@ -17,7 +17,7 @@ class SendProductNotification
      */
     public function handle($event)
     {
-        if($event->name == 'product:publihed') {
+        if($event->name == 'product:published') {
             $event->product->notify(new ProductUpdated);
         } 
 
