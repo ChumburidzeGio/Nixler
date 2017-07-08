@@ -53,5 +53,15 @@ class LuteciaGe extends BasePattern {
     {
         return $this->crawleList('.breadcrumb li:not(:first-child):not(:last-child)');
     }
+
+    /**
+     * Parse the image of product
+     *
+     * @return array
+     */
+    public function getMedia()
+    {
+        return [$this->crawler('.image .thumbnail img')->first()->attr('src')];
+    }
     
 }
