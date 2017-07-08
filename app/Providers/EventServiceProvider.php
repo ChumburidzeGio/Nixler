@@ -13,8 +13,35 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\SomeEvent' => [
-            'App\Listeners\EventListener',
+        'App\Events\ProductPublished' => [
+            'App\Listeners\UpdateUserStats',
+            'App\Listeners\SendProductNotification',
+        ],
+        'App\Events\ProductDisabled' => [
+            'App\Listeners\UpdateUserStats',
+        ],
+        'App\Events\ProductDeleted' => [
+            'App\Listeners\UpdateUserStats',
+            'App\Listeners\SendProductNotification',
+        ],
+        'App\Events\ProductCommented' => [
+            'App\Listeners\SendCommentedNotification',
+        ],
+        'App\Events\ProductLiked' => [
+            'App\Listeners\SendLikedNotification',
+        ],
+        'App\Events\ProductDisliked' => [],
+        'App\Events\OrderCreated' => [
+            'App\Listeners\UpdateUserStats',
+        ],
+        'App\Events\UserFollowed' => [
+            'App\Listeners\UpdateUserStats',
+            'App\Listeners\SendFollowedNotification',
+            'App\Listeners\UpdateStreamOnFollowUnfollow',
+        ],
+        'App\Events\UserUnfollowed' => [
+            'App\Listeners\UpdateUserStats',
+            'App\Listeners\UpdateStreamOnFollowUnfollow',
         ],
     ];
 

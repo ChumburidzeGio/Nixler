@@ -1,5 +1,5 @@
 angular.module('products').controller('SellCtrl', [
-    '$http', 'anchorSmoothScroll', '$scope', function ($http, anchorSmoothScroll, $scope) {
+    '$http', 'anchorSmoothScroll', '$scope', 'ngDialog', function ($http, anchorSmoothScroll, $scope, ngDialog) {
 
         var vm = this;
         var product = window.product;
@@ -136,4 +136,22 @@ angular.module('products').controller('SellCtrl', [
         });
 
      }
+
+    vm.openImport = function(){
+
+        ngDialog.open({
+
+            template: '/tmp/importer.html',
+            controller: function() {
+
+                var cvm = this;
+
+            },
+            controllerAs: 'cvm',
+            showClose: 1,
+            className: 'ngdialog-theme-plain'
+        });
+
+    }
+
  }]);

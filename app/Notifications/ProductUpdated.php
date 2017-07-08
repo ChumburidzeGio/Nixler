@@ -56,8 +56,6 @@ class ProductUpdated extends Notification
             'tags' => ProductTag::where('product_id', $notifiable->id)->get()->pluck('name')->toArray(),
             'likes_count' => $notifiable->likes_count,
             'owner' => $owner->name,
-            'county' => $owner->country,
-            'created_at' => intval($notifiable->created_at->format('U')),
         ];
     }
     
@@ -69,9 +67,6 @@ class ProductUpdated extends Notification
     public function toRecomm($notifiable, $service)
     {
         $data = $this->toArray($notifiable);
-
-        unset($data['county']);
-        unset($data['created_at']);
 
         return $service->addObject($data, $notifiable->id);
     }

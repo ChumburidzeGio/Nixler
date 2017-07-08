@@ -5,6 +5,16 @@ angular.module('order', [])
 
 		var vm = this;
 		
+		vm.payment_method = 'cod';
+
+		vm.pm = function(type){
+			return vm.payment_method == type;
+		}
+
+		vm.spm = function(type){
+			vm.payment_method = type;
+		}
+
 		vm.cities = $filter('orderBy')(window.cities, 'label');
 
 		vm.pprice = window.price;

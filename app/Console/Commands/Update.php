@@ -13,6 +13,7 @@ use App\Upgrade\AIA;
 use App\Upgrade\AIB;
 use App\Upgrade\AIC;
 use App\Upgrade\AID;
+use App\Upgrade\AIE;
 use Notification;
 
 class Update extends Command
@@ -108,6 +109,7 @@ class Update extends Command
             '1.92' => AIB::class,
             '1.93' => AIC::class,
             '1.94' => AID::class,
+            '1.95' => AIE::class,
         ]);
     }
 

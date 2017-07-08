@@ -12,6 +12,7 @@ use App\Entities\ShippingPrice;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use App\Http\Requests\UpdateProduct;
+use App\Http\Requests\ImportProduct;
 use App\Http\Requests\OrderProduct;
 
 class ProductController extends Controller
@@ -87,6 +88,19 @@ class ProductController extends Controller
             __('Your product has been updated and is now live. Do you want to add another one or go to product page?');
 
         return redirect()->route('product.edit', ['id' => $id])->with('status', $status)->with('buttons', $isPublish);
+    }
+
+
+    /**
+     * Show the product page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import($id, ImportProduct $request)
+    {
+        $this->repository->import($request->input('url'), $id);
+
+        return redirect()->route('product.edit', ['id' => $id])->with('status', __('Product from url successfully imported.'));
     }
 
     /**

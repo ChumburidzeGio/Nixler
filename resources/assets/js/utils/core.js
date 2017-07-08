@@ -139,7 +139,7 @@ angular.module('utils', []).service('anchorSmoothScroll', function(){
                 signAmount = amount < 0 ? '-' : '',
                 rtl = rtl || false;
 
-            return amount + ' ' + currency;
+            return (window.nx.currency == 'USD') ? currency + amount : amount +  currency;
         };
     }])
 

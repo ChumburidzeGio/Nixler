@@ -1,6 +1,6 @@
 angular.module('products').controller('ShowCtrl', [
     '$http', '$scope', 'ngDialog', '$timeout', function ($http, $scope, ngDialog, $timeout) {
-
+      
         var vm = this;
         vm.product = window.product;
         vm.media = {};

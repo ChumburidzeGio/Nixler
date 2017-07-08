@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Repositories\BaseRepository;
 use App\Entities\User;
 use App\Entities\Metric;
-use App\Notifications\SomeoneFollowedYou;
 use App\Repositories\LocationRepository;
 use App\Repositories\ProductRepository;
 use App\Entities\Profile;
@@ -15,6 +14,8 @@ use App\Services\RecommService;
 use App\Services\SystemService;
 use App\Services\AnalyticsService;
 use App\Services\UserAgentService;
+use App\Events\UserFollowed;
+use App\Events\UserUnfollowed;
 use App\Notifications\SendVerificationCode;
 use Carbon\Carbon;
 use Session, DB;
@@ -44,12 +45,6 @@ class UserRepository extends BaseRepository {
             $user = $this->model->where('username', $username)->firstOrFail();
         }
 
-        $user->liked_count = $user->liked()->count();
-        $user->selling_count = $user->products()->active()->count();
-        $user->followers_count = $user->followers()->count();
-        $user->followings_count = $user->followings()->count();
-        $user->media_count = $user->media()->unordered()->count();
-
         if($tab == 'products'){
             $data = app(ProductRepository::class)->transformProducts(
                 $user->products()->active()->withMedia()->paginate(20)
@@ -75,7 +70,7 @@ class UserRepository extends BaseRepository {
         }
         else {
             $data = app(ProductRepository::class)->transformProducts(
-                $user->liked()->withMedia()->paginate(20)
+                $user->liked()->with('owner')->paginate(20)
             );
             $view = 'products';
         }
@@ -90,27 +85,60 @@ class UserRepository extends BaseRepository {
     public function follow($username)
     {
         $target = $this->model->whereUsername($username)->firstOrFail();
+
         $user = auth()->user();
 
-        if($user->id !== $target->id){
+        if($user->id == $target->id) return false;
 
-            if($user->isFollowing($target->id)){
+        if($user->isFollowing($target->id)){
 
-                $user->unfollow($target->id);
+            $user->unfollow($target->id);
 
-                $products = $target->products()->take(10)->orderBy('likes_count', 'desc')->active()->pluck('id');
+            event(new UserUnfollowed($target, $user));
 
-                $user->pushInStream($products, 'user:'.$target->id);
+        } else {
 
-            } else {
-                $user->follow($target->id);
-                $target->notify(new SomeoneFollowedYou($user));
-                $user->streamRemoveBySource('user:'.$target->id);
-            } 
+            $user->follow($target->id);
 
-        }
+            event(new UserFollowed($target, $user));
+
+        } 
 
         return $target;
+    }
+
+
+    /**
+     * Follow user
+     */
+    public function streamRemoveBySource($user, $actor)
+    {
+        $actor->streamRemoveBySource('user:'.$user->id);
+    }
+
+
+    /**
+     * Follow user
+     */
+    public function streamPushBySource($user, $actor)
+    {
+        $products = $user->products()->take(10)->orderBy('likes_count', 'desc')->active()->pluck('id');
+
+        $actor->pushInStream($products, 'user:'.$user->id);
+    }
+
+
+
+    /**
+     * Follow user
+     */
+    public function updateStats($user)
+    {
+        $user->update([
+            'products_count' => $user->products()->active()->count(),
+            'sales_count' => $user->sales()->count(),
+            'followers_count' => $user->followers()->count(),
+        ]);
     }
 
 
@@ -120,6 +148,7 @@ class UserRepository extends BaseRepository {
     public function deactivate()
     {
         $user = auth()->user();
+        
         return $user->delete();
     }
 

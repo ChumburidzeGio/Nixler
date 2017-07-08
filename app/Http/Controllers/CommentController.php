@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Entities\Product;
 use App\Entities\Comment;
+use App\Events\ProductCommented;
 use MediaUploader;
 use App\Services\SystemService;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -44,6 +45,8 @@ class CommentController extends Controller
 
         $product = Product::findOrFail($request->target);
 
+        $user = auth()->user();
+
         $comment = $product->comment($request->input('text'));
 
         if($request->file('file')) {
@@ -80,6 +83,8 @@ class CommentController extends Controller
 
         }
 
+        event(new ProductCommented($product, $user));
+
         return [
             'id' => $comment->id,
             'avatar' => $comment->author->avatar('comments'),
@@ -87,7 +92,7 @@ class CommentController extends Controller
             'attachment' => media($comment, 'product', 'comment-attachment', null),
             'text' => nl2br(str_limit($comment->text, 1000)),
             'time' => $comment->created_at->format('c'),
-            'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
+            'can_delete' => 1
         ];
     }
 

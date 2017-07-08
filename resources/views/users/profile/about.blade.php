@@ -5,7 +5,7 @@
 
 <div class="col-xs-12 _mt80">
 
-@if($user->selling_count)
+@if($user->products_count)
 
 	@if($user->merchant_terms)
 		<span class="_fs15 _ttu _cb _mb10 _clear">@lang('Terms & Conditions')</span>

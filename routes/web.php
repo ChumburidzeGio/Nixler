@@ -43,6 +43,7 @@ Auth::routes();
 		Route::post('/products/{id}/photos', 'ProductController@uploadPhoto')->middleware('auth')->name('product:photos:post');
 		Route::post('/products/{id}/photos/{mid}', 'ProductController@removePhoto')->middleware('auth')->name('product:photos:remove');
 		Route::post('/products/{id}', 'ProductController@update')->middleware('auth')->name('product:update');
+		Route::post('/products/{id}/import', 'ProductController@import')->middleware('auth')->name('product:import');
 		Route::delete('/products/{id}', 'ProductController@delete')->middleware('auth')->name('product:delete');
 		Route::post('/products/{id}/status', 'ProductController@changeStatus')->middleware('auth')->name('product:update:status');
 		Route::post('/products/{id}/schedule', 'ProductController@schedule')->middleware('auth')->name('product:schedule');
@@ -114,10 +115,23 @@ Auth::routes();
 
 	Route::get('/monitor', function(){
 
+		$product = \App\Entities\Product::active()->first();
+
+		$actor = auth()->user();
+
+		$seller = $product->owner;
+
+		return $seller->notify(new \App\Notifications\CommentedOnProduct($actor, $product));
+
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
 		return $monitors['fields'];
 
+	});
+
+
+	Route::get('/scrap', function(){
+		return app(\App\Crawler\Crawler::class)->toArray(request('url'));
 	});
 
 //});

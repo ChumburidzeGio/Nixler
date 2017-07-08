@@ -20,6 +20,7 @@ use App\Entities\Country;
 use App\Entities\City;
 use App\Entities\Product;
 use App\Entities\ShippingPrice;
+use App\Entities\Order;
 use App\Traits\Searchable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Silber\Bouncer\Database\HasRolesAndAbilities;
@@ -75,7 +76,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'currency', 'country', 'locale', 'timezone', 'city_id'
+        'name', 'email', 'password', 'currency', 'country', 'locale', 'timezone', 'city_id',
+        'products_count', 'sales_count', 'followers_count'
     ];
 
     /**
@@ -101,6 +103,11 @@ class User extends Authenticatable
     public function profiles()
     {   
         return $this->hasMany(Profile::class, 'user_id');
+    }
+
+    public function sales()
+    {   
+        return $this->hasMany(Order::class, 'merchant_id');
     }
 
     public function emails()

@@ -49,7 +49,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($this->shouldReport($exception)) {
+        if ($this->shouldReport($exception) && app()->environment('development', 'production')) {
             return response()->view('errors.500', [], 500);
         }
 

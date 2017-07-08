@@ -16,7 +16,7 @@ class Order extends Model
     public $table = 'orders';
     
     protected $fillable  = [
-        'status', 'amount', 'currency', 'quantity', 'address', 'shipping_cost', 'payment_method', 'user_id', 'product_id', 'merchant_id', 'product_variant', 'shipping_window_from', 'shipping_window_to'
+        'status', 'amount', 'currency', 'quantity', 'address', 'shipping_cost', 'payment_method', 'user_id', 'product_id', 'merchant_id', 'product_variant', 'shipping_window_from', 'shipping_window_to', 'city_id', 'phone', 'title'
     ];
 
 

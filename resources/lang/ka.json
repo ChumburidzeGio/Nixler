@@ -221,8 +221,8 @@
     "Merchant set status of your order as sent. Please go to [order page](:url) for more information.": "გამყიდველმა თქვენი შეკვეთა გაგზავნილად მონიშნა. გთხოვთ გადახვიდეთ [შეკვეთის გვერდზე](:url) დეტალური ინფორმაციისათვის.",
     "Merchant closed your order. Please go to [order page](:url) for more information.": "გამყიდველმა თქვენი შეკვეთა დახურულად მონიშნა. გთხოვთ გადახვიდეთ [შეკვეთის გვერდზე](:url) დეტალური ინფორმაციისათვის.",
     "[:name](:url) started following you.": "[:name](:url) გახდა თქვენი გამომწერი.",
-    "Delivery in :days day :cost": "მიიღებთ :days დღეში:cost",
-    "Delivery in :days days :cost": "მიიღებთ :days დღეში:cost",
+    ":n day": ":n დღეში",
+    ":n days": ":n დღეში",
     "for free": " უფასოდ",
     "for :cost": ". ფასი: :cost",
     "By clicking Join us or Sign in with Facebook, I agree to Nixler's <a href=\":terms\">Terms of Service</a> and <a href=\":privacy\">Privacy Policy</a>.": "რეგისტრაციაზე ან Facebook-ით ავტორიზაციაზე დაჭერით თქვენ ეთანხმებით ნიქსლერის <a href=\":terms\">სამომხმარებლო შეთანხმებას</a> და <a href=\":privacy\">კონფიდენციალურობის პოლიტიკას</a>.",
@@ -273,5 +273,10 @@
     "Start shopping": "პროდუქციის ყიდვა",
     "Amount": "თანხა",
     "Status": "სტატუსი",
-    "Delivery dates": "მიტანის თარიღები"
+    "Delivery dates": "მიტანის თარიღები",
+    ":actor commented on your product :product": ":actor-მ დააკომენტარა თქვენს პროდუქტზე :product",
+    "Thank you for using our application.": "მადლობა ჩვენი აპლიკაციის გამოყენებისთვის.",
+    "Total cost": "საბოლოო ფასი",
+    "Shipping cost": "მიტანის ღირებულება",
+    "Delivery in": "მიიღებთ"
 }

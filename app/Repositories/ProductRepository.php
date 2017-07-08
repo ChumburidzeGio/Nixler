@@ -17,12 +17,17 @@ use App\Entities\ProductTag;
 use App\Entities\Metric;
 use App\Entities\ShippingPrice;
 use App\Entities\Order;
+use App\Events\ProductPublished;
+use App\Events\ProductDisabled;
+use App\Events\ProductDeleted;
+use App\Events\ProductLiked;
+use App\Events\ProductDisliked;
+use App\Events\OrderCreated;
 use Carbon\Carbon;
 use Ayeo\Price\Price;
-use App\Notifications\ProductUpdated;
-use App\Notifications\ProductDeleted;
 use App\Notifications\OrderStatusChanged;
 use Illuminate\Support\Facades\Cache;
+use App\Crawler\Crawler;
 use Auth, DB;
 
 class ProductRepository extends BaseRepository {
@@ -194,9 +199,57 @@ class ProductRepository extends BaseRepository {
         $product->save();
         
         if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
-            $product->notify(new ProductUpdated);
+
+            event(new ProductPublished($product, $user));
+
             $product->markAsActive();
+
+        } else {
+
+            event(new ProductDisabled($product, $user));
+
         }
+
+        return $product;
+    }
+    
+
+
+    /**
+     * Import product from url
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function import(string $url, int $id)
+    {
+        $user = auth()->user();
+
+        $product = $this->model->where([
+            'id' => $id,
+            'owner_id' => $user->id
+        ])->firstOrFail();
+
+        $metadata = app(Crawler::class)->get($url);
+
+        $this->syncVariants($metadata->getVariants(), $product);
+
+        $this->syncTags($metadata->getTags(), $product);
+
+        foreach ($metadata->getMedia() as $src) {
+            $this->uploadMediaForProduct($id, $src);
+        }
+
+        $product->fill([
+            'title' => $metadata->getTitle(),
+            'description' => $metadata->getDescription(),
+            'category_id' => $metadata->getCategory(),
+        ]);
+
+        if(!$product->has_variants){
+            $product->price = $metadata->getPrice();
+        }
+
+        $product->save();
 
         return $product;
     }
@@ -213,6 +266,8 @@ class ProductRepository extends BaseRepository {
         $media = $product->firstMedia('photo');
 
         $product->media_id = $media ? $media->id : null;
+
+        $product->media_count = $product->media()->count();
 
         return $product->save();
     }
@@ -300,6 +355,12 @@ class ProductRepository extends BaseRepository {
         $user = auth()->user();
 
         $liked = $product->toggleActivity('product:liked');
+
+        if($liked) {
+            event(new ProductLiked($product, $user));
+        } else {
+            event(new ProductDisliked($product, $user));
+        }
 
         $product->likes_count = $product->getActivities('product:liked')->count();
         
@@ -602,7 +663,11 @@ class ProductRepository extends BaseRepository {
      */
     public function syncVariants($variants, Product $product)
     {
-        $variants = collect(json_decode($variants));
+        if(is_string($variants)){
+            $variants = json_decode($variants, 1);
+        }
+
+        $variants = collect($variants);
 
         $models = $variants->map(function ($variant) use ($product) {
             return $this->updateOrCreateVariant($variant, $product);
@@ -634,9 +699,9 @@ class ProductRepository extends BaseRepository {
 
         $model->fill([
             'product_id' => $product->id,
-            'name' => $variant->name,
-            'price' => $variant->price,
-            'in_stock' => $variant->in_stock,
+            'name' => array_get($variant, 'name'),
+            'price' => array_get($variant, 'price'),
+            'in_stock' => array_get($variant, 'in_stock', 0),
         ]);
 
         $model->save();
@@ -653,7 +718,17 @@ class ProductRepository extends BaseRepository {
      */
     public function syncTags($tags, Product $product)
     {
-        $tags = collect(json_decode($tags))->pluck('text');
+        if(is_string($tags)){
+
+            $tags = json_decode($tags);
+
+            $tags = collect($tags)->pluck('text');
+
+        } else {
+
+            $tags = collect($tags);
+
+        }
 
         $ids = $tags->map(function ($tag) use ($product) {
             $model = $this->updateOrCreateTag($tag, $product);
@@ -737,15 +812,13 @@ class ProductRepository extends BaseRepository {
             })->first();
 
             if($shipping) {
-                $days = $shipping['window_from'] == $shipping['window_to'] 
+                $n = $shipping['window_from'] == $shipping['window_to'] 
                 ? "{$shipping['window_from']}" 
                 : "{$shipping['window_from']}-{$shipping['window_to']}";
 
-                $cost = $shipping['price'] == '0.00' ? __('for free') : __('for :cost', ['cost' => money($shipping['currency'], $shipping['price'])]);
-
                 $shipping_text =  $shipping['window_from'] == $shipping['window_to']
-                    ? __("Delivery in :days day :cost", compact('days', 'cost'))
-                    : __("Delivery in :days days :cost", compact('days', 'cost'));
+                    ? __(":n day", compact('n'))
+                    : __(":n days", compact('n'));
                 
                 $shipping_price = $shipping['price'];
             }
@@ -823,10 +896,15 @@ class ProductRepository extends BaseRepository {
             'user_id' => $user->id,
             'product_id' => $product->id,
             'product_variant' => $variant ? $variant->name : null,
-            'merchant_id' => $product->owner_id
+            'merchant_id' => $product->owner_id,
+            'city_id' => $user->city_id,
+            'phone' => $user->phone,
+            'title' => $product->title,
         ]);
 
         $order->notify(new OrderStatusChanged());
+
+        event(new OrderCreated($order, $user));
 
         if($product->has_variants) {
 
@@ -940,6 +1018,8 @@ class ProductRepository extends BaseRepository {
     public function hide($id)
     {
         if (app()->runningInConsole()){
+
+            $user = User::find(1);
             
             $product = $this->model->findOrFail($id);
 
@@ -952,6 +1032,8 @@ class ProductRepository extends BaseRepository {
         }
 
         $product->markAsInactive();
+
+        event(new ProductDisabled($product, $user));
         
     }
 
@@ -967,6 +1049,8 @@ class ProductRepository extends BaseRepository {
     public function delete($id)
     {
         if (app()->runningInConsole()){
+
+            $user = User::find(1);
             
             $product = $this->model->findOrFail($id);
 
@@ -978,7 +1062,7 @@ class ProductRepository extends BaseRepository {
 
         }
 
-        $product->notify(new ProductDeleted);
+        event(new ProductDeleted($product, $user));
 
         $product->comments()->delete();
         

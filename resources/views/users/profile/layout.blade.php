@@ -104,19 +104,19 @@
     @lang('About')
 </a>
   <a class="_fs12 _tb{{$tab == 'profile' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link() }}">
-    @lang('Liked') <span class="_fw300 _ml5">{{ $user->liked_count }}</span>
+    @lang('Liked')
 </a>
 <a class="_fs12 _tb{{$tab == 'products' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('products') }}">
-    @lang('Selling') <span class="_fw300 _ml5">{{ $user->selling_count }}</span>
+    @lang('Selling') <span class="_fw300 _ml5">{{ $user->products_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'followers' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('followers') }}">
     @lang('Followers') <span class="_fw300 _ml5">{{ $user->followers_count }}</span>
 </a>
 <a class="_fs12 _tb{{$tab == 'followings' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('followings') }}">
-    @lang('Following', ['amount' => $user->followings_count]) <span class="_fw300 _ml5">{{ $user->followings_count }}</span>
+    @lang('Following', ['amount' => 1])
 </a>
 <a class="_fs12 _tb{{$tab == 'photos' ? ' _bb1 _bw2 _ci _bci' : ''}}" href="{{ $user->link('photos') }}">
-    @lang('Photos') <span class="_fw300 _ml5">{{ $user->media_count }}</span>
+    @lang('Photos')
 </a>
             <!--a class="_tb _right _fw300" href="/">Share</a>
             <a class="_tb _right _fw300" href="/" onclick='event.preventDefault();if(prompt("Please write shortly the reason")){document.getElementById("avatar-upload-form").submit();}'>Report</a-->

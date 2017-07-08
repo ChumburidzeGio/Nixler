@@ -37,6 +37,7 @@ class CreateProductsTables extends Migration
             $table->integer('sales_count')->default(0);
             $table->integer('comments_count')->default(0)->unsigned();
             $table->integer('views_count')->default(0)->unsigned();
+            $table->integer('media_count')->default(0)->unsigned();
             $table->boolean('is_active')->default(0);
             $table->boolean('has_variants')->default(0);
             $table->timestamps();
@@ -104,6 +105,9 @@ class CreateProductsTables extends Migration
             $table->integer('product_id')->unsigned();
             $table->string('product_variant')->nullable();
             $table->integer('merchant_id')->unsigned();
+            $table->integer('city_id')->nullable()->unsigned();
+            $table->bigInteger('phone')->nullable()->unsigned();
+            $table->string('title')->nullable();
             $table->timestamps();
 
         });
