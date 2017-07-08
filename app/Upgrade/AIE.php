@@ -50,7 +50,7 @@ class AIE
 
             Order::with('product', 'user')->get()->map(function($order){
 
-                if(!$product) {
+                if(!$order->product) {
                     $order->delete();
                 }
 
