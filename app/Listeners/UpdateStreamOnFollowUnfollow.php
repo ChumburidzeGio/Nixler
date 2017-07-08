@@ -16,16 +16,14 @@ class UpdateStreamOnFollowUnfollow
      */
     public function handle($event)
     {
-        if($event->name == 'user:followed') {
-            
-            app(UserRepository::class)->streamPushBySource($event->user, $event->actor);
+        $repository = app(UserRepository::class);
 
+        if($event->name == 'user:followed') {
+            $repository->streamPushBySource($event->user, $event->actor);
         }
         
         elseif($event->name == 'user:unfollowed') {
-
-            app(UserRepository::class)->streamRemoveBySource($event->user, $event->actor);
-
+            $repository->streamRemoveBySource($event->user, $event->actor);
         }
     }
 }

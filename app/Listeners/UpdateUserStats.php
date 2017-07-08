@@ -16,16 +16,18 @@ class UpdateUserStats
      */
     public function handle($event)
     {
+        $repository = app(UserRepository::class);
+        
         if(starts_with($event->name, 'user')) {
-            app(UserRepository::class)->updateStats($event->user);
+            $repository->updateStats($event->user);
         }
 
         elseif(starts_with($event->name, 'order')) {
-            app(UserRepository::class)->updateStats($event->order->merchant);
+            $repository->updateStats($event->order->merchant);
         }
 
         elseif(starts_with($event->name, 'product')) {
-            app(UserRepository::class)->updateStats($event->actor);
+            $repository->updateStats($event->actor);
         }
     }
 }

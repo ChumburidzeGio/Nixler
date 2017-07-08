@@ -76,10 +76,4 @@ class AIE
         }
     }
 
-    public function messages(){
-        return [
-        'ka' => "# ნიქსლერი განახლდა (ვერსია 1.95)\n",
-        ];
-    }
-
 }

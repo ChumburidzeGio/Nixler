@@ -7,7 +7,7 @@ use App\Events\ProductCommented;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendLikedNotification
+class SendCommentedNotification
 {
     /**
      * Handle the event.
