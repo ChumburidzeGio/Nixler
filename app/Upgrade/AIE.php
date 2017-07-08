@@ -50,6 +50,10 @@ class AIE
 
             Order::with('product', 'user')->get()->map(function($order){
 
+                if(!$product) {
+                    $order->delete();
+                }
+
                 $order->update([
                     'city_id' => $order->user->city_id,
                     'phone' => $order->user->phone,
