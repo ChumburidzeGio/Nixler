@@ -77,6 +77,11 @@
         d=n.domain;while(1){n.cookie='fs_uid=;domain='+d+
         ';path=/;expires='+new Date(0).toUTCString();i=d.indexOf('.');if(i<0)break;d=d.slice(i+1)}}};
     })(window,document,window['_fs_namespace'],'script','user');
+    @if(auth()->check())
+        FS.identify('{{ auth()->user()->id }}', {
+          displayName: '{{ auth()->user()->name }}',
+        });
+    @endif
     </script>
     @endif
     @endif

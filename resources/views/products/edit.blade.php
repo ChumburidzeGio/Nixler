@@ -337,7 +337,7 @@
 
 			<a class="_hvr1 _fs13 _clear _lim _hvrl" href="{{ route('stock') }}" target="_bank">
 				<i class="material-icons _mr10 _va5 _fs18 _cbl">store_mall_directory</i> 
-				@lang('My Products')
+				@lang('My products')
 			</a>
 
 			<a class="_hvr1 _fs13 _clear _lim _hvrl" href="{{ route('settings.orders') }}" target="_bank">
