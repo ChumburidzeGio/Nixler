@@ -1,7 +1,7 @@
 {
     "Account settings": "ანგარიშის პარამეტრები",
     "General settings": "მთავარი პარამეტრები",
-    "Name": "სახელი და გვარი",
+    "Name": "სახელი",
     "Username": "ნიკი",
     "Email": "ელ.ფოსტა",
     "Phone": "ტელეფონი",
@@ -278,5 +278,10 @@
     "Thank you for using our application.": "მადლობა ჩვენი აპლიკაციის გამოყენებისთვის.",
     "Total cost": "საბოლოო ფასი",
     "Shipping cost": "მიტანის ღირებულება",
-    "Delivery in": "მიიღებთ"
+    "Delivery in": "მიიღებთ",
+    "Full Name": "სახელი და გვარი",
+    "Product from url successfully imported.": "პროდუქტი წარმატებით დაიმპორტდა",
+    "Product import is canceled, you already published it once.": "იმპორტი გაუქმებულია, პროდუქტი უკვე დაიმპორტებული გაქვთ.",
+    "Import": "იმპორტი",
+    "The page doesn't contain product information and it can't be parsed.": "იმპორტი გაუქმებულია რადგან მოცემული გვერდი არ შეიცავს პროდუქტის შესახებ ინფორმაციას"
 }

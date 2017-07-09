@@ -78,6 +78,20 @@ class AIE
             });
 
         }
+
+
+        if (!Schema::hasTable('product_sources')) {
+
+            Schema::create('product_sources', function (Blueprint $table) {
+                $table->bigIncrements('id')->index();
+                $table->integer('product_id')->unsigned()->index();
+                $table->integer('merchant_id')->unsigned()->index();
+                $table->text('source')->nullable();
+                $table->timestamps();
+            });
+
+        }
+        
     }
 
 }

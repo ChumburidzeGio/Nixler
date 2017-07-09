@@ -250,4 +250,14 @@ class BasePattern
 
     	return $this->clean(explode(',', $keywords));
     }
+
+    /**
+     * Parse the image of product
+     *
+     * @return array
+     */
+    public function parseUrl($url, $sep='+')
+    {
+        return preg_replace('/[[:space:]]+/', '%20', $url);
+    }
 }

@@ -11,6 +11,7 @@ use MediaUploader;
 use App\Traits\Searchable;
 use App\Entities\User;
 use App\Entities\Media;
+use App\Entities\ProductSource;
 use App\Traits\NPerGroup;
 use App\Entities\Activity;
 use App\Traits\Actable;
@@ -120,12 +121,20 @@ class Product extends Model
     /**
      * One to one relationship for categories
      */
-    public function category()
-    {   
-        return $this->hasOne(ProductCategory::class, 'id', 'category_id')
-            ->with('translations');
+    public function category() {   
+        return $this->hasOne(ProductCategory::class, 'id', 'category_id')->with('translations');
     }
 
+    public function sources() {   
+        return $this->hasMany(ProductSource::class, 'product_id', 'id');
+    }
+
+    /**
+     * Show comments for model
+     */
+    public function comments() {
+        return $this->hasMany(Comment::class, 'target_id', 'id');
+    }
 
     public function setPriceAttribute($value){
         $this->attributes['price'] = filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
@@ -247,14 +256,6 @@ class Product extends Model
     public function getDescriptionParsedAttribute()
     {   
         return (new Markdown)->text($this->attributes['description']);
-    }
-
-    /**
-     * Show comments for model
-     */
-    public function comments()
-    {
-        return $this->hasMany(Comment::class, 'target_id', 'id');
     }
     
     /**

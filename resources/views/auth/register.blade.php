@@ -19,7 +19,7 @@
 
                         <div class="form-group _m0 _mb10{{ $errors->has('name') ? ' has-error' : '' }}">
 
-                                <input id="name" type="text" class="_b1 _bcg _fe _brds3" name="name" value="{{ old('name') }}" required autofocus placeholder="@lang('Name')">
+                                <input id="name" type="text" class="_b1 _bcg _fe _brds3" name="name" value="{{ old('name') }}" required autofocus placeholder="@lang('Full Name')">
 
                                 @if ($errors->has('name'))
                                     <span class="help-block _mb _mt0">

@@ -3,6 +3,7 @@
 namespace App\Crawler;
 
 use Goutte\Client;
+use App\Services\SystemService;
 use App\Crawler\BasePattern;
 use App\Crawler\Patterns\LuteciaGe;
 use App\Crawler\Patterns\BeGe;
@@ -26,7 +27,20 @@ class Crawler {
     {
         $crawler = $this->client->request('GET', $url);
 
-        return app($this->findPattern($url))->parse($crawler);
+        try {
+            $pattern = app($this->findPattern($url))->parse($crawler);
+        }
+        
+        catch(\Exception $e) {
+            app(SystemService::class)->reportException($e);
+            return null;
+        }
+
+        if(method_exists($pattern, 'isProduct') && !$pattern->isProduct()) {
+            return null;
+        }
+
+        return $pattern;
     }
 
     /**
@@ -36,6 +50,10 @@ class Crawler {
     function toArray($url)
     {
         $pattern = $this->get($url);
+
+        if(!$pattern) {
+            return null;
+        }
 
         $title = $pattern->getTitle();
 

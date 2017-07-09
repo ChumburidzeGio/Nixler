@@ -98,9 +98,19 @@ class ProductController extends Controller
      */
     public function import($id, ImportProduct $request)
     {
-        $this->repository->import($request->input('url'), $id);
+        $import = $this->repository->import($request->input('url'), $id);
 
-        return redirect()->route('product.edit', ['id' => $id])->with('status', __('Product from url successfully imported.'));
+        $status = __('Product from url successfully imported.');
+
+        if(is_null($import)) {
+            $status = __('Product import is canceled, you already published it once.');
+        }
+
+        elseif(!$import) {
+            $status = __('The page doesn\'t contain product information and it can\'t be parsed.');
+        }
+
+        return redirect()->route('product.edit', ['id' => $id])->with('status', $status);
     }
 
     /**

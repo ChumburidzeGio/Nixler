@@ -12,6 +12,7 @@ use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use App\Entities\Activity;
+use App\Entities\ProductSource;
 use App\Entities\ProductVariant;
 use App\Entities\ProductTag;
 use App\Entities\Metric;
@@ -225,12 +226,25 @@ class ProductRepository extends BaseRepository {
     {
         $user = auth()->user();
 
+        $isUploaded = ProductSource::where([
+            'merchant_id' => $user->id,
+            'source' => $url
+        ])->exists();
+
+        if($isUploaded) {
+            return false;
+        }
+
         $product = $this->model->where([
             'id' => $id,
             'owner_id' => $user->id
         ])->firstOrFail();
 
         $metadata = app(Crawler::class)->get($url);
+
+        if(!$metadata) {
+            return null;
+        }
 
         $this->syncVariants($metadata->getVariants(), $product);
 
@@ -250,6 +264,12 @@ class ProductRepository extends BaseRepository {
             $product->price = $metadata->getPrice();
         }
 
+        $product->sources()->create([
+            'product_id' => $product->id,
+            'merchant_id' => $user->id,
+            'source' => $url
+        ]);
+        
         $product->save();
 
         return $product;

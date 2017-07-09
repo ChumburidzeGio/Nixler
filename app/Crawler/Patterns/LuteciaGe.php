@@ -61,7 +61,25 @@ class LuteciaGe extends BasePattern {
      */
     public function getMedia()
     {
-        return [$this->crawler('.image .thumbnail img')->first()->attr('src')];
+        $photo = $this->crawler('.image .thumbnail img')->first()->attr('src');
+
+        $additional = $this->crawler('#additional-carousel .slider-item')->each(function($item) {
+            return $this->parseUrl($item->filter('a')->first()->attr('href'));
+        });
+
+        $encoded = $this->parseUrl($photo);
+
+        return array_merge($additional, [$encoded]);
+    }
+
+    /**
+     * Check if we are on product page
+     *
+     * @return boolean
+     */
+    public function isProduct()
+    {
+        return !!$this->crawler('.image .thumbnail img')->first();
     }
     
 }

@@ -111,6 +111,14 @@ class CreateProductsTables extends Migration
             $table->timestamps();
 
         });
+
+        Schema::create('product_sources', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->integer('product_id')->unsigned()->index();
+            $table->integer('merchant_id')->unsigned()->index();
+            $table->text('source')->nullable();
+            $table->timestamps();
+        });
         
     }
 
@@ -121,6 +129,7 @@ class CreateProductsTables extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('product_sources');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('product_variants');
         Schema::dropIfExists('product_tags_t');
