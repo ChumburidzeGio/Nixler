@@ -28,15 +28,8 @@ class Crawler {
     {
         $crawler = $this->client->request('GET', $url);
 
-        try {
-            $pattern = app($this->findPattern($url))->parse($crawler);
-        }
+        $pattern = app($this->findPattern($url))->parse($crawler);
         
-        catch(\Exception $e) {
-            app(SystemService::class)->reportException($e);
-            return null;
-        }
-
         if(method_exists($pattern, 'isProduct') && !$pattern->isProduct()) {
             return null;
         }

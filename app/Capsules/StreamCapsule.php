@@ -177,10 +177,10 @@ class StreamCapsule {
     public function popular()
     {
     	$this->model = $this->model
-    	->orderBy('likes_count', 'desc')
-    	->orderBy('sales_count', 'desc')
+    	->orderBy('p.likes_count', 'desc')
+    	->orderBy('p.sales_count', 'desc')
     	->orderBy('p.updated_at', 'desc')
-    	->orderBy('views_count', 'desc');
+    	->orderBy('p.views_count', 'desc');
 
     	return $this;
     }

@@ -256,26 +256,50 @@ class ProductRepository extends BaseRepository {
 
         $metadata = app(Crawler::class)->get($url);
 
+        try {
+
+            $variants = $metadata->getVariants();
+
+            $tags = $metadata->getTags();
+
+            $media = $metadata->getMedia();
+
+            $title = $metadata->getTitle();
+
+            $description = $metadata->getDescription();
+
+            $category = $metadata->getCategory();
+
+            $price = $metadata->getPrice();
+
+        }
+        
+        catch(\Exception $e) {
+            app(SystemService::class)->reportException($e);
+            return null;
+        }
+
+
         if(!$metadata) {
             return null;
         }
 
-        $this->syncVariants($metadata->getVariants(), $product);
+        $this->syncVariants($variants, $product);
 
-        $this->syncTags($metadata->getTags(), $product);
+        $this->syncTags($tags, $product);
 
-        foreach ($metadata->getMedia() as $src) {
+        foreach ($media as $src) {
             $this->uploadMediaForProduct($id, $src);
         }
 
         $product->fill([
-            'title' => $metadata->getTitle(),
-            'description' => $metadata->getDescription(),
-            'category_id' => $metadata->getCategory(),
+            'title' => $title,
+            'description' => $description,
+            'category_id' => $category,
         ]);
 
         if(!$product->has_variants){
-            $product->price = $metadata->getPrice();
+            $product->price = $price;
         }
 
         $product->sources()->create([
