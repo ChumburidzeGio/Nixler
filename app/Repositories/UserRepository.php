@@ -46,9 +46,7 @@ class UserRepository extends BaseRepository {
         }
 
         if($tab == 'products'){
-            $data = app(ProductRepository::class)->transformProducts(
-                $user->products()->active()->withMedia()->paginate(20)
-            );
+            $data = capsule('stream')->whereSeller($user->id)->get();
             $view = 'products';
         }
         elseif($tab == 'followers'){
@@ -69,9 +67,7 @@ class UserRepository extends BaseRepository {
             $view = 'about';
         }
         else {
-            $data = app(ProductRepository::class)->transformProducts(
-                $user->liked()->with('owner')->paginate(20)
-            );
+            $data = capsule('stream')->whereLikeBy($user->id)->get();
             $view = 'products';
         }
 

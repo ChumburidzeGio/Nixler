@@ -7,7 +7,7 @@
 <div class="container-fluid _m0 ng-cloak" ng-controller="StreamCtrl as vm" style="width: 100%">
 
 
-	<script>window.stream = {!! $products->toJson() !!};</script>
+	<script>window.stream = {!! $capsule->toJson() !!};</script>
 
 	<div class="row">
 
@@ -25,13 +25,11 @@
 					@endif
 				</a>
 				
-				@foreach($categories as $cat)
-				<a href="{{ route('feed', 
-				array_merge(request()->only(['price_min', 'price_max', 'query']), ['cat' => $cat->id])
-				)}}"
-				class="_lim _hvrd _cg _brds3 _telepsis _fs13{{ request()->cat == $cat->id ? ' _hvrda' : '' }}">
-				<i class="material-icons _fs18 _mr15 _va4">{{ $cat->icon or 'brightness_1' }}</i> {{ $cat->name }}
-			</a>
+			@foreach($capsule->categories() as $cat)
+				<a href="{{ $cat['href'] }}" 
+					class="_lim _hvrd _brds3 _telepsis _fs13{{ $cat['active'] ? ' _hvrda' : '' }}{{ $cat['empty'] ? ' _cgl' : ' _cg' }}">
+					<i class="material-icons _fs18 _mr15 _va4">{{ $cat['icon'] or 'brightness_1' }}</i> {{ $cat['name'] }}
+				</a>
 			@endforeach
 
 			{{--<div class="_fs12 _ttu _pl15 _pt10 _pb5">Order</div>
@@ -54,7 +52,7 @@
 
 		@if(isset($facets) && $facets && $facets->count() > 0)
 
-		<script>window.facets = {!! $facets->toJson() !!};</script>
+		<script>window.facets = {!! $capsule->toJson() !!};</script>
 
 		<div class="_db _tbs _ov _mb5" id="price-filter">
 			<div class="_tb _crp _pl5" ng-if="vm.filters.price.avg">

@@ -13,24 +13,8 @@ use App\Repositories\UserRepository;
 class StreamController extends Controller
 {
 
-    /**
-     * @var PostRepository
-     */
-    protected $productRepository;
-
-    public function __construct(ProductRepository $productRepository){
+    public function __construct(){
         parent::__construct();
-        $this->productRepository = $productRepository;
-    }
-
-
-    /**
-     * Display a listing of the resource.
-     * @return Response
-     */
-    public function discover(Request $request)
-    {
-        return app(UserRepository::class)->updateStreams();
     }
 
 
@@ -40,36 +24,25 @@ class StreamController extends Controller
      */
     public function index(Request $request)
     {
-        /*if(auth()->guest()){
-
-            $what = collect(trans('landing.what.items'))->chunk(2);
-
-            $why = collect(trans('landing.why.items'))->chunk(3);
-
-            $who = collect(trans('landing.who.items'))->chunk(4);
-
-            return view('landing.page', compact('what', 'why', 'who'));
-        }*/
+        $capsule = capsule('stream');
 
         if($request->has('query') || $request->has('cat')){
 
-            $result = $this->productRepository->search($request->all());
-            
-            $products = array_get($result, 'products');
-
-            $facets = array_get($result, 'facets');
+            $capsule = $capsule->search(request('query'));
 
             if(!$request->has('cat')){
                 $users = app(UserRepository::class)->search($request->input('query'));
             }
 
         } else {
-            $products = $this->productRepository->getUserStream();
+
+            $capsule = auth()->check() ? $capsule->recommendedFor(auth()->id()) : $capsule->popular();
+
         }
 
-        $categories = $this->productRepository->getProductCategories($request->input('cat'));
+        $capsule = $capsule->get();
 
-        return $request->isMethod('post') ? $products->toJson() : view('stream.index', compact('products', 'categories', 'users', 'facets'));
+        return $request->isMethod('post') ? $capsule->toArray() : view('stream.index', compact('capsule', 'users'));
     }
 
 }

@@ -13,19 +13,32 @@ if (! function_exists('media')) {
 
     function media($media, $type, $place, $default = '-') {
 
-    	if(is_object($media) && $media) {
-    		$media = (isset($media->id) && $media->getTable() == 'media') ? $media->id : $media->media_id;
-    	}
+        if(is_object($media) && $media) {
+            $media = (isset($media->id) && $media->getTable() == 'media') ? $media->id : $media->media_id;
+        }
 
         if(is_null($default) && !$media) {
             return null;
         }
 
         return route('photo', [
-        	'id' => $media ?? $default,
-        	'type' => $type,
-        	'place' => $place,
+            'id' => $media ?? $default,
+            'type' => $type,
+            'place' => $place,
         ]);
+
+    }
+}
+
+if (! function_exists('capsule')) {
+
+    function capsule($name) {
+
+    	$capsule = array_get([
+            'stream' => \App\Capsules\StreamCapsule::class
+        ], $name);
+
+        return app($capsule);
 
     }
 }

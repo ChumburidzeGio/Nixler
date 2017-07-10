@@ -60,6 +60,19 @@ Reboot your system (`vagrant reload`) and enjoy
 * One view - 0.1
 * One sale - 2
 
+# Capsules
+
+#### StreamCapsule
+`capsule('stream')->recommendedFor($user->id)
+	->whereSeller($user->id)
+	->whereLikeBy($user->id)
+	->search(null)
+	->whereCategory(1)
+	->wherePrice(200, 1400)
+	->perPage(500)
+	->get();
+`
+
 # Resources
 
 * [Georgian Technical Dictionary](http://techdict.ge/)

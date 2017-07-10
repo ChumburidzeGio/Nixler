@@ -129,6 +129,10 @@ class Product extends Model
         return $this->hasMany(ProductSource::class, 'product_id', 'id');
     }
 
+    public function infeed() {   
+        return $this->hasMany(Feed::class, 'object_id', 'id');
+    }
+
     /**
      * Show comments for model
      */
