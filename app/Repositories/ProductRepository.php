@@ -202,15 +202,29 @@ class ProductRepository extends BaseRepository {
         
         if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
 
-            event(new ProductPublished($product, $user));
-
-            $product->markAsActive();
+            $product = $this->publish($product, $user);
 
         } else {
 
             event(new ProductDisabled($product, $user));
 
         }
+
+        return $product;
+    }
+    
+
+
+    /**
+     * Prepare product for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function publish($product, $user)
+    {
+        event(new ProductPublished($product, $user));
+
+        $product->markAsActive();
 
         return $product;
     }

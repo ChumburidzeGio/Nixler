@@ -111,6 +111,7 @@ Auth::routes();
 	});
 
 	Route::get('/about', 'BlogController@welcome');
+	Route::get('/help', 'HelpController@index');
 	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
 	Route::get('/monitor', function(){
@@ -122,7 +123,7 @@ Auth::routes();
 	});
 
 	Route::get('/scrap', function(){
-		return app(\App\Crawler\Crawler::class)->toArray(request('url'));
+		return app(\App\Crawler\Crawler::class)->all(request('url'));
 	});
 
 //});

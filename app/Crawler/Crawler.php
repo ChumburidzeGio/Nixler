@@ -8,6 +8,7 @@ use App\Crawler\BasePattern;
 use App\Crawler\Patterns\LuteciaGe;
 use App\Crawler\Patterns\BeGe;
 use App\Crawler\Patterns\DealsGe;
+use App\Repositories\ProductRepository;
 
 class Crawler {
 
@@ -41,6 +42,31 @@ class Crawler {
         }
 
         return $pattern;
+    }
+
+    /**
+     * @param $name string
+     * @return App\Entities\City
+     */
+    function all($url)
+    {
+        $repository = app(ProductRepository::class);
+
+        $crawler = $this->client->request('GET', $url);
+
+        $links = app($this->findPattern($url))->parse($crawler)->detectProductsOnPage();
+
+        foreach ($links as $link) {
+
+            $product = $repository->create();
+
+            $product = $repository->import($link, $product->id);
+
+            if($product) {
+                $repository->publish($product, auth()->user());
+            }
+
+        }
     }
 
     /**

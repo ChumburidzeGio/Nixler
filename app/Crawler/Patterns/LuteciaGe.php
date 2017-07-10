@@ -81,5 +81,23 @@ class LuteciaGe extends BasePattern {
     {
         return !!$this->crawler('.image .thumbnail img')->first();
     }
+
+    /**
+     * Get the list of products from page
+     *
+     * @return boolean
+     */
+    public function detectProductsOnPage()
+    {
+        $products = $this->crawler('#content .product-block');
+
+        if(!$products->count()){
+            return [];
+        }
+
+        return array_unique($products->each(function($a){
+            return $a->filter('a')->attr('href');
+        }));
+    }
     
 }
