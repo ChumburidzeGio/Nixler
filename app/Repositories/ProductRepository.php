@@ -6,6 +6,7 @@ use App\Repositories\BaseRepository;
 use App\Entities\ProductCategory;
 use App\Services\RecommService;
 use App\Services\AnalyticsService;
+use App\Services\SystemService;
 use Illuminate\Container\Container as App;
 use App\Entities\Product;
 use League\Fractal\Manager;
@@ -104,7 +105,7 @@ class ProductRepository extends BaseRepository {
         $model = $this->model->where([
             'is_active' => 0,
             'owner_id' => $user->id,
-            'in_stock' => 1
+            'in_stock' => 0
         ])->latest('id')->first();
 
         if($model) {
