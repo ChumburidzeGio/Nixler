@@ -281,7 +281,7 @@ class ProductRepository extends BaseRepository {
         }
 
 
-        if(!$metadata) {
+        if(!$metadata || !$price) {
             return null;
         }
 
