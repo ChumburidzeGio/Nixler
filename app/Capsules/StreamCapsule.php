@@ -54,7 +54,7 @@ class StreamCapsule {
 
     	$this->priceMax = request('price_max', 9999);
 
-    	$this->facetQuery = $model;
+    	$this->facetQuery = $model->from('products as p');
 
     	$this->query = null;
 
