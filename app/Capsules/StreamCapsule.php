@@ -303,19 +303,35 @@ class StreamCapsule {
      */
     public function get()
     {
+        $this->filter();
+
+        $this->addUserData();
+        
+        $this->items = $this->cache('items', 0, function() {
+
+            $paginate = $this->model->simplePaginate($this->perPage, $this->page);
+
+            return $this->transform($paginate->items());
+
+        });
+
+        $this->executed = true;
+
+        return $this;
+    }
+
+    /**
+     * Run and take just ids
+     *
+     * @return this
+     */
+    public function keys()
+    {
     	$this->filter();
-
-    	$this->addUserData();
     	
-    	$this->items = $this->cache('items', 0, function() {
+    	$this->items = $this->model->take($this->perPage)->select('p.id')->pluck('id');
 
-    		$paginate = $this->model->simplePaginate($this->perPage, $this->page);
-
-    		return $this->transform($paginate->items());
-
-    	});
-
-    	$this->executed = true;
+        $this->executed = true;
 
     	return $this;
     }
@@ -374,7 +390,13 @@ class StreamCapsule {
 
     	$params = array_prepend($params, 'stream', 'capsule');
 
-    	$params = array_prepend($params, $key, 'key');
+        $params = array_prepend($params, $key, 'key');
+
+        $params = array_prepend($params, app()->getLocale(), 'locale');
+
+        $params = array_prepend($params, config('app.currency'), 'currency');
+
+    	$params = array_prepend($params, config('app.country'), 'country');
 
     	return md5(implode('-', $params));
     }
@@ -462,12 +484,12 @@ class StreamCapsule {
 
     		$categories = $categories->select('id', 'icon')->with('translations')->get()->map(function($item) use ($ids) {
     			return [
-    			'id'     => (int) $item->id,
-    			'icon'   => $item->icon,
-    			'name'   => $item->name,
-    			'href'   => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query']), ['cat' => $item->id])),
-    			'active' => (request('cat') == $item->id),
-    			'empty' => ((count($ids) || $this->category) && !in_array($item->id, $ids)),
+        			'id'     => (int) $item->id,
+        			'icon'   => $item->icon,
+        			'name'   => $item->name,
+        			'href'   => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query']), ['cat' => $item->id])),
+        			'active' => (request('cat') == $item->id),
+        			'empty' => ((count($ids) || $this->category) && !in_array($item->id, $ids)),
     			];
     		});
 
