@@ -63,15 +63,63 @@ Reboot your system (`vagrant reload`) and enjoy
 # Capsules
 
 #### StreamCapsule
-`capsule('stream')->recommendedFor($user->id)
+```php
+$capsule = capsule('stream')
 	->whereSeller($user->id)
 	->whereLikeBy($user->id)
-	->search(null)
-	->whereCategory(1)
+	->recommendedFor($user->id)
 	->wherePrice(200, 1400)
+	->whereCategory(1)
+	->search(null)
 	->perPage(500)
-	->get();
-`
+	->latest()
+	->popular();
+
+$capsule->keys();
+
+$capsule->get()->items(); //or just $capsule->items();
+$capsule->get()->nextPageUrl(); //or just $capsule->nextPageUrl();
+$capsule->get()->priceFacet(); //or just $capsule->priceFacet();
+$capsule->get()->categories(); //or just $capsule->categories();
+
+$capsule->get()->toArray();
+$capsule->get()->toJson();
+```
+
+#### RecoCapsule
+```php
+$userStream = capsule('reco')->forUser($user)->get();
+
+$similarProducts = capsule('reco')->forProduct($product)->get();
+```
+
+# Underscore
+
+#### List
+```html
+<div class="_lst">
+	<div class="_lsti">Item</div>
+	<div class="_lsti active">Item</div>
+	<div class="_lsti">
+		<i class="material-icons">icon</i> Item
+	</div>
+</div>
+```
+
+#### Card
+```html
+<div class="_crd">
+	<div class="_crd-header">Title</div>
+	<div class="_crd-content">
+		Body
+	</div>
+</div>
+```
+
+#### Loader
+```html
+<div class="_ldr">Loading...</div>
+```
 
 # Resources
 
