@@ -123,7 +123,7 @@ Auth::routes();
 	});
 
 	Route::get('/scrap', function(){
-		return app(\App\Crawler\Crawler::class)->all(request('url'));
+		return app(\App\Crawler\Crawler::class)->get(request('url'))->toArray();
 	});
 
 //});

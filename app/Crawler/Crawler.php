@@ -66,35 +66,6 @@ class Crawler {
      * @param $name string
      * @return App\Entities\City
      */
-    function toArray($url)
-    {
-        $pattern = $this->get($url);
-
-        if(!$pattern) {
-            return null;
-        }
-
-        $title = $pattern->getTitle();
-
-        $description = $pattern->getDescription();
-
-        $price = $pattern->getPrice();
-
-        $media = $pattern->getMedia();
-
-        $varinats = $pattern->getVariants();
-
-        $category = $pattern->getCategory();
-
-        $tags = $pattern->getTags();
-
-        return compact('title', 'description', 'price', 'media', 'varinats', 'category', 'tags');
-    }
-
-    /**
-     * @param $name string
-     * @return App\Entities\City
-     */
     function findPattern($url)
     {
         $domain = $this->getRootDomain($url);

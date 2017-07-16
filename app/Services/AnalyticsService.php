@@ -134,27 +134,4 @@ class AnalyticsService
         return true;
     }
 
-
-        /*$response = \Analytics::performQuery(
-            $period,
-            'ga:pageviews',
-            [
-                'dimensions' => 'ga:pagePath,ga:pageTitle',
-                'sort' => '-ga:pageviews',
-                'max-results' => 50,
-                'filters' => 'ga:pagePath=@/@',
-            ]
-        );
-
-        $response = \Analytics::performQuery(
-            $period,
-            'ga:pageviews',
-            [
-                'dimensions' => 'ga:city,ga:socialNetwork,ga:fullReferrer',
-                'filters' => 'ga:pagePath=@/@tinatin-gogatishvili/',
-                'sort' => '-ga:pageviews',
-            ]
-        );*/
-
-
 }

@@ -2,6 +2,7 @@
 
 namespace App\Crawler;
 
+use App\Entities\ProductCategory;
 use Symfony\Component\DomCrawler\Crawler;
 
 class BasePattern
@@ -224,6 +225,18 @@ class BasePattern
     }
 
     /**
+     * Parse the category of product
+     *
+     * @return integer
+     */
+    public function getCategoryName()
+    {
+        $category = $this->getCategory();
+
+        return $category ? ProductCategory::find($category)->name : null;
+    }
+
+    /**
      * Parse the price of product
      *
      * @return integer
@@ -259,5 +272,31 @@ class BasePattern
     public function parseUrl($url, $sep='+')
     {
         return preg_replace('/[[:space:]]+/', '%20', $url);
+    }
+
+    /**
+     * Return pattern as an array
+     *
+     * @return array
+     */
+    function toArray()
+    {
+        $title = $this->getTitle();
+
+        $description = $this->getDescription();
+
+        $price = $this->getPrice();
+
+        $media = $this->getMedia();
+
+        $varinats = $this->getVariants();
+
+        $category = $this->getCategory();
+
+        $categoryName = $this->getCategoryName();
+
+        $tags = $this->getTags();
+
+        return compact('title', 'description', 'price', 'media', 'varinats', 'category', 'categoryName', 'tags');
     }
 }

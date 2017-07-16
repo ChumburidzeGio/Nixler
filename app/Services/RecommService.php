@@ -119,7 +119,7 @@ class RecommService {
      *
      * @return string
      */
-    public function similar($id, $count, $actor = null, $params = [])
+    public function similar($id, $count, $params = [], $actor = null)
     {   
         $params = $actor ? array_merge(['targetUserId' => $actor], $params) : $params;
 

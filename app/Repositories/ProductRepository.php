@@ -72,7 +72,7 @@ class ProductRepository extends BaseRepository {
             ];
         });
 
-        $product->setRelation('similar', $this->similar($product->id, $product->owner_id));
+        $product->setRelation('similar', $this->similar($product));
 
         $product->trackActivity('product:viewed');
 
@@ -435,39 +435,20 @@ class ProductRepository extends BaseRepository {
      *
      * @return array
      */
-    public function similar($id, $owner_id)
+    public function similar($product)
     {
-        $hash = md5('similar'.$id.auth()->id());
+        $hash = md5('similar'.$product->id.auth()->id());
 
-        return Cache::remember($hash, (60 * 24), function () use ($id, $owner_id) {
+        return Cache::remember($hash, (60 * 24), function () use ($product) {
 
-            $ids = (new RecommService)->similar($id, 5, auth()->id(), [
-                'filter' => "'currency' == \"".config('app.currency')."\"",
-                'booster' => 
-                    " + (if 'category_id' == context_item[\"category_id\"] then 20 else 0)". // Category is the same - 20
-                    " + (if size('description') > 50 then 7 else 0)". // Size of description contains more then 50 characters - 7
-                    " + (if 'likes_count' > 0 then ('likes_count' * 0.5) else 0)",// On like - 0.5
-            ]);
+            $user = auth()->user();
 
-            if($ids) {
-                return $this->model->whereIn('id', $ids)->active()->take(5)->get();
-            } else {
-                return $this->model->where('id', '<>', $id)->active()->where([
-                    'owner_id' => $owner_id,
-                    'currency' => config('app.currency'),
-                ])->take(5)->get();
-            }
+            $ids = capsule('reco')->forProduct($product, $user)->get();
+
+            return $this->model->whereIn('id', $ids)->active()->take(5)->get();
 
         });
         
-    }
-
-    /**
-     * Price filter
-     */
-    public function filterPrice($value)
-    {   
-        return filter_var($value, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
     }
 
     /**
@@ -847,19 +828,9 @@ class ProductRepository extends BaseRepository {
      */
     public function hide($id)
     {
-        if (app()->runningInConsole()){
+        $user = auth()->user();
 
-            $user = User::find(1);
-            
-            $product = $this->model->findOrFail($id);
-
-        } else {
-
-            $user = auth()->user();
-
-            $product = $user->products()->findOrFail($id);
-
-        }
+        $product = $user->products()->findOrFail($id);
 
         $product->markAsInactive();
 

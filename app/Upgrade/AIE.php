@@ -23,6 +23,7 @@ class AIE
      * Move to events and listeners
      * Add couple shops to patterns
      * Renew purchase page design
+     * Add capsules
      *
      * @return void
      */

@@ -16,7 +16,7 @@
     ]) ?>;
 </script>
 
-<div class="container" ng-controller="ShowCtrl as vm">
+<div class="container" ng-controller="ShowCtrl as vm" itemscope itemtype="http://schema.org/Product">
 
     <div class="col-md-12 _p0">
         <div class="row">
@@ -27,7 +27,7 @@
                     <div class="col-md-11">
                         @if($product->photo('full', 1))
                         <div class="_clear _posr _bcg _tac" id="product-gallery">
-                            <img src="{{ $product->photo('full') }}" class="_clear _ma" 
+                            <img src="{{ $product->photo('full') }}" itemprop="image" class="_clear _ma" 
                             ng-init="vm.mediaBase='{{ url('media') }}/'" 
                             ng-src="@{{ vm.media.mainPath() }}"
                             ng-click="vm.media.next()"

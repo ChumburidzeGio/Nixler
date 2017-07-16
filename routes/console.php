@@ -17,11 +17,3 @@ use App\Repositories\ProductRepository;
 Artisan::command('countries:download {iso_code}', function ($code) {
     app(LocationRepository::class)->downloadCountry($code);
 });
-
-Artisan::command('products:delete {id}', function ($id) {
-    app(ProductRepository::class)->delete($id);
-});
-
-Artisan::command('products:hide {id}', function ($id) {
-    app(ProductRepository::class)->hide($id);
-});

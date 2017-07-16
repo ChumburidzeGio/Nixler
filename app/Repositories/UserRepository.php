@@ -145,7 +145,24 @@ class UserRepository extends BaseRepository {
     {
         $user = auth()->user();
         
+        $user->products()->pluck('id')->map(function($product){
+            app(ProductRepository::class)->hide($product->id);
+        });
+
         return $user->delete();
+    }
+
+
+    /**
+     * Soft delete user
+     */
+    public function activate($user)
+    {
+        $user->restore();
+
+        $user->products()->pluck('id')->map(function($product){
+            app(ProductRepository::class)->publish($product->id);
+        });
     }
 
 
@@ -169,7 +186,7 @@ class UserRepository extends BaseRepository {
 
         if($model && $model->trashed()) {
             Session::flash('message', __('Your account successfully restored. Have a good day and thank you for coming back!'));
-            $model->restore();
+            $this->activate($user);
         }
 
         if (is_null($model)) {
@@ -318,17 +335,7 @@ class UserRepository extends BaseRepository {
 
         //$locationFilter = $city ? " and earth_distance('lat','lng', ".floatval($city->lat).", ".floatval($city->lng).") < 50000" : "";
 
-        $followings = $user->followings()->take(20)->pluck('follow_id')->implode(',');
-
-        $recommendations = (new RecommService)->recommendations($user->id, 50, [
-            'filter' => "'currency' == \"{$user->currency}\"",
-            'booster' => 
-                "(if 'user_id' in {{$followings}} then 20 else 0)". // User follows the seller - 20
-                " + (if 'category_id' < 30 then 5 else 0)". // Category is Fashion or Techinics - 5
-                " + (if size('description') > 50 then 7 else 0)". // Size of description contains more then 50 characters - 7
-                " + (if 'likes_count' > 0 then ('likes_count' * 0.5) else 0)",// On like - 0.5
-            'rotationRate' => '0.1'
-        ]);
+        $recommendations = capsule('reco')->forUser($user)->get();
 
         $products = app(ProductRepository::class)->findByIds($recommendations)->pluck('id');
 

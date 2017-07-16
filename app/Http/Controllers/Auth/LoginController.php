@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
+use App\Repositories\UserRepository;
 use App\Entities\User;
 use Illuminate\Http\Request;
 use Hash, Session;
@@ -77,9 +78,13 @@ class LoginController extends Controller
             $user = User::where('email', $email)->orWhere('username', $username)->withTrashed()->first();
 
             if($user && $user->trashed() && Hash::check($password, $user->password)) {
-                $user->restore();
+
+                app(UserRepository::class)->activate($user);
+
                 Auth::login($user, true);
+
                 $attempt = true;
+                
                 Session::flash('message', __('Your account successfully restored. Have a good day and thank you for coming back!'));
             }
 
