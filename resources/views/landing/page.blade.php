@@ -22,6 +22,32 @@
 
     </div>
 
+    <div id="qa" class="_clear _c2 _tal">
+    <br>
+    <hr>
+    <br>
+        <div class="_cbl _tac _fs24 _mt15">კითხვა-პასუხი</div>
+
+        @foreach($qa as $section)
+
+            @foreach($section as $q => $a)
+
+                @if($q == '_title')
+                <br>
+                <div class="_cbl _fs20 _mt15">{{ $a }}</div>
+
+                @else
+
+                <div class="_c2 _fs16 _mt10 _fw600">{{ $q }}</div>
+                <div class="_c3 _fs15">{{ $a }}</div>
+
+                @endif
+
+            @endforeach
+
+        @endforeach
+    </div>  
+
 
     <div id="contact" class="_pb15 row _pl10 _pr10 _mt70">
 

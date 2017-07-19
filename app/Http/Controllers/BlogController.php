@@ -82,13 +82,9 @@ class BlogController extends Controller
      */
     public function welcome()
     {   
-        $what = collect(trans('landing.what.items'))->chunk(2);
+        $qa = json_decode(file_get_contents(resource_path('docs/qa.ka.json')));
 
-        $why = collect(trans('landing.why.items'))->chunk(3);
-
-        $who = collect(trans('landing.who.items'))->chunk(3);
-
-        return view('landing.page', compact('what', 'why', 'who'));
+        return view('landing.page', compact('qa'));
     }
 
 }

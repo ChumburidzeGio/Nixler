@@ -67,10 +67,13 @@ class Update extends Command
         ]);
 
         $terms_en = file_get_contents(resource_path('docs/terms.en.md'));
+        $terms_ka = file_get_contents(resource_path('docs/terms.ka.md'));
 
         app(BlogRepository::class)->updateOrCreateBySlug('terms', [
             'title:en' => 'Nixler Terms of Service',
-            'body:en' => $terms_en
+            'body:en' => $terms_en,
+            'title:ka' => 'სამომხმარებლო შეთანხმება',
+            'body:ka' => $terms_ka,
         ]);
 
     }
