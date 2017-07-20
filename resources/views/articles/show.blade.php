@@ -10,9 +10,9 @@
 		<div class=" _brds3 _clear _mb15">
 
 			<article class="article">
-				<h1 class="_cbt9 article-title">{{ $article->title }}</h1>
+				<h1 class="article-title">{{ $article->title }}</h1>
 
-				<section class="content _c2 _fs16 _mt15 _anc article-body">
+				<section class="content _mt15 _anc article-body">
 					{!! $article->body_parsed !!}
 				</section>
 			</article>
