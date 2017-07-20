@@ -1,6 +1,16 @@
-.article-title {
-	font-size: 35px;line-height: 48px;padding: 0 0 10px;
+/*=================================
+       ARTICLE
+==================================*/
+.article .article-body h4 {
+    font-size: 18px;
+    margin: 20px 0px 25px;
+    color: #21211e;
+    line-height: 30px;
+    font-weight: bold;
 }
-.article-body {
-	line-height: 26px;
+
+.article .article-title {
+    font-size: 35px;
+    line-height: 48px;
+    padding: 0 0 10px;
 }
