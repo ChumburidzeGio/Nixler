@@ -108,7 +108,7 @@ class Zalando extends BasePattern {
             return [
                 'price' => $this->calcPrice($price, $currency),
                 'in_stock' => array_get($item, 'stock'),
-                'name' => $this->transfromSize(array_get($item, 'size.local'), array_get($item, 'size.local_type'))
+                'name' => $this->transfromSize(array_get($item, 'size.local'), array_get($item, 'size.local_type')).' ზომა'
             ];
 
         });
@@ -192,15 +192,15 @@ class Zalando extends BasePattern {
 
         $GBP2GEL = 3.15;
 
-        $FEE = 15;
+        $FEE = 5;
 
         if($currency == 'GBP') {
 
-            $price = money(null, $price * $GBP2GEL);
+            $price = money(null, ($price + 5) * $GBP2GEL);
 
         } elseif ($currency == 'EUR') {
 
-            $price = money(null, $price * $EUR2GEL);
+            $price = money(null, ($price + 4) * $EUR2GEL);
 
         }
 
