@@ -65,7 +65,7 @@ class Zalando extends BasePattern {
                     continue;
                 }
 
-                $data[] = $this->translate(array_get($item, 'name')).': '.array_get($item, 'values');
+                $data[] = $this->translate(array_get($item, 'name')).': '.$this->translate(array_get($item, 'values'));
 
             }
 
@@ -178,6 +178,7 @@ class Zalando extends BasePattern {
             'Cucitura sul seno' => 'სამკუთხედი გული',
             'Gessati' => 'წვრილი',
             'Lunghezza normale' => 'ნორმალური სიგრძე',
+            'Materiale' => 'მასალა',
         ], $word, $word);
     }
 
