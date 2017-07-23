@@ -185,6 +185,15 @@ class Zalando extends BasePattern {
             '100% cotone' => '100% ბამბა',
             'Lunghezza normale' => 'ნორმალური სიგრძე',
             'Manica corta' => 'მოკლე',
+            'Rivestimento' => 'ზედაპირი',
+            'Pelle' => 'ტყავი',
+            'Suola' => 'ძირი',
+            'Materiale parte superiore' => 'შიდა მასალა',
+            'Materiale sintetico' => 'სინთეტიკა',
+            'Tipo di tacco' => 'ქუსლის ტიპი',
+            'Flat' => 'ბრტყელი',
+            'Chiusura' => 'შესაკრავი',
+            'Lacci' => 'თასმა',
         ], $word, $word);
     }
 
