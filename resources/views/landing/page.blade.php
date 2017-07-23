@@ -22,32 +22,48 @@
 
     </div>
 
-    <div id="qa" class="_clear _c2 _tal">
-    <br>
-    <hr>
-    <br>
+    <div id="qa" class="_clear _c2 _tal _p10">
+        <br>
+        <hr>
+        <br>
         <div class="_cbl _tac _fs24 _mt15">კითხვა-პასუხი</div>
 
         @foreach($qa as $section)
 
-            @foreach($section as $q => $a)
+        @foreach($section as $q => $a)
 
-                @if($q == '_title')
-                <br>
-                <div class="_cbl _fs20 _mt15">{{ $a }}</div>
+        @if($q == '_title')
+        <br>
+        <div class="_cbl _fs20 _mt15">{{ $a }}</div>
 
-                @else
+        @else
 
-                <div class="_c2 _fs16 _mt10 _fw600">{{ $q }}</div>
-                <div class="_c3 _fs15">{{ $a }}</div>
+        <div class="_c2 _fs16 _mt10 _fw600">{{ $q }}</div>
+        <div class="_c3 _fs15">{{ $a }}</div>
 
-                @endif
+        @endif
 
-            @endforeach
+        @endforeach
 
         @endforeach
     </div>  
 
+</div>
+
+<div class="_clear _bgw _bb1 _mt40 _bt1">
+        <div class="_crsl _p15">
+            <div class="_crsli">
+                <img src="{{ asset('img/screens/3'. config('app.locale') .'.png') }}">
+                <div class="_clear _tac _c2">Product edit page</div>
+            </div>
+            <div class="_crsli">
+                <img src="{{ asset('img/screens/4'. config('app.locale') .'.png') }}">
+                <div class="_clear _tac _c2">Order page</div>
+            </div>
+        </div>
+</div>
+
+<div class="container">
 
     <div id="contact" class="_pb15 row _pl10 _pr10 _mt70">
 

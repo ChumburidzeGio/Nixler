@@ -25,10 +25,6 @@ Auth::routes();
 	Route::post('articles/{slug}', 'BlogController@update')->name('articles.update')->middleware('can:create-articles');
 	Route::delete('articles/{slug}', 'BlogController@destroy')->name('articles.destroy')->middleware('can:create-articles');
 
-	Route::group([], function() {
-	    Route::get('/cl{id}', 'CollectionController@find')->name('collection.find');
-	});
-
 	Route::group(['middleware' => ['auth'], 'prefix' => 'im'], function() {
 	    Route::get('/{id?}', 'MessagesController@show')->name('threads');
 	    Route::get('/{id}/load', 'MessagesController@load')->name('thread-load');
@@ -51,6 +47,15 @@ Auth::routes();
 		Route::match(['get', 'post'], 'products/{id}/order', 'ProductController@order')->middleware('auth')->name('order');
 		Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 		Route::get('/stock', 'ProductController@stock')->name('stock');
+	});
+
+	Route::group(['prefix' => 'cl'], function() {
+	    Route::get('/{id}', 'CollectionsController@show')->name('collections.show')->where('id', '[0-9]+');
+	    Route::get('/create', 'CollectionsController@update')->name('collections.create');
+	    Route::get('/update/{id}', 'CollectionsController@update')->name('collections.update');
+	    Route::post('/store', 'CollectionsController@store')->name('collections.store');
+	    Route::post('/delete', 'CollectionsController@delete')->name('collections.delete');
+	    Route::post('/productSearch', 'CollectionsController@productSearch')->name('collections.productSearch');
 	});
 
 	Route::group(['prefix' => 'comments'], function() {
@@ -123,7 +128,9 @@ Auth::routes();
 	});
 
 	Route::get('/scrap', function(){
+
 		return app(\App\Crawler\Crawler::class)->get(request('url'))->toArray();
+
 	});
 
 //});

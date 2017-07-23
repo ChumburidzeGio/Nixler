@@ -848,62 +848,50 @@ select._fe{
 /*=================================
        LOADER
 ==================================*/
-._ldr,
-._ldr:before,
-._ldr:after {
-  border-radius: 50%;
-  width: 2.5em;
-  height: 2.5em;
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both;
-  -webkit-animation: load7 1.8s infinite ease-in-out;
-  animation: load7 1.8s infinite ease-in-out;
+@keyframes spinner {
+    to {transform: rotate(360deg);}
 }
 
-._ldr {
-  color: #ffffff;
-  font-size: 10px;
-  margin: 80px auto;
-  position: relative;
-  text-indent: -9999em;
-  -webkit-transform: translateZ(0);
-  -ms-transform: translateZ(0);
-  transform: translateZ(0);
-  -webkit-animation-delay: -0.16s;
-  animation-delay: -0.16s;
+._spnr:before {
+    content: '';
+    box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin-top: -10px;
+    margin-left: -10px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    border-top-color: #333;
+    animation: spinner .6s linear infinite;
 }
 
-._ldr:before,
-._ldr:after {
-  content: '';
-  position: absolute;
-  top: 0;
+/*=================================
+       CAROUSEL
+==================================*/
+._crsl {
+    width: 100%;
+    height: 60vh;
+    overflow-x: scroll;
+    white-space: nowrap;
+    overflow-y: hidden;
 }
 
-._ldr:before {
-  left: -3.5em;
-  -webkit-animation-delay: -0.32s;
-  animation-delay: -0.32s;
+._crsli {
+    display: inline-block;
 }
 
-._ldr:after {
-  left: 3.5em;
+._crsli img {
+    max-height: calc(60vh - 50px);
+    display: inline-block;
 }
 
-@-webkit-keyframes load7 {
-    0%, 80%, 100% {
-        box-shadow: 0 2.5em 0 -1.3em;
+@media(min-width: 700px){
+
+    ._crsli:first-child {
+        margin-left: 15vh;
     }
-    40% {
-        box-shadow: 0 2.5em 0 0;
-    }
-}
 
-@keyframes load7 {
-    0%, 80%, 100% {
-        box-shadow: 0 2.5em 0 -1.3em;
-    }
-    40% {
-        box-shadow: 0 2.5em 0 0;
-    }
 }

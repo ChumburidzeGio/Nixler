@@ -223,8 +223,6 @@ class RecommService {
             'tags' => 'set',
             'likes_count' => 'int',
             'owner' => 'string',
-            'lat' => 'double',
-            'lng' => 'double',
         ];
 
         $user_props = [

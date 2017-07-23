@@ -8,6 +8,7 @@ use App\Crawler\BasePattern;
 use App\Crawler\Patterns\LuteciaGe;
 use App\Crawler\Patterns\BeGe;
 use App\Crawler\Patterns\DealsGe;
+use App\Crawler\Patterns\Zalando;
 use App\Repositories\ProductRepository;
 
 class Crawler {
@@ -74,6 +75,8 @@ class Crawler {
             'lutecia.ge' => LuteciaGe::class,
             'be.ge' => BeGe::class,
             'deals.ge' => DealsGe::class,
+            'zalando.it' => Zalando::class,
+            'zalando.co.uk' => Zalando::class,
         ];
 
         $default = BasePattern::class;

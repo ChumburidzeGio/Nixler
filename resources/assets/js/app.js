@@ -30,6 +30,7 @@
  require('./stream/core');
  require('./settings/core');
  require('./user/core');
+ require('./collections');
 
  
  var app = angular.module('nx', [
@@ -55,6 +56,7 @@
     'stream',
     'settings',
     'user',
+    'collections'
     ]);
 
  app.factory('httpRequestInterceptor', function () {

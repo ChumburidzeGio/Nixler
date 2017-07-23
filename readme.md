@@ -18,6 +18,16 @@ To run scheduled tasks we need to setup cron jobs. From the root of project run 
 `locale -a` to check which locations are allowed, next do `sudo locale-gen id_ID.UTF-8` to install your locale and do `sudo dpkg-reconfigure locales` to publish it.
 Reboot your system (`vagrant reload`) and enjoy
 
+# Styleguide
+
+### Routing
+In the name of routes repository name should be the first, then by dots seperated other identifiers. Examples:
+* collections.create
+* collections.update
+* collections.store
+* collections.delete
+* collections.follow
+* collections.productSearch
 
 # Algorithm for Stream 
 
@@ -70,6 +80,8 @@ $capsule = capsule('stream')
 	->recommendedFor($user->id)
 	->wherePrice(200, 1400)
 	->whereCategory(1)
+	->whereIds([1])
+	->whereInCollection($collection->id)
 	->search(null)
 	->perPage(500)
 	->latest()
@@ -125,3 +137,4 @@ $similarProducts = capsule('reco')->forProduct($product)->get();
 
 * [Georgian Technical Dictionary](http://techdict.ge/)
 * [CSS Hues](https://webkul.github.io/coolhue/)
+* [Javascript Comments Reindention](https://forum.sublimetext.com/t/javascript-indentation-broken-after-comment/13609/8)

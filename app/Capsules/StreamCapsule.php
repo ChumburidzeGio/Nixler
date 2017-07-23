@@ -64,6 +64,18 @@ class StreamCapsule {
     }
 
     /**
+     * Filter products by ids
+     *
+     * @return this
+     */
+    public function whereIds(array $ids)
+    {
+        $this->model = $this->model->whereIn('p.id', $ids);
+
+        return $this;
+    }
+
+    /**
      * Filter products by merchant
      *
      * @return this
@@ -73,6 +85,20 @@ class StreamCapsule {
     	$this->model = $this->model->where('p.owner_id', $id);
 
     	return $this;
+    }
+
+    /**
+     * Filter products by user likes (just liked products)
+     *
+     * @return this
+     */
+    public function whereInCollection($id)
+    {
+        $this->model = $this->model->join('collection_items as ci', function ($join) use ($id) {
+            return $join->on('p.id', '=', 'ci.product_id')->where('ci.collection_id', $id);
+        })->orderBy('ci.order', 'desc');
+
+        return $this;
     }
 
     /**

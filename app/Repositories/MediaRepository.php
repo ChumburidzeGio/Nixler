@@ -53,7 +53,7 @@ class MediaRepository extends BaseRepository {
                 $basic->fit($height, $width);
             }
 
-            return $basic->encode('jpg', 90);
+            return $basic->encode('jpg', 100);
 
         });
 

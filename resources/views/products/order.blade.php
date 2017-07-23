@@ -12,34 +12,35 @@
     </script>
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default _b0 _crd">
+            <form role="form" method="POST" action="{{ route('order', ['id' => $product->id]) }}">
+                {{ csrf_field() }}
+                <input type="hidden" name="variant" value="{{ request()->input('variant') }}">
+                <input type="hidden" name="quantity" value="{{ request()->input('quantity') }}">
+                <input type="hidden" name="step" value="2">
 
-                <div class="_lim _clear _mt5 _mb5 _bb1 _bcg">
-                    <img src="{{ $product->photo('similar') }}" class="_left _dib _mt5" height="60" width="60">
-                    <div class="_pl15 _pr15 _pb10 _oh">
-                        <a class="_cbt8 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs18" href="{{ $product->url() }}">
-                            {{ $product->title }}
-                        </a>
-                        <span class="_cbt8 _clear _telipsis _w100 _oh _pr10 _oh _fs13">
-                            By <a href="{{ $product->owner->link() }}" class="_ci">{{ $product->owner->name }}</a>
-                        </span>
-                        <span class="_cbt8 _clear _telipsis _w100 _oh _pr10 _oh _fs13">
-                            {{ $product->price_formated }}
-                        </span>
+                <div class="panel panel-default _b0 _crd">
+
+                    <div class="_lim _clear _mt5 _mb5 _bb1 _bcg">
+                        <img src="{{ $product->photo('similar') }}" class="_left _dib _mt5" height="60" width="60">
+                        <div class="_pl15 _pr15 _pb10 _oh">
+                            <a class="_cbt8 _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs18" href="{{ $product->url() }}">
+                                {{ $product->title }}
+                            </a>
+                            <span class="_cbt8 _clear _telipsis _w100 _oh _pr10 _oh _fs13">
+                                By <a href="{{ $product->owner->link() }}" class="_ci">{{ $product->owner->name }}</a>
+                            </span>
+                            <span class="_cbt8 _clear _telipsis _w100 _oh _pr10 _oh _fs13">
+                                {{ $product->price_formated }}
+                            </span>
+                        </div>
                     </div>
-                </div>
 
 
-                <span class="_c2 _lh1 _mb0 _fs18 _p15 _clear _pb0">
-                    @lang('Add shipping details')
-                </span>
+                    <span class="_c2 _lh1 _mb0 _fs18 _p15 _clear _pb0">
+                        @lang('Add shipping details')
+                    </span>
 
-                <div class="panel-body _pb15 _pl5 _pr5">
-                    <form role="form" method="POST" action="{{ route('order', ['id' => $product->id]) }}">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="variant" value="{{ request()->input('variant') }}">
-                        <input type="hidden" name="quantity" value="{{ request()->input('quantity') }}">
-                        <input type="hidden" name="step" value="2">
+                    <div class="panel-body _pb15 _pl5 _pr5">
 
                         <div class="col-sm-4 _mb15">
                             <small class="_clear _pb1">@lang('Your city')</small>
@@ -79,9 +80,8 @@
                             </span>
                             @endif
                         </div>
-                    </form>
 
-                </div>
+                    </div>
 
                 <!--span class="_c2 _lh1 _mb0 _fs18 _p15 _clear _pb0 _pt0 _bt1 _bcg _pt10">
                     @lang('Choose payment method')
@@ -176,18 +176,17 @@
                         <p class="_clear _fs13 _c2 _mb0 _tac _mt5 ng-cloak" ng-if="vm.city.shipping_price">@lang('You will pay on delivery') <span ng-bind="vm.price() | money "></span>.</p-->
 
 
-                        <button type="submit" class="_btn _bga _cb _mt15 block _fs15" ng-disabled="!vm.city.shipping">
-                            @lang('Buy')
-                            <i class="material-icons _fs18 _va4 _ml4">chevron_right</i>
-                        </button>
+                            <button type="submit" class="_btn _bga _cb _mt15 block _fs15" ng-disabled="!vm.city.shipping">
+                                @lang('Buy')
+                                <i class="material-icons _fs18 _va4 _ml4">chevron_right</i>
+                            </button>
+                        </div>
+
                     </div>
-
                 </div>
-            </div>
 
-            <p class="_fs13 _tac">
-            {!! nl2br($product->owner->merchant_terms) !!}</p>
-
+                <p class="_fs13 _tac">{!! nl2br($product->owner->merchant_terms) !!}</p>
+            </form>
         </div>
     </div>
 </div>
