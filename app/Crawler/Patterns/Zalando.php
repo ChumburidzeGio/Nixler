@@ -179,6 +179,12 @@ class Zalando extends BasePattern {
             'Gessati' => 'წვრილი',
             'Lunghezza normale' => 'ნორმალური სიგრძე',
             'Materiale' => 'მასალა',
+            'Normale' => 'ნორმალური',
+            'Leggera' => 'ნათელი',
+            'Stampa' => 'ნაბეჭდი',
+            '100% cotone' => '100% ბამბა',
+            'Lunghezza normale' => 'ნორმალური სიგრძე',
+            'Manica corta' => 'მოკლე',
         ], $word, $word);
     }
 
