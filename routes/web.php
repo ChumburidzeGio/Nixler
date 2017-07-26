@@ -129,12 +129,6 @@ Auth::routes();
 
 	Route::get('/scrap', function(){
 
-		$order = \App\Entities\Order::first();
-
-		$user = $order->user;
-
-		return event(new \Illuminate\Auth\Events\Registered($user));
-
 		$crawler = app(\App\Crawler\Crawler::class);
 
 		$url = request('url');
