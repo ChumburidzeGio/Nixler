@@ -132,9 +132,9 @@ class AIE
 
         }
 
-        app(RecommService::class)->removeProp('lat');
-        
-        app(RecommService::class)->removeProp('lng');
+        app(RecommService::class)->removeProp('lat', 'product');
+
+        app(RecommService::class)->removeProp('lng', 'product');
         
     }
 
