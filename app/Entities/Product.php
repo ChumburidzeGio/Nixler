@@ -264,11 +264,11 @@ class Product extends Model
     {
         $array = $this->toArray();
 
-        $tags = ProductTag::where('product_id', $this->id)->pluck('name')->toArray();
+        $tags = ProductTag::where('product_id', $this->id)->pluck('name')->implode(', ');
 
-        $variants = ProductVariant::where('product_id', $this->id)->pluck('name')->toArray();
+        $variants = ProductVariant::where('product_id', $this->id)->pluck('name')->implode(', ');
 
-        return dd(array_merge(array_intersect_key($array, array_flip(['id', 'title', 'description', 'sku'])), compact('tags', 'variants')));
+        return array_merge(array_intersect_key($array, array_flip(['id', 'title', 'description', 'sku'])), compact('tags', 'variants'));
     }
     
     
