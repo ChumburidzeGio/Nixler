@@ -264,7 +264,9 @@ class Product extends Model
     {
         $array = $this->toArray();
 
-        return array_intersect_key($array, array_flip(['id', 'title', 'description']));
+        $tags = ProductTag::where('product_id', $this->id)->get();
+
+        return array_merge(array_intersect_key($array, array_flip(['id', 'title', 'description'])), compact('tags'));
     }
     
     
