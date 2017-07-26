@@ -5,6 +5,7 @@ namespace App\Upgrade;
 use App\Entities\User;
 use App\Entities\Order;
 use App\Entities\Product;
+use App\Services\RecommService;
 use Illuminate\Support\Facades\Schema;
 use App\Repositories\UserRepository;
 use App\Repositories\ProductRepository;
@@ -130,6 +131,10 @@ class AIE
             });
 
         }
+
+        app(RecommService::class)->removeProp('lat');
+        
+        app(RecommService::class)->removeProp('lng');
         
     }
 

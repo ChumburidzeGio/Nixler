@@ -207,6 +207,27 @@ class RecommService {
      *
      * @return string
      */
+    public function removeProp($prop, $table)
+    {   
+        if($table == 'product') {
+
+            $request = new Reqs\DeleteItemProperty($prop);
+
+        } else {
+
+            $request = new Reqs\DeleteUserProperty($prop);
+            
+        }
+
+        return $this->send($request);
+    }
+
+
+    /**
+     * Add activity to Keen
+     *
+     * @return string
+     */
     public function addProps()
     {   
         $requests = [];

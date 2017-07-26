@@ -42,8 +42,6 @@ class ProductUpdated extends Notification
      */
     public function toArray($notifiable)
     {
-        $owner = $notifiable->owner()->first();
-        
         return [
             'price' => floatval($notifiable->price),
             'title' => $notifiable->title,
