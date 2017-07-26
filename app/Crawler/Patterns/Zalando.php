@@ -245,6 +245,11 @@ class Zalando extends BasePattern {
             'Carrying handle' => 'სახელური',
             'Lining' => 'სარჩული',
             'Polyester' => 'პოლიესტერინი',
+            'Collar' => 'საყელო',
+            'Adjustable straps' => 'რეგულირებადი თასმები',
+            'Extra short' => 'ძალიან მოკლე',
+            'Asymmetrical' => 'ასიმეტრიული',
+            'Cut' => 'ფასონი',
 
             'pink' => 'ვარდისფერი',
             'purple' => 'იასამნისფერი',
@@ -298,6 +303,7 @@ class Zalando extends BasePattern {
             'Zip fastening' => 'ელვა შესაკრავი',
             'Knee-length' => 'მუხლამდე სიგრძე',
             'Hand wash only' => 'მხოლოდ ხელით რეცხვა',
+            'viscose' => 'ვისკოზა',
         ]);
 
         $word = preg_replace_callback("/(\d.+)\"/", function($matches){
