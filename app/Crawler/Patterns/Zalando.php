@@ -222,11 +222,11 @@ class Zalando extends BasePattern {
     public function translate(string $word) : string
     {
         $word = array_get([
-            'heading_material' => 'ქსოვილი',
-            'heading_details' => 'დეტალები',
-            'heading_measure_and_fitting' => 'ზომა',
+            'heading_material' => 'ქსოვილის შემადგენლობა და რეცხვა',
+            'heading_details' => 'პროდუქტის დეტალები',
+            'heading_measure_and_fitting' => 'ზომა და მორგება',
             'Zip' => 'ელვა',
-            'Floral' => 'ყვავილოვანი',
+            'Floral' => 'ყვავილებიანი',
             'Long' => 'გრძელი',
             'Cropped' => 'გადაჭრილი',
             'Round neck' => 'მომრგვალებული საყელო',
@@ -250,6 +250,14 @@ class Zalando extends BasePattern {
             'Extra short' => 'ძალიან მოკლე',
             'Asymmetrical' => 'ასიმეტრიული',
             'Cut' => 'ფასონი',
+            'Pockets' => 'ჯიბეები',
+            'Side pockets' => 'გვერდითი ჯიბეები',
+            'Elasticated waist' => 'ელასტიური წელი',
+            'Inner leg length' => 'ფეხის სიგრძე შიგნიდან',
+            'Outer leg length' => 'ფეხის სიგრძე გარედან',
+            'Fit' => 'სტილი',
+            'Loose' => 'თავისუფალი',
+            'Spacious inner compartment' => 'ფართე შიგა სივრცე',
 
             'pink' => 'ვარდისფერი',
             'purple' => 'იასამნისფერი',
@@ -259,6 +267,7 @@ class Zalando extends BasePattern {
             'dark blue' => 'მუქი ლურჯი',
             'blue' => 'ცისფერი',
 
+            'Trousers' => 'შარვალები',
             'Trouser' => 'შარვალი',
             'Sports shoes' => 'სპორტული ფეხსაცმელი',
             'Scarf' => 'შარფი',
@@ -274,7 +283,7 @@ class Zalando extends BasePattern {
             'Washing instructions' => 'რეცხვა',
             'Neckline' => 'საყელო',
             'Sheer' => 'გამჭვირვალე',
-            'Semi-sheer' => 'ნახევრად-გამჭვირვალე',
+            'Semi-sheer' => 'ნახევრად გამჭვირვალე',
             'Pattern' => 'მოხატულობა',
             'Details' => 'დეტალები',
             'Our model\'s height' => 'მოდელის სიმაღლე',
@@ -283,11 +292,11 @@ class Zalando extends BasePattern {
             'Back width' => 'ზურგის სიფართე',
             'Lunghezza delle maniche' => 'სახელოების სიგრძე',
             'Total length' => 'სრული სიგრძე',
-            'Flat' => 'ბრტყელი',
+            'Flat' => 'ფართე',
             'Short' => 'მოკლე',
             'cotton' => 'ბამბა',
             'polyester' => 'პოლიესტერინი',
-            'Do not tumble dry' => 'არ გააშროთ სარეცხ-მანქანაში',
+            'Do not tumble dry' => 'არ გააშროთ სარეცხ მანქანაში',
             'machine wash at' => 'რეცხვის ტემპერატურა',
             'Our model is' => 'ჩვენი მოდელის სიმაღლე არის',
             'tall and is wearing size' => 'და იცვავს ზომას',
@@ -295,7 +304,7 @@ class Zalando extends BasePattern {
             'Normal' => 'ნორმალური',
             'Regular' => 'ჩვეულებრივი',
             'Print' => 'პრინტი',
-            'Machine wash at' => 'სარეცხ-მანქანაში რეცხვა ტემპერატურაზე',
+            'Machine wash at' => 'სარეცხ მანქანაში რეცხვა ტემპერატურაზე',
             'Machine wash on gentle cycle' => 'რეცხვა დელიკატურზე',
             'Fastening' => 'შესაკრავი',
             'Button' => 'ღილი',
@@ -304,6 +313,7 @@ class Zalando extends BasePattern {
             'Knee-length' => 'მუხლამდე სიგრძე',
             'Hand wash only' => 'მხოლოდ ხელით რეცხვა',
             'viscose' => 'ვისკოზა',
+            'A shrinkage of up to 5% may occur' => 'შეიძლება მოხდეს ზომაში შემცირება 5%-ით',
         ]);
 
         $word = preg_replace_callback("/(\d.+)\"/", function($matches){
