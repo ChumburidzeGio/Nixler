@@ -40,6 +40,7 @@ class CreateProductsTables extends Migration
             $table->integer('media_count')->default(0)->unsigned();
             $table->boolean('is_active')->default(0);
             $table->boolean('has_variants')->default(0);
+            $table->string('target', 15)->nullable();
             $table->timestamps();
 
         });

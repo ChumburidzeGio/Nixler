@@ -25,11 +25,11 @@
 					@endif
 				</a>
 				
-			@foreach($capsule->categories() as $cat)
+				@foreach($capsule->categories() as $cat)
 				<a href="{{ $cat['href'] }}" 
-					class="_lim _hvrd _brds3 _telepsis _fs13{{ $cat['active'] ? ' _hvrda' : '' }}{{ $cat['empty'] ? ' _cgl' : ' _cg' }}">
-					<i class="material-icons _fs18 _mr15 _va4">{{ $cat['icon'] or 'brightness_1' }}</i> {{ $cat['name'] }}
-				</a>
+				class="_lim _hvrd _brds3 _telepsis _fs13{{ $cat['active'] ? ' _hvrda' : '' }}{{ $cat['empty'] ? ' _cgl' : ' _cg' }}">
+				<i class="material-icons _fs18 _mr15 _va4">{{ $cat['icon'] or 'brightness_1' }}</i> {{ $cat['name'] }}
+			</a>
 			@endforeach
 
 			{{--<div class="_fs12 _ttu _pl15 _pt10 _pb5">Order</div>
@@ -50,20 +50,20 @@
 	</div>
 	<div class="col-lg-9 col-md-10 col-xs-12">
 
-		@if(isset($facets) && $facets && $facets->count() > 0)
+		@if($capsule->priceFacet())
 
-		<script>window.facets = {!! $capsule->toJson() !!};</script>
+		<script>window.facets = {!! json_encode($capsule->priceFacet()) !!};</script>
 
-		<div class="_db _tbs _ov _mb5" id="price-filter">
-			<div class="_tb _crp _pl5" ng-if="vm.filters.price.avg">
-				<span ng-click="vm.showPriceRange=!vm.showPriceRange" ng-class="{'_zi999': vm.showPriceRange}">
-					<i class="material-icons _fs17 _va3 _mr10">filter_list</i>
-					@lang('Price range')<i class="material-icons _fs17 _va5">expand_more</i>
+		<div class="_dib _tbs _ov _mb5" id="price-filter">
+			<div class="_tb _crp _p0" ng-if="vm.filters.price.avg">
+				<span ng-click="vm.showPriceRange=!vm.showPriceRange" ng-class="{'_zi999': vm.showPriceRange}" class="_clear _m5">
+					<i class="material-icons _fs17 _va3 _mr10">attach_money</i>
+					@lang('Price range')<i class="material-icons _fs17 _va5 _ml5">expand_more</i>
 				</span>
 
 				<div class="_af _bgwt2 _zi999" ng-if="vm.showPriceRange" ng-click="vm.showPriceRange=0"></div>
 
-				<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange" ng-init="vm.filters.price.min={{ request()->input('price_min', 0) }};vm.filters.price.max={{ request()->input('price_max', 9999) }};">
+				<div class="price-range _clear _mb15 _bgw _brds1 _z013 _p10 _posa _mt5 _w350px _zi999" ng-if="vm.showPriceRange" ng-init="vm.filters.price.min={{ request()->input('price_min', '0.00') }};vm.filters.price.max={{ request()->input('price_max', '9999.00') }};">
 					<div class="_clear">
 						<span class="_fs17 _clear">@{{ vm.filters.price.min | money }} - @{{ vm.filters.price.max | money }}</span>
 						<span>@lang('The average price of product is') @{{ vm.filters.price.avg | money }}.</span>
@@ -112,6 +112,44 @@
 		</div>
 	</div>
 
+	@endif
+
+	@if($capsule->targets())
+	<div class="_dib _tbs _ov _mb5 _ml10" id="target-filter">
+		<div class="_tb _crp _p0">
+			<span ng-click="vm.showTargetRange=!vm.showTargetRange" ng-class="{'_zi999': vm.showTargetRange}" class="_clear _m5">
+				<i class="material-icons _fs17 _va3 _mr10">people</i>
+				@lang('For whom')<i class="material-icons _fs17 _va5 _ml5">expand_more</i>
+			</span>
+
+			<div class="_af _bgwt2 _zi999" ng-if="vm.showTargetRange" ng-click="vm.showTargetRange=0"></div>
+
+			<div class="target-range _clear _mb15 _bgw _brds1 _z013 _posa _mt5 _w350px _zi999" ng-if="vm.showTargetRange" ng-init="vm.filters.target.min={{ request()->input('target_min', '0.00') }};vm.filters.target.max={{ request()->input('target_max', '9999.00') }};">
+
+
+				<div class="_lst _b0">
+
+					@foreach($capsule->targets() as $target)
+
+					@foreach($target as $key => $value)
+
+						@if($key === 'title')
+						<span class="_c3 _mt15 _bb1 _mb5 _clear _pl15 _pb5 _cbl">{{ $value }}</span>
+						@else
+						<a class="_lsti{{ $value['active'] ? ' active' : '' }}" href="{{ $value['link'] }}">
+							{{ $value['name'] }}<i class="material-icons _right _mt5">chevron_right</i>
+						</a>
+						@endif
+
+					@endforeach
+
+					@endforeach
+
+				</div>
+
+			</div>
+		</div>
+	</div>
 	@endif
 
 	@if(auth()->guest() && !request()->has('cat') && !request()->has('query'))

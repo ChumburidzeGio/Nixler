@@ -26,6 +26,12 @@
             <div class="_dib _right _tbs">
                 @if(auth()->check())
 
+                @if(auth()->user()->products_count)
+                <a href="{{ url('/new-product') }}" class="_tb _posr">
+                    <i class="material-icons _cinherit _fs20 _mt10">add</i> 
+                </a>
+                @endif
+
                 <a href="{{ route('threads') }}" class="_tb _posr">
                     <i class="material-icons _cinherit _fs20 _mt10">message</i> 
                     @if(auth()->user()->notifications_count)

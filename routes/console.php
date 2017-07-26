@@ -17,3 +17,8 @@ use App\Repositories\ProductRepository;
 Artisan::command('countries:download {iso_code}', function ($code) {
     app(LocationRepository::class)->downloadCountry($code);
 });
+
+Artisan::command('crawler:page {uid} {url}', function ($uid, $url) {
+	auth()->loginUsingId($uid);
+    $crawler = app(\App\Crawler\Crawler::class)->all($url);
+});

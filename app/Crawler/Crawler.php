@@ -30,7 +30,7 @@ class Crawler {
         $crawler = $this->client->request('GET', $url);
 
         $pattern = app($this->findPattern($url))->parse($crawler);
-        
+
         if(method_exists($pattern, 'isProduct') && !$pattern->isProduct()) {
             return null;
         }
@@ -52,12 +52,22 @@ class Crawler {
 
         foreach ($links as $link) {
 
-            $product = $repository->create();
+            try {
 
-            $product = $repository->import($link, $product->id);
+                $product = $repository->create();
 
-            if($product) {
-                $repository->publish($product, auth()->user());
+                $product = $repository->import($link, $product->id);
+
+                if($product && $product->category_id) {
+                    $repository->publish($product, auth()->user());
+                }
+
+                echo ($product ? 'Success - ' : 'Skipped - ').$link."\n";
+
+            } catch (\Exception $e) {
+                dd($e);
+                echo 'Rejected - '.$link." - ".$e->getMessage()."\n";
+
             }
 
         }

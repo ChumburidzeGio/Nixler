@@ -8,9 +8,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Validation\Rule;
 use App\Services\LocationService;
 use App\Services\PhoneService;
+use App\Services\UserAgentService;
 use App\Repositories\UserRepository;
 use App\Entities\Order;
-use stdClass, Lava;
+use stdClass, Lava, DB;
+use Carbon\Carbon;
 
 class SettingsController extends Controller
 {
@@ -112,14 +114,29 @@ class SettingsController extends Controller
     }
 
     /**
-     * Show the specified resource.
+     * Show user sessions
+     *
      * @return Response
      */
     public function sessions(Request $request)
     {
-        $user = auth()->user();
-       
-        $sessions = $this->repository->getSessions();
+        $sessions = DB::table('sessions')->where('user_id', auth()->id())->whereNotNull('user_id')->latest('last_activity')->get();
+        
+        $sessions = $sessions->map(function($session) {
+
+            $carbon = Carbon::createFromTimestamp($session->last_activity);
+
+            $geoip = geoip($session->ip_address);
+
+            return [
+                'id' => $session->id,
+                'location' => array_get($geoip, 'country'). ', ' .array_get($geoip, 'city'),
+                'user_agent' => app(UserAgentService::class)->forHumans($session->user_agent),
+                'ip_address' => $session->ip_address,
+                'time' => $carbon->diffForHumans(),
+                'is_current' => (session()->getId() == $session->id)
+            ];
+        });
         
         return view('users.settings.sessions', compact('sessions'));
     }

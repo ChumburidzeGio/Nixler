@@ -24,10 +24,10 @@
 					@lang('My products')
 				</a>
 
-				<!--a class="_lsti {{ request()->is('*/sessions') ? 'active' : ''}}" href="{{ route('settings.sessions') }}">
+				<a class="_lsti {{ request()->is('*/sessions') ? 'active' : ''}}" href="{{ route('settings.sessions') }}">
 					<i class="material-icons">important_devices</i>
 					@lang('Sessions')
-				</a-->
+				</a>
 			</div>
 		</div>
 

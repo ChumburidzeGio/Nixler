@@ -33,6 +33,7 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\ProductDisliked' => [],
         'App\Events\OrderCreated' => [
             'App\Listeners\UpdateUserStats',
+            'App\Listeners\SendPuchasedNotification',
         ],
         'App\Events\UserFollowed' => [
             'App\Listeners\UpdateUserStats',
@@ -42,6 +43,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\UserUnfollowed' => [
             'App\Listeners\UpdateUserStats',
             'App\Listeners\UpdateStreamOnFollowUnfollow',
+        ],
+        'Illuminate\Auth\Events\Registered' => [
+            'App\Listeners\SendRegisteredNotification',
         ],
     ];
 

@@ -83,7 +83,7 @@ class BasePattern
     }
 
     /**
-     * Find category in list of tags
+     * Find category in list of tags or match category with list of subcats
      *
      * @param $haystack array
      * @param $needle array
@@ -91,8 +91,18 @@ class BasePattern
      * @return int
      */
     public function findCategory($haystack, $needle)
-    {
+    { 
         foreach ($needle as $cat => $value) {
+
+            if(is_string($haystack)) {
+                
+                if(in_array($haystack, $value)) {
+                    return $cat;
+                } else {
+                    continue;
+                }
+
+            }
             
             if(!in_array($cat, $haystack)) {
                 continue;
@@ -275,6 +285,16 @@ class BasePattern
     }
 
     /**
+     * Get target group
+     *
+     * @return string
+     */
+    public function getTarget()
+    {
+        return null;
+    }
+
+    /**
      * Return pattern as an array
      *
      * @return array
@@ -297,6 +317,8 @@ class BasePattern
 
         $tags = $this->getTags();
 
-        return compact('title', 'description', 'price', 'media', 'varinats', 'category', 'categoryName', 'tags');
+        $target = $this->getTarget();
+
+        return compact('title', 'description', 'price', 'categoryName', 'category', 'media', 'varinats', 'tags', 'target');
     }
 }

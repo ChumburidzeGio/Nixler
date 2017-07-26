@@ -103,16 +103,15 @@ class ProductRepository extends BaseRepository {
         $user = auth()->user();
 
         $model = $this->model->where([
-            'is_active' => 0,
-            'owner_id' => $user->id,
-            'in_stock' => 0
+            'owner_id' => $user->id
         ])->latest('id')->first();
 
-        if($model) {
+        if(!$model->is_active && !$model->in_stock) {
             return $model;
-        } 
+        }
         
         return $this->model->create([
+            'in_stock' => 0,
             'is_active' => 0,
             'currency' => $user->currency,
             'owner_id' => $user->id,
@@ -257,6 +256,8 @@ class ProductRepository extends BaseRepository {
 
         $metadata = app(Crawler::class)->get($url);
 
+        $metadata->getTitle();
+
         try {
 
             $variants = $metadata->getVariants();
@@ -272,6 +273,8 @@ class ProductRepository extends BaseRepository {
             $category = $metadata->getCategory();
 
             $price = $metadata->getPrice();
+
+            $target = $metadata->getTarget();
 
         }
         
@@ -297,6 +300,7 @@ class ProductRepository extends BaseRepository {
             'title' => $title,
             'description' => $description,
             'category_id' => $category,
+            'target' => $target,
         ]);
 
         if(!$product->has_variants){
@@ -873,6 +877,8 @@ class ProductRepository extends BaseRepository {
 
         $product->activities()->delete();
 
+        $product->sources()->delete();
+
         $product->delete();
     }
 
@@ -886,7 +892,7 @@ class ProductRepository extends BaseRepository {
     {
         $user = auth()->user();
 
-        return $this->model->where('owner_id', $user->id)->latest('id')->paginate(150);
+        return $this->model->where('owner_id', $user->id)->latest('id')->paginate(20);
     }
 
 

@@ -46,7 +46,7 @@ class UserRepository extends BaseRepository {
         }
 
         if($tab == 'products'){
-            $data = capsule('stream')->whereSeller($user->id)->get();
+            $data = capsule('stream')->whereSeller($user->id)->latest()->get();
             $view = 'products';
         }
         elseif($tab == 'followers'){
@@ -242,10 +242,14 @@ class UserRepository extends BaseRepository {
         $model = $this->model->whereEmail($user->getEmail())->whereNotNull('email')->withTrashed()->first();
 
         if(is_null($model)){
+
             $model = $account->user()->create([
                 'email' => $user->getEmail(),
                 'name'  => $user->offsetGet('name')
             ]);
+
+            event(new \Illuminate\Auth\Events\Registered($model));
+            
         }
 
         if($account->wasRecentlyCreated && !$model->firstMedia('avatar')){
@@ -417,34 +421,6 @@ class UserRepository extends BaseRepository {
     {
         return $this->model->whereKeyword($query)->take(6)->get();
     }
-
-
-    /**
-     * Search in users
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function getSessions()
-    {
-        $sessions = DB::table('sessions')->where('user_id', auth()->id())->whereNotNull('user_id')->get();
-        
-        return $sessions->map(function($session) {
-
-            $carbon = Carbon::createFromTimestamp($session->last_activity);
-
-            $geoip = geoip($session->ip_address);
-
-            return [
-                'id' => $session->id,
-                'location' => array_get($geoip, 'country'). ', ' .array_get($geoip, 'city'),
-                'user_agent' => app(UserAgentService::class)->forHumans($session->user_agent),
-                'ip_address' => $session->ip_address,
-                'time' => $carbon->diffForHumans(),
-                'is_current' => (session()->getId() == $session->id)
-            ];
-        });
-    }
-
 
 
     /**

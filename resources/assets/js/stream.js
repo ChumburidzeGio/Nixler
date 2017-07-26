@@ -53,6 +53,7 @@ angular.module('stream', [])
 			var range = [], step = 1, 
 				maxAmountPercent = 50 / Math.max(...Object.values(prices));
 
+			range.push({value: 0});
 
 			for (var i = min; i <= max; i++) {
 
@@ -73,7 +74,7 @@ angular.module('stream', [])
 
 			if(window.facets) {
 
-				vm.grices = window.facets.price;
+				vm.grices = window.facets;
 
 				vm.filters.price = calcPriceRange(vm.grices);
 

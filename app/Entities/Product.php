@@ -34,9 +34,23 @@ class Product extends Model
         'title', 'description',  'price', 'status', 'currency', 
         'owner_id', 'owner_username', 'category_id', 'in_stock', 
         'buy_link', 'id_used', 'has_variants', 'is_active', 'sku', 
-        'sales_count', 'comments_count', 'views_count'
+        'sales_count', 'comments_count', 'views_count', 'target'
     ];
 
+    protected $targetGroups = [
+        'men', 
+        'women', 
+        'unia', 
+        'tgirls', 
+        'tboys', 
+        'unit',
+        'kgirls', 
+        'kboys', 
+        'unik', 
+        'bgirls', 
+        'bboys', 
+        'unib',
+    ];
 
     /**
      *  Get the avatar

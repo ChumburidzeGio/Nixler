@@ -122,6 +122,14 @@ class AIE
             });
 
         }
+
+        if (!Schema::hasColumn('products', 'target')) {
+
+            Schema::table('products', function (Blueprint $table) {
+                $table->string('target', 15)->nullable();
+            });
+
+        }
         
     }
 

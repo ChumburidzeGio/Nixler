@@ -21,7 +21,9 @@ class StreamCapsule {
 
 	private $priceMin;
 
-	private $priceMax;
+    private $priceMax;
+
+	private $targetGroup;
 
 	private $executed;
 
@@ -52,7 +54,9 @@ class StreamCapsule {
 
     	$this->priceMin = request('price_min', 0);
 
-    	$this->priceMax = request('price_max', 9999);
+        $this->priceMax = request('price_max', 9999);
+
+    	$this->targetGroup = request('target');
 
     	$this->facetQuery = $model->from('products as p');
 
@@ -256,11 +260,19 @@ class StreamCapsule {
 
     	}
 
-    	if($this->category) {
+        if($this->category) {
 
-    		$query = $query->whereIn('category_id', $this->getCategoryFamily());
+            $query = $query->whereIn('category_id', $this->getCategoryFamily());
 
-    		$this->facetQuery = $this->facetQuery->whereIn('category_id', $this->getCategoryFamily());
+            $this->facetQuery = $this->facetQuery->whereIn('category_id', $this->getCategoryFamily());
+
+        }
+
+    	if($this->targetGroup && $this->category && $this->category < 9) {
+
+    		$query = $query->whereIn('target', $this->getTargetGroup());
+
+    		$this->facetQuery = $this->facetQuery->whereIn('target', $this->getTargetGroup());
 
     	}
 
@@ -292,7 +304,7 @@ class StreamCapsule {
 
     	} else {
 
-    		$this->model = $query->where('p.currency', $this->currency)->active();
+    		$this->model = $query->where('p.currency', $this->currency)->active()->latest('p.id');
 
     		$this->facetQuery = $this->facetQuery->where('p.currency', $this->currency)->active();
 
@@ -307,14 +319,16 @@ class StreamCapsule {
      */
     private function getPriceRange($prices)
     {
+        $prices = array_map('intval', $prices);
+
     	$prices = array_count_values($prices);
 
-    	if(!array_get($prices, '0.00')){
-    		$prices = array_prepend($prices, 1, '0.00');
+    	if(!array_get($prices, '0')){
+    		$prices = array_prepend($prices, 0, '0');
     	}
 
-    	if(!array_get($prices, '9999.00')){
-    		$prices = array_prepend($prices, 1, '9999.00');
+    	if(!array_get($prices, '9999')){
+    		$prices = array_prepend($prices, 0, '9999');
     	}
 
     	krsort($prices);
@@ -344,6 +358,33 @@ class StreamCapsule {
         $this->executed = true;
 
         return $this;
+    }
+
+    /**
+     * Get the array of possible targets for target group query
+     *
+     * @return array
+     */
+    private function getTargetGroup() : array
+    {
+        switch ($this->targetGroup) {
+            case 'men':
+                return ['men', 'unia'];
+            case 'women':
+                return ['women', 'unia'];
+            case 'tboys':
+                return ['tboys', 'unit'];
+            case 'tgirls':
+                return ['tgirls', 'unit'];
+            case 'kboys':
+                return ['kboys', 'unik'];
+            case 'kgirls':
+                return ['kgirls', 'unik'];
+            case 'bboys':
+                return ['bboys', 'unib'];
+            case 'bgirls':
+                return ['bgirls', 'unib'];
+        }
     }
 
     /**
@@ -406,7 +447,7 @@ class StreamCapsule {
      */
     private function stateId($key = null)
     {
-    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab']);
+    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab', 'target']);
 
     	$params = array_prepend($params, intval($this->page), 'page');
 
@@ -466,6 +507,10 @@ class StreamCapsule {
      */
     public function priceFacet()
     {
+        if(!$this->category && !$this->query) {
+            return false;
+        }
+
     	return $this->cache('priceFacet', 15, function() {
 
     		$prices = $this->facetQuery->pluck('price')->toArray();
@@ -482,47 +527,103 @@ class StreamCapsule {
      */
     public function categories()
     {
-    	return $this->cache('categories', 100, function(){
+        return $this->cache('categories', 100, function(){
 
-    		$categories = new ProductCategory;
+            $categories = new ProductCategory;
 
-    		$category = $this->category;
+            $category = $this->category;
 
-    		$ids = $this->category ? array_unique($this->facetQuery->pluck('category_id')->toArray()) : [];
+            $ids = $this->category ? array_unique($this->facetQuery->pluck('category_id')->toArray()) : [];
 
-    		$match = [
-	    		1 => [0, 9],
-	    		9 => [8, 30],
-	    		30 => [29, 40],
-	    		40 => [39, 54],
-	    		54 => [53, 69],
-	    		69 => [68, 80],
-    		];
+            $match = [
+                1 => [0, 9],
+                9 => [8, 30],
+                30 => [29, 40],
+                40 => [39, 54],
+                54 => [53, 69],
+                69 => [68, 80],
+            ];
 
-    		foreach ($match as $key => $value) {
-    			
-    			if($category > array_first($value) && $category < array_last($value)) {
-    				$category = $key;
-    			}
-    		}
+            foreach ($match as $key => $value) {
+                
+                if($category > array_first($value) && $category < array_last($value)) {
+                    $category = $key;
+                }
+            }
 
-    		$categories = $this->category ? $categories->where('parent_id', $category) : $categories->whereNull('parent_id');
+            $categories = $this->category ? $categories->where('parent_id', $category) : $categories->whereNull('parent_id');
 
-    		$categories = $categories->select('id', 'icon')->with('translations')->get()->map(function($item) use ($ids) {
-    			return [
-        			'id'     => (int) $item->id,
-        			'icon'   => $item->icon,
-        			'name'   => $item->name,
-        			'href'   => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query']), ['cat' => $item->id])),
-        			'active' => (request('cat') == $item->id),
-        			'empty' => ((count($ids) || $this->category) && !in_array($item->id, $ids)),
-    			];
-    		});
+            $categories = $categories->select('id', 'icon')->with('translations')->get()->map(function($item) use ($ids) {
+                return [
+                    'id'     => (int) $item->id,
+                    'icon'   => $item->icon,
+                    'name'   => $item->name,
+                    'href'   => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query', 'target']), ['cat' => $item->id])),
+                    'active' => (request('cat') == $item->id),
+                    'empty' => ((count($ids) || $this->category) && !in_array($item->id, $ids)),
+                ];
+            });
 
-    		return $categories->toArray();
+            return $categories->toArray();
+
+        });
+
+    }
+
+    /**
+     * Return target facets
+     *
+     * @return array
+     */
+    public function targets() : array
+    {
+    	return $this->cache('targetGroup', 100, function(){
+
+            if(!$this->category || $this->category > 8) {
+                return [];
+            }
+
+            $targets = [
+                'adults' => [],
+                'boys' => [
+                    'title' => __('For Boys'),
+                ],
+                'girls' => [
+                    'title' => __('For Girls'),
+                ],
+            ];
+
+            $targets = $this->pushTargetGroup($targets, 'adults', 'For Men', 'men');
+            $targets = $this->pushTargetGroup($targets, 'adults', 'For Women', 'women');
+
+            $targets = $this->pushTargetGroup($targets, 'boys', 'Teens (9 - 16 years)', 'tboys');
+            $targets = $this->pushTargetGroup($targets, 'boys', 'Kids (2 - 9 years)', 'kboys');
+            $targets = $this->pushTargetGroup($targets, 'boys', 'Babies (0 - 2 years)', 'bboys');
+
+            $targets = $this->pushTargetGroup($targets, 'girls', 'Teens (9 - 16 years)', 'tgirls');
+            $targets = $this->pushTargetGroup($targets, 'girls', 'Kids (2 - 9 years)', 'kgirls');
+            $targets = $this->pushTargetGroup($targets, 'girls', 'Babies (0 - 2 years)', 'bgirls');
+
+            return $targets;
 
     	});
 
+    }
+
+    /**
+     * Return capsule as array
+     *
+     * @return array
+     */
+    public function pushTargetGroup($targets, $group, $name, $key)
+    {
+        array_push($targets[$group], [
+            'name' => __($name),
+            'link' => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query', 'cat']), ['target' => $key])),
+            'active' => $this->targetGroup == $key
+        ]);
+
+        return $targets;
     }
 
     /**

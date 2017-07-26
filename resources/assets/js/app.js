@@ -27,9 +27,9 @@
  require('./messages/core');
  require('./nav/nav.ctrl');
  require('./order/core');
- require('./stream/core');
  require('./settings/core');
  require('./user/core');
+ require('./stream');
  require('./collections');
 
  
