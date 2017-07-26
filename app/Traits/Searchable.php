@@ -41,7 +41,9 @@ trait Searchable {
 
 		$ids_ordered = implode(',', $ids);
 
-        dd($ids);
+        if(count($ids)) {
+            dd($ids);
+        }
 
     	return $ids ? $builder->whereIn('id', $ids)->orderBy(DB::raw("FIELD(id, $ids_ordered)")) : $builder->whereNull('id');
     }
