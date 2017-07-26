@@ -29,6 +29,8 @@ class ProductDeleted extends Notification
      */
     public function toRecomm($product, $service)
     {
-        return $service->removeProduct($product->id);
+        if($product->is_active){
+            return $service->removeProduct($product->id);
+        }
     }
 }
