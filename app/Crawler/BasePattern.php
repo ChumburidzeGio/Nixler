@@ -295,6 +295,16 @@ class BasePattern
     }
 
     /**
+     * Get SKU
+     *
+     * @return string
+     */
+    public function getSKU()
+    {
+        return null;
+    }
+
+    /**
      * Return pattern as an array
      *
      * @return array

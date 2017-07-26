@@ -503,5 +503,15 @@ class Zalando extends BasePattern {
 
         return null;
     }
+
+    /**
+     * Get SKU
+     *
+     * @return string
+     */
+    public function getSKU()
+    {
+        return array_get($this->data, 'model.articleInfo.id');
+    }
     
 }

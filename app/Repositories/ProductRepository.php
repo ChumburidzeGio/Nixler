@@ -276,6 +276,8 @@ class ProductRepository extends BaseRepository {
 
             $target = $metadata->getTarget();
 
+            $sku = $metadata->getSKU();
+
         }
         
         catch(\Exception $e) {
@@ -301,6 +303,7 @@ class ProductRepository extends BaseRepository {
             'description' => $description,
             'category_id' => $category,
             'target' => $target,
+            'sku' => $sku,
         ]);
 
         if(!$product->has_variants){
