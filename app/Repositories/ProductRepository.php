@@ -106,7 +106,7 @@ class ProductRepository extends BaseRepository {
             'owner_id' => $user->id
         ])->latest('id')->first();
 
-        if(!$model->is_active && !$model->in_stock) {
+        if($model && !$model->is_active && !$model->in_stock) {
             return $model;
         }
         
