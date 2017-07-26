@@ -23,21 +23,7 @@ trait Searchable {
 
         $query = str_slug($query) !== $query ? $query . " " . str_slug($query) : $query;
 
-    	$tnt = new TNTSearch();
-
-        $driver = config('database.default');
-
-        $config = config('scout.tntsearch') + config("database.connections.$driver");
-
-        $tnt->loadConfig($config);
-
-        $tnt->fuzziness = true;
-
-		$tnt->selectIndex("{$this->getTable()}.index");
-
-		$res = $tnt->search($query, 1000);
-
-		$ids = $res['ids'];
+		$ids = $this->search($query)->keys()->toArray();
 
 		$ids_ordered = implode(',', $ids);
 

@@ -14,7 +14,7 @@ use App\Upgrade\AIB;
 use App\Upgrade\AIC;
 use App\Upgrade\AID;
 use App\Upgrade\AIE;
-use Notification;
+use Notification, Storage;
 
 class Update extends Command
 {
@@ -85,7 +85,12 @@ class Update extends Command
      */
     public function searchIndex()
     {
+        Storage::delete(storage_path('products.index'));
+
+        Storage::delete(storage_path('users.index'));
+
         $this->call('scout:import', ['model' => 'App\\Entities\\Product']);
+        
         $this->call('scout:import', ['model' => 'App\\Entities\\User']);
     }
 

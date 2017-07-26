@@ -264,13 +264,19 @@ class Product extends Model
     {
         $array = $this->toArray();
 
-        $tags = ProductTag::where('product_id', $this->id)->pluck('name')->implode(' ');
+        $tags = str_slug(ProductTag::where('product_id', $this->id)->pluck('name')->implode(' '), ' ');
 
-        $variants = ProductVariant::where('product_id', $this->id)->pluck('name')->implode(' ');
+        $variants = str_slug(ProductVariant::where('product_id', $this->id)->pluck('name')->implode(' '), ' ');
 
-        $data = array_merge(array_intersect_key($array, array_flip(['id', 'title', 'description', 'sku'])), compact('tags', 'variants'));
+        $title = str_slug($this->attributes['title'], ' ');
 
-        return $data;
+        $description = str_slug($this->attributes['description'], ' ');
+
+        $sku = $this->attributes['sku'];
+
+        $id = $this->attributes['id'];
+
+        return compact('title', 'description', 'tags', 'variants', 'sku', 'id');
     }
     
     

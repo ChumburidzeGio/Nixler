@@ -67,12 +67,12 @@ return [
         'query_expansion' => false
     ],
     'tntsearch' => [
-        'storage'  => storage_path(), //place where the index files will be stored
-        'fuzziness' => env('TNTSEARCH_FUZZINESS', true),
+        'storage'  => storage_path(),
+        'fuzziness' => true,
         'fuzzy' => [
             'prefix_length' => 2,
             'max_expansions' => 50,
-            'distance' => 2
+            'distance' => 5
         ],
         'asYouType' => false,
     ],
