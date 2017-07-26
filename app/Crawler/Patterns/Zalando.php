@@ -230,6 +230,9 @@ class Zalando extends BasePattern {
             'Long' => 'გრძელი',
             'Cropped' => 'გადაჭრილი',
             'Round neck' => 'მომრგვალებული საყელო',
+            'Sleeveless' => 'უსახელო',
+            'Calf-length' => 'მუხლს ქვემოთ',
+            'Low V-neck' => 'დაბალი V-ტიპის ჭრილი',
 
             'pink' => 'ვარდისფერი',
             'purple' => 'იასამნისფერი',
