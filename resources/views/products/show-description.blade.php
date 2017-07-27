@@ -3,27 +3,31 @@
 </h1>
 
 <span class="_cgr _clear _pr10" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+
    <h2 class="_fs17 _m0 _fw400 _dib" itemprop="price">{{ $product->price_formated }}</h2>
 
    <div class="_tbs _ov _right _cg _mt3">
-
 
         <a class="_tb _crp _anim1 _fs13 _ls5 _fw600 _cbt6 _left _p0 _pr15" 
            ng-class="{'_c4':vm.product.liked}"
            id="like"
            {{ auth()->guest() ? 'href='.route('login') : 'ng-click=vm.like()' }}>
-           <i class="material-icons _fs18 _va5 _mr5">favorite</i> 
-           <span ng-show="vm.product.likes_count" class="ng-cloak">
-            (<span ng-bind="vm.product.likes_count"">
-            {{ $product->likes_count }}
-        </span>)
-        </span>
+
+            <i class="material-icons _fs18 _va5 _mr5">favorite</i> 
+
+            <span ng-show="vm.product.likes_count" class="ng-cloak">
+
+                (<span ng-bind="vm.product.likes_count"">{{ $product->likes_count }}</span>)
+
+            </span>
+
         </a>
 
         <span class="_tb _crp _anim1 _fs13 _ls5 _fw600 _cbt6 _left _p0" ng-click="vm.share()" id="share">
             <i class="material-icons _fs18 _va5 _mr5">share</i> 
         </span>
-</div>
+
+    </div>
 
 </span>
 
@@ -66,7 +70,7 @@
             <a href="{{ $product->owner->link() }}">
                 <img class="_mr15 _left _brds50" src="{{ $product->owner->avatar('product') }}" height="45px" width="45px" alt="{{ $product->owner->name }}">
             </a>
-            <div class="_clear">
+            <div>
                 <a class="_c2" href="{{ $product->owner->link() }}">
                     <!--button class="_btn _bg5 _c2 _right _ttu" style="line-height: 29px;">
                         <i class="material-icons _fs20 _va6">add</i>

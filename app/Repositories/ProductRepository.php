@@ -65,7 +65,7 @@ class ProductRepository extends BaseRepository {
 
         $product->tags = ProductTag::where('product_id', $product->id)->get();
 
-        $product->variants = ProductVariant::where('product_id', $product->id)->orderBy('price')->get()->map(function($item) use($product) {
+        $product->variants = ProductVariant::where('product_id', $product->id)->where('in_stock', '>', 0)->orderBy('price')->get()->map(function($item) use($product) {
             return [
                 'id' => $item->id,
                 'name' => $item->name.' - '.money($product->currency, $item->price)

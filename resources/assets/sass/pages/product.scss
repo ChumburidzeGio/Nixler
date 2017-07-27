@@ -20,23 +20,32 @@
 .product-description .show-more-container a { color: #4285F4; }
 
 @media (min-width: 700px) {
+    
   #product-gallery > img {
     max-width: 100%;
     max-height: 75vh;
   }
+
+  .product-description ._media > div {
+        overflow: hidden;
+  }
 }
 
 @media (max-width: 700px) {
+
   #product-gallery > img {
     max-width: 100%;
     max-height: 80vh;
   }
+
   #product-gallery > ul {
     position: relative !important;
   }
+
   #product-gallery > ul > img {
     display: inline-block;
   }
+
 }
 
 #comments img.attachment {

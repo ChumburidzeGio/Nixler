@@ -268,13 +268,13 @@ class Product extends Model
 
         $variants = str_slug(ProductVariant::where('product_id', $this->id)->pluck('name')->implode(' '), ' ');
 
-        $title = str_slug($this->attributes['title'], ' ');
+        $title = str_slug(array_get($this->attributes, 'title'), ' ');
 
-        $description = str_slug($this->attributes['description'], ' ');
+        $description = str_slug(array_get($this->attributes, 'description'), ' ');
 
-        $sku = $this->attributes['sku'];
+        $sku = array_get($this->attributes, 'sku');
 
-        $id = $this->attributes['id'];
+        $id = array_get($this->attributes, 'id');
 
         return compact('title', 'description', 'tags', 'variants', 'sku', 'id');
     }

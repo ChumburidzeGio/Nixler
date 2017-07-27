@@ -120,7 +120,7 @@ Auth::routes();
 	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
 	Route::get('/monitor', function(){
-		
+			
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
 		return $monitors['fields'];
