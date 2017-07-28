@@ -329,7 +329,7 @@ class StreamCapsule {
 
     	}
 
-        $this->model = $query->where('p.currency', $this->currency)->active()->latest('p.id');
+        $this->model = $query->where('p.currency', $this->currency)->distinct('p.id')->active()->latest('p.id');
 
         $this->facetQuery = $this->facetQuery->where('p.currency', $this->currency)->active();
 
