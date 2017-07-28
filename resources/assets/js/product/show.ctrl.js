@@ -44,7 +44,25 @@ angular.module('products').controller('ShowCtrl', [
             controller: function() {
 
                 var vm = this;
-                vm.url = window.location.href;
+
+                vm.copy = function() {
+
+                  var copyElement = document.createElement("span");
+                  copyElement.appendChild(document.createTextNode(vm.link));
+                  angular.element(document.body.append(copyElement));
+
+                  // select the text
+                  var range = document.createRange();
+                  range.selectNode(copyElement);
+                  window.getSelection().removeAllRanges();
+                  window.getSelection().addRange(range);
+
+                  // copy & cleanup
+                  document.execCommand('copy');
+                  window.getSelection().removeAllRanges();
+                  copyElement.remove();
+
+                }
 
             },
             controllerAs: 'vm',

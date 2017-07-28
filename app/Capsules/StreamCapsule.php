@@ -305,7 +305,7 @@ class StreamCapsule {
 
             $query = $query->join('product_tags as pt', function ($join) use ($tag) {
                 return $join->on('p.id', '=', 'pt.product_id')->whereRaw('LOWER(pt.name) like ?', $tag);
-            });
+            })->distinct('p.id');
 
             $this->facetQuery = $this->facetQuery->join('product_tags as pt', function ($join) use ($tag) {
                 return $join->on('p.id', '=', 'pt.product_id')->whereRaw('LOWER(pt.name) like ?', $tag);
@@ -329,7 +329,7 @@ class StreamCapsule {
 
     	}
 
-        $this->model = $query->where('p.currency', $this->currency)->distinct('p.id')->active()->latest('p.id');
+        $this->model = $query->where('p.currency', $this->currency)->active()->latest('p.id');
 
         $this->facetQuery = $this->facetQuery->where('p.currency', $this->currency)->active();
 

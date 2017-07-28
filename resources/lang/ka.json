@@ -209,7 +209,7 @@
     "Buy and Sell Online Clothes, Shoes, Electronics & more": "იყიდე და გაყიდე ონლაინ ტანსაცმელი, ფეხსაცმელი, ელექტრონიკა და სხვა",
     "Sign up and find the best offers from shops in your area or become a seller and get the new channel of sales for free.": "დარეგისტრირდი და მიიღე საუკეთესო შემოთავაზებები მაღაზიებისგან ან განათავსე პროდუქცია და შექმენი გაყიდვების ახალი წყარო შენი ბიზნესისთვის სრულიად უფასოდ.",
     "Share": "გაზიარება",
-    "Share on :network": "გაზიარება :network-ზე",
+    "Share on :network": "გააზიარეთ :network-ზე",
     "You can now sell the products. Let's just publish and we will take care of the rest!": "ყველაფერი მზადაა! უკვე შეგიძლიათ დაამატოთ პროდუქცია თქვენს მაღაზიაში.",
     "Add new product": "პროდუქტის დამატება",
     "Other regions": "სხვა რეგიონებში",
@@ -306,5 +306,6 @@
     "Hello!": "მოგესალმებით!",
     "Your Order Confirmation": "თქვენი შეკვეთის დადასტურება!",
     "Thank you for registration on Nixler!": "მადლობა ნიქსლერზე რეგისტრაციისთვის!",
-    "Thank you for joining us and we hope that you exparience will be the best!": "მადლობა რომ შემოგვიერთდით და იმედი გვაქვს კმაყოფილი დარჩებით იმ მომსახურებით რომელსაც ჩვენი სერვისი გთავაზობთ!"
+    "Thank you for joining us and we hope that you exparience will be the best!": "მადლობა რომ შემოგვიერთდით და იმედი გვაქვს კმაყოფილი დარჩებით იმ მომსახურებით რომელსაც ჩვენი სერვისი გთავაზობთ!",
+    "Copy link": "დააკოპირეთ ლინკი"
 }
