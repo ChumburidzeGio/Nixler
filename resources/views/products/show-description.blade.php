@@ -90,10 +90,9 @@
             </div>
         </div>
 
-
         <div id="tags" class="_mt10 _mb15 _clear">
             @foreach($product->tags as $tag)
-            <span class="_bgbt05 _brds3 _fs13 _c3 _mr10 _dib _p5 _pl10 _pr10 _mb10"> {{ $tag->name }} </span>
+            <a class="_bgbt05 _brds3 _fs13 _c3 _mr10 _dib _p5 _pl10 _pr10 _mb10" href="{{ route('feed', ['tag' => $tag->name]) }}"> {{ $tag->name }} </a>
             @endforeach
         </div>
 

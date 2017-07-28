@@ -4,6 +4,7 @@ namespace App\Capsules;
 
 use App\Entities\ProductCategory;
 use App\Entities\Product;
+use DB;
 
 class StreamCapsule {
 	
@@ -22,6 +23,8 @@ class StreamCapsule {
 	private $priceMin;
 
     private $priceMax;
+
+    private $tag;
 
 	private $targetGroup;
 
@@ -55,6 +58,8 @@ class StreamCapsule {
     	$this->priceMin = request('price_min', 0);
 
         $this->priceMax = request('price_max', 9999);
+
+        $this->tag = request('tag');
 
     	$this->targetGroup = request('target');
 
@@ -130,10 +135,6 @@ class StreamCapsule {
     		return $join->on('p.id', '=', 'f.object_id')->where('f.user_id', $id);
     	})->orderBy('f.id', 'desc');
 
-    	$this->facetQuery = $this->facetQuery->join('feeds as f', function ($join) use ($id) {
-    		return $join->on('p.id', '=', 'f.object_id')->where('f.user_id', $id);
-    	});
-
     	return $this;
     }
 
@@ -144,9 +145,21 @@ class StreamCapsule {
      */
     public function wherePrice($min, $max)
     {
-    	$this->priceMin = floatval($min);
+        $this->priceMin = floatval($min);
 
-    	$this->priceMax = floatval($max);
+        $this->priceMax = floatval($max);
+
+        return $this;
+    }
+
+    /**
+     * Filter products by price
+     *
+     * @return void
+     */
+    public function whereTag($tag)
+    {
+    	$this->tag = $tag;
 
     	return $this;
     }
@@ -254,9 +267,27 @@ class StreamCapsule {
 
     		$resultsLimit = intval($this->page * 20);
 
-    		$query = Product::whereKeyword($this->query)->where('currency', $this->currency)->take($resultsLimit);
+            $searchQuery = str_slug($searchQuery, ' ') !== $searchQuery ? $searchQuery . " " . str_slug($searchQuery, ' ') : $searchQuery;
 
-    		$this->facetQuery = $this->facetQuery->where('currency', $this->currency);
+            $searchedIds = Product::search($searchQuery)->take($resultsLimit)->keys()->toArray();
+
+            if(count($searchedIds)) {
+
+                $searchedIdsImploded = implode(',', $searchedIds);
+
+                $query = $query->whereIn('p.id', $searchedIds)->orderByRaw("FIELD(p.id, $searchedIdsImploded)");
+
+                $this->facetQuery = $this->facetQuery->whereIn('p.id', $searchedIds);
+
+            } else {
+
+                $this->model = Product::where('id', '-1');
+
+                $this->facetQuery = Product::where('id', '-1');
+
+                return null;
+
+            }
 
     	}
 
@@ -265,6 +296,20 @@ class StreamCapsule {
             $query = $query->whereIn('category_id', $this->getCategoryFamily());
 
             $this->facetQuery = $this->facetQuery->whereIn('category_id', $this->getCategoryFamily());
+
+        }
+
+        if($this->tag) {
+
+            $tag = '%'.strtolower($this->tag).'%';
+
+            $query = $query->join('product_tags as pt', function ($join) use ($tag) {
+                return $join->on('p.id', '=', 'pt.product_id')->whereRaw('LOWER(pt.name) like ?', $tag);
+            });
+
+            $this->facetQuery = $this->facetQuery->join('product_tags as pt', function ($join) use ($tag) {
+                return $join->on('p.id', '=', 'pt.product_id')->whereRaw('LOWER(pt.name) like ?', $tag);
+            });
 
         }
 
@@ -284,31 +329,11 @@ class StreamCapsule {
 
     	}
 
-    	if($searchQuery){
+        $this->model = $query->where('p.currency', $this->currency)->active()->latest('p.id');
 
-    		$ids = $query->pluck('id')->toArray();
+        $this->facetQuery = $this->facetQuery->where('p.currency', $this->currency)->active();
 
-    		if(count($ids)){
-
-    			$this->model = $this->model->whereIn('p.id', $ids)->active();
-
-    			$this->facetQuery = $this->facetQuery->whereIn('p.id', $ids)->active();
-
-    		} else {
-
-    			$this->model = $this->model->where('p.id', '-1');
-
-    			$this->facetQuery = $this->facetQuery->where('p.id', '-1');
-
-    		}
-
-    	} else {
-
-    		$this->model = $query->where('p.currency', $this->currency)->active()->latest('p.id');
-
-    		$this->facetQuery = $this->facetQuery->where('p.currency', $this->currency)->active();
-
-    	}
+        $this->addUserData();
 
     }
 
@@ -345,11 +370,9 @@ class StreamCapsule {
     {
         $this->filter();
 
-        $this->addUserData();
-        
         $this->items = $this->cache('items', 0, function() {
 
-            $paginate = $this->model->simplePaginate($this->perPage, $this->page);
+            $paginate = $this->model->skip(($this->page - 1) * $this->perPage)->simplePaginate($this->perPage);
 
             return $this->transform($paginate->items());
 
@@ -447,7 +470,7 @@ class StreamCapsule {
      */
     private function stateId($key = null)
     {
-    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab', 'target']);
+    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab', 'target', 'tag']);
 
     	$params = array_prepend($params, intval($this->page), 'page');
 
@@ -481,7 +504,7 @@ class StreamCapsule {
 
     	$path = request()->path();
 
-    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab']);
+    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab', 'tag']);
 
     	$params = http_build_query(array_prepend($params, intval($this->page + 1), 'page'));
 
@@ -507,11 +530,11 @@ class StreamCapsule {
      */
     public function priceFacet()
     {
-        if(!$this->category && !$this->query) {
+        if(!$this->category && !$this->query && !$this->tag) {
             return false;
         }
 
-    	return $this->cache('priceFacet', 15, function() {
+    	return $this->cache('priceFacet', 18, function() {
 
     		$prices = $this->facetQuery->pluck('price')->toArray();
 

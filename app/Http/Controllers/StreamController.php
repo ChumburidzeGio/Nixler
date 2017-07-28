@@ -26,11 +26,11 @@ class StreamController extends Controller
     {
         $capsule = capsule('stream');
 
-        if($request->has('query') || $request->has('cat')){
+        if($request->has('query') || $request->has('cat') || $request->has('tag')){
 
             $capsule = $capsule->search(request('query'));
 
-            if(!$request->has('cat')){
+            if(!$request->has('cat') && !$request->has('tag')){
                 $users = app(UserRepository::class)->search($request->input('query'));
             }
 
