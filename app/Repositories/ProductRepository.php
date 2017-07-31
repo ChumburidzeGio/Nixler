@@ -236,85 +236,77 @@ class ProductRepository extends BaseRepository {
      *
      * @return \Illuminate\Http\Response
      */
-    public function import(string $url, int $id)
+    public function import(string $url)
     {
         $user = auth()->user();
 
-        $isUploaded = ProductSource::where([
+        $source = ProductSource::where([
             'merchant_id' => $user->id,
             'source' => $url
-        ])->exists();
+        ])->first();
 
-        if($isUploaded) {
-            return false;
-        }
+        if($source) {
 
-        $product = $this->model->where([
-            'id' => $id,
-            'owner_id' => $user->id
-        ])->firstOrFail();
+            $product = $this->model->find($source->product_id);
 
-        $metadata = app(Crawler::class)->get($url);
+            if(!$product) {
 
-        $metadata->getTitle();
+                $source->delete();
 
-        try {
+                return null;
+            }
 
-            $variants = $metadata->getVariants();
+        } else {
 
-            $tags = $metadata->getTags();
-
-            $media = $metadata->getMedia();
-
-            $title = $metadata->getTitle();
-
-            $description = $metadata->getDescription();
-
-            $category = $metadata->getCategory();
-
-            $price = $metadata->getPrice();
-
-            $target = $metadata->getTarget();
-
-            $sku = $metadata->getSKU();
+            $product = $this->create();
 
         }
         
-        catch(\Exception $e) {
-            app(SystemService::class)->reportException($e);
-            return null;
+        $metadata = app(Crawler::class)->get($url);
+
+        if($metadata->isInvalid()) {
+
+            return $source ? $this->hide($source->product_id) && false : null;
+
         }
 
+        $this->syncVariants($metadata->getVariants(), $product);
 
-        if(!$metadata || !$price) {
-            return null;
-        }
+        $this->syncTags($metadata->getTags(), $product);
 
-        $this->syncVariants($variants, $product);
+        if(!$source) {
 
-        $this->syncTags($tags, $product);
+            foreach ($metadata->getMedia() as $src) {
+                $this->uploadMediaForProduct($product->id, $src);
+            }
 
-        foreach ($media as $src) {
-            $this->uploadMediaForProduct($id, $src);
         }
 
         $product->fill([
-            'title' => $title,
-            'description' => $description,
-            'category_id' => $category,
-            'target' => $target,
-            'sku' => $sku,
+            'title' => $metadata->getTitle(),
+            'description' => $metadata->getDescription(),
+            'category_id' => $metadata->getCategory(),
+            'target' => $metadata->getTarget(),
+            'sku' => $metadata->getSKU(),
         ]);
 
         if(!$product->has_variants){
-            $product->price = $price;
+
+            $product->price = $metadata->getPrice();
+
+            $product->originalPrice = $metadata->getOriginalPrice();
+
         }
 
-        $product->sources()->create([
-            'product_id' => $product->id,
-            'merchant_id' => $user->id,
-            'source' => $url
-        ]);
+        if(!$source) {
+
+            $product->sources()->create([
+                'product_id' => $product->id,
+                'merchant_id' => $user->id,
+                'source' => $url
+            ]);
+
+        }
         
         $product->save();
 
@@ -494,6 +486,7 @@ class ProductRepository extends BaseRepository {
         if($models->count()) {
             $product->has_variants = true;
             $product->price = $models->min('price');
+            $product->original_price = $models->min('original_price');
             $product->in_stock = $models->sum('in_stock');
         }
 
@@ -518,6 +511,7 @@ class ProductRepository extends BaseRepository {
         $model->fill([
             'product_id' => $product->id,
             'name' => array_get($variant, 'name'),
+            'original_price' => array_get($variant, 'original_price'),
             'price' => array_get($variant, 'price'),
             'in_stock' => array_get($variant, 'in_stock', 1),
         ]);

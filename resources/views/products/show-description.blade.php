@@ -4,9 +4,20 @@
 
 <span class="_cgr _clear _pr10" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 
-   <h2 class="_fs17 _m0 _fw400 _dib" itemprop="price">{{ $product->price_formated }}</h2>
+   <div class="_dib">
 
-   <div class="_tbs _ov _right _cg _mt3">
+    @if($product->original_price_formated)
+    <div class="_fs15 _clear _mb5 _cr">
+        {{ $product->discount }}
+        <span class="_tdlt _c2"> {{ $product->original_price_formated }}</span>
+    </div>
+    @endif
+
+   <h2 class="_fs17 _m0 _fw400 _clear" itemprop="price">{{ $product->price_formated }}</h2>
+
+   </div>
+
+   <div class="_tbs _ov _right _cg{{ $product->original_price_formated ? ' _mt3' : '' }}">
 
         <a class="_tb _crp _anim1 _fs13 _ls5 _fw600 _cbt6 _left _p0 _pr15" 
            ng-class="{'_c4':vm.product.liked}"

@@ -136,6 +136,19 @@ class AIE
 
         app(RecommService::class)->removeProp('lng', 'product');
         
+
+        if (!Schema::hasColumn('products', 'original_price') && !Schema::hasColumn('product_variants', 'original_price')) {
+
+            Schema::table('products', function (Blueprint $table) {
+                $table->decimal('original_price', 8, 2)->nullable();
+            });
+
+            Schema::table('product_variants', function (Blueprint $table) {
+                $table->decimal('original_price', 8, 2)->nullable();
+            });
+
+        }
+        
     }
 
 }

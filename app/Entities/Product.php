@@ -31,10 +31,10 @@ class Product extends Model
     public $table = 'products';
     
     protected $fillable  = [
-        'title', 'description',  'price', 'status', 'currency', 
-        'owner_id', 'owner_username', 'category_id', 'in_stock', 
-        'buy_link', 'id_used', 'has_variants', 'is_active', 'sku', 
-        'sales_count', 'comments_count', 'views_count', 'target'
+        'title', 'description',  'price', 'status', 'currency', 'owner_id', 
+        'owner_username', 'category_id', 'in_stock', 'buy_link', 'id_used', 
+        'has_variants', 'is_active', 'sku', 'sales_count', 'comments_count', 
+        'views_count', 'target', 'original_price'
     ];
 
     protected $targetGroups = [
@@ -166,6 +166,33 @@ class Product extends Model
 
     public function getPriceFormatedAttribute(){
         return app(CurrencyService::class)->get($this->attributes['currency'], $this->attributes['price']);
+    }
+
+
+    public function getOriginalPriceFormatedAttribute(){
+
+        if(is_null($this->attributes['original_price'])) {
+            return null;
+        }
+
+        return app(CurrencyService::class)->get($this->attributes['currency'], $this->attributes['original_price']);
+    }
+
+
+    public function getDiscountAttribute(){
+
+        $op = $this->attributes['original_price'];
+
+        $pr = $this->attributes['price'];
+
+        if(is_null($op)) {
+            return null;
+        }
+
+        $discount = round(($op - $pr) * 100 / $op);
+
+        return "-{$discount}%";
+
     }
 
     public function getIsInactiveAttribute(){

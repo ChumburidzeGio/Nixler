@@ -253,13 +253,29 @@ class BasePattern
      */
     public function getPrice()
     {
-    	$variants = $this->getVariants();
+        $variants = $this->getVariants();
 
         if(count($variants)){
             return collect($variants)->min('price');
         }
 
         return $this->textFrom('[itemprop="price"]');
+    }
+
+    /**
+     * Parse the price of product
+     *
+     * @return integer
+     */
+    public function getOriginalPrice()
+    {
+        $variants = $this->getVariants();
+
+        if(count($variants)){
+            return collect($variants)->min('original_price');
+        }
+
+    	return null;
     }
 
     /**
@@ -305,17 +321,37 @@ class BasePattern
     }
 
     /**
+     * Check if page is valid
+     *
+     * @return string
+     */
+    public function isInvalid()
+    {
+        return (method_exists($this, 'isProduct') && !$this->isProduct());
+    }
+
+    /**
      * Return pattern as an array
      *
      * @return array
      */
     function toArray()
     {
+        if($this->isInvalid()) {
+
+            return [
+                'error' => 'Product doesn\'t exist!'
+            ];
+
+        }
+
         $title = $this->getTitle();
 
         $description = $this->getDescription();
 
         $price = $this->getPrice();
+
+        $originalPrice = $this->getOriginalPrice();
 
         $media = $this->getMedia();
 
@@ -329,6 +365,6 @@ class BasePattern
 
         $target = $this->getTarget();
 
-        return compact('title', 'description', 'price', 'categoryName', 'category', 'media', 'varinats', 'tags', 'target');
+        return compact('title', 'description', 'price', 'originalPrice', 'categoryName', 'category', 'media', 'varinats', 'tags', 'target');
     }
 }

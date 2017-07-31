@@ -10,7 +10,7 @@ class ProductVariant extends Model
     public $table = 'product_variants';
     
     protected $fillable  = [
-        'product_id', 'name', 'price', 'in_stock', 'sales_count'
+        'product_id', 'name', 'price', 'in_stock', 'sales_count', 'original_price'
     ];
 
     public function setPriceAttribute($value){

@@ -25,24 +25,14 @@ class Zalando extends BasePattern {
     {
         parent::parse($crawler);
 
-        if($this->isProduct()) {
+        $this->data = $this->parseJson();
 
-            $json = $this->crawler('#z-vegas-pdp-props')->first()->text();
+        if($this->isProduct() && !$this->isUK()) {
 
-            $json = ltrim($json, '<![CDATA[');
+            $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q=';
 
-            $json = rtrim($json, ']>');
+            $this->lcen = app(LC::class)->get($enUrl.array_get($this->data, 'model.articleInfo.id'));
 
-            $this->data = json_decode($json, 1);
-
-            if(!$this->isUK()) {
-
-                $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q=';
-
-                $this->lcen = app(LC::class)->get($enUrl.array_get($this->data, 'model.articleInfo.id'));
-
-            }
-            
         }
 
         return $this;
@@ -59,13 +49,33 @@ class Zalando extends BasePattern {
     }
 
     /**
+     * 
+     *
+     * @return bool
+     */
+    public function parseJson()
+    {
+        if(!$this->crawler('#z-vegas-pdp-props')->count()) {
+            return null;
+        }
+
+        $json = $this->crawler('#z-vegas-pdp-props')->first()->text();
+
+        $json = ltrim($json, '<![CDATA[');
+
+        $json = rtrim($json, ']>');
+
+        return json_decode($json, 1);
+    }
+
+    /**
      * Check if we are on product page
      *
      * @return boolean
      */
-    public function isProduct()
+    public function isProduct() : bool
     {
-        return !!$this->crawler('#z-vegas-pdp-props')->count();
+        return $this->data && $this->getSKU() !== null;
     }
 
     /**
@@ -93,7 +103,7 @@ class Zalando extends BasePattern {
      */
     public function getTitle()
     {
-        if(!$this->isUK() && $this->lcen) {
+        if(!$this->isUK() && $this->lcen->isProduct()) {
 
             return $this->lcen->getTitle();
 
@@ -115,7 +125,7 @@ class Zalando extends BasePattern {
     {
         //return array_get($this->data, 'model.articleInfo');
 
-        if(!$this->isUK() && $this->lcen) {
+        if(!$this->isUK() && $this->lcen->isProduct()) {
 
             return $this->lcen->getDescription();
 
@@ -169,11 +179,20 @@ class Zalando extends BasePattern {
     {
         return collect(array_get($this->data, 'model.articleInfo.units'))->map(function($item) {
 
-            $price = array_get($item, 'displayPrice.originalPrice.value');
+            $price = array_get($item, 'displayPrice.price.value');
 
-            $currency = array_get($item, 'displayPrice.originalPrice.currency');
+            $currency = array_get($item, 'displayPrice.price.currency');
+
+            $originalPrice = null;
+
+            if(array_get($item, 'displayPrice.isDiscounted')) {
+
+                $originalPrice = array_get($item, 'displayPrice.originalPrice.value');
+
+            }
 
             return [
+                'original_price' => $originalPrice ? $this->calcPrice($originalPrice, $currency) : null,
                 'price' => $this->calcPrice($price, $currency),
                 'in_stock' => array_get($item, 'stock'),
                 'name' => $this->transfromSize(array_get($item, 'size.local'), array_get($item, 'size.local_type'))
@@ -262,10 +281,10 @@ class Zalando extends BasePattern {
             'Upper material' => 'ზედა ნაწილის მასალა',
             'Leather and textile' => 'ტყავი და ტექსტილი',
             'Internal material' => 'შიდა მასალა',
+            'Insert material' => 'სარჩული',
             'Cover sole' => 'ძირის საფარი',
             'Sole' => 'ძირი',
             'Textile' => 'ტექსტილი',
-            'Size' => 'ზომა',
             'Normal' => 'ნორმალური',
             'Synthetics' => 'სინთეტიკა',
             'Backless' => 'ზურგის გარეშე',
@@ -338,6 +357,9 @@ class Zalando extends BasePattern {
             'Dry clean only' => 'მხოლოდ მშრალი რეცხვა',
             'viscose' => 'ვისკოზა',
             'Heel type' => 'ქუსლის ტიპი',
+            'Size' => 'ზომა',
+            'Jersey' => 'ჯერსი',
+            'Lace' => 'მაქმანი',
             'A shrinkage of up to 5% may occur' => 'შეიძლება მოხდეს ზომაში შემცირება 5%-ით',
         ]);
 
@@ -347,6 +369,10 @@ class Zalando extends BasePattern {
 
         $word = preg_replace_callback("/((ზომა|ზომას) (\d+))/", function($matches){
             return array_get($matches, 2) . ' ' . $this->transfromSize(array_get($matches, 3), 'UK');
+        }, $word);
+
+        $word = preg_replace_callback("/((\d+) (Size))/", function($matches){
+            return array_get($matches, 3) . ' ' . $this->transfromSize(array_get($matches, 2), 'UK');
         }, $word);
 
         return $word;
@@ -359,7 +385,7 @@ class Zalando extends BasePattern {
      */
     public function getCategory()
     {
-        if(!$this->isUK() && $this->lcen) {
+        if(!$this->isUK() && $this->lcen->isProduct()) {
 
             return $this->lcen->getCategory();
 
@@ -406,16 +432,13 @@ class Zalando extends BasePattern {
                 'Wellies', 'Mules & Clogs', 'Clogs', 'Mules', 
                 'Ballet Pumps', 'Ankle Cuff Ballet Pumps', 'Ankle Strap Ballet Pumps', 'Classic Ballet Pumps', 
                 'Foldable Ballet Pumps', 'Peep-Toe Ballet Pumps', 'Sling-back Ballet Pumps', 
-                'Flip Flops & Beach Shoes', 'Beach Shoes & Jelly Shoes', 'Flip Flops', 
-                'Sports Shoes', 'Cushioned', 'Stability', 'Lightweight', 'Natural Running', 'Trail', 'Walking', 
+                'Flip Flops', 'Cushioned', 'Stability', 'Lightweight', 'Natural Running', 'Trail', 'Walking', 
                 'Football Boots', 'Moulded Soles', 
-                'Basketball Shoes', 'Tennis Shoes', 'Clay Court Shoes', 'Indoor Court Shoes', 'Golf shoes', 
-                'Trainers & Fitness Shoes', 'Trainers', 'Indoor Shoes', 'Dance & Ballet Shoes', 'Beach Shoes', 
-                'Watersports Shoes', 'Hiking & Hillwalking Shoes', 'Hiking Boots', 'Walking Boots', 'Mountain Boots', 
-                'Trail Shoes', 'Trekking Boots', 'Boots', 'Winter Boots', 'Wellies', 'Ski & Snowboard Boots', 
-                'Low-tops', 'High-tops', 'Trainers', 'Cycling Shoes', 
-                'Slippers', 'Shoe Care', 'Shoe Trees', 'Soles and Insoles', 'Lace-up Boots', 'Casual Shoes', 
-                'Brogues', 'Slip Ons', 'Boat Shoes', 'Sporty Lace Ups', 'Espadrilles', 'Formal Shoes', 'Derbies & Oxfords', 
+                'Trainers', 'Hiking Boots', 'Walking Boots', 'Mountain Boots', 
+                'Trekking Boots', 'Boots', 'Winter Boots', 'Wellies', 'Ski & Snowboard Boots', 
+                'Low-tops', 'High-tops', 'Trainers',
+                'Slippers', 'Soles and Insoles', 'Lace-up Boots', 
+                'Brogues', 'Slip Ons', 'Sporty Lace Ups', 'Espadrilles', 'Derbies & Oxfords', 
                 'Loafers', 'Sliders', 'Slides & Clogs', 
             ],
             2 => [
@@ -441,7 +464,7 @@ class Zalando extends BasePattern {
      */
     public function getTags() : array
     {
-        if(!$this->isUK() && $this->lcen) {
+        if(!$this->isUK() && $this->lcen->isProduct()) {
 
             return $this->lcen->getTags();
 
@@ -465,25 +488,31 @@ class Zalando extends BasePattern {
      */
     public function calcPrice(float $price, string $currency) : int
     {
-        $EUR2GEL = 2.80;
+        $exchangeRates = [
+            'eur' => 2.80,
+            'gbp' => 3.15
+        ];
 
-        $GBP2GEL = 3.15;
+        $shippingFees = [
+            'it' => 4,
+            'uk' => 5,
+        ];
 
-        $FEE = 5;
+        $commissionInDouble = (10 + 100) / 100;
 
         if($currency == 'GBP') {
 
-            $price = money(null, ($price + 5) * $GBP2GEL);
+            $price = ($price + array_get($shippingFees, 'uk')) * array_get($exchangeRates, 'gbp') * $commissionInDouble;
 
         } elseif ($currency == 'EUR') {
 
-            $price = money(null, ($price + 4) * $EUR2GEL);
+            $price = ($price + array_get($shippingFees, 'it')) * array_get($exchangeRates, 'eur') * $commissionInDouble;
 
         }
 
-        $price = str_replace(',', '', $price);
+        $price = money(null, $price);
 
-        return round($price + $FEE);
+        return str_replace(',', '', $price);
     }
 
     /**

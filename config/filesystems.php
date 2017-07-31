@@ -107,7 +107,7 @@ return [
             'default' => public_path('img/image.jpg'),
             'sizes' => [
                 'full' => [null, 600],
-                'short-card' => [300, 330],
+                'short-card' => [300, 370],
                 'similar' => [60, 60],
                 'comment-attachment' => [530, null],
             ]

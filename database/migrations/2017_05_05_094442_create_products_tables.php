@@ -24,6 +24,7 @@ class CreateProductsTables extends Migration
             $table->string('title')->nullable();
             $table->text('description')->nullable();
 
+            $table->decimal('original_price', 8, 2)->nullable();
             $table->decimal('price', 8, 2)->default(0);
             $table->string('currency', 5)->default('usd');
             $table->integer('in_stock')->default(0);
@@ -82,6 +83,7 @@ class CreateProductsTables extends Migration
 
             $table->increments('id');
             $table->string('name');
+            $table->decimal('original_price', 8, 2)->nullable();
             $table->decimal('price', 8, 2)->default(0);
             $table->integer('in_stock')->default(0);
             $table->integer('sales_count')->default(0);

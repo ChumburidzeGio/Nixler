@@ -20,5 +20,9 @@ Artisan::command('countries:download {iso_code}', function ($code) {
 
 Artisan::command('crawler:page {uid} {url}', function ($uid, $url) {
 	auth()->loginUsingId($uid);
-    $crawler = app(\App\Crawler\Crawler::class)->all($url);
+    $crawler = app(\App\Crawler\Crawler::class)->all($url, $this);
+});
+
+Artisan::command('crawler:updateAll', function () {
+    $crawler = app(\App\Crawler\Crawler::class)->updateAll($this);
 });

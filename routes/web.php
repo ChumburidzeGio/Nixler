@@ -134,7 +134,7 @@ Auth::routes();
 		$url = request('url');
 
 		if(request('type') == 'page') {
-			return $crawler->all($url);
+			return $crawler->updateAll();
 		}
 
 		return $crawler->get($url)->toArray();

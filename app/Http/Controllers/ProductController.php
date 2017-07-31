@@ -110,7 +110,7 @@ class ProductController extends Controller
             $status = __('The page doesn\'t contain product information and it can\'t be parsed.');
         }
 
-        return redirect()->route('product.edit', ['id' => $id])->with('status', $status);
+        return redirect()->route('product.edit', ['id' => $import->id])->with('status', $status);
     }
 
     /**
