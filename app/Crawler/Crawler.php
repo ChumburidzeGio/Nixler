@@ -72,7 +72,13 @@ class Crawler {
 
                 $results = $query->forPage($page, $count)->pluck('source');
 
-                $countResults = $results->count();
+                $links = $results->filter(function($link) {
+
+                    return ('zalando.it' == $this->getRootDomain($link));
+
+                });
+
+                $countResults = $links->count();
 
                 if ($countResults == 0) {
                     break;
@@ -80,7 +86,7 @@ class Crawler {
 
                 $commander->info("Updating {$countResults} links from chunk {$page}");
 
-                $this->bulk($results->toArray(), $commander);
+                $this->bulk($links->toArray(), $commander);
 
                 $page++;
 
