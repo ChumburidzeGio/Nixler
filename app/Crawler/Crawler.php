@@ -56,7 +56,9 @@ class Crawler {
     {
         $startDate = strtotime('now');
 
-        $merchants = ProductSource::groupBy('merchant_id')->pluck('merchant_id')->map(function($merchantId) use ($commander) {
+        $linksUpdated = 0;
+
+        $merchants = ProductSource::groupBy('merchant_id')->pluck('merchant_id')->map(function($merchantId) use ($commander, &$linksUpdated) {
 
             auth()->loginUsingId($merchantId);
 
@@ -64,7 +66,7 @@ class Crawler {
 
             $page = 1;
 
-            $count = 30;
+            $count = 100;
 
             do {
 
@@ -88,17 +90,22 @@ class Crawler {
 
                 $this->bulk($links->toArray(), $commander);
 
-                $page++;
-
                 $secondsUsed = strtotime('now') - $chunkStartDate;
 
                 $commander->comment("Updated {$countResults} links from chunk {$page} for {$secondsUsed} seconds");
+
+                $page++;
+
+                $linksUpdated += $countResults;
 
             } while ($countResults == $count);
 
         });
 
-        $commander->info('Proccessed for '.(strtotime('now') - $startDate).' seconds');
+        $secondsUsed = strtotime('now') - $startDate;
+
+        $commander->info("In total updated {$linksUpdated} links for {$secondsUsed} seconds");
+
     }
 
     /**
