@@ -135,6 +135,8 @@ class Crawler {
 
             } catch (\Exception $e) {
 
+                app(SystemService::class)->reportException($e);
+
                 $commander->error('Rejected - '.$link." - ".$e->getMessage());
 
             }
