@@ -64,7 +64,7 @@ class Crawler {
 
             $page = 1;
 
-            $count = 10;
+            $count = 30;
 
             do {
 
@@ -89,8 +89,6 @@ class Crawler {
                 $this->bulk($links->toArray(), $commander);
 
                 $page++;
-
-                sleep(10);
 
                 $secondsUsed = strtotime('now') - $chunkStartDate;
 
