@@ -44,7 +44,7 @@ class StreamCapsule {
     public function __construct(Product $model)
     {
     	$this->model = $model->from('products as p')->select(
-            'p.id', 'p.title', 'owner_username', 'p.slug', 'p.currency', 'price', 'likes_count', 'p.media_id'
+            'p.id', 'p.title', 'owner_username', 'p.slug', 'p.currency', 'price', 'likes_count', 'p.media_id', 'p.original_price'
         );
 
     	$this->page = request('page', 1);
@@ -442,7 +442,8 @@ class StreamCapsule {
         		'price' => $item->price_formated,
         		'likes_count' => $item->likes_count,
         		'owner' => $item->uname,
-        		'photo' => media($item, 'product', 'short-card')
+                'photo' => media($item, 'product', 'short-card'),
+        		'discount' => $item->discount
     		];
 
     	}, $products);

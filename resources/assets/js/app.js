@@ -15,6 +15,7 @@
  require('angular-sanitize');
 
  require('./vendor/angular-timeago');
+ require('./vendor/preloader');
  require('ng-dialog');
  require('angularjs-scroll-glue');
  require('angular-numeric-input');
@@ -56,7 +57,8 @@
     'stream',
     'settings',
     'user',
-    'collections'
+    'collections',
+    'angular-preload-image'
     ]);
 
  app.factory('httpRequestInterceptor', function () {
