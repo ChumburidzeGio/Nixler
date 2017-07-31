@@ -294,7 +294,7 @@ class ProductRepository extends BaseRepository {
 
             $product->price = $metadata->getPrice();
 
-            $product->originalPrice = $metadata->getOriginalPrice();
+            $product->original_price = $metadata->getOriginalPrice();
 
         }
 
