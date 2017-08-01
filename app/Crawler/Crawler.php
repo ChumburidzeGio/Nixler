@@ -54,6 +54,8 @@ class Crawler {
      */
     function updateAll($commander)
     {
+        $startMemory = memory_get_usage();
+
         $startDate = strtotime('now');
 
         $linksUpdated = 0;
@@ -104,8 +106,18 @@ class Crawler {
 
         $secondsUsed = strtotime('now') - $startDate;
 
-        $commander->info("In total updated {$linksUpdated} links for {$secondsUsed} seconds");
+        $memoryUsed = $this->formatBytes(memory_get_usage() - $startDate);
 
+        $commander->info("In total updated {$linksUpdated} links for {$secondsUsed} seconds and used {$memoryUsed} bytes");
+
+    }
+
+    private function formatBytes($size, $precision = 2)
+    {
+        $base = log($size, 1024);
+        $suffixes = array('', 'K', 'M', 'G', 'T');   
+
+        return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
     }
 
     /**
