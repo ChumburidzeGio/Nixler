@@ -106,7 +106,7 @@ class Crawler {
 
         $secondsUsed = strtotime('now') - $startDate;
 
-        $memoryUsed = $this->formatBytes(memory_get_usage() - $startDate);
+        $memoryUsed = $this->formatBytes(memory_get_usage() - $startMemory);
 
         $commander->info("In total updated {$linksUpdated} links for {$secondsUsed} seconds and used {$memoryUsed} bytes");
 
