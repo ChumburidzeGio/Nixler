@@ -75,6 +75,7 @@ return [
             'distance' => 5
         ],
         'asYouType' => false,
+        'searchBoolean' => false
     ],
 
 ];
