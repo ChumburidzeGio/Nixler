@@ -108,14 +108,14 @@ class Crawler {
 
         $memoryUsed = $this->formatBytes(memory_get_usage() - $startMemory);
 
-        $commander->info("In total updated {$linksUpdated} links for {$secondsUsed} seconds and used {$memoryUsed} bytes");
+        $commander->info("In total updated {$linksUpdated} links for {$secondsUsed} seconds and used {$memoryUsed}");
 
     }
 
     private function formatBytes($size, $precision = 2)
     {
         $base = log($size, 1024);
-        $suffixes = array('', 'K', 'M', 'G', 'T');   
+        $suffixes = array('bytes', 'kilobytes', 'megabytes', 'gegabytes');   
 
         return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
     }
