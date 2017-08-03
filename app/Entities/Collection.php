@@ -22,4 +22,16 @@ class Collection extends Model
         return $this->belongsTo(config('auth.providers.users.model'), 'user_id', 'id');
     }
 
+    /**
+     * Link attribute for collection
+     *
+     * @return string
+     */
+    public function getLinkAttribute()
+    {   
+        return route('collections.show', [
+            'id' => $this->getKey()
+        ]);
+    }
+
 }

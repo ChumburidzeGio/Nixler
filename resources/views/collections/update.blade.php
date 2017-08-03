@@ -25,7 +25,15 @@
                 <input type="hidden" name="id" value="{{ $collection->id }}">
 
                 <h2 class="_crd-header _bg0">
+
                     {{ $collection->id ? __('Update collection') : __('Create new collection') }}
+
+                    @if($collection->id)
+                        <a href="{{ $collection->link }}" class="_right _cbl _fs15" target="_blank" id="view-collection">
+                            <i class="material-icons _fs18 _va4">open_in_new</i> @lang('View collection')
+                        </a>
+                    @endif
+
                 </h2>
 
                 <div class="_crd-content _p15 _bgwt6">
@@ -80,7 +88,7 @@
                     <div class="_posr">
                         <div class="_a8">
                             <i class="material-icons _fs20 _ml15 _mt10" ng-if="!vm.searchProccessing">search</i>
-                            <div class="_spnr" style="margin: 40px 28px;" ng-if="vm.searchProccessing"></div>
+                            <div class="_spnr-sm" style="margin: 40px 28px;" ng-if="vm.searchProccessing"></div>
                         </div>
 
                         <input class="_fe" type="text" 
@@ -128,7 +136,7 @@
                             <div class="_m15 _tac _p15">
                                 <div class="_m15 _p15">
                                     <i class="material-icons _fs40 _mb15 _pb0" style="color: #cdd1d7;">shopping_basket</i>
-                                    <p style="color: #939393;">No products to show.</p>
+                                    <p style="color: #939393;">@lang('No products to show.')</p>
                                 </div>
                             </div>
 

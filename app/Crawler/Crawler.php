@@ -45,6 +45,8 @@ class Crawler {
 
         $links = app($this->findPattern($url))->parse($crawler)->detectProductsOnPage();
 
+        dd($links);
+
         $this->bulk($links, $commander);
     }
 

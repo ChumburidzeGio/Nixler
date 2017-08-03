@@ -13,6 +13,7 @@
         'variants' => $product->variants,
         'comments' => $product->comments->items(),
         'comments_count' => $product->comments->total(),
+        'media' => $product->media
         ]) ?>;
     </script>
 
@@ -25,25 +26,32 @@
                     <div class="row _brds3 _clear _mb15">
 
                         <div class="col-md-11">
+
                             @if($product->photo('full', 1))
                             <div class="_clear _posr _bcg _tac" id="product-gallery">
-                                <img src="{{ $product->photo('full') }}" itemprop="image" class="_clear _ma" 
-                                ng-init="vm.mediaBase='{{ url('media') }}/'" 
-                                ng-src="@{{ vm.media.mainPath() }}"
-                                ng-click="vm.media.next()"
-                                alt="{{ $product->title }}">
+
+                                    <div class="_a0 _posa _spnr-md ng-cloak" ng-if="vm.media.isLoading()"></div>
+
+                                    <img src="{{ $product->photo('full') }}" itemprop="image" class="_clear _ma" 
+                                    preload-image
+                                    ng-src="@{{ vm.media.active() }}"
+                                    ng-click="vm.media.next()"
+                                    alt="{{ $product->title }}"
+                                    fallback-src="http://nixler.app/media/2116/media/thumb_s.jpg"
+                                    onloading="vm.media.onLoading"
+                                    onloaded="vm.media.onLoaded">
 
                                 <ul class="_pl5 _pr15 _pt10 _a8 _posa">
-                                    @foreach($product->media as $key => $photo)
-                                    <img src="{{ $photo->photo('thumb_s') }}" 
+
+                                    <img ng-repeat="(id, photo) in vm.media.all()" 
+                                    ng-src="@{{ photo.thumb }}"
+                                    data="@{{ id }}" 
                                     height="50px" 
                                     width="50px" 
                                     class="_mr10 _mb10 _z013 _brds2 _crp _clear" 
-                                    ng-class="{'_b1 _bca _bw2':(vm.mainPhoto == {{ $key }})}"
-                                    ng-init="vm.media.add({{ $key }},{{ $photo->id }})"
-                                    ng-click="vm.mainPhoto={{ $key }}"
-                                    alt="{{ $product->title }}">    
-                                    @endforeach
+                                    ng-class="{'_b1 _bca _bw2':vm.media.isActive(id)}"
+                                    ng-click="vm.media.select(id)">    
+
                                 </ul>
 
                             </div>

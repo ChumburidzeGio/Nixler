@@ -1,6 +1,6 @@
 
 /**
- * Next, we will create a fresh Vue application instance and attach it to
+ * Next, we will create a fresh Angular application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
@@ -15,7 +15,6 @@
  require('angular-sanitize');
 
  require('./vendor/angular-timeago');
- require('./vendor/preloader');
  require('ng-dialog');
  require('angularjs-scroll-glue');
  require('angular-numeric-input');
@@ -57,9 +56,10 @@
     'stream',
     'settings',
     'user',
-    'collections',
-    'angular-preload-image'
-    ]);
+    'collections'
+]);
+
+require('./utils/preloader');
 
  app.factory('httpRequestInterceptor', function () {
  	return {
@@ -71,7 +71,7 @@
  });
 
 
- app.config(['$httpProvider', function ($httpProvider) {
+ app.config(['$httpProvider', '$compileProvider', function ($httpProvider, $compileProvider) {
 
     XMLHttpRequest.prototype.setRequestHeader = (function (sup) {
         return function (header, value) {
@@ -84,10 +84,13 @@
 
     $httpProvider.interceptors.push('httpRequestInterceptor');
 
+    $compileProvider.debugInfoEnabled(false);
+    //$compileProvider.commentDirectivesEnabled(false);
+    //$compileProvider.cssClassDirectivesEnabled(false);
+
 }]);
 
-
- app.filter('boolean', function() {
+app.filter('boolean', function() {
     return function(input) {
         return input ? 1 : 0;
     }

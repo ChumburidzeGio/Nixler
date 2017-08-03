@@ -26,7 +26,7 @@ use Cocur\Slugify\Slugify;
 
 class Product extends Model
 {
-	use Mediable, Metable, Sluggable, Searchable, NPerGroup, Actable, Notifiable;
+	use Mediable, Metable, Sluggable, /*Searchable,*/ NPerGroup, Actable, Notifiable;
 	
     public $table = 'products';
     

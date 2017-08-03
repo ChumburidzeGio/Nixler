@@ -1,26 +1,60 @@
 angular.module('products').controller('ShowCtrl', [
-    '$http', '$scope', 'ngDialog', '$timeout', function ($http, $scope, ngDialog, $timeout) {
-      
+    '$http', '$scope', 'ngDialog', '$timeout', '$log', function ($http, $scope, ngDialog, $timeout, $log) {
+
         var vm = this;
         vm.product = window.product;
-        vm.media = {};
-        vm.mainPhoto = 0;
         vm.quantities = vm.product.quantities;
         vm.variants = vm.product.variants;
 
-        vm.media = {
-        	add: function(id,mid){
-              vm.media[id] = mid;
-          },
-          next: function(){
-              vm.mainPhoto = vm.media[(vm.mainPhoto + 1)] ? (vm.mainPhoto + 1) : 0;
-          },
-          mainPath: function(){
-              return vm.mediaBase+vm.media[vm.mainPhoto]+'/product/full.jpg'
-          }
-      };
+        var mainPhotoId = 0;
 
-      vm.like = function(){
+        vm.media = {
+            loading: false,
+            initialize: function()
+            {
+                mainPhotoId = 0;
+            },
+            next: function()
+            {
+                mainPhotoId = vm.product.media[(mainPhotoId + 1)] ? (mainPhotoId + 1) : 0;
+            },
+            active: function()
+            {
+                return vm.product.media[mainPhotoId].full;
+            },
+            isActive: function(id)
+            {
+                return mainPhotoId == id;
+            },
+            isLoading: function()
+            {
+                return vm.media.loading;
+            },
+            select: function(id)
+            {
+                mainPhotoId = id;
+            },
+            all: function()
+            {
+                return vm.product.media;
+            },
+            onLoading: function()
+            {
+                $timeout(function(){
+                    vm.media.loading = true;
+                });
+            },
+            onLoaded: function()
+            {
+                $timeout(function(){
+                    vm.media.loading = false;
+                });
+            }
+        };
+
+        vm.media.initialize();
+
+    vm.like = function(){
 
         $http.post('/products/'+vm.product.id+'/like').then(function(response){
 
@@ -62,13 +96,13 @@ angular.module('products').controller('ShowCtrl', [
                   window.getSelection().removeAllRanges();
                   copyElement.remove();
 
-                }
+              }
 
-            },
-            controllerAs: 'vm',
-            showClose: 1,
-            className: 'ngdialog-theme-plain'
-        });
+          },
+          controllerAs: 'vm',
+          showClose: 1,
+          className: 'ngdialog-theme-plain'
+      });
 
     }
 

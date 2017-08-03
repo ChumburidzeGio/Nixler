@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 class CollectionsController extends Controller
 {
     /**
-     * Show the collection create page
+     * Show the collection create/update page
      *
      * @return \Illuminate\Http\Response
      */
@@ -45,12 +45,12 @@ class CollectionsController extends Controller
 
         $privacyOptions = [
             [
-                'key' => 0,
+                'key' => 1,
                 'label' => __('Public')
             ],
             [
-                'key' => 1,
-                'label' => __('Private')
+                'key' => 2,
+                'label' => __('Only me')
             ]
         ];
 
@@ -92,7 +92,7 @@ class CollectionsController extends Controller
 
         $collection->description = $request->description;
 
-        $collection->is_private = $request->is_private;
+        $collection->is_private = ($request->is_private == 2 ? true : false);
 
         $collection->user_id = $request->user()->id;
 

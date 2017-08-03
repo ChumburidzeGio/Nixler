@@ -307,5 +307,16 @@
     "Your Order Confirmation": "თქვენი შეკვეთის დადასტურება!",
     "Thank you for registration on Nixler!": "მადლობა ნიქსლერზე რეგისტრაციისთვის!",
     "Thank you for joining us and we hope that you exparience will be the best!": "მადლობა რომ შემოგვიერთდით და იმედი გვაქვს კმაყოფილი დარჩებით იმ მომსახურებით რომელსაც ჩვენი სერვისი გთავაზობთ!",
-    "Copy link": "დააკოპირეთ ლინკი"
+    "Copy link": "დააკოპირეთ ლინკი",
+    "Public": "საჯარო",
+    "Only me": "მხოლოდ მე",
+    "Create new collection": "ახალი კოლექციის შექმნა",
+    "Update collection": "განაახლე კოლექცია",
+    "Collection name": "კოლექციის სახელი",
+    "Collection description": "კოლექციის აღწერა",
+    "Find products": "პროდუქტების ძიება",
+    "No products to show.": "არც ერთი პროდუქტი არ მოიძებნა საჩვენებლად.",
+    "Global search results": "გლობალური ძიების შედეგები",
+    "View collection": "კოლექციის ნახვა",
+    "Last updated": "ბოლო განახლება"
 }

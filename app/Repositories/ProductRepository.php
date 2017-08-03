@@ -59,8 +59,16 @@ class ProductRepository extends BaseRepository {
         }
 
         $product->load('owner.shippingPrices', 'category');
+
         $product->owner->shippingPrices->load('location');
-        $product->setRelation('media', $product->media('photo')->take(10)->get());
+
+        $product->setRelation('media', $product->media('photo')->get()->map(function($item, $key){
+            return [
+                'thumb' => $item->photo('thumb_s'),
+                'full' => $item->photo('full'),
+            ];
+        }));
+
         $product->setRelation('comments', $product->comments()->latest('id')->paginate());
 
         $product->tags = ProductTag::where('product_id', $product->id)->get();
