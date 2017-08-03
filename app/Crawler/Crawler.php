@@ -11,6 +11,7 @@ use App\Crawler\Patterns\BeGe;
 use App\Crawler\Patterns\DealsGe;
 use App\Crawler\Patterns\Zalando;
 use App\Repositories\ProductRepository;
+use App\Entities\Product;
 
 class Crawler {
 
@@ -45,7 +46,9 @@ class Crawler {
 
         $links = app($this->findPattern($url))->parse($crawler)->detectProductsOnPage();
 
-        $this->bulk($links, $commander);
+        Product::withoutSyncingToSearch(function () use ($links, $commander) {
+            $this->bulk($links, $commander);
+        });
     }
 
     /**
