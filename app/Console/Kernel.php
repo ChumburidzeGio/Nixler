@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        \App\Console\Commands\CollectionsDiagnose::class,
         \App\Console\Commands\Install::class,
         \App\Console\Commands\Update::class,
         \App\Console\Commands\Env::class,
