@@ -505,7 +505,7 @@ class StreamCapsule {
 
     	$path = request()->path();
 
-    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab', 'tag']);
+    	$params = request()->only(['cat', 'price_min', 'price_max', 'query', 'tab', 'tag', 'target']);
 
     	$params = http_build_query(array_prepend($params, intval($this->page + 1), 'page'));
 
