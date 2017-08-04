@@ -110,13 +110,13 @@ class ProductRepository extends BaseRepository {
     {
         $user = auth()->user();
 
-        $model = $this->model->where([
-            'owner_id' => $user->id
-        ])->latest('id')->first();
+        //$model = $this->model->where([
+        //    'owner_id' => $user->id
+        //])->latest('id')->first();
 
-        if($model && !$model->is_active && !$model->in_stock) {
-            return $model;
-        }
+        //if($model && !$model->is_active && !$model->in_stock) {
+        //    return $model;
+        //}
         
         return $this->model->create([
             'in_stock' => 0,

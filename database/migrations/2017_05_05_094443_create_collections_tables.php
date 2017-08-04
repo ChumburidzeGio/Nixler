@@ -21,6 +21,8 @@ class CreateCollectionsTables extends Migration
             $table->integer('user_id')->unsigned();
             $table->string('description', 250);
             $table->integer('media_id')->unsigned()->nullable();
+            $table->integer('category_id')->unsigned()->nullable();
+            $table->integer('products_count')->unsigned()->nullable();
             $table->timestamps();
 
         });

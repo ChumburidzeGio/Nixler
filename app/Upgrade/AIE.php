@@ -149,10 +149,11 @@ class AIE
 
         }
 
-        if (!Schema::hasColumn('collections', 'category_id')) {
+        if (!Schema::hasColumn('collections', 'category_id') && !Schema::hasColumn('collections', 'products_count')) {
 
             Schema::table('collections', function (Blueprint $table) {
                 $table->integer('category_id')->unsigned()->nullable();
+                $table->integer('products_count')->unsigned()->nullable();
             });
 
         }

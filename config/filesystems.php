@@ -111,6 +111,12 @@ return [
                 'similar' => [60, 60],
                 'comment-attachment' => [530, null],
             ]
+        ],
+        'collection' => [
+            'default' => public_path('img/image.jpg'),
+            'sizes' => [
+                'stream' => [375, 250],
+            ]
         ]
     ]
 

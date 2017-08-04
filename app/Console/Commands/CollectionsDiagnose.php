@@ -52,6 +52,8 @@ class CollectionsDiagnose extends Command
 
             }
 
+            $item->products_count = count($categories);
+
             $item->save();
 
         });
