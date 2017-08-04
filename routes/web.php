@@ -129,6 +129,12 @@ Auth::routes();
 
 	Route::get('/scrap', function(){
 
+		auth()->loginUsingId(44);
+
+		\App\Entities\Product::where('media_count', '>', 7)->pluck('id')->map(function($id) {
+			app(\App\Repositories\ProductRepository::class)->delete($id);
+		});
+
 		$crawler = app(\App\Crawler\Crawler::class);
 
 		$url = request('url');
