@@ -18,6 +18,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\CollectionsDiagnose::class,
+        \App\Console\Commands\CrawlSet::class,
         \App\Console\Commands\Install::class,
         \App\Console\Commands\Update::class,
         \App\Console\Commands\Env::class,
