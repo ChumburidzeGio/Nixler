@@ -131,7 +131,7 @@ Auth::routes();
 
 		auth()->loginUsingId(44);
 
-		\App\Entities\Product::where('media_count', '>', 7)->where('owner_id', 44)->pluck('id')->map(function($id) {
+		\App\Entities\Product::where('media_count', '>', 6)->where('owner_id', 44)->pluck('id')->map(function($id) {
 			app(\App\Repositories\ProductRepository::class)->delete($id);
 		});
 
