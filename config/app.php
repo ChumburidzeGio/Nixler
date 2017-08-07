@@ -201,7 +201,6 @@ return [
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
         Nwidart\Modules\LaravelModulesServiceProvider::class,
-        DamianTW\MySQLScout\Providers\MySQLScoutServiceProvider::class,//DELETE
         TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         Dimsav\Translatable\TranslatableServiceProvider::class,
@@ -219,7 +218,8 @@ return [
         Spatie\DemoMode\DemoModeServiceProvider::class,
         Torann\LaravelMetaTags\MetaTagsServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
-        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        //Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        Yab\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
 
         /*

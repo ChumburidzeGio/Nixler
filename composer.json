@@ -14,7 +14,6 @@
         "barryvdh/laravel-debugbar": "^2.3",
         "caouecs/laravel-lang": "~3.0",
         "cviebrock/eloquent-sluggable": "^4.2",
-        "damiantw/laravel-scout-mysql-driver": "^1.0",
         "dawson/amazon-ecs": "^2.0",
         "dimsav/laravel-translatable": "^7.0",
         "doctrine/dbal": "^2.5",
@@ -33,7 +32,7 @@
         "lab404/laravel-impersonate": "^1.1",
         "laravel-notification-channels/telegram": "^0.0.2",
         "laravel/dusk": "^1.0",
-        "laravel/framework": "5.4.*",
+        "laravel/framework": "v5.4.27",
         "laravel/scout": "^2.0",
         "laravel/socialite": "^3.0",
         "laravel/tinker": "~1.0",
@@ -62,7 +61,8 @@
         "teamtnt/laravel-scout-tntsearch-driver": "^3.0",
         "torann/geoip": "^1.0",
         "torann/laravel-meta-tags": "^3.0",
-        "watson/validating": "^3.0"
+        "watson/validating": "^3.0",
+        "yab/laravel-scout-mysql-driver": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

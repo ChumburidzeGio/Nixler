@@ -117,8 +117,6 @@ class Crawler {
 
         foreach ($links as $key => $link) {
 
-            $key++;
-            
             try {
 
                 $commander->comment($key.'. Crawling '.$link);

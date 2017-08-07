@@ -247,7 +247,7 @@ class ProductRepository extends BaseRepository {
     public function import(string $url)
     {
         $user = auth()->user();
-
+        
         $source = ProductSource::where([
             'merchant_id' => $user->id,
             'source' => $url
@@ -560,7 +560,6 @@ class ProductRepository extends BaseRepository {
 
         return ProductTag::whereNotIn('id', $ids)->where('product_id', $product->id)->delete();
     }
-
 
     /**
      * Update or create new tag for product.
