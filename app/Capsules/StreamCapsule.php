@@ -4,6 +4,7 @@ namespace App\Capsules;
 
 use App\Entities\ProductCategory;
 use App\Entities\Product;
+use App\Entities\ProductTag;
 use DB;
 
 class StreamCapsule {
@@ -568,6 +569,32 @@ class StreamCapsule {
                 69 => [68, 80],
             ];
 
+            if($category && !array_key_exists($category, $match)) {
+
+                $tags = $this->tagsAsCategories();
+
+                if($tags->count()) {
+
+                    return $tags->map(function($item) use ($category) {
+
+                        return [
+                            'id'     => null,
+                            'icon'   => null,
+                            'name'   => $item->name,
+                            'href'   => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query', 'target']), [
+                                'cat' => $category, 
+                                'tag' => $item->name
+                            ])),
+                            'active' => $this->tag == $item->name,
+                            'empty' => $item->count,
+                        ];
+
+                    });
+
+                }
+
+            }
+
             foreach ($match as $key => $value) {
                 
                 if($category > array_first($value) && $category < array_last($value)) {
@@ -582,7 +609,7 @@ class StreamCapsule {
                     'id'     => (int) $item->id,
                     'icon'   => $item->icon,
                     'name'   => $item->name,
-                    'href'   => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query', 'target']), ['cat' => $item->id])),
+                    'href'   => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query', 'target','tag']), ['cat' => $item->id])),
                     'active' => (request('cat') == $item->id),
                     'empty' => ((count($ids) || $this->category) && !in_array($item->id, $ids)),
                 ];
@@ -591,6 +618,43 @@ class StreamCapsule {
             return $categories->toArray();
 
         });
+
+    }
+
+    /**
+     * Return price facets
+     *
+     * @return array
+     */
+    public function tagsAsCategories()
+    {
+        $categories = $this->getCategoryFamily();
+
+        $targetGroup = $this->targetGroup ? $this->getTargetGroup() : null;
+
+        return ProductTag::whereExists(function ($query) use ($categories, $targetGroup) {
+
+            $query->select(DB::raw(1))
+
+            ->from('products as p')->whereIn('p.category_id', $categories)
+
+            ->whereRaw('p.id = product_tags.product_id')
+
+            ->where('p.is_active', true);
+
+            if(count($targetGroup)) 
+            {
+                $query = $query->whereIn('p.target', $targetGroup);
+            }
+
+
+        })
+
+        ->groupBy('name')->orderBy('total', 'desc')
+
+        ->where('type', 'category')
+
+        ->select('name', DB::raw('count(*) as total'))->get();
 
     }
 
@@ -643,7 +707,7 @@ class StreamCapsule {
     {
         array_push($targets[$group], [
             'name' => __($name),
-            'link' => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query', 'cat']), ['target' => $key])),
+            'link' => route('feed', array_merge(request()->only(['price_min', 'price_max', 'query', 'cat', 'tag']), ['target' => $key])),
             'active' => $this->targetGroup == $key
         ]);
 

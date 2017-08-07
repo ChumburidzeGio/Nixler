@@ -157,6 +157,14 @@ class AIE
             });
 
         }
+
+        if (!Schema::hasColumn('product_tags', 'type')) {
+
+            Schema::table('product_tags', function (Blueprint $table) {
+                $table->string('type', 20)->nullable();
+            });
+
+        }
         
     }
 

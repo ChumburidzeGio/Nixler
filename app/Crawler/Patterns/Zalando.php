@@ -27,15 +27,21 @@ class Zalando extends BasePattern {
 
         $this->data = $this->parseJson();
 
-        if($this->isProduct() && !$this->isUK()) {
-
-            $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q=';
-
-            $this->lcen = app(LC::class)->get($enUrl.array_get($this->data, 'model.articleInfo.id'));
-
-        }
-
         return $this;
+    }
+
+    /**
+     * Check if its Zalando.co.uk
+     *
+     * @return bool
+     */
+    public function parseEnVersion()
+    {
+        $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q=';
+
+        $this->lcen = $this->lcen ?? app(LC::class)->get($enUrl.array_get($this->data, 'model.articleInfo.id'));
+
+        return $this->lcen;
     }
 
     /**
@@ -75,7 +81,7 @@ class Zalando extends BasePattern {
      */
     public function isProduct() : bool
     {
-        return $this->data && $this->getSKU() !== null;
+        return $this->data && $this->getSKU() !== null && (!$this->isUK() && $this->parseEnVersion()->getSKU());
     }
 
     /**
@@ -478,7 +484,7 @@ class Zalando extends BasePattern {
             str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')))
         );
 
-        return array_values(compact('color', 'category', 'silhouetteCode'));
+        return array_flip(compact('color', 'category', 'silhouetteCode'));
     }
 
     /**

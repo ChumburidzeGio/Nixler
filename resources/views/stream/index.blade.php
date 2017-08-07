@@ -124,7 +124,7 @@
 
 			<div class="_af _bgwt2 _zi999" ng-if="vm.showTargetRange" ng-click="vm.showTargetRange=0"></div>
 
-			<div class="target-range _clear _mb15 _bgw _brds1 _z013 _posa _mt5 _w350px _zi999" ng-if="vm.showTargetRange" ng-init="vm.filters.target.min={{ request()->input('target_min', '0.00') }};vm.filters.target.max={{ request()->input('target_max', '9999.00') }};">
+			<div class="target-range _clear _mb15 _bgw _brds1 _z013 _posa _mt5 _w350px _zi999" ng-if="vm.showTargetRange">
 
 
 				<div class="_lst _b0">

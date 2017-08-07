@@ -16,6 +16,18 @@ class CollectionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index()
+    {
+        $collections = capsule('collections')->get();
+
+        return view('collections.index', compact('collections'));
+    }
+
+    /**
+     * Show the collection create/update page
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function update($id = null)
     {
         if(is_null($id)) {

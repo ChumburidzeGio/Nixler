@@ -111,17 +111,39 @@ class CollectionsCapsule {
      */
     public function transform($collections)
     {
-    	return $collections->map(function($item){
+        return $collections->map(function($item){
 
-    		return [
-    			'link' => route('collections.show', ['id' => $item->id]),
-    			'name' => $item->name,
-    			'owner_name' => $item->unm,
-    			'owner_photo' => route('avatar', ['id' => $item->uid, 'place' => 'nav']),
-    			'photo' => media($item->media_id, 'collection', 'stream')
-    		];
+            return [
+                'url' => route('collections.show', ['id' => $item->id]),
+                'name' => $item->name,
+                'owner_name' => $item->unm,
+                'owner_photo' => route('avatar', ['id' => $item->uid, 'place' => 'nav']),
+                'photo' => media($item->media_id, 'collection', 'stream')
+            ];
 
-    	});
+        });
+    }
+
+    /**
+     * Return capsule as array
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $items = $this->items();
+
+        return compact('items');
+    }
+
+    /**
+     * Return capsule as array
+     *
+     * @return array
+     */
+    public function toJson()
+    {
+        return json_encode($this->toArray());
     }
 
 }

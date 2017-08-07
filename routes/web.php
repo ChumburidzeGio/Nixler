@@ -55,6 +55,7 @@ Auth::routes();
 	    Route::get('/update/{id}', 'CollectionsController@update')->name('collections.update');
 	    Route::post('/store', 'CollectionsController@store')->name('collections.store');
 	    Route::post('/delete', 'CollectionsController@delete')->name('collections.delete');
+	    Route::get('/', 'CollectionsController@index')->name('collections.index');
 	    Route::post('/productSearch', 'CollectionsController@productSearch')->name('collections.productSearch');
 	});
 
@@ -128,12 +129,6 @@ Auth::routes();
 	});
 
 	Route::get('/scrap', function(){
-
-		auth()->loginUsingId(44);
-
-		\App\Entities\Product::where('media_count', '>', 6)->where('owner_id', 44)->pluck('id')->map(function($id) {
-			app(\App\Repositories\ProductRepository::class)->delete($id);
-		});
 
 		$crawler = app(\App\Crawler\Crawler::class);
 

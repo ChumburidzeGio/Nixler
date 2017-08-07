@@ -9,7 +9,7 @@ class ProductTag extends Model
     public $table = 'product_tags';
     
     protected $fillable = [
-    	'user_id', 'product_id', 'name'
+    	'user_id', 'product_id', 'name', 'type'
     ];
 
 }

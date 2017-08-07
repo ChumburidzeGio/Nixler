@@ -550,9 +550,12 @@ class ProductRepository extends BaseRepository {
 
         }
 
-        $ids = $tags->map(function ($tag) use ($product) {
-            $model = $this->updateOrCreateTag($tag, $product);
+        $ids = $tags->map(function ($key, $tag) use ($product) {
+
+            $model = $this->updateOrCreateTag($tag, $product, $key);
+
             return $model->id;
+
         })->flatten();
 
         return ProductTag::whereNotIn('id', $ids)->where('product_id', $product->id)->delete();
@@ -567,18 +570,28 @@ class ProductRepository extends BaseRepository {
      *
      * @return ProductTag
      */
-    public function updateOrCreateTag($tag, Product $product)
-    {
+    public function updateOrCreateTag($tag, Product $product, $key = null)
+    {  
         $name = trim($tag);
 
         $model = ProductTag::where('name', $name)->where('product_id', $product->id)->first();
 
         if(!$model) {
+
             $model = ProductTag::create([
                 'name' => $name,
                 'user_id' => auth()->id(),
                 'product_id' => $product->id
             ]);
+
+        }
+
+        if(in_array($key, ['color', 'category', 'silhouetteCode']) && $model->type !== $key) {
+
+            $model->update([
+                'type' => $key
+            ]);
+
         }
 
         return $model;
