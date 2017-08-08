@@ -108,6 +108,30 @@ class UserController extends Controller
 
 
     /**
+     * Get the user profile
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sitemap()
+    {
+        $users = User::select('updated_at', 'username')->get()->map(function($item){
+
+            return [
+                'loc' => $item->link(),
+                'lastmod' => $item->updated_at->tz('UTC')->toAtomString(),
+                'priority' => 0.9,
+            ];
+
+        });
+
+        return response()->view('sitemaps.index', [
+            'items' => $users,
+        ])->header('Content-Type', 'text/xml');
+    }
+
+
+
+    /**
      * Deactivate user account
      */
     public function deactivate(Request $request)

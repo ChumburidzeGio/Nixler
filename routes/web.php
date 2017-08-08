@@ -47,6 +47,7 @@ Auth::routes();
 		Route::match(['get', 'post'], 'products/{id}/order', 'ProductController@order')->middleware('auth')->name('order');
 		Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 		Route::get('/stock', 'ProductController@stock')->name('stock');
+		Route::get('/sitemap/products', 'ProductController@sitemap')->name('sitemap.products');
 	});
 
 	Route::group(['prefix' => 'cl'], function() {
@@ -81,6 +82,7 @@ Auth::routes();
 		Route::post('@{id}/photos', 'UserController@uploadPhoto')->name('user.uploadPhoto');
 
 		Route::get('/avatars/{id}/{place}', 'UserController@avatar')->name('avatar');
+		Route::get('/sitemap/users', 'UserController@sitemap')->name('sitemap.users');
 
 		Route::get('/auth/{provider}', 'SocialAuthController@redirect');
 		Route::get('/auth/{provider}/callback', 'SocialAuthController@callback');

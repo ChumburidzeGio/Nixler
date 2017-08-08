@@ -5,3 +5,6 @@ Disallow: /orders/
 Disallow: /new-product
 Disallow: /im
 Disallow: /im/
+Disallow: /img/
+
+Sitemap: https://www.nixler.ge/sitemap.xml

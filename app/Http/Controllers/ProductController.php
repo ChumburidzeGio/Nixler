@@ -266,4 +266,26 @@ class ProductController extends Controller
         return view('products.stock', compact('products'));
     }
 
+    /**
+     * Get the user profile
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function sitemap()
+    {
+        $products = Product::active()->select('updated_at', 'slug', 'owner_username')->get()->map(function($item){
+
+            return [
+                'loc' => $item->url(),
+                'lastmod' => $item->updated_at->tz('UTC')->toAtomString(),
+                'priority' => 0.9,
+            ];
+
+        });
+
+        return response()->view('sitemaps.index', [
+            'items' => $products,
+        ])->header('Content-Type', 'text/xml');
+    }
+
 }

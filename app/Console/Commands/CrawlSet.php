@@ -30,14 +30,19 @@ class CrawlSet extends Command
      */
     public function handle()
     {
+        $links = [];
+
         $userId = $this->ask('Who to act instead?');
 
         auth()->loginUsingId($userId);
 
         while ($link = $this->ask('What is the url of webpage?')) {
-             $this->crawl($link);
+             $links[] = $link;
         }
-       
+
+        foreach ($links as $link) {
+            $this->crawl($link);
+        }
     }
 
     /**
