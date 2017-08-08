@@ -81,7 +81,7 @@ class Zalando extends BasePattern {
      */
     public function isProduct() : bool
     {
-        return $this->data && $this->getSKU() !== null && (!$this->isUK() && $this->parseEnVersion()->getSKU());
+        return $this->data && $this->getSKU() !== null && !(!$this->isUK() && !$this->parseEnVersion()->getSKU());
     }
 
     /**
@@ -130,7 +130,6 @@ class Zalando extends BasePattern {
     public function getDescription()
     {
         //return array_get($this->data, 'model.articleInfo');
-
         if(!$this->isUK() && $this->lcen->isProduct()) {
 
             return $this->lcen->getDescription();
