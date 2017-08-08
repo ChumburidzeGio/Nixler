@@ -280,16 +280,6 @@ class Product extends Model
         }
 
     }
-
-    /**
-     * Get the indexable data array for the model.
-     *
-     * @return array
-     */
-    public function toSearchableArray()
-    {
-        return $this->toArray();
-    }
     
     /**
      * Return description parsed with Markdown
