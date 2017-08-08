@@ -129,7 +129,6 @@ class Zalando extends BasePattern {
      */
     public function getDescription()
     {
-        //return array_get($this->data, 'model.articleInfo');
         if(!$this->isUK() && $this->lcen->isProduct()) {
 
             return $this->lcen->getDescription();
@@ -246,6 +245,70 @@ class Zalando extends BasePattern {
     public function translate(string $word) : string
     {
         $word = array_get([
+
+            /*//Material
+            'Cashmere' => '',
+            'Cord' => '',
+            'Cotton' => '',
+            'Crocheted' => '',
+            'Denim' => '',
+            'Down' => '',
+            'Fleece' => '',
+            'Hardshell' => '',
+            'Imitation Leather' => '',
+            'Jersey' => '',
+            'Lace' => '',
+            'Leather' => '',
+            'Linen' => '',
+            'Mesh' => '',
+            'Mohair' => '',
+            'Other' => '',
+            'Polyester' => '',
+            'Ribbed' => '',
+            'Silk' => '',
+            'Softshell' => '',
+            'Sweat' => '',
+            'Viscose' => '',
+            'Wool' => '',*/
+
+            /*//Pattern
+            'Animal Print' => '',
+            'Burnout' => '',
+            'Camouflage' => '',
+            'Checked' => '',
+            'Colour Gradient' => '',
+            'Colourful' => '',
+            'Floral' => '',
+            'Herringbone' => '',
+            'marl' => '',
+            'paisley' => '',
+            'photo print' => '',
+            'Pinstriped' => '',
+            'plain' => '',
+            'polka dot' => '',
+            'Print' => '',
+            'striped' => '',*/
+
+            /*//Color
+            'Black' => '',
+            'Brown' => '',
+            'Beige' => '',
+            'Grey' => '',
+            'White' => '',
+            'Blue' => '',
+            'Petrol' => '',
+            'Turquoise' => '',
+            'Green' => '',
+            'Olive' => '',
+            'Yellow' => '',
+            'Orange' => '',
+            'Red' => '',
+            'Pink' => '',
+            'Lilac' => '',
+            'Gold' => '',
+            'Silver' => '',
+            'Multi-coloured' => '',*/
+
             'heading_material' => 'ქსოვილის შემადგენლობა და რეცხვა',
             'heading_details' => 'პროდუქტის დეტალები',
             'heading_measure_and_fitting' => 'ზომა და მორგება',

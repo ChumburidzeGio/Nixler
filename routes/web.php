@@ -123,6 +123,13 @@ Auth::routes();
 	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
 
 	Route::get('/monitor', function(){
+
+		return \App\Entities\ProductTag::groupBy('name')->orderBy('total', 'desc')
+
+        ->where('type', 'category')
+
+        ->select('name', DB::raw('count(*) as total'))->get();
+
 			
 		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
 
