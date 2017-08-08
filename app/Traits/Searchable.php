@@ -17,6 +17,8 @@ trait Searchable {
      */
     public function scopeWhereKeyword($builder, $query)
     {
+        return $this->search($query);
+        /*
     	if(!$query) {
     		return $builder;
     	}
@@ -27,7 +29,7 @@ trait Searchable {
 
 		$ids_ordered = implode(',', $ids);
 
-    	return $ids ? $builder->whereIn('id', $ids)->orderBy(DB::raw("FIELD(id, $ids_ordered)")) : $builder->whereNull('id');
+    	return $ids ? $builder->whereIn('id', $ids)->orderBy(DB::raw("FIELD(id, $ids_ordered)")) : $builder->whereNull('id');*/
     }
     
 }
