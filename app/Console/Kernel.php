@@ -40,7 +40,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:run')->daily()->at('02:00');
         $schedule->command('backup:monitor')->daily()->at('03:00');
 
-        $schedule->command('crawler:updateAll')->hourly();
+        $schedule->command('crawler:updateAll')->daily();
     }
 
     /**
