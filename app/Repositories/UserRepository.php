@@ -419,7 +419,7 @@ class UserRepository extends BaseRepository {
      */
     public function search($query)
     {
-        return $this->model->whereKeyword($query)->take(6)->get();
+        return $this->model->search($query)->take(6)->get();
     }
 
 

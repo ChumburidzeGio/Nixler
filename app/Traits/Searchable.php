@@ -15,9 +15,10 @@ trait Searchable {
      *
      * @return void
      */
-    public function scopeWhereKeyword($builder, $query)
-    {
-        return $this->search($query);
+    public function scopeWhereKeyword($query, $match, $keyword)
+    {        
+        return $query->whereRaw("MATCH($match) AGAINST(? IN NATURAL LANGUAGE MODE)", [$keyword]);
+
         /*
     	if(!$query) {
     		return $builder;
