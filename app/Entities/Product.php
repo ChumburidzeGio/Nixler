@@ -281,7 +281,6 @@ class Product extends Model
 
     }
 
-
     /**
      * Get the indexable data array for the model.
      *
@@ -289,23 +288,8 @@ class Product extends Model
      */
     public function toSearchableArray()
     {
-        $array = $this->toArray();
-
-        $tags = str_slug(ProductTag::where('product_id', $this->id)->pluck('name')->implode(' '), ' ');
-
-        $variants = str_slug(ProductVariant::where('product_id', $this->id)->pluck('name')->implode(' '), ' ');
-
-        $title = str_slug(array_get($this->attributes, 'title'), ' ');
-
-        $description = str_slug(array_get($this->attributes, 'description'), ' ');
-
-        $sku = array_get($this->attributes, 'sku');
-
-        $id = array_get($this->attributes, 'id');
-
-        return compact('title', 'description', 'tags', 'variants', 'sku', 'id');
+        return $this->toArray();
     }
-    
     
     /**
      * Return description parsed with Markdown
