@@ -97,6 +97,10 @@ class Crawler {
 
         $commander->info("In total updated {$linksUpdated} links for {$secondsUsed} seconds and used {$memoryUsed}");
 
+        file_put_contents(public_path('crlw/zalando.json'), 
+            json_encode(config('crawler.translations.zalando'))
+        );
+
     }
 
     private function formatBytes($size, $precision = 2)

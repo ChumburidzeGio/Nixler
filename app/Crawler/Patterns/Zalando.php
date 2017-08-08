@@ -137,7 +137,7 @@ class Zalando extends BasePattern {
         
         $description = collect(array_get($this->data, 'model.articleInfo.attributes'))->map(function($item) {
             
-            $header = $this->translate(array_get($item, 'category'));
+            $header = $this->translate(array_get($item, 'category'), 'headings');
 
             $data = [];
 
@@ -147,7 +147,10 @@ class Zalando extends BasePattern {
                     continue;
                 }
 
-                $data[] = $this->translate(array_get($item, 'name')).': '.$this->translate(array_get($item, 'values'));
+                $data[] = $this->translate(array_get($item, 'name'), 'dname').': '.$this->translate(array_get($item, 'values'));
+
+                $this->pushTranslation('dname', array_get($item, 'name'));
+                $this->pushTranslation('dvalues', array_get($item, 'values'));
 
             }
 
@@ -242,76 +245,123 @@ class Zalando extends BasePattern {
      *
      * @return string
      */
-    public function translate(string $word) : string
+    public function translate(string $word, $type = null) : string
     {
+        $translations = [
+            'materials' => [
+                'Cashmere' => '',
+                'Cord' => '',
+                'Cotton' => '',
+                'Crocheted' => '',
+                'Denim' => '',
+                'Down' => '',
+                'Fleece' => '',
+                'Hardshell' => '',
+                'Imitation Leather' => '',
+                'Jersey' => '',
+                'Lace' => '',
+                'Leather' => '',
+                'Linen' => '',
+                'Mesh' => '',
+                'Mohair' => '',
+                'Other' => '',
+                'Polyester' => '',
+                'Ribbed' => '',
+                'Silk' => '',
+                'Softshell' => '',
+                'Sweat' => '',
+                'Viscose' => '',
+                'Wool' => '',
+            ],
+            'pattern' => [
+                'Animal Print' => '',
+                'Burnout' => '',
+                'Camouflage' => '',
+                'Checked' => '',
+                'Colour Gradient' => '',
+                'Colourful' => '',
+                'Floral' => '',
+                'Herringbone' => '',
+                'marl' => '',
+                'paisley' => '',
+                'photo print' => '',
+                'Pinstriped' => '',
+                'plain' => '',
+                'polka dot' => '',
+                'Print' => '',
+                'striped' => '',
+            ],
+            'colors' => [
+                'black' => 'შავი',
+                'camel' => 'ყავისფერი',
+                'beige' => '',
+                'dark blue' => 'მუქი ლურჯი',
+                'dark red' => 'მუქი წითელი',
+                'grey' => 'ნაცრისფერი',
+                'white' => 'თეთრი',
+                'blue' => 'ცისფერი',
+                'petrol' => '',
+                'turquoise' => '',
+                'green' => 'მწვანე',
+                'olive' => '',
+                'yellow' => 'ყვითელი',
+                'orange' => 'სტაფილოსფერი',
+                'red' => 'წითელი',
+                'rose' => 'ვარდისფერი',
+                'lilac' => 'იასამნისფერი',
+                'gold' => 'ოქროსფერი',
+                'silver' => 'ვერცხლისფერი',
+                'multicoloured' => 'ფერადი',
+            ],
+            'headings' => [
+                'heading_material' => 'ქსოვილის შემადგენლობა და რეცხვა',
+                'heading_details' => 'პროდუქტის დეტალები',
+                'heading_measure_and_fitting' => 'ზომა და მორგება',
+            ],
+            'dnames' => [
+                'Outer fabric material' => '',
+                'Upper material' => '',
+                'Internal material' => '',
+                'Fabric' => '',
+                'Sheer' => '',
+                'Neckline' => '',
+                'Pattern' => '',
+                'Our model\'s height' => '',
+                'Fit' => '',
+                'Length' => '',
+                'Sleeve length' => '',
+                'Total length' => '',
+                'Back width' => '',
+                'Lining' => '',
+                'Washing instructions' => '',
+                'Collar' => '',
+                'Fastening' => '',
+                'Details' => '',
+                'Cover sole' => '',
+                'Sole' => '',
+                'Padding type' => '',
+                'Fabric' => '',
+                'Shoe toecap' => '',
+                'Heel type' => '',
+                'Shoe fastener' => '',
+                'Heel height' => '',
+                'Height' => '',
+                'Width' => '',
+            ],
+        ];
+
+        if(!is_null($type)) {
+
+            $wordbase = array_get($translations, $type);
+
+            if(array_get($wordbase, $word)) 
+            {
+                return array_get($wordbase, $word);
+            }
+
+        }
+
         $word = array_get([
-
-            /*//Material
-            'Cashmere' => '',
-            'Cord' => '',
-            'Cotton' => '',
-            'Crocheted' => '',
-            'Denim' => '',
-            'Down' => '',
-            'Fleece' => '',
-            'Hardshell' => '',
-            'Imitation Leather' => '',
-            'Jersey' => '',
-            'Lace' => '',
-            'Leather' => '',
-            'Linen' => '',
-            'Mesh' => '',
-            'Mohair' => '',
-            'Other' => '',
-            'Polyester' => '',
-            'Ribbed' => '',
-            'Silk' => '',
-            'Softshell' => '',
-            'Sweat' => '',
-            'Viscose' => '',
-            'Wool' => '',*/
-
-            /*//Pattern
-            'Animal Print' => '',
-            'Burnout' => '',
-            'Camouflage' => '',
-            'Checked' => '',
-            'Colour Gradient' => '',
-            'Colourful' => '',
-            'Floral' => '',
-            'Herringbone' => '',
-            'marl' => '',
-            'paisley' => '',
-            'photo print' => '',
-            'Pinstriped' => '',
-            'plain' => '',
-            'polka dot' => '',
-            'Print' => '',
-            'striped' => '',*/
-
-            /*//Color
-            'Black' => '',
-            'Brown' => '',
-            'Beige' => '',
-            'Grey' => '',
-            'White' => '',
-            'Blue' => '',
-            'Petrol' => '',
-            'Turquoise' => '',
-            'Green' => '',
-            'Olive' => '',
-            'Yellow' => '',
-            'Orange' => '',
-            'Red' => '',
-            'Pink' => '',
-            'Lilac' => '',
-            'Gold' => '',
-            'Silver' => '',
-            'Multi-coloured' => '',*/
-
-            'heading_material' => 'ქსოვილის შემადგენლობა და რეცხვა',
-            'heading_details' => 'პროდუქტის დეტალები',
-            'heading_measure_and_fitting' => 'ზომა და მორგება',
             'Zip' => 'ელვა',
             'Floral' => 'ყვავილებიანი',
             'Long' => 'გრძელი',
@@ -327,10 +377,7 @@ class Zalando extends BasePattern {
             'Magnet' => 'მაგნიტი',
             'Compartments' => 'განყოფილებები',
             'Mobile phone pocket' => 'ტელეფონის ჯიბე',
-            'Height' => 'სიმაღლე',
-            'Width' => 'სიგანე',
             'Carrying handle' => 'სახელური',
-            'Lining' => 'სარჩული',
             'Polyester' => 'პოლიესტერინი',
             'Collar' => 'საყელო',
             'Adjustable straps' => 'რეგულირებადი თასმები',
@@ -360,15 +407,6 @@ class Zalando extends BasePattern {
             'Decorative seams' => 'დეკორატიული ნაკერები',
             'Shoe fastener' => 'ფეხსაცმლის შესაკრავი',
             'Laces' => 'თასმები',
-
-            'pink' => 'ვარდისფერი',
-            'purple' => 'იასამნისფერი',
-            'multicoloured' => 'ფერადი',
-            'white' => 'თეთრი',
-            'black' => 'შავი',
-            'dark blue' => 'მუქი ლურჯი',
-            'blue' => 'ცისფერი',
-            'dark red' => 'მუქი წითელი',
 
             'Trousers' => 'შარვალები',
             'Trouser' => 'შარვალი',
@@ -538,15 +576,37 @@ class Zalando extends BasePattern {
 
         }
 
-        $color = $this->translate(array_get($this->data, 'model.articleInfo.color'));
+        $color = array_get($this->data, 'model.articleInfo.color');
+        $category = array_get($this->data, 'model.articleInfo.category_tag');
+        $silhouetteCode = str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')));
 
-        $category = $this->translate(array_get($this->data, 'model.articleInfo.category_tag'));
+        $this->pushTranslation('category', $category);
+        $this->pushTranslation('color', $color);
+        $this->pushTranslation('silhouetteCode', $silhouetteCode);
 
-        $silhouetteCode = $this->translate(
-            str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')))
-        );
+        $color = $this->translate($color, 'color');
+        $category = $this->translate($category);
+        $silhouetteCode = $this->translate($silhouetteCode);
 
         return array_flip(compact('color', 'category', 'silhouetteCode'));
+    }
+
+    /**
+     * Parse the tags of product
+     *
+     * @return array
+     */
+    public function pushTranslation($tag, $val)
+    {
+        $tag = "crawler.translations.zalando.{$tag}";
+
+        $config = config($tag, []);
+
+        array_push($config, $val);
+
+        $config = array_values(array_unique($config));
+
+        config([$tag => $config]);
     }
 
     /**
