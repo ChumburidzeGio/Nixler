@@ -264,9 +264,9 @@ class StreamCapsule {
 
     	$query = $this->model;
 
-    	if($searchQuery){
+        /*if($searchQuery){
 
-    		$resultsLimit = intval($this->page * 20);
+            $resultsLimit = intval($this->page * 20);
 
             $searchQuery = str_slug($searchQuery, ' ') !== $searchQuery ? $searchQuery . " " . str_slug($searchQuery, ' ') : $searchQuery;
 
@@ -289,6 +289,16 @@ class StreamCapsule {
                 return null;
 
             }
+
+        }*/
+
+    	if($searchQuery){
+
+            $searchQuery = str_slug($searchQuery, ' ') !== $searchQuery ? $searchQuery . " " . str_slug($searchQuery, ' ') : $searchQuery;
+
+            $query = $query->search($searchQuery);
+
+            $this->facetQuery = $this->search($searchQuery);
 
     	}
 
