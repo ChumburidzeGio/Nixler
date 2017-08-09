@@ -7,6 +7,7 @@ use App\Crawler\BasePattern;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Crawler\Crawler as LC;
 use Symfony\Component\DomCrawler\Link;
+use App\Services\LanguageDetectService;
 
 class Zalando extends BasePattern {
 
@@ -147,10 +148,7 @@ class Zalando extends BasePattern {
                     continue;
                 }
 
-                $data[] = $this->translate(array_get($item, 'name'), 'dname').': '.$this->translate(array_get($item, 'values'));
-
-                $this->pushTranslation('dname', array_get($item, 'name'));
-                $this->pushTranslation('dvalues', array_get($item, 'values'));
+                $data[] = $this->translate(array_get($item, 'name'), 'dname').': '.$this->translate(array_get($item, 'values'), 'dvalues');
 
             }
 
@@ -229,12 +227,12 @@ class Zalando extends BasePattern {
 
             }
 
-            $size = $size.' ზომა';
+            $size = $size;
 
         }
 
         if($size == 'One Size') {
-            return 'ერთი ზომა';
+            return 'ერთი';
         }
 
         return $size;
@@ -248,31 +246,6 @@ class Zalando extends BasePattern {
     public function translate(string $word, $type = null) : string
     {
         $translations = [
-            'materials' => [
-                'Cashmere' => '',
-                'Cord' => '',
-                'Cotton' => '',
-                'Crocheted' => '',
-                'Denim' => '',
-                'Down' => '',
-                'Fleece' => '',
-                'Hardshell' => '',
-                'Imitation Leather' => '',
-                'Jersey' => '',
-                'Lace' => '',
-                'Leather' => '',
-                'Linen' => '',
-                'Mesh' => '',
-                'Mohair' => '',
-                'Other' => '',
-                'Polyester' => '',
-                'Ribbed' => '',
-                'Silk' => '',
-                'Softshell' => '',
-                'Sweat' => '',
-                'Viscose' => '',
-                'Wool' => '',
-            ],
             'pattern' => [
                 'Animal Print' => '',
                 'Burnout' => '',
@@ -290,73 +263,73 @@ class Zalando extends BasePattern {
                 'polka dot' => '',
                 'Print' => '',
                 'striped' => '',
-            ],
-            'colors' => [
-                'black' => 'შავი',
-                'camel' => 'ყავისფერი',
-                'beige' => '',
-                'dark blue' => 'მუქი ლურჯი',
-                'dark red' => 'მუქი წითელი',
-                'grey' => 'ნაცრისფერი',
-                'white' => 'თეთრი',
-                'blue' => 'ცისფერი',
-                'petrol' => '',
-                'turquoise' => '',
-                'green' => 'მწვანე',
-                'olive' => '',
-                'yellow' => 'ყვითელი',
-                'orange' => 'სტაფილოსფერი',
-                'red' => 'წითელი',
-                'rose' => 'ვარდისფერი',
-                'lilac' => 'იასამნისფერი',
-                'gold' => 'ოქროსფერი',
-                'silver' => 'ვერცხლისფერი',
-                'multicoloured' => 'ფერადი',
-            ],
-            'headings' => [
-                'heading_material' => 'ქსოვილის შემადგენლობა და რეცხვა',
-                'heading_details' => 'პროდუქტის დეტალები',
-                'heading_measure_and_fitting' => 'ზომა და მორგება',
-            ],
-            'dnames' => [
-                'Outer fabric material' => '',
-                'Upper material' => '',
-                'Internal material' => '',
-                'Fabric' => '',
-                'Sheer' => '',
-                'Neckline' => '',
-                'Pattern' => '',
-                'Our model\'s height' => '',
-                'Fit' => '',
-                'Length' => '',
-                'Sleeve length' => '',
-                'Total length' => '',
-                'Back width' => '',
-                'Lining' => '',
-                'Washing instructions' => '',
-                'Collar' => '',
-                'Fastening' => '',
-                'Details' => '',
-                'Cover sole' => '',
-                'Sole' => '',
-                'Padding type' => '',
-                'Fabric' => '',
-                'Shoe toecap' => '',
-                'Heel type' => '',
-                'Shoe fastener' => '',
-                'Heel height' => '',
-                'Height' => '',
-                'Width' => '',
-            ],
+            ]
         ];
+
+        $jsonTranslations = file_get_contents(resource_path('docs/crawler/zalando.json'));
+
+        $translations = array_merge($translations, json_decode($jsonTranslations, 1));
 
         if(!is_null($type)) {
 
             $wordbase = array_get($translations, $type);
 
+            //replace inches with cm
+            $word = preg_replace_callback("/(\d.+)\"/", function($matches){
+                return round(floatval($matches[1]) / 0.393700787). ' სმ';
+            }, $word);
+
+            //replace size and transform to europian
+            $word = preg_replace_callback("/Size (\d+)/", function($matches){
+                return 'ზომა ' . $this->transfromSize(array_get($matches, 1), 'UK');
+            }, $word);
+
+            //replace model info
+            $word = preg_replace_callback("/Our model is (.*) tall and is wearing size (\d+)/", function($matches){
+                return 'ჩვენი მოდელი არის '.array_get($matches, 2).' სიმაღლის და იცვავს ზომას '.array_get($matches, 3);
+            }, $word);
+
+            //replace matterials
+            $word = preg_replace_callback("/(\d+%) (\w+)/", function($matches){
+                return array_get($matches, 1).' '.$this->translate(array_get($matches, 2), 'material');
+            }, $word);
+
+            //replace washing details
+            if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash')){
+
+                $word = strtolower($word);
+
+                $word = preg_replace_callback("/machine wash at (\d+&deg;)c/", function($matches){
+                    return 'მანქანაში რეცხვა '.array_get($matches, 1).' გრადუსზე';
+                }, $word);
+
+                $word = preg_replace_callback("/a shrinkage of up to (\d+%) may occur/", function($matches){
+                    return 'შესაძლებელია მოხდეს ზომაში შემცირება '.array_get($matches, 1).'-ით';
+                }, $word);
+
+                $word = strtr($word, [
+                    'machine wash on gentle cycle' => 'მანქანაში რეცხვა დელიკატურზე',
+                    'do not tumble dry' => 'არ გააშროთ სარეცხ მანქანაში',
+                    'do not iron' => 'არ გააუთაოთ',
+                    'dry clean only' => 'მხოლოდ ქიმწმენდა',
+                    'colour may run - please wash separately' => 'შესაძლებელია გადაუვიდეს ფერი - გარეცხეთ ცალკე',
+                    'do not wash' => 'არ გარეცხოთ',
+                    'dry cleanable' => 'შესაძლებელია ქიმწმენდა',
+                    'tumble dry' => 'გააშრეთ სარეცხ მანქანაში',
+                    'machine wash on wool cycle' => 'მანქანაში გარეცხეთ ბამბის ციკლზე',
+                ]);
+
+            }
+
             if(array_get($wordbase, $word)) 
             {
                 return array_get($wordbase, $word);
+            }
+
+            $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english');
+
+            if($hasEnglish) {
+                $this->pushTranslation($type, $word);
             }
 
         }
@@ -469,14 +442,6 @@ class Zalando extends BasePattern {
             'A shrinkage of up to 5% may occur' => 'შეიძლება მოხდეს ზომაში შემცირება 5%-ით',
         ]);
 
-        $word = preg_replace_callback("/(\d.+)\"/", function($matches){
-            return round(floatval($matches[1]) / 0.393700787). ' სმ';
-        }, $word);
-
-        $word = preg_replace_callback("/((ზომა|ზომას) (\d+))/", function($matches){
-            return array_get($matches, 2) . ' ' . $this->transfromSize(array_get($matches, 3), 'UK');
-        }, $word);
-
         $word = preg_replace_callback("/((\d+) (Size))/", function($matches){
             return array_get($matches, 3) . ' ' . $this->transfromSize(array_get($matches, 2), 'UK');
         }, $word);
@@ -580,13 +545,9 @@ class Zalando extends BasePattern {
         $category = array_get($this->data, 'model.articleInfo.category_tag');
         $silhouetteCode = str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')));
 
-        $this->pushTranslation('category', $category);
-        $this->pushTranslation('color', $color);
-        $this->pushTranslation('silhouetteCode', $silhouetteCode);
-
         $color = $this->translate($color, 'color');
-        $category = $this->translate($category);
-        $silhouetteCode = $this->translate($silhouetteCode);
+        $category = $this->translate($category, 'category');
+        $silhouetteCode = $this->translate($silhouetteCode, 'silhouetteCode');
 
         return array_flip(compact('color', 'category', 'silhouetteCode'));
     }

@@ -7,25 +7,67 @@ use Exception, Debugbar;
 
 class LanguageDetectService
 {
+    protected $languages;
+
     /**
      * Public function to retrive language from text
      *
-     * @return string|null
+     * @return this
      */
     public function detect($text) {
 
         $tokens = $this->tokenize($text);
 
-        $languages = $this->checkForEachLanguage($tokens);
+        $this->languages = $this->checkForEachLanguage($tokens);
 
-        if(array_first($languages) == 0) {
+        return $this;
+        
+    }
+
+    /**
+     * Get all language from text
+     *
+     * @return string|null
+     */
+    public function all() {
+
+        return $this->languages;
+
+    }
+
+    /**
+     * Get top language from text
+     *
+     * @return string|null
+     */
+    public function top() {
+
+        if(array_first($this->languages) == 0) {
             return null;
         }
 
-        reset($languages);
+        reset($this->languages);
 
-        return key($languages);
+        return key($this->languages);
 
+    }
+
+    /**
+     * Check if text contains language
+     *
+     * @return boolean
+     */
+    public function has($lang, $minPortion = 3) {
+
+        foreach ($this->languages as $key => $value) {
+            
+            if($value > $minPortion && $key == $lang) {
+                return true;
+            }
+
+        }
+
+        return false;
     }
 
     /**
