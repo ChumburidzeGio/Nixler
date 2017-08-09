@@ -245,30 +245,7 @@ class Zalando extends BasePattern {
      */
     public function translate(string $word, $type = null) : string
     {
-        $translations = [
-            'pattern' => [
-                'Animal Print' => '',
-                'Burnout' => '',
-                'Camouflage' => '',
-                'Checked' => '',
-                'Colour Gradient' => '',
-                'Colourful' => '',
-                'Floral' => '',
-                'Herringbone' => '',
-                'marl' => '',
-                'paisley' => '',
-                'photo print' => '',
-                'Pinstriped' => '',
-                'plain' => '',
-                'polka dot' => '',
-                'Print' => '',
-                'striped' => '',
-            ]
-        ];
-
-        $jsonTranslations = file_get_contents(resource_path('docs/crawler/zalando.json'));
-
-        $translations = array_merge($translations, json_decode($jsonTranslations, 1));
+        $translations = json_decode(file_get_contents(resource_path('docs/crawler/zalando.json')), 1);
 
         if(!is_null($type)) {
 
@@ -279,18 +256,18 @@ class Zalando extends BasePattern {
                 return round(floatval($matches[1]) / 0.393700787). ' სმ';
             }, $word);
 
-            //replace size and transform to europian
-            $word = preg_replace_callback("/Size (\d+)/", function($matches){
+            //replace size and transform to europian TODO: Sx32
+            $word = preg_replace_callback("/Size (\d+|One Size|S|M|S/M|XS|XS/S|L|SxAB|CUP B|Sx32)/", function($matches){
                 return 'ზომა ' . $this->transfromSize(array_get($matches, 1), 'UK');
             }, $word);
 
             //replace model info
-            $word = preg_replace_callback("/Our model is (.*) tall and is wearing size (\d+)/", function($matches){
-                return 'ჩვენი მოდელი არის '.array_get($matches, 2).' სიმაღლის და იცვავს ზომას '.array_get($matches, 3);
+            $word = preg_replace_callback("/Our model is (.*) tall and is wearing size (.*)/", function($matches){
+                return 'ჩვენი მოდელი არის '.array_get($matches, 2).' სიმაღლის და იცვავს ზომას '.$this->transfromSize(array_get($matches, 3), 'UK');
             }, $word);
 
             //replace matterials
-            $word = preg_replace_callback("/(\d+%) (\w+)/", function($matches){
+            $word = preg_replace_callback("/(\d+%) ([a-z ]+)/", function($matches){
                 return array_get($matches, 1).' '.$this->translate(array_get($matches, 2), 'material');
             }, $word);
 
@@ -348,21 +325,16 @@ class Zalando extends BasePattern {
             'Fabric' => 'ნაჭერი',
             'Synthetic leather' => 'სინთეტიკური ტყავი',
             'Magnet' => 'მაგნიტი',
-            'Compartments' => 'განყოფილებები',
             'Mobile phone pocket' => 'ტელეფონის ჯიბე',
             'Carrying handle' => 'სახელური',
-            'Polyester' => 'პოლიესტერინი',
             'Collar' => 'საყელო',
             'Adjustable straps' => 'რეგულირებადი თასმები',
             'Extra short' => 'ძალიან მოკლე',
             'Asymmetrical' => 'ასიმეტრიული',
-            'Cut' => 'ფასონი',
-            'Pockets' => 'ჯიბეები',
             'Side pockets' => 'გვერდითი ჯიბეები',
             'Elasticated waist' => 'ელასტიური წელი',
             'Inner leg length' => 'ფეხის სიგრძე შიგნიდან',
             'Outer leg length' => 'ფეხის სიგრძე გარედან',
-            'Fit' => 'სტილი',
             'Loose' => 'თავისუფალი',
             'Spacious inner compartment' => 'ფართე შიგა სივრცე',
             'Top part material' => 'ზედა ნაწილის მასალა',
@@ -374,11 +346,10 @@ class Zalando extends BasePattern {
             'Sole' => 'ძირი',
             'Textile' => 'ტექსტილი',
             'Normal' => 'ნორმალური',
-            'Synthetics' => 'სინთეტიკა',
             'Backless' => 'ზურგის გარეშე',
             'Detail' => 'წვრილმანი',
             'Decorative seams' => 'დეკორატიული ნაკერები',
-            'Shoe fastener' => 'ფეხსაცმლის შესაკრავი',
+            'Shoe fastener' => '',
             'Laces' => 'თასმები',
 
             'Trousers' => 'შარვალები',
@@ -394,52 +365,23 @@ class Zalando extends BasePattern {
         ], $word, $word);
 
         $word = strtr($word, [
-            'Outer fabric material' => 'შემადგენლობა',
-            'Washing instructions' => 'რეცხვა',
-            'Neckline' => 'საყელო',
-            'Sheer' => 'გამჭვირვალე',
             'Semi-sheer' => 'ნახევრად გამჭვირვალე',
-            'Pattern' => 'მოხატულობა',
-            'Details' => 'დეტალები',
-            'Our model\'s height' => 'მოდელის სიმაღლე',
-            'Length' => 'სიგრძე',
-            'Sleeve length' => 'სახელოების სიგრძე',
-            'Shoe toecap' => 'ფეხსაცმლის წვერი',
-            'Back width' => 'ზურგის სიფართე',
-            'Lunghezza delle maniche' => 'სახელოების სიგრძე',
-            'Total length' => 'სრული სიგრძე',
             'Flat' => 'ფართე',
             'Short' => 'მოკლე',
-            'cotton' => 'ბამბა',
-            'polyester' => 'პოლიესტერინი',
-            'poly amide' => 'პოლიამიდი',
-            'spandex' => 'სპანდექსი',
             'slip' => 'სრიალა',
-            'Do not tumble dry' => 'არ გააშროთ სარეცხ მანქანაში',
-            'machine wash at' => 'რეცხვის ტემპერატურა',
-            'Our model is' => 'ჩვენი მოდელის სიმაღლე არის',
-            'tall and is wearing size' => 'და იცვავს ზომას',
             'deep pockets' => 'ღრმა ჯიბეები',
             'Deep pockets' => 'ღრმა ჯიბეები',
             'Treat with a suitable protector before wear' => 'დაამუშავეთ შესაბამისი დამცავით ჩაცმამდე',
             'bust darts' => 'მკერდის დამჭერი',
             'Regular' => 'ჩვეულებრივი',
             'Print' => 'პრინტი',
-            'Machine wash at' => 'სარეცხ მანქანაში რეცხვა ტემპერატურაზე',
-            'Machine wash on gentle cycle' => 'რეცხვა დელიკატურზე',
-            'Fastening' => 'შესაკრავი',
             'Button' => 'ღილი',
             'Plain' => 'გლუვი',
             'Zip fastening' => 'ელვა შესაკრავი',
             'Knee-length' => 'მუხლამდე სიგრძე',
-            'Hand wash only' => 'მხოლოდ ხელით რეცხვა',
-            'Dry clean only' => 'მხოლოდ მშრალი რეცხვა',
-            'viscose' => 'ვისკოზა',
             'Heel type' => 'ქუსლის ტიპი',
-            'Size' => 'ზომა',
             'Jersey' => 'ჯერსი',
             'Lace' => 'მაქმანი',
-            'A shrinkage of up to 5% may occur' => 'შეიძლება მოხდეს ზომაში შემცირება 5%-ით',
         ]);
 
         $word = preg_replace_callback("/((\d+) (Size))/", function($matches){
@@ -462,69 +404,64 @@ class Zalando extends BasePattern {
 
         }
 
-        $category = array_get($this->data, 'model.articleInfo.category_tag');
+        $matching = [
+            "Bag" => 8,
+            "Dress" => 2,
+            "One Piece Suit" => 2,
+            "Pullover" => 2,
+            "Shirt" => 2,
+            "Trouser" => 2,
+            "T Shirt Top" => 2,
+            "One Piece Beachwear" => 2,
+            "Bustier" => 2,
+            "Nightwear Combination" => 2,
+            "Beach Trouser" => 2,
+            "Skirt" => 2,
+            "Bra" => 2,
+            "Cardigan" => 2,
+            "Underpant" => 2,
+            "Coat" => 2,
+            "Combination Clothing" => 2,
+            "Bikini Combination" => 2,
+            "Beach Shirt" => 2,
+            "Vest" => 2,
+            "Sneaker" => 3,
+            "Low Shoe" => 3,
+            "Sandals" => 3,
+            "First Shoe" => 3,
+            "Ballerina Shoe" => 3,
+            "Ankle Boots" => 3,
+            "Nightdress" => 2,
+            "One Piece Underwear" => 2,
+            "Jacket" => 2,
+            "Other Accessoires" => 4,
+            "Backless Slipper" => 3,
+            "Boots" => 3,
+            "Beach Accessoires" => 2,
+            "Stocking" => 2,
+            "Headgear" => 2,
+            "Other Equipment" => null,
+            "Backpack" => 8,
+            "Glasses" => 4,
+            "Watch" => 6,
+            "Scarf" => 4,
+            "Bathrobe" => 2,
+            "Underwear Combination" => 2,
+            "Night Shirt" => 2,
+            "One Piece Nightwear" => 2,
+            "Night Trouser" => 2,
+            "Undershirt" => 2,
+            "Suit Accessoires" => 4,
+            "Tights" => 2,
+            "Pumps" => 3,
+            "Wallet" => 4,
+            "Bikini Top" => 2,
+            "Corsage" => 2
+        ];
 
-        $cat2l = strtolower($category);
+        $silhouetteCode = str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')));
 
-        if(str_contains($cat2l, [
-            'shoe', 'boot', 'trainer', 'heel', 'sandal', 'slip-on'
-        ])) {
-            return 3;
-        }
-
-        if(str_contains($cat2l, [
-            'handbag', 'tote bag', 'rucksack', 'body bag'
-        ])) {
-            return 8;
-        }
-
-        if(str_contains($cat2l, [
-            'bracciale', 'bracelet'
-        ])) {
-            return 5;
-        }
-
-        if(str_contains($cat2l, [
-            'wallet'
-        ])) {
-            return 7;
-        }
-
-        if(str_contains($cat2l, [
-            'dress', 'shirt', 'jacket', 'cape', 'trouser', 'skirt', 'shorts', 'bikini', 'cardigan', 'suit', 'vest', 'bras', 
-            'briefs', 'bustier', 'pyjama', 'coat', 'blazer', 'sock', 'sleeved', 'jumper'
-        ])) {
-            return 2;
-        }
-
-        return $this->findCategory($category, [
-            3 => [
-                'Peep Toes', 'Wedges', 'Flats & Lace-Ups', 'Brogues & Lace-Ups', 'Espadrilles', 'Loafers', 'Moccasins', 'Sporty Lace-Ups', 
-                'Wellies', 'Mules & Clogs', 'Clogs', 'Mules', 
-                'Ballet Pumps', 'Ankle Cuff Ballet Pumps', 'Ankle Strap Ballet Pumps', 'Classic Ballet Pumps', 
-                'Foldable Ballet Pumps', 'Peep-Toe Ballet Pumps', 'Sling-back Ballet Pumps', 
-                'Flip Flops', 'Cushioned', 'Stability', 'Lightweight', 'Natural Running', 'Trail', 'Walking', 
-                'Football Boots', 'Moulded Soles', 
-                'Trainers', 'Hiking Boots', 'Walking Boots', 'Mountain Boots', 
-                'Trekking Boots', 'Boots', 'Winter Boots', 'Wellies', 'Ski & Snowboard Boots', 
-                'Low-tops', 'High-tops', 'Trainers',
-                'Slippers', 'Soles and Insoles', 'Lace-up Boots', 
-                'Brogues', 'Slip Ons', 'Sporty Lace Ups', 'Espadrilles', 'Derbies & Oxfords', 
-                'Loafers', 'Sliders', 'Slides & Clogs', 
-            ],
-            2 => [
-                'Long Sleeve Tops',
-                'Jeans', 'Skinny Fit', 'Flares', 'Bootcut', 'Denim Shorts', 'Loose Fit', 'Slim Fit', 'Straight Leg', 
-                'Hoodies', 'Jumpers', 'Fleece Jumpers', 
-                'Chinos', 'Joggers & Sweats', 'Leggings', 'Shorts', 
-                'Blouses & Tunics', 'Blouse', 'Tunics', 
-                'Lingerie & Nightwear', 'Knickers', 'Nightwear', 'Suspenders', 
-                'Shapewear', 'Push-ups',
-                'Panties & French Knickers', 'Strings & Thongs', 'Nighties/Slips', 'Sets', 
-                'Bodies', 'Corsets', 'Leggings', 'Leg Warmers', 'Suspenders', 
-                'Tights', 'Swimwear', 'Bathrobes', 'Beach Accessories', 
-            ]
-        ]);
+        return array_get($matching, $silhouetteCode);
 
     }
 
