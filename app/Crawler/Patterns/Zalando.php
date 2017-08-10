@@ -15,6 +15,8 @@ class Zalando extends BasePattern {
 
     protected $lcen;
 
+    private $translations;
+
     /**
      * Construct the pattern
      *
@@ -27,6 +29,8 @@ class Zalando extends BasePattern {
         parent::parse($crawler);
 
         $this->data = $this->parseJson();
+
+        $this->translations = json_decode(file_get_contents(resource_path('docs/crawler/zalando.json')), 1);
 
         return $this;
     }
@@ -82,7 +86,12 @@ class Zalando extends BasePattern {
      */
     public function isProduct() : bool
     {
-        return $this->data && $this->getSKU() !== null && !(!$this->isUK() && !$this->parseEnVersion()->getSKU());
+        return 
+            $this->data && 
+            array_get($this->data, 'model.articleInfo.active') == true && 
+            array_get($this->data, 'model.articleInfo.available') == true && 
+            $this->getSKU() !== null && 
+            !(!$this->isUK() && !$this->parseEnVersion()->getSKU());
     }
 
     /**
@@ -132,11 +141,15 @@ class Zalando extends BasePattern {
     {
         if(!$this->isUK() && $this->lcen->isProduct()) {
 
-            return $this->lcen->getDescription();
+            $description = array_get($this->lcen->getRaw(), 'model.articleInfo.attributes');
 
+        } else {
+
+            $description = array_get($this->data, 'model.articleInfo.attributes');
+            
         }
         
-        $description = collect(array_get($this->data, 'model.articleInfo.attributes'))->map(function($item) {
+        $description = collect($description)->map(function($item) {
             
             $header = $this->translate(array_get($item, 'category'), 'headings');
 
@@ -180,6 +193,48 @@ class Zalando extends BasePattern {
      *
      * @return array
      */
+    public function getEUSize($size)
+    {
+        $units = array_get($this->lcen->getRaw(), 'model.articleInfo.units');
+
+        foreach ($units as $unit) {
+            
+            if(array_get($unit, 'size.local') == $size) {
+
+                $sunits = array_get($this->data, 'model.articleInfo.units');
+
+                foreach ($sunits as $sunit) {
+
+                    if(array_get($sunit, 'size.manufacturer') == array_get($unit, 'size.manufacturer')) {
+
+                        return array_get($sunit, 'size.local');
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        return $size;
+    }
+
+    /**
+     * Parse the variants of product
+     *
+     * @return array
+     */
+    public function getRaw()
+    {
+        return $this->data;
+    }
+
+    /**
+     * Parse the variants of product
+     *
+     * @return array
+     */
     public function getVariants()
     {
         return collect(array_get($this->data, 'model.articleInfo.units'))->map(function($item) {
@@ -200,42 +255,10 @@ class Zalando extends BasePattern {
                 'original_price' => $originalPrice ? $this->calcPrice($originalPrice, $currency) : null,
                 'price' => $this->calcPrice($price, $currency),
                 'in_stock' => array_get($item, 'stock'),
-                'name' => $this->transfromSize(array_get($item, 'size.local'), array_get($item, 'size.local_type'))
+                'name' => array_get($item, 'size.local')
             ];
 
         });
-    }
-
-    /**
-     * Transform size to EU one
-     *
-     * @return int
-     */
-    public function transfromSize(string $size, string $type) : string
-    {
-        if(is_numeric($size)){
-
-            if($type == 'UK')  {
-
-                $size = $size + 28;
-
-            }
-
-            elseif($type == 'US')  {
-
-                $size = ($size == 1) ? 32 : $size + 32;
-
-            }
-
-            $size = $size;
-
-        }
-
-        if($size == 'One Size') {
-            return 'ერთი';
-        }
-
-        return $size;
     }
 
     /**
@@ -245,56 +268,40 @@ class Zalando extends BasePattern {
      */
     public function translate(string $word, $type = null) : string
     {
-        $translations = json_decode(file_get_contents(resource_path('docs/crawler/zalando.json')), 1);
-
         if(!is_null($type)) {
 
-            $wordbase = array_get($translations, $type);
+            $wordbase = array_get($this->translations, $type);
 
-            //replace inches with cm
-            $word = preg_replace_callback("/(\d.+)\"/", function($matches){
-                return round(floatval($matches[1]) / 0.393700787). ' სმ';
-            }, $word);
-
-            //replace size and transform to europian TODO: Sx32
-            $word = preg_replace_callback("/Size (\d+|One Size|S|M|S/M|XS|XS/S|L|SxAB|CUP B|Sx32)/", function($matches){
-                return 'ზომა ' . $this->transfromSize(array_get($matches, 1), 'UK');
-            }, $word);
-
-            //replace model info
-            $word = preg_replace_callback("/Our model is (.*) tall and is wearing size (.*)/", function($matches){
-                return 'ჩვენი მოდელი არის '.array_get($matches, 2).' სიმაღლის და იცვავს ზომას '.$this->transfromSize(array_get($matches, 3), 'UK');
-            }, $word);
-
-            //replace matterials
-            $word = preg_replace_callback("/(\d+%) ([a-z ]+)/", function($matches){
-                return array_get($matches, 1).' '.$this->translate(array_get($matches, 2), 'material');
-            }, $word);
+            $word = preg_replace_callback_array([
+                "/(\d.+)\"/" => function ($match) {
+                    return round(floatval($match[1]) / 0.393700787). ' სმ';
+                },
+                "/Size (\d+|One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32)/" => function ($match) {
+                    return 'ზომა ' . ($match[1] == 'One Size' ? 'ერთი ზომა' : $this->getEUSize($match[1]));
+                },
+                "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
+                    return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
+                },
+                "/(\d+%) ([a-z ]+)/" => function ($match) {
+                    return $match[1].' '.$this->translate($match[2], 'material');
+                }
+            ], $word);
 
             //replace washing details
             if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash')){
 
                 $word = strtolower($word);
 
-                $word = preg_replace_callback("/machine wash at (\d+&deg;)c/", function($matches){
-                    return 'მანქანაში რეცხვა '.array_get($matches, 1).' გრადუსზე';
-                }, $word);
+                $word = preg_replace_callback_array([
+                    "/machine wash at (\d+&deg;)c/" => function ($match) {
+                        return 'მანქანაში რეცხვა '.$match[1].' გრადუსზე';
+                    },
+                    "/a shrinkage of up to (\d+%) may occur/" => function ($match) {
+                        return 'შესაძლებელია მოხდეს ზომაში შემცირება '.$match[1].'-ით';
+                    }
+                ], $word);
 
-                $word = preg_replace_callback("/a shrinkage of up to (\d+%) may occur/", function($matches){
-                    return 'შესაძლებელია მოხდეს ზომაში შემცირება '.array_get($matches, 1).'-ით';
-                }, $word);
-
-                $word = strtr($word, [
-                    'machine wash on gentle cycle' => 'მანქანაში რეცხვა დელიკატურზე',
-                    'do not tumble dry' => 'არ გააშროთ სარეცხ მანქანაში',
-                    'do not iron' => 'არ გააუთაოთ',
-                    'dry clean only' => 'მხოლოდ ქიმწმენდა',
-                    'colour may run - please wash separately' => 'შესაძლებელია გადაუვიდეს ფერი - გარეცხეთ ცალკე',
-                    'do not wash' => 'არ გარეცხოთ',
-                    'dry cleanable' => 'შესაძლებელია ქიმწმენდა',
-                    'tumble dry' => 'გააშრეთ სარეცხ მანქანაში',
-                    'machine wash on wool cycle' => 'მანქანაში გარეცხეთ ბამბის ციკლზე',
-                ]);
+                $word = strtr($word, array_get($this->translations, 'washing'));
 
             }
 
@@ -303,7 +310,7 @@ class Zalando extends BasePattern {
                 return array_get($wordbase, $word);
             }
 
-            $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english');
+            $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english', 4);
 
             if($hasEnglish) {
                 $this->pushTranslation($type, $word);
@@ -333,8 +340,6 @@ class Zalando extends BasePattern {
             'Asymmetrical' => 'ასიმეტრიული',
             'Side pockets' => 'გვერდითი ჯიბეები',
             'Elasticated waist' => 'ელასტიური წელი',
-            'Inner leg length' => 'ფეხის სიგრძე შიგნიდან',
-            'Outer leg length' => 'ფეხის სიგრძე გარედან',
             'Loose' => 'თავისუფალი',
             'Spacious inner compartment' => 'ფართე შიგა სივრცე',
             'Top part material' => 'ზედა ნაწილის მასალა',
@@ -342,8 +347,6 @@ class Zalando extends BasePattern {
             'Leather and textile' => 'ტყავი და ტექსტილი',
             'Internal material' => 'შიდა მასალა',
             'Insert material' => 'სარჩული',
-            'Cover sole' => 'ძირის საფარი',
-            'Sole' => 'ძირი',
             'Textile' => 'ტექსტილი',
             'Normal' => 'ნორმალური',
             'Backless' => 'ზურგის გარეშე',
@@ -351,17 +354,6 @@ class Zalando extends BasePattern {
             'Decorative seams' => 'დეკორატიული ნაკერები',
             'Shoe fastener' => '',
             'Laces' => 'თასმები',
-
-            'Trousers' => 'შარვალები',
-            'Trouser' => 'შარვალი',
-            'Sports shoes' => 'სპორტული ფეხსაცმელი',
-            'Scarf' => 'შარფი',
-            'Dress' => 'კაბა',
-            'Summer dress' => 'საზაფხულო კაბა',
-            'Shirt' => 'პერანგი',
-            'Shorts' => 'შორტები',
-            'Ballerina Shoe' => 'ბალეტკები',
-            'Tailored' => 'მკაცრ სტილში გაფორმებული',
         ], $word, $word);
 
         $word = strtr($word, [
@@ -398,66 +390,9 @@ class Zalando extends BasePattern {
      */
     public function getCategory()
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) {
+        if(!$this->isUK() && $this->lcen->isProduct()) return $this->lcen->getCategory();
 
-            return $this->lcen->getCategory();
-
-        }
-
-        $matching = [
-            "Bag" => 8,
-            "Dress" => 2,
-            "One Piece Suit" => 2,
-            "Pullover" => 2,
-            "Shirt" => 2,
-            "Trouser" => 2,
-            "T Shirt Top" => 2,
-            "One Piece Beachwear" => 2,
-            "Bustier" => 2,
-            "Nightwear Combination" => 2,
-            "Beach Trouser" => 2,
-            "Skirt" => 2,
-            "Bra" => 2,
-            "Cardigan" => 2,
-            "Underpant" => 2,
-            "Coat" => 2,
-            "Combination Clothing" => 2,
-            "Bikini Combination" => 2,
-            "Beach Shirt" => 2,
-            "Vest" => 2,
-            "Sneaker" => 3,
-            "Low Shoe" => 3,
-            "Sandals" => 3,
-            "First Shoe" => 3,
-            "Ballerina Shoe" => 3,
-            "Ankle Boots" => 3,
-            "Nightdress" => 2,
-            "One Piece Underwear" => 2,
-            "Jacket" => 2,
-            "Other Accessoires" => 4,
-            "Backless Slipper" => 3,
-            "Boots" => 3,
-            "Beach Accessoires" => 2,
-            "Stocking" => 2,
-            "Headgear" => 2,
-            "Other Equipment" => null,
-            "Backpack" => 8,
-            "Glasses" => 4,
-            "Watch" => 6,
-            "Scarf" => 4,
-            "Bathrobe" => 2,
-            "Underwear Combination" => 2,
-            "Night Shirt" => 2,
-            "One Piece Nightwear" => 2,
-            "Night Trouser" => 2,
-            "Undershirt" => 2,
-            "Suit Accessoires" => 4,
-            "Tights" => 2,
-            "Pumps" => 3,
-            "Wallet" => 4,
-            "Bikini Top" => 2,
-            "Corsage" => 2
-        ];
+        $matching = array_get($this->translations, 'silhouetteCodeMatching');
 
         $silhouetteCode = str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')));
 
@@ -478,15 +413,17 @@ class Zalando extends BasePattern {
 
         }
 
-        $color = array_get($this->data, 'model.articleInfo.color');
-        $category = array_get($this->data, 'model.articleInfo.category_tag');
-        $silhouetteCode = str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')));
+        $brand = array_get($this->data, 'model.articleInfo.brand.name');
 
-        $color = $this->translate($color, 'color');
-        $category = $this->translate($category, 'category');
-        $silhouetteCode = $this->translate($silhouetteCode, 'silhouetteCode');
+        $color = $this->translate(array_get($this->data, 'model.articleInfo.color'), 'color');
 
-        return array_flip(compact('color', 'category', 'silhouetteCode'));
+        $category = $this->translate(array_get($this->data, 'model.articleInfo.category_tag'), 'category');
+
+        $silhouetteCode = $this->translate(
+            str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')))
+        , 'silhouetteCode');
+
+        return array_flip(compact('color', 'category', 'silhouetteCode', 'brand'));
     }
 
     /**

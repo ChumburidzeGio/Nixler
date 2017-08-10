@@ -132,18 +132,6 @@ Auth::routes();
 
 	Route::get('/scrap', function(){
 
-		$word = request('word');
-
-		$word = preg_replace_callback("/(\d.+)\"/", function($matches){
-            return round(floatval($matches[1]) / 0.393700787). ' სმ';
-        }, $word);
-
-		$word = preg_replace_callback("/((Size) (\d+))/", function($matches){
-            return 'ზომა ' . array_get($matches, 3);
-        }, $word);
-
-		return $word;
-
 		$crawler = app(\App\Crawler\Crawler::class);
 
 		$url = request('url');
@@ -152,7 +140,7 @@ Auth::routes();
 			return $crawler->updateAll();
 		}
 
-		$crawler->get($url)->toArray();
+		return $crawler->get($url)->toArray();
 
 	});
 
