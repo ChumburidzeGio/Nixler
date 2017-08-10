@@ -86,6 +86,10 @@ class Crawler {
                 $page++;
 
                 $linksUpdated += $countResults;
+                
+                file_put_contents(public_path('crlw/zalando.json'), 
+                    json_encode(config('crawler.translations.zalando'))
+                );
 
             } while ($countResults == $count);
 
