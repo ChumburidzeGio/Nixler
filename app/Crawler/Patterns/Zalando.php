@@ -150,7 +150,7 @@ class Zalando extends BasePattern {
         } else {
 
             return null;
-            
+
         }
         
         $description = collect($description)->map(function($item) {
@@ -199,6 +199,10 @@ class Zalando extends BasePattern {
      */
     public function getEUSize($size)
     {
+        if($size == 'One Size'){
+            return 'ერთი ზომა';
+        }
+
         $units = array_get($this->lcen->getRaw(), 'model.articleInfo.units');
 
         foreach ($units as $unit) {
@@ -281,7 +285,7 @@ class Zalando extends BasePattern {
                     return round(floatval($match[1]) / 0.393700787). ' სმ';
                 },
                 "/Size (\d+|One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32)/" => function ($match) {
-                    return 'ზომა ' . ($match[1] == 'One Size' ? 'ერთი ზომა' : $this->getEUSize($match[1]));
+                    return 'ზომა ' . $this->getEUSize($match[1]);
                 },
                 "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
                     return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
@@ -415,6 +419,10 @@ class Zalando extends BasePattern {
 
             return $this->lcen->getTags();
 
+        }
+
+        if(!$this->isProduct()) {
+            return [];
         }
 
         $brand = array_get($this->data, 'model.articleInfo.brand.name');
