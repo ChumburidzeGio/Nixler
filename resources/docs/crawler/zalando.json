@@ -486,6 +486,7 @@
 		"Corsage": 2
 	},
 	"washing": {
+		"hand wash only": "მხოლოდ ხელით რეცხვა",
 		"machine wash on gentle cycle": "მანქანაში რეცხვა დელიკატურზე",
 		"do not tumble dry": "არ გააშროთ სარეცხ მანქანაში",
 		"do not iron": "არ გააუთაოთ",

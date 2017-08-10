@@ -296,7 +296,7 @@ class Zalando extends BasePattern {
             ], $word);
 
             //replace washing details
-            if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash')){
+            if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash') || str_contains($word, 'Hand wash')){
 
                 $word = strtolower($word);
 
