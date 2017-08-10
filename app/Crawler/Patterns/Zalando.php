@@ -279,7 +279,7 @@ class Zalando extends BasePattern {
         if(!is_null($type)) {
 
             $wordbase = array_get($this->translations, $type);
-            
+
             //replace washing details
             if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash') || str_contains($word, 'Hand wash')){
 
@@ -421,7 +421,7 @@ class Zalando extends BasePattern {
 
         }
 
-        if(!$this->isProduct()) {
+        if(!$this->isUK() && !$this->lcen->isProduct()) {
             return [];
         }
 
