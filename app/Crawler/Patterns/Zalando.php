@@ -279,22 +279,7 @@ class Zalando extends BasePattern {
         if(!is_null($type)) {
 
             $wordbase = array_get($this->translations, $type);
-
-            $word = preg_replace_callback_array([
-                "/(\d.+)\"/" => function ($match) {
-                    return round(floatval($match[1]) / 0.393700787). ' სმ';
-                },
-                "/Size (\d+|One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32)/" => function ($match) {
-                    return 'ზომა ' . $this->getEUSize($match[1]);
-                },
-                "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
-                    return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
-                },
-                "/(\d+%) ([a-z ]+)/" => function ($match) {
-                    return $match[1].' '.$this->translate($match[2], 'material');
-                }
-            ], $word);
-
+            
             //replace washing details
             if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash') || str_contains($word, 'Hand wash')){
 
@@ -312,6 +297,21 @@ class Zalando extends BasePattern {
                 $word = strtr($word, array_get($this->translations, 'washing'));
 
             }
+
+            $word = preg_replace_callback_array([
+                "/(\d.+)\"/" => function ($match) {
+                    return round(floatval($match[1]) / 0.393700787). ' სმ';
+                },
+                "/Size (\d+|One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32)/" => function ($match) {
+                    return 'ზომა ' . $this->getEUSize($match[1]);
+                },
+                "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
+                    return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
+                },
+                "/(\d+%) ([a-z ]+)/" => function ($match) {
+                    return $match[1].' '.$this->translate($match[2], 'material');
+                }
+            ], $word);
 
             if(array_get($wordbase, $word)) 
             {
