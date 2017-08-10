@@ -143,9 +143,13 @@ class Zalando extends BasePattern {
 
             $description = array_get($this->lcen->getRaw(), 'model.articleInfo.attributes');
 
-        } else {
+        } elseif($this->isProduct() && $this->isUK()) {
 
             $description = array_get($this->data, 'model.articleInfo.attributes');
+            
+        } else {
+
+            return null;
             
         }
         
