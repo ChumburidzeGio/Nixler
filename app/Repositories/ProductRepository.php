@@ -575,14 +575,13 @@ class ProductRepository extends BaseRepository {
 
         $model = ProductTag::where('name', $name)->where('product_id', $product->id)->first();
 
-        if(!$model) {
-
+        if(!$model) 
+        {
             $model = ProductTag::create([
                 'name' => $name,
                 'user_id' => auth()->id(),
                 'product_id' => $product->id
             ]);
-
         }
 
         if(in_array($key, ['color', 'category', 'silhouetteCode']) && $model->type !== $key) {

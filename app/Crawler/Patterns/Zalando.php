@@ -297,9 +297,6 @@ class Zalando extends BasePattern {
             "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
                 return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
             },
-            "/(\d+%) ([a-z ]+)/" => function ($match) {
-                return $match[1].' '.$this->translate($match[2], 'material');
-            },
             "/([1-9\/]+) length/" => function ($match) {
                 return $match[1].' სიგრძის';
             }
