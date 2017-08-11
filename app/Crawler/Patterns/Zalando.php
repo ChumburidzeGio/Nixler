@@ -42,9 +42,9 @@ class Zalando extends BasePattern {
      */
     public function parseEnVersion()
     {
-        $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q=';
+        $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q='.array_get($this->data, 'model.articleInfo.id');
 
-        $this->lcen = $this->lcen ?? app(LC::class)->get($enUrl.array_get($this->data, 'model.articleInfo.id'));
+        $this->lcen = $this->lcen ?? app(LC::class)->get($enUrl);
 
         return $this->lcen;
     }
@@ -66,9 +66,7 @@ class Zalando extends BasePattern {
      */
     public function parseJson()
     {
-        if(!$this->crawler('#z-vegas-pdp-props')->count()) {
-            return null;
-        }
+        if(!$this->crawler('#z-vegas-pdp-props')->count()) return null;
 
         $json = $this->crawler('#z-vegas-pdp-props')->first()->text();
 
@@ -86,11 +84,14 @@ class Zalando extends BasePattern {
      */
     public function isProduct() : bool
     {
-        return 
-            $this->data && 
+        return $this->data && 
+
             array_get($this->data, 'model.articleInfo.active') == true && 
+
             array_get($this->data, 'model.articleInfo.available') == true && 
+
             $this->getSKU() !== null && 
+
             !(!$this->isUK() && !$this->parseEnVersion()->getSKU());
     }
 
@@ -103,11 +104,10 @@ class Zalando extends BasePattern {
     {
         $products = $this->crawler('#catalogItemsListParent .catalogArticlesList_item');
 
-        if(!$products->count()){
-            return [];
-        }
+        if(!$products->count()) return [];
 
-        return array_unique($products->each(function($a){
+        return array_unique($products->each(function($a)
+        {
             return $a->filter('a')->link()->getUri();
         }));
     }
@@ -119,10 +119,9 @@ class Zalando extends BasePattern {
      */
     public function getTitle()
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) {
-
+        if(!$this->isUK() && $this->lcen->isProduct()) 
+        {
             return $this->lcen->getTitle();
-
         }
 
         $name = array_get($this->data, 'model.articleInfo.name');
@@ -139,18 +138,17 @@ class Zalando extends BasePattern {
      */
     public function getDescription()
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) {
-
+        if(!$this->isUK() && $this->lcen->isProduct()) 
+        {
             $description = array_get($this->lcen->getRaw(), 'model.articleInfo.attributes');
-
-        } elseif($this->isProduct() && $this->isUK()) {
-
+        } 
+        elseif($this->isProduct() && $this->isUK()) 
+        {
             $description = array_get($this->data, 'model.articleInfo.attributes');
-            
-        } else {
-
+        } 
+        else 
+        {
             return null;
-
         }
         
         $description = collect($description)->map(function($item) {
@@ -185,10 +183,9 @@ class Zalando extends BasePattern {
      */
     public function getMedia()
     {
-        return collect(array_get($this->data, 'model.articleInfo.media.images'))->map(function($item) {
-
+        return collect(array_get($this->data, 'model.articleInfo.media.images'))->map(function($item) 
+        {
             return array_get($item, 'sources.zoom');
-
         });
     }
 
@@ -199,30 +196,27 @@ class Zalando extends BasePattern {
      */
     public function getEUSize($size)
     {
-        if($size == 'One Size'){
+        if($size == 'One Size')
+        {
             return 'ერთი ზომა';
         }
 
         $units = array_get($this->lcen->getRaw(), 'model.articleInfo.units');
 
-        foreach ($units as $unit) {
-            
-            if(array_get($unit, 'size.local') == $size) {
-
+        foreach ($units as $unit) 
+        {
+            if(array_get($unit, 'size.local') == $size) 
+            {
                 $sunits = array_get($this->data, 'model.articleInfo.units');
 
-                foreach ($sunits as $sunit) {
-
-                    if(array_get($sunit, 'size.manufacturer') == array_get($unit, 'size.manufacturer')) {
-
+                foreach ($sunits as $sunit) 
+                {
+                    if(array_get($sunit, 'size.manufacturer') == array_get($unit, 'size.manufacturer')) 
+                    {
                         return array_get($sunit, 'size.local');
-
                     }
-
                 }
-
             }
-
         }
 
         return $size;
@@ -253,10 +247,9 @@ class Zalando extends BasePattern {
 
             $originalPrice = null;
 
-            if(array_get($item, 'displayPrice.isDiscounted')) {
-
+            if(array_get($item, 'displayPrice.isDiscounted')) 
+            {
                 $originalPrice = array_get($item, 'displayPrice.originalPrice.value');
-
             }
 
             return [
@@ -274,119 +267,76 @@ class Zalando extends BasePattern {
      *
      * @return string
      */
-    public function translate(string $word, $type = null) : string
+    public function translate(string $word, $type) : string
     {
-        if(!is_null($type)) {
+        $wordbase = array_get($this->translations, $type);
 
-            $wordbase = array_get($this->translations, $type);
-
-            //replace washing details
-            if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash') || str_contains($word, 'Hand wash')){
-
-                $word = strtolower($word);
-
-                $word = preg_replace_callback_array([
-                    "/machine wash at (\d+&deg;)c/" => function ($match) {
-                        return 'მანქანაში რეცხვა '.$match[1].' გრადუსზე';
-                    },
-                    "/a shrinkage of up to (\d+%) may occur/" => function ($match) {
-                        return 'შესაძლებელია მოხდეს ზომაში შემცირება '.$match[1].'-ით';
-                    }
-                ], $word);
-
-                $word = strtr($word, array_get($this->translations, 'washing'));
-
-            }
+        if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash') || str_contains($word, 'Hand wash'))
+        {
+            $word = strtolower($word);
 
             $word = preg_replace_callback_array([
-                "/(\d.+)\"/" => function ($match) {
-                    return round(floatval($match[1]) / 0.393700787). ' სმ';
+                "/machine wash at (\d+&deg;)c/" => function ($match) {
+                    return 'მანქანაში რეცხვა '.$match[1].' გრადუსზე';
                 },
-                "/Size (\d+|One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32)/" => function ($match) {
-                    return 'ზომა ' . $this->getEUSize($match[1]);
-                },
-                "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
-                    return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
-                },
-                "/(\d+%) ([a-z ]+)/" => function ($match) {
-                    return $match[1].' '.$this->translate($match[2], 'material');
+                "/a shrinkage of up to (\d+%) may occur/" => function ($match) {
+                    return 'შესაძლებელია მოხდეს ზომაში შემცირება '.$match[1].'-ით';
                 }
             ], $word);
 
-            if(array_get($wordbase, $word)) 
-            {
-                return array_get($wordbase, $word);
+            $word = strtr($word, array_get($this->translations, 'washing'));
+        }
+
+        $word = preg_replace_callback_array([
+            "/(\d.+)\"/" => function ($match) {
+                return round(floatval($match[1]) / 0.393700787). ' სმ';
+            },
+            "/Size (\d+|One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32)/" => function ($match) {
+                return 'ზომა ' . $this->getEUSize($match[1]);
+            },
+            "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
+                return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
+            },
+            "/(\d+%) ([a-z ]+)/" => function ($match) {
+                return $match[1].' '.$this->translate($match[2], 'material');
+            },
+            "/([1-9\/]+) length/" => function ($match) {
+                return $match[1].' სიგრძის';
             }
+        ], $word);
 
-            $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english', 4);
+        if(array_get($wordbase, $word)) 
+        {
+            $word = array_get($wordbase, $word);
+        }
 
-            if($hasEnglish) {
-                $this->pushTranslation($type, $word);
-            }
+        if($type == 'dvalues') 
+        {
+            $word = strtr(strtolower($word), array_get($this->translations, 'dvalues'));
+        }
 
+        $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english', 4);
+
+        if($hasEnglish) 
+        {
+            $this->pushTranslation($type, $word);
         }
 
         $word = array_get([
             'Zip' => 'ელვა',
-            'Floral' => 'ყვავილებიანი',
             'Long' => 'გრძელი',
-            'Cropped' => 'გადაჭრილი',
-            'Round neck' => 'მომრგვალებული საყელო',
-            'Sleeveless' => 'უსახელო',
-            'Calf-length' => 'მუხლს ქვემოთ',
-            'Low V-neck' => 'დაბალი V-ტიპის ჭრილი',
-            'Outer material' => 'გარე მასალა',
             'Faux leather' => 'ხელოვნური ტყავი',
-            'Fabric' => 'ნაჭერი',
             'Synthetic leather' => 'სინთეტიკური ტყავი',
-            'Magnet' => 'მაგნიტი',
             'Mobile phone pocket' => 'ტელეფონის ჯიბე',
             'Carrying handle' => 'სახელური',
-            'Collar' => 'საყელო',
-            'Adjustable straps' => 'რეგულირებადი თასმები',
-            'Extra short' => 'ძალიან მოკლე',
             'Asymmetrical' => 'ასიმეტრიული',
-            'Side pockets' => 'გვერდითი ჯიბეები',
-            'Elasticated waist' => 'ელასტიური წელი',
-            'Loose' => 'თავისუფალი',
             'Spacious inner compartment' => 'ფართე შიგა სივრცე',
-            'Top part material' => 'ზედა ნაწილის მასალა',
-            'Upper material' => 'ზედა ნაწილის მასალა',
             'Leather and textile' => 'ტყავი და ტექსტილი',
-            'Internal material' => 'შიდა მასალა',
-            'Insert material' => 'სარჩული',
             'Textile' => 'ტექსტილი',
-            'Normal' => 'ნორმალური',
-            'Backless' => 'ზურგის გარეშე',
-            'Detail' => 'წვრილმანი',
             'Decorative seams' => 'დეკორატიული ნაკერები',
-            'Shoe fastener' => '',
-            'Laces' => 'თასმები',
-        ], $word, $word);
-
-        $word = strtr($word, [
-            'Semi-sheer' => 'ნახევრად გამჭვირვალე',
             'Flat' => 'ფართე',
-            'Short' => 'მოკლე',
-            'slip' => 'სრიალა',
-            'deep pockets' => 'ღრმა ჯიბეები',
-            'Deep pockets' => 'ღრმა ჯიბეები',
             'Treat with a suitable protector before wear' => 'დაამუშავეთ შესაბამისი დამცავით ჩაცმამდე',
-            'bust darts' => 'მკერდის დამჭერი',
-            'Regular' => 'ჩვეულებრივი',
-            'Print' => 'პრინტი',
-            'Button' => 'ღილი',
-            'Plain' => 'გლუვი',
-            'Zip fastening' => 'ელვა შესაკრავი',
-            'Knee-length' => 'მუხლამდე სიგრძე',
-            'Heel type' => 'ქუსლის ტიპი',
-            'Jersey' => 'ჯერსი',
-            'Lace' => 'მაქმანი',
-        ]);
-
-        $word = preg_replace_callback("/((\d+) (Size))/", function($matches){
-            return array_get($matches, 3) . ' ' . $this->transfromSize(array_get($matches, 2), 'UK');
-        }, $word);
+        ], $word, $word);
 
         return $word;
     }
@@ -398,7 +348,10 @@ class Zalando extends BasePattern {
      */
     public function getCategory()
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) return $this->lcen->getCategory();
+        if(!$this->isUK() && $this->lcen->isProduct()) 
+        {
+            return $this->lcen->getCategory();
+        }
 
         $matching = array_get($this->translations, 'silhouetteCodeMatching');
 
@@ -415,13 +368,13 @@ class Zalando extends BasePattern {
      */
     public function getTags() : array
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) {
-
+        if(!$this->isUK() && $this->lcen->isProduct()) 
+        {
             return $this->lcen->getTags();
-
         }
 
-        if(!$this->isUK() && !$this->lcen->isProduct()) {
+        if(!$this->isUK() && !$this->lcen->isProduct()) 
+        {
             return [];
         }
 
@@ -475,14 +428,13 @@ class Zalando extends BasePattern {
 
         $commissionInDouble = (10 + 100) / 100;
 
-        if($currency == 'GBP') {
-
+        if($currency == 'GBP') 
+        {
             $price = ($price + array_get($shippingFees, 'uk')) * array_get($exchangeRates, 'gbp') * $commissionInDouble;
-
-        } elseif ($currency == 'EUR') {
-
+        } 
+        elseif ($currency == 'EUR') 
+        {
             $price = ($price + array_get($shippingFees, 'it')) * array_get($exchangeRates, 'eur') * $commissionInDouble;
-
         }
 
         $price = money(null, $price);
@@ -501,64 +453,62 @@ class Zalando extends BasePattern {
 
         $gender = array_get($this->data, 'model.articleInfo.targetGroups.gender');
 
-        if(in_array('FEMALE', $gender) && !in_array('MALE', $gender)) {
-
-            if(in_array('ADULT', $age)){
+        if(in_array('FEMALE', $gender) && !in_array('MALE', $gender)) 
+        {
+            if(in_array('ADULT', $age))
+            {
                 return 'women';
             } 
-
-            elseif(in_array('KID', $age)){
+            elseif(in_array('KID', $age))
+            {
                 return 'kgirls';
             }
-
-            elseif(in_array('TEEN', $age)){
+            elseif(in_array('TEEN', $age))
+            {
                 return 'tgirls';
             }
-
-            elseif(in_array('BABY', $age)){
+            elseif(in_array('BABY', $age))
+            {
                 return 'bgirls';
             }
-
         }
-
-        elseif(!in_array('FEMALE', $gender) && in_array('MALE', $gender)) {
-
-            if(in_array('ADULT', $age)){
+        elseif(!in_array('FEMALE', $gender) && in_array('MALE', $gender)) 
+        {
+            if(in_array('ADULT', $age))
+            {
                 return 'men';
             } 
-
-            elseif(in_array('KID', $age)){
+            elseif(in_array('KID', $age))
+            {
                 return 'kboys';
             }
-
-            elseif(in_array('TEEN', $age)){
+            elseif(in_array('TEEN', $age))
+            {
                 return 'tboys';
             }
-
-            elseif(in_array('BABY', $age)){
+            elseif(in_array('BABY', $age))
+            {
                 return 'bboys';
             }
-
         }
-
-        elseif(in_array('FEMALE', $gender) && in_array('MALE', $gender)) {
-
-            if(in_array('ADULT', $age)){
+        elseif(in_array('FEMALE', $gender) && in_array('MALE', $gender))
+        {
+            if(in_array('ADULT', $age))
+            {
                 return 'unia';
             } 
-
-            elseif(in_array('KID', $age)){
+            elseif(in_array('KID', $age))
+            {
                 return 'unik';
             }
-
-            elseif(in_array('TEEN', $age)){
+            elseif(in_array('TEEN', $age))
+            {
                 return 'unit';
             }
-
-            elseif(in_array('BABY', $age)){
+            elseif(in_array('BABY', $age))
+            {
                 return 'unib';
             }
-
         }
 
         return null;

@@ -145,8 +145,8 @@ class ProductRepository extends BaseRepository {
 
         $product->variants = ProductVariant::where('product_id', $product->id)->get();
 
-        $product->tags = ProductTag::where('product_id', $product->id)->get()->map(function($item){
-            return ['text' => $item->name];
+        $product->tags = ProductTag::where('product_id', $product->id)->get(['name', 'type'])->map(function($item){
+            return ['text' => $item->name, 'type' => $item->type];
         });
 
         $product->media = $product->getMedia('photo')->map(function($media){
@@ -542,7 +542,7 @@ class ProductRepository extends BaseRepository {
 
             $tags = json_decode($tags);
 
-            $tags = collect($tags)->pluck('text');
+            $tags = collect($tags)->pluck('type', 'text');
 
         } else {
 
