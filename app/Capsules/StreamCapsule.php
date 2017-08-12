@@ -662,7 +662,7 @@ class StreamCapsule {
 
         ->groupBy('name')->orderBy('total', 'desc')
 
-        ->where('type', 'category')
+        ->where('type', 'silhouetteCode')
 
         ->select('name', DB::raw('count(*) as total'))->get();
 
