@@ -3,6 +3,12 @@
 @section('app')
 <div class="container _mt50" ng-controller="OrderCtrl as vm">
 
+    @if(app()->environment('production', 'development'))
+    <script>
+    fbq('track', 'InitiateCheckout');
+    </script>
+    @endif
+    
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <div class="panel panel-default _b0 _z013">

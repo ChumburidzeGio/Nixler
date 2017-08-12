@@ -17,6 +17,16 @@
         ]) ?>;
     </script>
 
+    @if(app()->environment('production', 'development'))
+    <script>
+    fbq('track', 'ViewContent', <?php echo json_encode([
+        'value' => $product->price,
+        'currency' => $product->currency,
+        'content_ids' => $product->id,
+    ]) ?>);
+    </script>
+    @endif
+
     <div class="container" ng-controller="ShowCtrl as vm" itemscope itemtype="http://schema.org/Product">
 
         <div class="col-md-12 _p0">

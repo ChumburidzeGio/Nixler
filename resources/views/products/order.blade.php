@@ -10,6 +10,13 @@
         window.price = <?php echo $product->price; ?>;
         window.city_id = <?php echo old('city_id', auth()->user()->city_id) ? : 0; ?>;
     </script>
+
+    @if(app()->environment('production', 'development'))
+    <script>
+    fbq('track', 'InitiateCheckout');
+    </script>
+    @endif
+    
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
             <form role="form" method="POST" action="{{ route('order', ['id' => $product->id]) }}">

@@ -6,6 +6,13 @@
 
 <div class="container-fluid _m0 ng-cloak" ng-controller="StreamCtrl as vm" style="width: 100%">
 
+    @if(app()->environment('production', 'development') && request('query'))
+    <script>
+    fbq('track', 'Search', <?php echo json_encode([
+        'search_string' => request('query')
+    ]) ?>);
+    </script>
+    @endif
 
 	<script>window.stream = {!! $capsule->toJson() !!};</script>
 
