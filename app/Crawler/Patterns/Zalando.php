@@ -90,7 +90,7 @@ class Zalando extends BasePattern {
 
         $name = $this->translate($name, 'color');
 
-        $name = $this->translate($name, 'dvalues');
+        $name = $this->translate($name, 'title');
 
         $brand = array_get($this->data, 'model.articleInfo.brand.name');
 

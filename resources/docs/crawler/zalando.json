@@ -266,7 +266,7 @@
 		"Pullover": "პულოვერი",
 		"Shirt": "პერანგი",
 		"Trouser": "შარვალი",
-		"T Shirt Top": "მაიკა",
+		"T Shirt Top": "მაისური",
 		"One Piece Beachwear": "კომბინირებული ზღვის სამოსი",
 		"Bustier": "ბიუსჰალტერი",
 		"Nightwear Combination": "ღამის სამოსი",
@@ -527,7 +527,6 @@
 		"slip": "სრიალა",
 		"striped": "ზოლიანი",
 		"square neck": "კვადრატული საყელო",
-		"print t-shirt": "მაიკა პრინტით",
 		"animal print": "ცხოველის პრინტი",
 		"photo print": "ფოტო-პრინტი",
 		"print": "პრინტი",
@@ -634,5 +633,10 @@
 		"cold padding": "ცივი საფენი",
 		"asymmetrical": "ასიმეტრიული",
 		"high-quality": "მაღალი ხარისხის"
+	},
+	"title": {
+		"summer dress ": "საზაფხულო კაბა",
+		"jersey dress ": "ჯერსის კაბა",
+		"print t-shirt": "მაისური"
 	}
 }
