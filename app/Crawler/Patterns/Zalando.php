@@ -88,8 +88,6 @@ class Zalando extends BasePattern {
 
         $name = array_get($this->data, 'model.articleInfo.name');
 
-        $name = $this->translate($name, 'color');
-
         $name = ucfirst($this->translate($name, 'title'));
 
         $brand = array_get($this->data, 'model.articleInfo.brand.name');
@@ -362,7 +360,10 @@ class Zalando extends BasePattern {
 
         if($type == 'title') 
         {
-            $word = strtr(strtolower($word), array_get($this->translations, 'title'));
+            $word = strtr(strtolower($word), array_merge(
+                array_get($this->translations, 'title'),
+                array_get($this->translations, 'color')
+            ));
         }
 
         $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english', 4);
