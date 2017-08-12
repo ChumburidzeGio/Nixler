@@ -353,9 +353,8 @@
 		"Sleeve cuffs": "მანჟეტები",
 		"Sleeves material": "სახელოების მასალა",
 		"Weather": "ამინდი",
-		"Material filling": "",
-		"Padding type": "",
-		"Fleece": "",
+		"Material filling": "მასალის შიგთავსი",
+		"Fleece": "მატყლი",
 		"Breathable": "ჰაერგამტარი",
 		"Layers": "ფენები",
 		"Qualities": "ხარისხები",
@@ -401,7 +400,8 @@
 		"Quantity": "რაოდენობა",
 		"Bottom of trouser leg": "",
 		"Denier": "დენიე",
-		"UV-protection": "UV-დაცვა"
+		"UV-protection": "UV-დაცვა",
+		"Padding type": "საფენის ტიპი"
 	},
 	"silhouetteCodeMatching": {
 		"Bag": 8,
@@ -495,6 +495,7 @@
 		"polyurethane": "პოლიურეთანი",
 		"Cupro": "სპილენძი",
 		"mohair": "თივთიკი",
+		"imitation leather": "ხელოვნური ტყავი",
 		"synthetic leather": "ხელოვნური ტყავი",
 		"colourful": "ფერადი",
 		"strapless": "უთასმო",
@@ -525,6 +526,7 @@
 		"slip": "სრიალა",
 		"striped": "ზოლიანი",
 		"square neck": "კვადრატული საყელო",
+		"animal print": "ცხოველის პრინტი",
 		"photo print": "ფოტო-პრინტი",
 		"print": "პრინტი",
 		"non-wired bra": "უთასმებო ბიუსჰალტერი",
@@ -617,6 +619,14 @@
 		"neoprene": "სინთეზური პოლიმერი",
 		"waterproof": "წყალგამძლე",
 		"sweat": "სვეთი",
-		"back closure": "უკან შესაკრავი"
+		"back closure": "უკან შესაკრავი",
+		"canvas": "ტილო",
+		"round": "მომრგვალებული",
+		"handball": "ხელბურთი",
+		"and": "და",
+		"combination of": "კომბინირებული",
+		"straps": "თასმები",
+		"lapel collar": "გადანაკეცი საყელო",
+		"cold padding": "ცივი საფენი"
 	}
 }
