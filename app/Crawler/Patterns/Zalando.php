@@ -362,7 +362,7 @@ class Zalando extends BasePattern {
         {
             $word = strtr(strtolower($word), array_merge(
                 array_get($this->translations, 'title'),
-                array_get($this->translations, 'color')
+                //array_get($this->translations, 'color')
             ));
         }
 
