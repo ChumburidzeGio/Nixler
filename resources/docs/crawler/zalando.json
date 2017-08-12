@@ -279,7 +279,7 @@
 		"Combination Clothing": "კომბინირებული ტანსაცმელი",
 		"Bikini Combination": "ბიკინის კომბინაცია",
 		"Beach Shirt": "ზღვის პერანგი",
-		"Vest": "ჟილეტი",
+		"Vest": "ვესტი",
 		"Sneaker": "კედები",
 		"Low Shoe": "დაბალი ფეხსაცმელი",
 		"Sandals": "სანდლები",
@@ -637,6 +637,7 @@
 	"title": {
 		"summer dress ": "საზაფხულო კაბა",
 		"jersey dress ": "ჯერსის კაბა",
-		"print t-shirt": "მაისური"
+		"print t-shirt": "მაისური",
+		"jumper": "ჯემპრი"
 	}
 }
