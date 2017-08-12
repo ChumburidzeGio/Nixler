@@ -16,14 +16,7 @@ class Zalando extends BasePattern {
     protected $lcen;
 
     private $translations;
-
-    /**
-     * Construct the pattern
-     *
-     * @param $crawler Crawler
-     * 
-     * @return $this
-     */
+    
     public function parse(Crawler $crawler)
     {
         parent::parse($crawler);
@@ -35,11 +28,6 @@ class Zalando extends BasePattern {
         return $this;
     }
 
-    /**
-     * Check if its Zalando.co.uk
-     *
-     * @return bool
-     */
     public function parseEnVersion()
     {
         $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q='.array_get($this->data, 'model.articleInfo.id');
@@ -49,21 +37,11 @@ class Zalando extends BasePattern {
         return $this->lcen;
     }
 
-    /**
-     * Check if its Zalando.co.uk
-     *
-     * @return bool
-     */
     public function isUK() : bool
     {
         return !!($this->crawler('html')->first()->attr('lang') == 'en-GB');
     }
 
-    /**
-     * 
-     *
-     * @return bool
-     */
     public function parseJson()
     {
         if(!$this->crawler('#z-vegas-pdp-props')->count()) return null;
@@ -77,11 +55,6 @@ class Zalando extends BasePattern {
         return json_decode($json, 1);
     }
 
-    /**
-     * Check if we are on product page
-     *
-     * @return boolean
-     */
     public function isProduct() : bool
     {
         return $this->data && 
@@ -95,11 +68,6 @@ class Zalando extends BasePattern {
             !(!$this->isUK() && !$this->parseEnVersion()->getSKU());
     }
 
-    /**
-     * Get the list of products from page
-     *
-     * @return boolean
-     */
     public function detectProductsOnPage()
     {
         $products = $this->crawler('#catalogItemsListParent .catalogArticlesList_item');
@@ -112,11 +80,6 @@ class Zalando extends BasePattern {
         }));
     }
 
-    /**
-     * Parse the title for product
-     *
-     * @return string
-     */
     public function getTitle()
     {
         if(!$this->isUK() && $this->lcen->isProduct()) 
@@ -131,11 +94,6 @@ class Zalando extends BasePattern {
         return "{$name} - {$brand}";
     }
 
-    /**
-     * Parse the description for product
-     *
-     * @return string
-     */
     public function getDescription()
     {
         if(!$this->isUK() && $this->lcen->isProduct()) 
@@ -176,11 +134,6 @@ class Zalando extends BasePattern {
         return implode("\n\n", $description->toArray());
     }
 
-    /**
-     * Parse the image of product
-     *
-     * @return array
-     */
     public function getMedia()
     {
         return collect(array_get($this->data, 'model.articleInfo.media.images'))->map(function($item) 
@@ -189,11 +142,6 @@ class Zalando extends BasePattern {
         });
     }
 
-    /**
-     * Parse the variants of product
-     *
-     * @return array
-     */
     public function getEUSize($size)
     {
         if($size == 'One Size')
@@ -222,21 +170,11 @@ class Zalando extends BasePattern {
         return $size;
     }
 
-    /**
-     * Parse the variants of product
-     *
-     * @return array
-     */
     public function getRaw()
     {
         return $this->data;
     }
 
-    /**
-     * Parse the variants of product
-     *
-     * @return array
-     */
     public function getVariants()
     {
         return collect(array_get($this->data, 'model.articleInfo.units'))->map(function($item) {
@@ -262,11 +200,6 @@ class Zalando extends BasePattern {
         });
     }
 
-    /**
-     * Translate word
-     *
-     * @return string
-     */
     public function translate(string $word, $type) : string
     {
         $wordbase = array_get($this->translations, $type);
@@ -322,11 +255,6 @@ class Zalando extends BasePattern {
         return $word;
     }
 
-    /**
-     * Parse the category of product
-     *
-     * @return integer
-     */
     public function getCategory()
     {
         if(!$this->isUK() && $this->lcen->isProduct()) 
@@ -342,11 +270,6 @@ class Zalando extends BasePattern {
 
     }
 
-    /**
-     * Parse the tags of product
-     *
-     * @return array
-     */
     public function getTags() : array
     {
         if(!$this->isUK() && $this->lcen->isProduct()) 
@@ -372,11 +295,6 @@ class Zalando extends BasePattern {
         return array_flip(compact('color', 'category', 'silhouetteCode', 'brand'));
     }
 
-    /**
-     * Parse the tags of product
-     *
-     * @return array
-     */
     public function pushTranslation($tag, $val)
     {
         $tag = "crawler.translations.zalando.{$tag}";
@@ -390,11 +308,6 @@ class Zalando extends BasePattern {
         config([$tag => $config]);
     }
 
-    /**
-     * Calculate price
-     *
-     * @return int
-     */
     public function calcPrice(float $price, string $currency) : int
     {
         $exchangeRates = [
@@ -423,11 +336,6 @@ class Zalando extends BasePattern {
         return str_replace(',', '', $price);
     }
 
-    /**
-     * Get target group
-     *
-     * @return string
-     */
     public function getTarget()
     {
         $age = array_get($this->data, 'model.articleInfo.targetGroups.age');
@@ -495,11 +403,6 @@ class Zalando extends BasePattern {
         return null;
     }
 
-    /**
-     * Get SKU
-     *
-     * @return string
-     */
     public function getSKU()
     {
         return array_get($this->data, 'model.articleInfo.id');
