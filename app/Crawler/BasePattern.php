@@ -12,13 +12,6 @@ class BasePattern
     
     private $media;
 
-    /**
-     * Construct the pattern
-     *
-     * @param $crawler Crawler
-     * 
-     * @return $this
-     */
     public function parse(Crawler $crawler)
     {
         $this->crawler = $crawler;
@@ -42,12 +35,8 @@ class BasePattern
 
     /**
      * Trim the string and strip tags inside
-     *
-     * @param $string string
-     * 
-     * @return string
      */
-    public function clean($string)
+    public function clean(string $string) : string
     {
         if(is_array($string)) {
             return array_filter($string, 'strlen');
@@ -62,12 +51,8 @@ class BasePattern
 
     /**
      * Parse meta tag
-     *
-     * @param $prop string
-     * 
-     * @return string
      */
-    public function getMeta($prop)
+    public function getMeta(string $prop) : string
     {
         $content = $this->crawler('meta[property="og:'.$prop.'"]')->first();
 
@@ -85,12 +70,9 @@ class BasePattern
     /**
      * Find category in list of tags or match category with list of subcats
      *
-     * @param $haystack array
-     * @param $needle array
-     * 
-     * @return int
+     * @return int|null
      */
-    public function findCategory($haystack, $needle)
+    public function findCategory(array $haystack, array $needle)
     { 
         foreach ($needle as $cat => $value) {
 
@@ -125,13 +107,9 @@ class BasePattern
     }
 
     /**
-     * Parse meta tag
-     *
-     * @param $prop string
-     * 
-     * @return string
+     * Parse text from dom element
      */
-    public function textFrom($prop)
+    public function textFrom(string $prop)
     {
         $content = $this->crawler($prop)->first();
 
@@ -143,11 +121,7 @@ class BasePattern
     }
 
     /**
-     * Parse meta tag
-     *
-     * @param $prop string
-     * 
-     * @return string
+     * Parse text from the list of dom elements
      */
     public function crawleList($el)
     {
@@ -157,13 +131,9 @@ class BasePattern
     }
 
     /**
-     * Parse meta tag
-     *
-     * @param $prop string
-     * 
-     * @return string
+     * Transform string from html to markdown
      */
-    public function markdownify($html)
+    public function markdownify(string $html) : string
     {
     	$html = preg_replace_callback("/(<([^.]+)>)([^<]+)(<\\/\\2>)/s", function($matches){
 
@@ -184,61 +154,31 @@ class BasePattern
         return strip_tags($html);
     }
 
-    /**
-     * Parse the title of product from meta tags
-     *
-     * @return string
-     */
     public function getTitle()
     {
     	return $this->getMeta('title');
     }
 
-    /**
-     * Parse the description of product from meta tags
-     *
-     * @return string
-     */
     public function getDescription()
     {
     	return $this->getMeta('description');
     }
 
-    /**
-     * Parse the image of product from meta tags
-     *
-     * @return array
-     */
     public function getMedia()
     {
     	return [$this->getMeta('image')];
     }
 
-    /**
-     * Parse the variants of product
-     *
-     * @return array
-     */
     public function getVariants()
     {
     	return [];
     }
 
-    /**
-     * Parse the category of product
-     *
-     * @return integer
-     */
     public function getCategory()
     {
         return null;
     }
 
-    /**
-     * Parse the category of product
-     *
-     * @return integer
-     */
     public function getCategoryName()
     {
         $category = $this->getCategory();
@@ -246,11 +186,6 @@ class BasePattern
         return $category ? ProductCategory::find($category)->name : null;
     }
 
-    /**
-     * Parse the price of product
-     *
-     * @return integer
-     */
     public function getPrice()
     {
         $variants = $this->getVariants();
@@ -262,11 +197,6 @@ class BasePattern
         return $this->textFrom('[itemprop="price"]');
     }
 
-    /**
-     * Parse the price of product
-     *
-     * @return integer
-     */
     public function getOriginalPrice()
     {
         $variants = $this->getVariants();
@@ -278,11 +208,6 @@ class BasePattern
     	return null;
     }
 
-    /**
-     * Parse the tags of product from meta tags
-     *
-     * @return array
-     */
     public function getTags()
     {
     	$keywords = $this->getMeta('keywords');
@@ -290,51 +215,29 @@ class BasePattern
     	return $this->clean(explode(',', $keywords));
     }
 
-    /**
-     * Parse the image of product
-     *
-     * @return array
-     */
-    public function parseUrl($url, $sep='+')
-    {
-        return preg_replace('/[[:space:]]+/', '%20', $url);
-    }
-
-    /**
-     * Get target group
-     *
-     * @return string
-     */
     public function getTarget()
     {
         return null;
     }
 
-    /**
-     * Get SKU
-     *
-     * @return string
-     */
     public function getSKU()
     {
         return null;
     }
 
     /**
-     * Check if page is valid
-     *
-     * @return string
+     * Replace special characters in URL
      */
+    public function parseUrl(string $url, $sep='+') : string
+    {
+        return preg_replace('/[[:space:]]+/', '%20', $url);
+    }
+
     public function isInvalid()
     {
         return (method_exists($this, 'isProduct') && !$this->isProduct());
     }
-
-    /**
-     * Return pattern as an array
-     *
-     * @return array
-     */
+    
     function toArray()
     {
         if($this->isInvalid()) {

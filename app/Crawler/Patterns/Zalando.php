@@ -6,7 +6,6 @@ use Goutte\Client;
 use App\Crawler\BasePattern;
 use Symfony\Component\DomCrawler\Crawler;
 use App\Crawler\Crawler as LC;
-use Symfony\Component\DomCrawler\Link;
 use App\Services\LanguageDetectService;
 
 class Zalando extends BasePattern {
@@ -16,7 +15,7 @@ class Zalando extends BasePattern {
     protected $lcen;
 
     private $translations;
-    
+
     public function parse(Crawler $crawler)
     {
         parent::parse($crawler);
@@ -26,6 +25,18 @@ class Zalando extends BasePattern {
         $this->translations = json_decode(file_get_contents(resource_path('docs/crawler/zalando.json')), 1);
 
         return $this;
+    }
+
+    public function detectProductsOnPage()
+    {
+        $products = $this->crawler('#catalogItemsListParent .catalogArticlesList_item');
+
+        if(!$products->count()) return [];
+
+        return array_unique($products->each(function($a)
+        {
+            return $a->filter('a')->link()->getUri();
+        }));
     }
 
     public function parseEnVersion()
@@ -68,18 +79,6 @@ class Zalando extends BasePattern {
             !(!$this->isUK() && !$this->parseEnVersion()->getSKU());
     }
 
-    public function detectProductsOnPage()
-    {
-        $products = $this->crawler('#catalogItemsListParent .catalogArticlesList_item');
-
-        if(!$products->count()) return [];
-
-        return array_unique($products->each(function($a)
-        {
-            return $a->filter('a')->link()->getUri();
-        }));
-    }
-
     public function getTitle()
     {
         if(!$this->isUK() && $this->lcen->isProduct()) 
@@ -89,6 +88,8 @@ class Zalando extends BasePattern {
 
         $name = array_get($this->data, 'model.articleInfo.name');
 
+        $name = $this->translate($name, 'dvalues');
+        
         $brand = array_get($this->data, 'model.articleInfo.brand.name');
 
         return "{$name} - {$brand}";
@@ -141,35 +142,7 @@ class Zalando extends BasePattern {
             return array_get($item, 'sources.zoom');
         });
     }
-
-    public function getEUSize($size)
-    {
-        if($size == 'One Size')
-        {
-            return 'ერთი ზომა';
-        }
-
-        $units = array_get($this->lcen->getRaw(), 'model.articleInfo.units');
-
-        foreach ($units as $unit) 
-        {
-            if(array_get($unit, 'size.local') == $size) 
-            {
-                $sunits = array_get($this->data, 'model.articleInfo.units');
-
-                foreach ($sunits as $sunit) 
-                {
-                    if(array_get($sunit, 'size.manufacturer') == array_get($unit, 'size.manufacturer')) 
-                    {
-                        return array_get($sunit, 'size.local');
-                    }
-                }
-            }
-        }
-
-        return $size;
-    }
-
+    
     public function getRaw()
     {
         return $this->data;
@@ -198,61 +171,6 @@ class Zalando extends BasePattern {
             ];
 
         });
-    }
-
-    public function translate(string $word, $type) : string
-    {
-        $wordbase = array_get($this->translations, $type);
-
-        if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash') || str_contains($word, 'Hand wash'))
-        {
-            $word = strtolower($word);
-
-            $word = preg_replace_callback_array([
-                "/machine wash at (\d+&deg;)c/" => function ($match) {
-                    return 'მანქანაში რეცხვა '.$match[1].' გრადუსზე';
-                },
-                "/a shrinkage of up to (\d+%) may occur/" => function ($match) {
-                    return 'შესაძლებელია მოხდეს ზომაში შემცირება '.$match[1].'-ით';
-                }
-            ], $word);
-
-            $word = strtr($word, array_get($this->translations, 'washing'));
-        }
-
-        $word = preg_replace_callback_array([
-            "/(\d.+)\"/" => function ($match) {
-                return round(floatval($match[1]) / 0.393700787). ' სმ';
-            },
-            "/Size (One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32|[1-9]yxREG|\d+)/" => function ($match) {
-                return 'ზომა ' . $this->getEUSize($match[1]);
-            },
-            "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
-                return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
-            },
-            "/([1-9\/]+) length/" => function ($match) {
-                return $match[1].' სიგრძის';
-            }
-        ], $word);
-
-        if(array_get($wordbase, $word)) 
-        {
-            $word = array_get($wordbase, $word);
-        }
-
-        if($type == 'dvalues') 
-        {
-            $word = strtr(strtolower($word), array_get($this->translations, 'dvalues'));
-        }
-
-        $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english', 4);
-
-        if($hasEnglish) 
-        {
-            $this->pushTranslation($type, $word);
-        }
-
-        return $word;
     }
 
     public function getCategory()
@@ -293,47 +211,6 @@ class Zalando extends BasePattern {
         , 'silhouetteCode');
 
         return array_flip(compact('color', 'category', 'silhouetteCode', 'brand'));
-    }
-
-    public function pushTranslation($tag, $val)
-    {
-        $tag = "crawler.translations.zalando.{$tag}";
-
-        $config = config($tag, []);
-
-        array_push($config, $val);
-
-        $config = array_values(array_unique($config));
-
-        config([$tag => $config]);
-    }
-
-    public function calcPrice(float $price, string $currency) : int
-    {
-        $exchangeRates = [
-            'eur' => 2.80,
-            'gbp' => 3.15
-        ];
-
-        $shippingFees = [
-            'it' => 4,
-            'uk' => 5,
-        ];
-
-        $commissionInDouble = (10 + 100) / 100;
-
-        if($currency == 'GBP') 
-        {
-            $price = ($price + array_get($shippingFees, 'uk')) * array_get($exchangeRates, 'gbp') * $commissionInDouble;
-        } 
-        elseif ($currency == 'EUR') 
-        {
-            $price = ($price + array_get($shippingFees, 'it')) * array_get($exchangeRates, 'eur') * $commissionInDouble;
-        }
-
-        $price = money(null, $price);
-
-        return str_replace(',', '', $price);
     }
 
     public function getTarget()
@@ -406,6 +283,130 @@ class Zalando extends BasePattern {
     public function getSKU()
     {
         return array_get($this->data, 'model.articleInfo.id');
+    }
+
+    public function calcPrice(float $price, string $currency) : int
+    {
+        $exchangeRates = [
+            'eur' => 2.80,
+            'gbp' => 3.15
+        ];
+
+        $shippingFees = [
+            'it' => 4,
+            'uk' => 5,
+        ];
+
+        $commissionInDouble = (10 + 100) / 100;
+
+        if($currency == 'GBP') 
+        {
+            $price = ($price + array_get($shippingFees, 'uk')) * array_get($exchangeRates, 'gbp') * $commissionInDouble;
+        } 
+        elseif ($currency == 'EUR') 
+        {
+            $price = ($price + array_get($shippingFees, 'it')) * array_get($exchangeRates, 'eur') * $commissionInDouble;
+        }
+
+        $price = money(null, $price);
+
+        return str_replace(',', '', $price);
+    }
+
+    public function translate(string $word, $type) : string
+    {
+        $wordbase = array_get($this->translations, $type);
+
+        if(str_contains($word, 'machine wash') || str_contains($word, 'Machine wash') || str_contains($word, 'Hand wash'))
+        {
+            $word = strtolower($word);
+
+            $word = preg_replace_callback_array([
+                "/machine wash at (\d+&deg;)c/" => function ($match) {
+                    return 'მანქანაში რეცხვა '.$match[1].' გრადუსზე';
+                },
+                "/a shrinkage of up to (\d+%) may occur/" => function ($match) {
+                    return 'შესაძლებელია მოხდეს ზომაში შემცირება '.$match[1].'-ით';
+                }
+            ], $word);
+
+            $word = strtr($word, array_get($this->translations, 'washing'));
+        }
+
+        $word = preg_replace_callback_array([
+            "/(\d.+)\"/" => function ($match) {
+                return round(floatval($match[1]) / 0.393700787). ' სმ';
+            },
+            "/Size (One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32|[1-9]yxREG|\d+)/" => function ($match) {
+                return 'ზომა ' . $this->getEUSize($match[1]);
+            },
+            "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
+                return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
+            },
+            "/([1-9\/]+) length/" => function ($match) {
+                return $match[1].' სიგრძის';
+            }
+        ], $word);
+
+        if(array_get($wordbase, $word)) 
+        {
+            $word = array_get($wordbase, $word);
+        }
+
+        if($type == 'dvalues') 
+        {
+            $word = strtr(strtolower($word), array_get($this->translations, 'dvalues'));
+        }
+
+        $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english', 4);
+
+        if($hasEnglish) 
+        {
+            $this->pushTranslation($type, $word);
+        }
+
+        return $word;
+    }
+
+    public function pushTranslation($tag, $val)
+    {
+        $tag = "crawler.translations.zalando.{$tag}";
+
+        $config = config($tag, []);
+
+        array_push($config, $val);
+
+        $config = array_values(array_unique($config));
+
+        config([$tag => $config]);
+    }
+
+    public function getEUSize($size)
+    {
+        if($size == 'One Size')
+        {
+            return 'ერთი ზომა';
+        }
+
+        $units = array_get($this->lcen->getRaw(), 'model.articleInfo.units');
+
+        foreach ($units as $unit) 
+        {
+            if(array_get($unit, 'size.local') == $size) 
+            {
+                $sunits = array_get($this->data, 'model.articleInfo.units');
+
+                foreach ($sunits as $sunit) 
+                {
+                    if(array_get($sunit, 'size.manufacturer') == array_get($unit, 'size.manufacturer')) 
+                    {
+                        return array_get($sunit, 'size.local');
+                    }
+                }
+            }
+        }
+
+        return $size;
     }
     
 }
