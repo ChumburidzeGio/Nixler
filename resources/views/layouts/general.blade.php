@@ -40,6 +40,24 @@
 
     <link id="favicon" rel="icon" type="image/png" sizes="64x64" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAh1BMVEUAAABVgKptkrZVgL9bgLZggL9chbhcgLtagbxdgL1cgLxbgb1bgLxdgb1agbtcgbtdgLxcgb1cgLxdgLtcgLxdgL1cgLxbgLxcgLxdgLxcgLxdgLxcgLxcgL1cgLxdgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxcgLxG47sgAAAALHRSTlMABgcMDhgZQEFCSElMTU91dnd6fIWHiImys7S+v8Dg4uPk5eby8/T4+fz9/qPzmuoAAACNSURBVHgBvZDdEoFQFEY3KRLyQxEpIT/W+z+f2XSR3RgzXVg335m1zrk58ptJWpa7cdNHvFg27nMJPW96ZWRCSqgzY2vCGVfH5VSTQc4HeVCFPYasCnfAkaOqg/R0qnAD+hKrWYmvU3uxlm5cFFFHEhOYv88LbGAzcBw/oR4eWFoH/hDyb58YZMYPpQ1PpmIwDYJOKekAAAAASUVORK5CYII=">
 
+    @if(app()->environment('production', 'development'))
+    <script>
+      !function(f,b,e,v,n,t,s)
+      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+      n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t,s)}(window, document,'script',
+      'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '1227044830767339');
+      fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+      src="https://www.facebook.com/tr?id=1227044830767339&ev=PageView&noscript=1"
+    /></noscript>
+    @endif
+
 </head>
 <body class="@yield('body_class')">
 
@@ -60,21 +78,6 @@
       ga('send', 'pageview');
     </script>
 
-    <script>
-      !function(f,b,e,v,n,t,s)
-      {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-      if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-      n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t,s)}(window, document,'script',
-      'https://connect.facebook.net/en_US/fbevents.js');
-      fbq('init', '1227044830767339');
-      fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-      src="https://www.facebook.com/tr?id=1227044830767339&ev=PageView&noscript=1"
-    /></noscript>
 
     @if(!request()->isRobot())
     <script>
