@@ -94,7 +94,7 @@
                     </small>
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
-                    <div class="_clear _c2" show-more more="@lang('Read more')" less="@lang('Show less')" height="180" itemprop="description">
+                    <div class="_clear _c2" show-more more="@lang('Read more')" less="@lang('Show less')" height="200" itemprop="description">
                         {!! $product->description_parsed !!}
                     </div>
                 </p>

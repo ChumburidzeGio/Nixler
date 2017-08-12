@@ -291,7 +291,7 @@ class Zalando extends BasePattern {
             "/(\d.+)\"/" => function ($match) {
                 return round(floatval($match[1]) / 0.393700787). ' სმ';
             },
-            "/Size (\d+|One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32)/" => function ($match) {
+            "/Size (One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32|[1-9]yxREG|\d+)/" => function ($match) {
                 return 'ზომა ' . $this->getEUSize($match[1]);
             },
             "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
@@ -318,22 +318,6 @@ class Zalando extends BasePattern {
         {
             $this->pushTranslation($type, $word);
         }
-
-        $word = array_get([
-            'Zip' => 'ელვა',
-            'Long' => 'გრძელი',
-            'Faux leather' => 'ხელოვნური ტყავი',
-            'Synthetic leather' => 'სინთეტიკური ტყავი',
-            'Mobile phone pocket' => 'ტელეფონის ჯიბე',
-            'Carrying handle' => 'სახელური',
-            'Asymmetrical' => 'ასიმეტრიული',
-            'Spacious inner compartment' => 'ფართე შიგა სივრცე',
-            'Leather and textile' => 'ტყავი და ტექსტილი',
-            'Textile' => 'ტექსტილი',
-            'Decorative seams' => 'დეკორატიული ნაკერები',
-            'Flat' => 'ფართე',
-            'Treat with a suitable protector before wear' => 'დაამუშავეთ შესაბამისი დამცავით ჩაცმამდე',
-        ], $word, $word);
 
         return $word;
     }
