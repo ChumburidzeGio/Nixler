@@ -360,10 +360,7 @@ class Zalando extends BasePattern {
 
         if($type == 'title') 
         {
-            $word = strtr(strtolower($word), array_merge(
-                array_get($this->translations, 'title'),
-                //array_get($this->translations, 'color')
-            ));
+            $word = strtr(strtolower($word), array_get($this->translations, 'title'));
         }
 
         $hasEnglish = app(LanguageDetectService::class)->detect($word)->has('english', 4);
