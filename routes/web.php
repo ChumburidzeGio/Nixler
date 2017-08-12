@@ -132,12 +132,6 @@ Auth::routes();
 
 	Route::get('/scrap', function(){
 
-		return preg_replace_callback_array([
-                "/([1-9\/]+) length/" => function ($match) {
-                    return $match[1].' სიგრძის';
-                }
-        ], request('word'));
-
 		$crawler = app(\App\Crawler\Crawler::class);
 
 		$url = request('url');
