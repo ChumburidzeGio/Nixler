@@ -269,7 +269,7 @@
 		"T Shirt Top": "მაიკა",
 		"One Piece Beachwear": "კომბინირებული ზღვის სამოსი",
 		"Bustier": "ბიუსჰალტერი",
-		"Nightwear Combination": "",
+		"Nightwear Combination": "ღამის სამოსი",
 		"Beach Trouser": "ზღვის შარვლები",
 		"Skirt": "ქვედატანი",
 		"Bra": "ლიფი",
@@ -342,13 +342,13 @@
 		"Sheer": "გამჭვირვალეობა",
 		"Back width": "ზურგის სიფართე",
 		"Detail": "წვრილმანი",
-		"Front material": "",
-		"Contains non-textile parts of animal origin": "",
-		"Bottom part material": "",
+		"Front material": "წინა ნაწილის მასალა",
+		"Contains non-textile parts of animal origin": "შეიცავს ცხოველური წარმოშობის არატექნიკურ მასალას",
+		"Bottom part material": "ქვედა ნაწილის მასალა",
 		"Sport": "სპორტი",
-		"Back material": "",
+		"Back material": "ზურგის მასალა",
 		"Insert material": "სარჩული",
-		"Hood detail": "",
+		"Hood detail": "კაპიშონის დეტალები",
 		"Waistband": "ქამარი",
 		"Sleeve cuffs": "მანჟეტები",
 		"Sleeves material": "სახელოების მასალა",
@@ -615,6 +615,8 @@
 		"plastic": "პლასტმასა",
 		"suede": "ზამში",
 		"neoprene": "სინთეზური პოლიმერი",
-		"waterproof": "წყალგამძლე"
+		"waterproof": "წყალგამძლე",
+		"sweat": "სვეთი",
+		"back closure": "უკან შესაკრავი"
 	}
 }
