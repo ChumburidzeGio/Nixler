@@ -393,8 +393,8 @@ class Zalando extends BasePattern {
 
         //Normalize sizes after lowercasing
         $word = preg_replace_callback_array([
-            "/ზომა (.*)\)/" => function ($match) {
-                return 'ზომა ' . strtr($match[1], array_get($this->translations, 'sizes')) . ')';
+            "/(\(ზომა |იცვავს ზომას ) (.*)/" => function ($match) {
+                return $match[1] . strtr($match[2], array_get($this->translations, 'sizes'));
             }
         ], $word);
 
@@ -421,7 +421,7 @@ class Zalando extends BasePattern {
             return 'ერთი ზომა';
         }
 
-        $units = array_get($this->lcen->getRaw(), 'model.articleInfo.units');
+        $units = $this->lcen->getRaw('model.articleInfo.units');
 
         foreach ($units as $unit) 
         {
