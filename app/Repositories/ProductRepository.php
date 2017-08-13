@@ -244,7 +244,7 @@ class ProductRepository extends BaseRepository {
      *
      * @return \Illuminate\Http\Response
      */
-    public function import(string $url)
+    public function import(string $url, $id = null)
     {
         $user = auth()->user();
         
@@ -266,8 +266,15 @@ class ProductRepository extends BaseRepository {
 
         } else {
 
-            $product = $this->create();
-
+            if(is_null($id)) 
+            {
+                $product = $this->create();
+            }
+            else 
+            {
+                $product = $this->model->findOrFail($id);
+            }
+            
         }
         
         $metadata = app(Crawler::class)->get($url);
