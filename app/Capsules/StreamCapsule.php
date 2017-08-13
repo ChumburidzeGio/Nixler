@@ -294,8 +294,6 @@ class StreamCapsule {
 
     	if($searchQuery){
 
-            $searchQuery = str_slug($searchQuery, ' ') !== $searchQuery ? $searchQuery . " " . str_slug($searchQuery, ' ') : $searchQuery;
-
             $query = $query->whereKeyword('owner_username,slug,title,description,p.currency,buy_link,sku,target', $searchQuery);
 
             $this->facetQuery = $this->facetQuery->whereKeyword('owner_username,slug,title,description,p.currency,buy_link,sku,target', $searchQuery);

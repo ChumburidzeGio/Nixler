@@ -253,19 +253,19 @@ class ProductRepository extends BaseRepository {
             'source' => $url
         ])->first();
 
-        if($source) {
-
+        if($source) 
+        {
             $product = $this->model->find($source->product_id);
 
-            if(!$product) {
-
+            if(!$product) 
+            {
                 $source->delete();
 
                 return null;
             }
-
-        } else {
-
+        } 
+        else 
+        {
             if(is_null($id)) 
             {
                 $product = $this->create();
@@ -273,8 +273,7 @@ class ProductRepository extends BaseRepository {
             else 
             {
                 $product = $this->model->findOrFail($id);
-            }
-            
+            } 
         }
         
         $metadata = app(Crawler::class)->get($url);
