@@ -52,6 +52,8 @@ class CollectionsController extends Controller
 
             $collection = Collection::findOrFail($id);
 
+            $collection->is_private = $collection->is_private ? 2 : 1;
+
             $items = capsule('stream')->whereInCollection($id)->items();
         }
 
