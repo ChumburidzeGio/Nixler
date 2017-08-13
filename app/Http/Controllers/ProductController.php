@@ -102,11 +102,12 @@ class ProductController extends Controller
 
         $status = __('Product from url successfully imported.');
 
-        if(is_null($import)) {
+        if(is_null($import)) 
+        {
             $status = __('Product import is canceled, you already published it once.');
         }
-
-        elseif(!$import) {
+        elseif(!$import) 
+        {
             $status = __('The page doesn\'t contain product information and it can\'t be parsed.');
         }
 

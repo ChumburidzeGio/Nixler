@@ -393,15 +393,21 @@ class ProductRepository extends BaseRepository {
     {
         $media_sorted = json_decode($attribute);
 
-        if($media_sorted){
+        if($media_sorted && is_array($media_sorted))
+        {
             $media = $product->getMedia('photo');
-            $media = $media->sortBy(function ($photo, $key) use ($media_sorted) {
-                foreach ($media_sorted as $key => $value) {
-                    if(isset($value->id) && $value->id == $photo->id){
+
+            $media = $media->sortBy(function ($photo, $key) use ($media_sorted) 
+            {
+                foreach ($media_sorted as $key => $value) 
+                {
+                    if(isset($value->id) && $value->id == $photo->id)
+                    {
                         return $key;
                     }
                 }
             });
+
             $product->syncMedia($media, 'photo');
         }
 
