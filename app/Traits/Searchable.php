@@ -17,7 +17,8 @@ trait Searchable {
      */
     public function scopeWhereKeyword($query, $match, $keyword)
     {        
-        return $query->whereRaw("MATCH($match) AGAINST('?' IN BOOLEAN MODE)", [$keyword]);
+        return $query->selectRaw("MATCH($match) AGAINST (? IN NATURAL LANGUAGE MODE) as relevance", [$keyword])
+                     ->whereRaw("MATCH($match) AGAINST (? IN NATURAL LANGUAGE MODE)", [$keyword]);
 
         /*
     	if(!$query) {

@@ -294,7 +294,7 @@ class StreamCapsule {
 
     	if($searchQuery){
 
-            $query = $query->whereKeyword('owner_username,slug,title,description,p.currency,buy_link,sku,target', $searchQuery);
+            $query = $query->whereKeyword('owner_username,slug,title,description,p.currency,buy_link,sku,target', $searchQuery)->orderBy('relevance', 'desc');
 
             $this->facetQuery = $this->facetQuery->whereKeyword('owner_username,slug,title,description,p.currency,buy_link,sku,target', $searchQuery);
 
