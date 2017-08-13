@@ -6,5 +6,6 @@ Disallow: /new-product
 Disallow: /im
 Disallow: /im/
 Disallow: /img/
+Disallow: /*/follow
 
 Sitemap: https://www.nixler.ge/sitemap.xml
