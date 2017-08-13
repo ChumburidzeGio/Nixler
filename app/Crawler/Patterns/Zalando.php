@@ -88,7 +88,10 @@ class Zalando extends BasePattern {
 
         $name = array_get($this->data, 'model.articleInfo.name');
 
-        $name = ucfirst($this->translate($name, 'title'));
+        if($this->translate($name, 'title') !== strtolower($name)) 
+        {
+            $name = ucfirst($this->translate($name, 'title'));
+        }
 
         $brand = array_get($this->data, 'model.articleInfo.brand.name');
 

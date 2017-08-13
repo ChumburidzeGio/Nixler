@@ -281,7 +281,7 @@
     "Delivery in": "მიიღებთ",
     "Full Name": "სახელი და გვარი",
     "Product from url successfully imported.": "პროდუქტი წარმატებით დაიმპორტდა",
-    "Product import is canceled, you already published it once.": "იმპორტი გაუქმებულია, პროდუქტი უკვე დაიმპორტებული გაქვთ.",
+    "Product import is canceled, you already published it once.": "იმპორტი გაუქმებულია, პროდუქტი უკვე დაიმპორტებული გაქვთ ან იმპორტისას წარმოიქმნა პრობლემა.",
     "Import": "იმპორტი",
     "The page doesn't contain product information and it can't be parsed.": "იმპორტი გაუქმებულია რადგან მოცემული გვერდი არ შეიცავს პროდუქტის შესახებ ინფორმაციას",
     "For whom": "ვისთვის",
