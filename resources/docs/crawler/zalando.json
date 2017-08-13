@@ -640,5 +640,14 @@
 		"jersey dress ": "ჯერსის კაბა",
 		"print t-shirt": "მაისური",
 		"jumper": "ჯემპრი"
+	},
+	"sizes": {
+		"xs": "XS",
+		"s": "S",
+		"m": "M",
+		"l": "L",
+		"xl": "XL",
+		"sxab": "SxAB",
+		"yxreg": "yxREG"
 	}
 }

@@ -41,7 +41,7 @@ class Zalando extends BasePattern {
 
     public function parseEnVersion()
     {
-        $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q='.array_get($this->data, 'model.articleInfo.id');
+        $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q='.$this->getRaw('model.articleInfo.id');
 
         $this->lcen = $this->lcen ?? app(LC::class)->get($enUrl);
 
@@ -68,15 +68,28 @@ class Zalando extends BasePattern {
 
     public function isProduct() : bool
     {
-        return $this->data && 
+        $isValidProduct = $this->data && 
 
-            array_get($this->data, 'model.articleInfo.active') == true && 
+            $this->getRaw('model.articleInfo.active') == true && 
 
-            array_get($this->data, 'model.articleInfo.available') == true && 
+            $this->getRaw('model.articleInfo.available') == true && 
 
-            $this->getSKU() !== null && 
+            $this->getSKU() !== null;
 
-            !(!$this->isUK() && !$this->parseEnVersion()->getSKU());
+        if(!$this->isUK()) {
+
+            $isValidProduct = $isValidProduct && 
+            
+                $this->parseEnVersion()->getSKU() && 
+
+                $this->parseEnVersion()->getRaw('model.articleInfo.active') == true && 
+
+                $this->parseEnVersion()->getRaw('model.articleInfo.available') == true;
+
+        }
+
+        return $isValidProduct;
+
     }
 
     public function getTitle()
@@ -86,14 +99,14 @@ class Zalando extends BasePattern {
             return $this->lcen->getTitle();
         }
 
-        $name = array_get($this->data, 'model.articleInfo.name');
+        $name = $this->getRaw('model.articleInfo.name');
 
         if($this->translate($name, 'title') !== strtolower($name)) 
         {
             $name = ucfirst($this->translate($name, 'title'));
         }
 
-        $brand = array_get($this->data, 'model.articleInfo.brand.name');
+        $brand = $this->getRaw('model.articleInfo.brand.name');
 
         return "{$name} - {$brand}";
     }
@@ -106,7 +119,7 @@ class Zalando extends BasePattern {
         } 
         elseif($this->isProduct() && $this->isUK()) 
         {
-            $description = array_get($this->data, 'model.articleInfo.attributes');
+            $description = $this->getRaw('model.articleInfo.attributes');
         } 
         else 
         {
@@ -140,20 +153,25 @@ class Zalando extends BasePattern {
 
     public function getMedia()
     {
-        return collect(array_get($this->data, 'model.articleInfo.media.images'))->map(function($item) 
+        return collect($this->getRaw('model.articleInfo.media.images'))->map(function($item) 
         {
             return array_get($item, 'sources.zoom');
         });
     }
     
-    public function getRaw()
+    public function getRaw($field = null)
     {
-        return $this->data;
+        if(is_null($field))
+        {
+            return $this->data;
+        }
+        
+        return array_get($this->data, $field);
     }
 
     public function getVariants()
     {
-        return collect(array_get($this->data, 'model.articleInfo.units'))->map(function($item) {
+        return collect($this->getRaw('model.articleInfo.units'))->map(function($item) {
 
             $price = array_get($item, 'displayPrice.price.value');
 
@@ -185,7 +203,7 @@ class Zalando extends BasePattern {
 
         $matching = array_get($this->translations, 'silhouetteCodeMatching');
 
-        $silhouetteCode = str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')));
+        $silhouetteCode = str_replace('_', ' ', title_case($this->getRaw('model.articleInfo.silhouette_code')));
 
         return array_get($matching, $silhouetteCode);
 
@@ -203,14 +221,14 @@ class Zalando extends BasePattern {
             return [];
         }
 
-        $brand = array_get($this->data, 'model.articleInfo.brand.name');
+        $brand = $this->getRaw('model.articleInfo.brand.name');
 
-        $color = $this->translate(array_get($this->data, 'model.articleInfo.color'), 'color');
+        $color = $this->translate($this->getRaw('model.articleInfo.color'), 'color');
 
-        $category = $this->translate(array_get($this->data, 'model.articleInfo.category_tag'), 'category');
+        $category = $this->translate($this->getRaw('model.articleInfo.category_tag'), 'category');
 
         $silhouetteCode = $this->translate(
-            str_replace('_', ' ', title_case(array_get($this->data, 'model.articleInfo.silhouette_code')))
+            str_replace('_', ' ', title_case($this->getRaw('model.articleInfo.silhouette_code')))
         , 'silhouetteCode');
 
         return array_flip(compact('color', 'category', 'silhouetteCode', 'brand'));
@@ -218,9 +236,9 @@ class Zalando extends BasePattern {
 
     public function getTarget()
     {
-        $age = array_get($this->data, 'model.articleInfo.targetGroups.age');
+        $age = $this->getRaw('model.articleInfo.targetGroups.age');
 
-        $gender = array_get($this->data, 'model.articleInfo.targetGroups.gender');
+        $gender = $this->getRaw('model.articleInfo.targetGroups.gender');
 
         if(in_array('FEMALE', $gender) && !in_array('MALE', $gender)) 
         {
@@ -285,7 +303,7 @@ class Zalando extends BasePattern {
 
     public function getSKU()
     {
-        return array_get($this->data, 'model.articleInfo.id');
+        return $this->getRaw('model.articleInfo.id');
     }
 
     public function calcPrice(float $price, string $currency) : int
@@ -340,8 +358,8 @@ class Zalando extends BasePattern {
             "/(\d.+)\"/" => function ($match) {
                 return round(floatval($match[1]) / 0.393700787). ' სმ';
             },
-            "/Size (One Size|S|M|S\/M|XS|XS\/S|L|SxAB|CUP B|Sx32|[1-9]yxREG|\d+)/" => function ($match) {
-                return 'ზომა ' . $this->getEUSize($match[1]);
+            "/Size (.*)\)/" => function ($match) {
+                return 'ზომა ' . $this->getEUSize($match[1]) . ')';
             },
             "/Our model is (.*) tall and is wearing size (.*)/" => function ($match) {
                 return 'ჩვენი მოდელი არის '.$match[1].' სიმაღლის და იცვავს ზომას '.$this->getEUSize($match[2]);
@@ -373,6 +391,13 @@ class Zalando extends BasePattern {
             $this->pushTranslation($type, $word);
         }
 
+        //Normalize sizes after lowercasing
+        $word = preg_replace_callback_array([
+            "/ზომა (.*)\)/" => function ($match) {
+                return 'ზომა ' . strtr($match[1], array_get($this->translations, 'sizes')) . ')';
+            }
+        ], $word);
+
         return $word;
     }
 
@@ -402,13 +427,15 @@ class Zalando extends BasePattern {
         {
             if(array_get($unit, 'size.local') == $size) 
             {
-                $sunits = array_get($this->data, 'model.articleInfo.units');
+                $sunits = $this->getRaw('model.articleInfo.units');
 
                 foreach ($sunits as $sunit) 
                 {
                     if(array_get($sunit, 'size.manufacturer') == array_get($unit, 'size.manufacturer')) 
                     {
-                        return array_get($sunit, 'size.local');
+                        $size = array_get($sunit, 'size.local');
+                        
+                        return $size;
                     }
                 }
             }
