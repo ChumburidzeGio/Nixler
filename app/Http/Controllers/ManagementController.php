@@ -12,7 +12,7 @@ class ManagementController extends Controller
 {
     public function users()
     {
-       $users = User::paginate();
+       $users = User::latest()->paginate();
 
        return view('management.users', compact('users'));
     }
@@ -20,7 +20,7 @@ class ManagementController extends Controller
 
     public function products()
     {
-       $products = Product::paginate();
+       $products = Product::latest()->paginate();
 
        return view('management.products', compact('products'));
     }
@@ -28,7 +28,7 @@ class ManagementController extends Controller
 
     public function orders()
     {
-       $orders = Order::with('product')->whereHas('product')->paginate();
+       $orders = Order::latest()->with('product')->whereHas('product')->paginate();
 
        return view('management.orders', compact('orders'));
     }
