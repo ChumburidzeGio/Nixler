@@ -118,6 +118,13 @@ Auth::routes();
 		Route::post('shipping/payment', 'ShippingController@updatePayment')->name('shipping.settings.payment');
 	});
 
+	Route::group(['middleware' => ['auth'], 'prefix' => 'management'], function()
+	{
+		Route::get('users', 'ManagementController@users')->name('management.users');
+		Route::get('products', 'ManagementController@products')->name('management.products');
+		Route::get('orders', 'ManagementController@orders')->name('management.orders');
+	});
+
 	Route::get('/about', 'BlogController@welcome');
 	Route::get('/help', 'HelpController@index');
 	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
@@ -131,6 +138,8 @@ Auth::routes();
 	});
 
 	Route::get('/scrap', function(){
+
+		return app(\App\Backup\Create::class)->import();
 
 		$crawler = app(\App\Crawler\Crawler::class);
 
