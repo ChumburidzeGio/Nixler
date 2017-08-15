@@ -75,7 +75,7 @@ Route::group([], function() {
 
 	});
 
-	Route::match(['get', 'post'], 'products/{id}/order', 'ProductController@order')->middleware('auth')->name('order');
+	Route::match(['get', 'post'], 'products/{id}/order', 'ProductController@order')->name('order');
 
 	Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 

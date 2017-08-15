@@ -13,7 +13,7 @@ class OrderProduct extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check(); //TODO: check if user is not seller of product
+        return auth()->check();
     }
 
     /**
