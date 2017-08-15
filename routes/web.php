@@ -48,6 +48,7 @@ Auth::routes();
 		Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 		Route::get('/stock', 'ProductController@stock')->name('stock');
 		Route::get('/sitemap/products', 'ProductController@sitemap')->name('sitemap.products');
+		Route::get('/p{id}', 'ProductController@shortlink')->name('products.shortlink');
 	});
 
 	Route::group(['prefix' => 'cl'], function() {

@@ -289,4 +289,19 @@ class ProductController extends Controller
         ])->header('Content-Type', 'text/xml');
     }
 
+    /**
+     * Get the user profile
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function shortlink($id)
+    {
+        $product = Product::select('slug', 'owner_username')->findOrFail($id);
+
+        return redirect()->route('product', [
+            'id' => $product->slug,
+            'uid' => $product->owner_username,
+        ]);
+    }
+
 }
