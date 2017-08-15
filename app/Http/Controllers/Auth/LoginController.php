@@ -54,8 +54,8 @@ class LoginController extends Controller
     {
         $this->meta('title', __('Sign in'));
 
-        $prevUrl = redirect()->intended('/')->getTargetUrl();
-
+        $prevUrl = session('url.intended');
+        
         $product = null;
 
         if(preg_match('/products\/(.*)\/order/', $prevUrl, $match)) 
