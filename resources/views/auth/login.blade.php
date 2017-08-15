@@ -12,7 +12,13 @@
                     </a>
                     @lang('Sign in now')
                 </div>
+
+                @if($product)
+                    @include('products.header', compact('product'))
+                @endif
+
                 <div class="panel-body _pb5 _bb1">
+
                     <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
                         {{ csrf_field() }}
 

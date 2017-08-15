@@ -11,147 +11,188 @@
 |
 */
 
-//Route::demoAccess('/access');
-
 Auth::routes(); 
 
-//Route::group(['middleware' => 'demoMode'], function () {
+Route::impersonate();
 
-	Route::impersonate();
+//Articles
+Route::group([], function() {
 
 	Route::get('new-article', 'BlogController@create')->name('articles.create')->middleware('can:create-articles');
+
 	Route::get('articles/{slug}', 'BlogController@show')->name('articles.show');
+	
 	Route::get('articles/{slug}/edit', 'BlogController@edit')->name('articles.edit')->middleware('can:create-articles');
+
 	Route::post('articles/{slug}', 'BlogController@update')->name('articles.update')->middleware('can:create-articles');
+
 	Route::delete('articles/{slug}', 'BlogController@destroy')->name('articles.destroy')->middleware('can:create-articles');
 
-	Route::group(['middleware' => ['auth'], 'prefix' => 'im'], function() {
-	    Route::get('/{id?}', 'MessagesController@show')->name('threads');
-	    Route::get('/{id}/load', 'MessagesController@load')->name('thread-load');
-	    Route::post('/{id}', 'MessagesController@store')->name('thread-new-message');
-	    Route::get('/with/{id}', 'MessagesController@redirectToConversation')->name('find-thread');
+});
+
+//Messages
+Route::group(['middleware' => ['auth'], 'prefix' => 'im'], function() {
+
+	Route::get('/{id?}', 'MessagesController@show')->name('threads');
+
+	Route::get('/{id}/load', 'MessagesController@load')->name('thread-load');
+
+	Route::post('/{id}', 'MessagesController@store')->name('thread-new-message');
+
+	Route::get('/with/{id}', 'MessagesController@redirectToConversation')->name('find-thread');
+
+});
+
+//Products & Orders
+Route::group([], function() {
+
+	Route::match(['get', 'post'], '/', 'StreamController@index')->name('feed');
+
+	Route::get('/@{uid}/{id}', 'ProductController@find')->name('product');
+
+	//Product Create/Update
+	Route::group(['middleware' => ['auth']], function() {
+
+		Route::get('/new-product', 'ProductController@create')->name('product.create');
+
+		Route::get('/products/{id}/edit', 'ProductController@edit')->name('product.edit');
+
+		Route::post('/products/{id}/photos', 'ProductController@uploadPhoto')->name('product:photos:post');
+
+		Route::post('/products/{id}/photos/{mid}', 'ProductController@removePhoto')->name('product:photos:remove');
+
+		Route::post('/products/{id}', 'ProductController@update')->name('product:update');
+
+		Route::post('/products/{id}/import', 'ProductController@import')->name('product:import');
+
+		Route::delete('/products/{id}', 'ProductController@delete')->name('product:delete');
+
+		Route::post('/products/{id}/status', 'ProductController@changeStatus')->name('product:update:status');
+
+		Route::post('/products/{id}/schedule', 'ProductController@schedule')->name('product:schedule');
+
+		Route::post('/products/{id}/like', 'ProductController@like')->name('product:like');
+
 	});
 
-	Route::group([], function() {
-		Route::get('/@{uid}/{id}', 'ProductController@find')->name('product');
-		Route::get('/new-product', 'ProductController@create')->middleware('auth')->name('product.create');
-		Route::get('/products/{id}/edit', 'ProductController@edit')->middleware('auth')->name('product.edit');
-		Route::post('/products/{id}/photos', 'ProductController@uploadPhoto')->middleware('auth')->name('product:photos:post');
-		Route::post('/products/{id}/photos/{mid}', 'ProductController@removePhoto')->middleware('auth')->name('product:photos:remove');
-		Route::post('/products/{id}', 'ProductController@update')->middleware('auth')->name('product:update');
-		Route::post('/products/{id}/import', 'ProductController@import')->middleware('auth')->name('product:import');
-		Route::delete('/products/{id}', 'ProductController@delete')->middleware('auth')->name('product:delete');
-		Route::post('/products/{id}/status', 'ProductController@changeStatus')->middleware('auth')->name('product:update:status');
-		Route::post('/products/{id}/schedule', 'ProductController@schedule')->middleware('auth')->name('product:schedule');
-		Route::post('/products/{id}/like', 'ProductController@like')->middleware('auth')->name('product:like');
-		Route::match(['get', 'post'], 'products/{id}/order', 'ProductController@order')->middleware('auth')->name('order');
-		Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
-		Route::get('/stock', 'ProductController@stock')->name('stock');
-		Route::get('/sitemap/products', 'ProductController@sitemap')->name('sitemap.products');
-		Route::get('/p{id}', 'ProductController@shortlink')->name('products.shortlink');
-	});
+	Route::match(['get', 'post'], 'products/{id}/order', 'ProductController@order')->middleware('auth')->name('order');
 
-	Route::group(['prefix' => 'cl'], function() {
-	    Route::get('/{id}', 'CollectionsController@show')->name('collections.show')->where('id', '[0-9]+');
-	    Route::get('/create', 'CollectionsController@update')->name('collections.create');
-	    Route::get('/update/{id}', 'CollectionsController@update')->name('collections.update');
-	    Route::post('/store', 'CollectionsController@store')->name('collections.store');
-	    Route::post('/delete', 'CollectionsController@delete')->name('collections.delete');
-	    Route::get('/', 'CollectionsController@index')->name('collections.index');
-	    Route::post('/productSearch', 'CollectionsController@productSearch')->name('collections.productSearch');
-	});
+	Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 
-	Route::group(['prefix' => 'comments'], function() {
-	    Route::post('/', 'CommentController@store');
-	    Route::get('/', 'CommentController@index');
-	    Route::delete('/{id}', 'CommentController@destroy');
-	});
+	Route::get('/stock', 'ProductController@stock')->name('stock');
 
-	Route::group(['prefix' => 'media'], function() {
-		Route::get('/{id}/{type}/{place}.jpg', 'MediaController@generate')->name('photo');
-		Route::delete('/{id}', 'MediaController@destroy');
-	});
+	Route::get('/sitemap/products', 'ProductController@sitemap')->name('sitemap.products');
 
-	Route::group([], function() {
-	    Route::match(['get', 'post'], '/', 'StreamController@index')->name('feed');
-	});
+	Route::get('/p{id}', 'ProductController@shortlink')->name('products.shortlink');
 
-	Route::group([], function() {
-		
-		Route::match(['get', 'post'], '/@{id}', 'UserController@find')->name('user');
-		Route::post('@{id}/follow', 'UserController@follow')->name('user.follow');
-		Route::post('@{id}/photos', 'UserController@uploadPhoto')->name('user.uploadPhoto');
+});
 
-		Route::get('/avatars/{id}/{place}', 'UserController@avatar')->name('avatar');
-		Route::get('/sitemap/users', 'UserController@sitemap')->name('sitemap.users');
+//Collections
+Route::group(['prefix' => 'cl'], function() {
 
-		Route::get('/auth/{provider}', 'SocialAuthController@redirect');
-		Route::get('/auth/{provider}/callback', 'SocialAuthController@callback');
+	Route::get('/{id}', 'CollectionsController@show')->name('collections.show')->where('id', '[0-9]+');
 
-		Route::group(['prefix' => 'settings'], function() {
+	Route::get('/create', 'CollectionsController@update')->name('collections.create');
 
-			Route::get('/', 'SettingsController@index');
+	Route::get('/update/{id}', 'CollectionsController@update')->name('collections.update');
 
-			//Account
-			Route::get('account', 'SettingsController@editAccount');
-			Route::post('account', 'SettingsController@updateAccount');
-			Route::post('account/deactivate', 'UserController@deactivate');
-			Route::post('password', 'SettingsController@updatePassword');
+	Route::post('/store', 'CollectionsController@store')->name('collections.store');
 
-			Route::get('orders', 'SettingsController@orders')->name('settings.orders');
-			Route::get('analytics', 'SettingsController@analytics')->name('settings.analytics');
-			Route::get('sessions', 'SettingsController@sessions')->name('settings.sessions');
+	Route::post('/delete', 'CollectionsController@delete')->name('collections.delete');
 
-			//Locale
-			Route::post('locale', 'SettingsController@updateLocale');
+	Route::get('/', 'CollectionsController@index')->name('collections.index');
+
+	Route::post('/productSearch', 'CollectionsController@productSearch')->name('collections.productSearch');
+
+});
+
+//Comments
+Route::group(['prefix' => 'comments'], function() {
+
+	Route::post('/', 'CommentController@store');
+
+	Route::get('/', 'CommentController@index');
+
+	Route::delete('/{id}', 'CommentController@destroy');
+
+});
+
+//Media
+Route::group(['prefix' => 'media'], function() {
+
+	Route::get('/{id}/{type}/{place}.jpg', 'MediaController@generate')->name('photo');
+
+	Route::delete('/{id}', 'MediaController@destroy');
+
+});
+
+//User & Auth & Settings
+Route::group([], function() {
+
+	Route::match(['get', 'post'], '/@{id}', 'UserController@find')->name('user');
+
+	Route::post('@{id}/follow', 'UserController@follow')->name('user.follow');
+
+	Route::post('@{id}/photos', 'UserController@uploadPhoto')->name('user.uploadPhoto');
+
+	Route::get('/avatars/{id}/{place}', 'UserController@avatar')->name('avatar');
+
+	Route::get('/auth/{provider}', 'SocialAuthController@redirect');
+
+	Route::get('/auth/{provider}/callback', 'SocialAuthController@callback');
+
+	Route::group(['prefix' => 'settings'], function() {
+
+		Route::get('/', 'SettingsController@index');
+
+		Route::get('account', 'SettingsController@editAccount');
+
+		Route::post('account', 'SettingsController@updateAccount');
+
+		Route::post('account/deactivate', 'UserController@deactivate');
+
+		Route::post('password', 'SettingsController@updatePassword');
+
+		Route::get('orders', 'SettingsController@orders')->name('settings.orders');
+
+		Route::get('analytics', 'SettingsController@analytics')->name('settings.analytics');
+
+		Route::get('sessions', 'SettingsController@sessions')->name('settings.sessions');
+
+		Route::post('locale', 'SettingsController@updateLocale');
+
+		Route::group(['middleware' => ['auth'], 'prefix' => 'shipping'], function() {
+
+			Route::get('/', 'ShippingController@index')->name('shipping.settings');
+
+			Route::post('/locations', 'ShippingController@store')->name('shipping.settings.locations.create');
+
+			Route::post('/locations/{id}', 'ShippingController@update')->name('shipping.settings.locations.update');
+
+			Route::post('/general', 'ShippingController@updateGeneral')->name('shipping.settings.general');
+
+			Route::post('/payment', 'ShippingController@updatePayment')->name('shipping.settings.payment');
 
 		});
 
 	});
 
-	Route::group(['middleware' => ['auth'], 'prefix' => 'settings'], function()
-	{
-		//Shipping rules
-		Route::get('shipping', 'ShippingController@index')->name('shipping.settings');
-		Route::post('shipping/locations', 'ShippingController@store')->name('shipping.settings.locations.create');
-		Route::post('shipping/locations/{id}', 'ShippingController@update')->name('shipping.settings.locations.update');
-		Route::post('shipping/general', 'ShippingController@updateGeneral')->name('shipping.settings.general');
-		Route::post('shipping/payment', 'ShippingController@updatePayment')->name('shipping.settings.payment');
-	});
+	Route::get('/sitemap/users', 'UserController@sitemap')->name('sitemap.users');
 
-	Route::group(['middleware' => ['auth'], 'prefix' => 'management'], function()
-	{
-		Route::get('users', 'ManagementController@users')->name('management.users');
-		Route::get('products', 'ManagementController@products')->name('management.products');
-		Route::get('orders', 'ManagementController@orders')->name('management.orders');
-	});
+});
 
-	Route::get('/about', 'BlogController@welcome');
-	Route::get('/help', 'HelpController@index');
-	//Route::post('/marketing/subscribe', 'Marketing\NewsletterController@subscribe');
+//Management
+Route::group(['middleware' => ['auth'], 'prefix' => 'management'], function() {
 
-	Route::get('/monitor', function(){
-			
-		$monitors = app(\App\Monitors\MonitorFactory::class)->get();
+	Route::get('users', 'ManagementController@users')->name('management.users');
 
-		return $monitors['fields'];
+	Route::get('products', 'ManagementController@products')->name('management.products');
 
-	});
+	Route::get('orders', 'ManagementController@orders')->name('management.orders');
 
-	Route::get('/scrap', function(){
+});
 
-		return app(\App\Backup\Create::class)->import();
+Route::get('/about', 'BlogController@welcome');
 
-		$crawler = app(\App\Crawler\Crawler::class);
+Route::get('/help', 'HelpController@index');
 
-		$url = request('url');
-
-		if(request('type') == 'page') {
-			return $crawler->updateAll();
-		}
-
-		return $crawler->get($url)->toArray();
-
-	});
-
-//});

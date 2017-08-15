@@ -7,6 +7,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
 use App\Repositories\UserRepository;
 use App\Entities\User;
+use App\Entities\Product;
 use Illuminate\Http\Request;
 use Hash, Session;
 
@@ -53,7 +54,16 @@ class LoginController extends Controller
     {
         $this->meta('title', __('Sign in'));
 
-        return view('auth.login');    
+        $prevUrl = redirect()->intended('/')->getTargetUrl();
+
+        $product = null;
+
+        if(preg_match('/products\/(.*)\/order/', $prevUrl, $match)) 
+        {
+            $product = Product::with('owner')->findOrFail($match[1]);
+        }
+
+        return view('auth.login', compact('product'));    
     }
 
     /**
