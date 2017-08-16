@@ -8,6 +8,7 @@ use App\Repositories\UserRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\MessengerRepository;
 use App\Monitors\MonitorFactory;
+use App\Services\BackupService;
 
 class Kernel extends ConsoleKernel
 {
@@ -34,13 +35,23 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call('\App\Console\Kernel@dailySchedule')->daily();
 
+        $schedule->call('\App\Console\Kernel@hourlySchedule')->hourly();
+
         $schedule->call('\App\Console\Kernel@everyTenMinutesSchedule')->everyTenMinutes();
 
-        $schedule->command('backup:clean')->daily()->at('01:00');
-        $schedule->command('backup:run')->daily()->at('02:00');
-        $schedule->command('backup:monitor')->daily()->at('03:00');
-
         $schedule->command('crawler:updateAll')->daily();
+    }
+
+    /**
+     * Commands to be executed hourly
+     *
+     * @return void
+     */
+    public function hourlySchedule()
+    {
+        app(BackupService::class)->export();
+
+        info('Daily schedule executed succesfully.');
     }
 
     /**
@@ -57,6 +68,8 @@ class Kernel extends ConsoleKernel
         app(UserRepository::class)->updateAnalytics();
 
         app(ProductRepository::class)->updateAnalytics();
+        
+        app(BackupService::class)->cleanOldBackups();
 
         info('Daily schedule executed succesfully.');
     }
