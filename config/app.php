@@ -213,7 +213,6 @@ return [
         Keevitaja\Linguist\LinguistServiceProvider::class,
         Silber\Bouncer\BouncerServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
-        Spatie\Backup\BackupServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
         Spatie\DemoMode\DemoModeServiceProvider::class,
         Torann\LaravelMetaTags\MetaTagsServiceProvider::class,
