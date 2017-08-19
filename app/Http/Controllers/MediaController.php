@@ -20,7 +20,6 @@ class MediaController extends Controller
         return redirect()->back();
     }
 
-
     public function generate ($id = '-', $type, $place)
     {   
         $media = app()->make(config('mediable.model'))->find($id);

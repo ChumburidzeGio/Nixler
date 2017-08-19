@@ -13,6 +13,8 @@ class SystemService
 
     public function reportException($e) {
 
+        info(get_class($e).' in '.$e->getFile().' line '.$e->getLine().' with message '.$e->getMessage());
+
         try {
            $this->notify(new ExceptionThrown($e));
         } 
