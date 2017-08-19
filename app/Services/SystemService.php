@@ -8,7 +8,7 @@ use Exception, Debugbar;
 class SystemService
 {
     public function notify($notifcation) {
-        app(config('laravel-backup.notifications.notifiable'))->notify($notifcation);
+        app(\App\Notifications\Notifiable\Notifiable::class)->notify($notifcation);
     }
 
     public function reportException($e) {
