@@ -75,9 +75,9 @@ Route::group([], function() {
 
 	});
 
-	Route::get('products/{id}/order', 'OrderController@create')->name('order');
+	Route::get('products/{id}/order', 'OrderController@create')->middleware('auth')->name('order');
 
-	Route::post('products/{id}/order', 'OrderController@store')->name('order.store');
+	Route::post('products/{id}/order', 'OrderController@store')->middleware('auth')->name('order.store');
 
 	Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
 
