@@ -11,8 +11,8 @@
 |
 */
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
 $factory->define(App\Entities\User::class, function (Faker\Generator $faker) {
+
     static $password;
 
     return [
@@ -20,5 +20,37 @@ $factory->define(App\Entities\User::class, function (Faker\Generator $faker) {
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+        'username' => $faker->uuid,
+        'country' => 'GE',
+        'locale' => 'ka',
+        'currency' => 'GEL',
+        'timezone' => 'Asia/Tbilisi',
     ];
+});
+
+$factory->define(App\Entities\Product::class, function (Faker\Generator $faker) {
+
+	return [
+		'title' => $faker->sentence,
+		'description' => $faker->text,
+		'price' => $faker->randomFloat(2, 0, 5000),
+		'original_price' => $faker->optional(0.4)->randomFloat(2, 0, 5000),
+		'in_stock' => $faker->randomDigitNotNull,
+		'buy_link' => $faker->optional(0.05)->url,
+		'category_id' => rand(1,79),
+		'is_active' => $faker->boolean(90),
+		'sku' => $faker->ean8,
+	];
+
+});
+
+$factory->define(App\Entities\ProductVariant::class, function (Faker\Generator $faker) {
+
+	return [
+		'name' => $faker->colorName,
+		'price' => $faker->randomFloat(2, 0, 5000),
+		'original_price' => $faker->optional(0.4)->randomFloat(2, 0, 5000),
+		'in_stock' => $faker->randomDigitNotNull,
+	];
+
 });

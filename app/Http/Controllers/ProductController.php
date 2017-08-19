@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Entities\Product;
+use App\Entities\ProductTag;
+use App\Entities\ProductVariant;
 use App\Entities\User;
 use App\Entities\Order;
 use App\Entities\ShippingPrice;
@@ -37,16 +39,62 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function find($uid, $id)
+    public function show($owner_username, $slug)
     {
-        $product = $this->repository->findBySlug($id, $uid);
+        $product = Product::where(compact('slug', 'owner_username'))->firstOrFail();
 
-        $this->meta('title', "{$product->title} · {$product->price_formated}");
-        $this->meta('description', $product->description);
-        $this->meta('image', $product->photo('full'));
-        $this->meta('type', 'product');
+        if(!$product->is_active) {
+            abort_if(auth()->guest() || auth()->user()->cannot('view', $product), 404);
+        }
+
+        $product->tags = ProductTag::where('product_id', $product->id)->get();
+
+        $product->setRelation('similar', $this->repository->similar($product));
+
+        $comments = capsule('comments')->whereTarget($product->id)->latest()->get()->items();
+
+        $quantities = [1,2,3,4,5,6,7,8];
+
+        $productFields = $product->setVisible(['id', 'price', 'likes_count', 'comments_count']);
+
+        $liked = $product->isLiked();
+
+        $media = $this->getMedia($product);
+
+        $variants = $this->getVariants($product);
+
+        $jsVars = array_merge($productFields->toArray(), compact('liked', 'quantities', 'variants', 'comments', 'media'));
+
+        capsule('frontend')->addJs(['product' => $jsVars])->addMeta([
+            'title' => $product->title.' · '.$product->price_formated,
+            'description' => $product->description,
+            'image' => $product->photo('full'),
+            'type' => 'product'
+        ]);
 
         return view('products.show', compact('product'));
+    }
+
+    private function getMedia(Product $product)
+    {
+        return $product->media('photo')->get()->map(function($item, $key){
+            return [
+                'thumb' => $item->photo('thumb_s'),
+                'full' => $item->photo('full'),
+            ];
+        });
+    }
+
+    private function getVariants(Product $product)
+    {
+        $variants = ProductVariant::where('product_id', $product->id)->where('in_stock', '>', 0)->orderBy('price')->get();
+
+        return $variants->map(function($item) use ($product) {
+            return [
+                'id' => $item->id,
+                'name' => $item->name.' - '.money($product->currency, $item->price)
+            ];
+        });
     }
 
     /**
@@ -79,9 +127,42 @@ class ProductController extends Controller
      */
     public function update($id, UpdateProduct $request)
     {
-        $this->repository->update($request->all(), $id);
+        $product = Product::where('owner_id', $request->user()->id)->findOrFail($id);
 
-        $isPublish = ($request->input('action') == 'publish');
+        $this->repository->sortMedia($request->media, $product);
+
+        $this->repository->syncVariants($request->variants, $product);
+
+        $this->repository->syncTags($request->tags, $product);
+
+        $product->fill([
+            'title' => $request->title,
+            'description' =>$request->description,
+            'category_id' =>$request->category,
+            'buy_link' =>$request->buy_link,
+            'is_used' =>$request->input('is_used', 0),
+            'sku' =>$request->sku,
+        ]);
+
+        if(!$product->has_variants)
+        {
+            $product->price = $request->price;
+
+            $product->in_stock = $request->in_stock;
+        }
+
+        $product->save();
+        
+        if($request->action == 'publish' && $this->authorize('create', $product)) 
+        {
+            $product->markAsActive();
+        } 
+        else 
+        {
+            $product->markAsInactive();
+        }
+
+        $isPublish = ($request->action == 'publish');
         
         $status = $isPublish ? 
             __('Your product has been saved, you can anytime publish it from this page or "My Products" section.') : 
@@ -148,8 +229,14 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function delete($id)
-    {
-        $this->repository->delete($id);
+    {   
+        $user = auth()->user();
+
+        $product = $user->products()->findOrFail($id);
+
+        event(new ProductDeleted($product, $user));
+
+        $product->delete();
 
         return redirect('/');
     }
@@ -186,47 +273,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Order product
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function order($id, OrderProduct $request)
-    {
-        $user = auth()->user();
-
-        if(!$request->has('step')) {
-
-            $data = $this->repository->getWithShippingByCity($id, $request->all());
-
-            return view('products.order', $data);
-
-        } elseif($request->input('step') == 2) {
-
-            $this->userRepository->update(
-                $request->only(['phone', 'city_id', 'address', 'quantity', 'variant'])
-            );
-
-            if($user->verified) {
-
-                $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
-
-                return redirect()->route('settings.orders', ['id' => $order->id]);
-            }
-
-            return view('products.order-step2', compact('id'));
-
-        } elseif($request->input('step') == 3) {
-
-            $user = $this->userRepository->update($request->only(['pcode']));
-
-            $order = $this->repository->order($id, $request->input('quantity'), $request->input('variant'));
-
-            return redirect()->route('settings.orders', ['id' => $order->id]);
-
-        }
-    }
-
-    /**
      * Update the specified resource in storage.
      * @param  Request $request
      * @return Response
@@ -251,7 +297,7 @@ class ProductController extends Controller
             ]);
         }
 
-        return redirect()->route('settings.orders', ['id' => $order->id]);
+        return redirect()->route('orders.show', ['id' => $order->id]);
     }
 
 
@@ -262,7 +308,9 @@ class ProductController extends Controller
      */
     public function stock()
     {
-        $products = $this->repository->indexStock();
+        $user = auth()->user();
+
+        $products = Product::where('owner_id', $user->id)->latest('id')->paginate(20);
 
         return view('products.stock', compact('products'));
     }

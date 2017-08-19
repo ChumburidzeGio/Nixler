@@ -23,6 +23,8 @@ use App\Services\SystemService;
 use App\Services\CurrencyService;
 use Illuminate\Support\Collection;
 use Cocur\Slugify\Slugify;
+use App\Events\ProductPublished;
+use App\Events\ProductDisabled;
 
 class Product extends Model
 {
@@ -147,6 +149,10 @@ class Product extends Model
         return $this->hasMany(Feed::class, 'object_id', 'id');
     }
 
+    public function variants() {   
+        return $this->hasMany(ProductVariant::class, 'product_id', 'id');
+    }
+
     /**
      * Show comments for model
      */
@@ -211,6 +217,10 @@ class Product extends Model
 
         $this->update();
 
+        $user = auth()->user();
+
+        event(new ProductPublished($this, $user));
+
         return auth()->user()->pushInStreams($this->id, 'user:'.auth()->id());
     }
 
@@ -222,10 +232,12 @@ class Product extends Model
 
         $this->owner->streamsRemove($this->id);
 
+        $user = auth()->user();
+
+        event(new ProductDisabled($this, $user));
+
         return $this->update();
     }
-
-
 
     public function isLiked($actor = null){
 

@@ -94,7 +94,7 @@ class Order extends Model
      */
     public function url()
     {   
-       return route('settings.orders', ['id' => $this->id]);
+       return route('orders.show', ['id' => $this->id]);
     }
 
 
@@ -118,6 +118,19 @@ class Order extends Model
             return ($this->status == 'closed');
 
         }
+    }
+
+    public function canUpdate()
+    {   
+        $user = auth()->user();
+
+        if($this->status == 'closed' || $this->status == 'rejected') {
+            return true;
+        }
+
+        return ($user->can('update-status', [$this, 'confirmed']) || 
+                    $user->can('update-status', [$this, 'sent']) || 
+                    $user->can('update-status', [$this, 'closed']));
     }
 
 }

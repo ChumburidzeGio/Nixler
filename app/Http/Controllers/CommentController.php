@@ -21,17 +21,8 @@ class CommentController extends Controller
     public function index(Request $request)
     {
         $product = Product::findOrFail($request->target);
-        return $product->comments()->latest('id')->paginate()->map(function($comment){
-            return [
-                'id' => $comment->id,
-                'avatar' => $comment->author->avatar('comments'),
-                'author' => $comment->author->name,
-                'attachment' => media($comment, 'product', 'comment-attachment', null),
-                'text' => nl2br(str_limit($comment->text, 1000)),
-                'time' => $comment->created_at->format('c'),
-                'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
-            ];
-        })->toJson();
+
+        return capsule('comments')->whereTarget($product->id)->latest()->get()->items();
     }
 
     /**

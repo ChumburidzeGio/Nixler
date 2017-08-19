@@ -110,7 +110,7 @@
                     </span>
                     @endif
                 </a>
-                <a href="{{ route('settings.orders') }}" class="_li _fs13 _hvrd _cg">
+                <a href="{{ route('orders.index') }}" class="_li _fs13 _hvrd _cg">
                     <i class="material-icons _fs20 _mr15">shopping_basket</i> @lang('Orders')
                 </a>
                 <a href="{{ url('/new-product') }}" class="_li _fs13 _hvrd _cg" id="new-product">

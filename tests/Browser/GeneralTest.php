@@ -21,20 +21,20 @@ class GeneralTest extends DuskTestCase
      */
     public function testGeneral()
     {
-        $this->browse(function ($browser) {
+       /* $this->browse(function ($browser) {
 
             $email = $this->faker('email');
 
             $browser->visit(new Register)
             ->createAccount($email);
-
-            /*$this->logout($browser);
+            
+            $this->logout($browser);
 
             $browser->visit(new Login)
             ->forgotPassword($email);
 
             $browser->visit(new Login)
-            ->loginUser($email);*/
+            ->loginUser($email);
 
             $browser->visit(new MerchantSettings)
             ->updageGeneralSettings()
@@ -49,7 +49,7 @@ class GeneralTest extends DuskTestCase
                 ->like()
                 ->comment();
 
-        });
+        });*/
     }
 
     /**
@@ -59,10 +59,10 @@ class GeneralTest extends DuskTestCase
      */
     public function logout($browser)
     {
-        $browser->click('#menu')
+        /*$browser->click('#menu')
             ->waitFor('#logout')
             ->pause(500)
-            ->press('#logout');
+            ->press('#logout');*/
     }
 
 }

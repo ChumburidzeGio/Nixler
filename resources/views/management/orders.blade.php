@@ -23,7 +23,7 @@
         <div id="orders">
             @forelse($orders as $order)
             <a class="_lim _clear _pl15 _pr15 _hvrl _bt1 _bcg{{ $order->user_id == auth()->id() ? ' _bgcrm' : '' }}" 
-                href="{{ route('settings.orders', ['id' => $order->id]) }}">
+                href="{{ route('orders.show', ['id' => $order->id]) }}">
 
                 <div class="row">
                     <span class="_oh col-xs-1 _pt5 _pl5 _pr0">

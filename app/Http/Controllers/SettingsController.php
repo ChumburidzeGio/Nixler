@@ -91,29 +91,6 @@ class SettingsController extends Controller
     }
 
     /**
-     * Show the specified resource.
-     * @return Response
-     */
-    public function orders(Request $request)
-    {
-        $user = auth()->user();
-       
-        if($request->has('id')) {
-            $order = Order::where([
-                'id' => $request->input('id'),
-                'user_id' => $user->id
-            ])->orWhere([
-                'id' => $request->input('id'),
-                'merchant_id' => $user->id
-            ])->with('product', 'product.owner', 'user')->firstOrFail();
-        } else {
-            $orders = Order::where('user_id', $user->id)->orWhere('merchant_id', $user->id)->with('product')->latest()->paginate();
-        }
-        
-        return view('users.settings.orders', compact('user', 'order', 'orders'));
-    }
-
-    /**
      * Show user sessions
      *
      * @return Response

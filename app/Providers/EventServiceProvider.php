@@ -21,6 +21,7 @@ class EventServiceProvider extends ServiceProvider
             'App\Listeners\UpdateUserStats',
         ],
         'App\Events\ProductDeleted' => [
+            'App\Listeners\DeleteProductRelationships',
             'App\Listeners\UpdateUserStats',
             'App\Listeners\SendProductNotification',
         ],

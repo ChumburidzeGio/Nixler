@@ -4,26 +4,19 @@
 
 @section('app')
 <div class="container _mt50" ng-controller="OrderCtrl as vm">
-
-    <script>
-        window.cities = <?php echo $cities->toJson(); ?>;
-        window.price = <?php echo $product->price; ?>;
-        window.city_id = <?php echo old('city_id', auth()->user()->city_id) ? : 0; ?>;
-    </script>
-
-    @if(app()->environment('production', 'development'))
-    <script>
-    fbq('track', 'InitiateCheckout');
-    </script>
-    @endif
     
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
-            <form role="form" method="POST" action="{{ route('order', ['id' => $product->id]) }}">
+            <form role="form" method="POST" 
+                class="{{ $errors->count ? 'has-error' : '' }}"
+                action="{{ route('order', ['id' => $product->id]) }}" 
+                ng-submit="vm.submit($event, orderForm)" ng-form-commit name="orderForm">
+
                 {{ csrf_field() }}
                 <input type="hidden" name="variant" value="{{ request()->input('variant') }}">
                 <input type="hidden" name="quantity" value="{{ request()->input('quantity') }}">
                 <input type="hidden" name="step" value="2">
+                <input type="hidden" name="payload" ng-value="vm.payload">
 
                 <div class="panel panel-default _b0 _crd">
 
@@ -41,7 +34,6 @@
                             </span>
                         </div>
                     </div>
-
 
                     <span class="_c2 _lh1 _mb0 _fs18 _p15 _clear _pb0">
                         @lang('Add shipping details')
@@ -90,6 +82,18 @@
 
                     </div>
 
+                    <div class="panel-body _p0 _bt1 _bcg">
+
+                        <div id="dropin-container"></div>
+
+                        @if ($errors->has('card'))
+                        <span class="help-block _mb10 _mt0 _ml15 _tac _mr15 _clear">
+                            <span class="_fs14 _lh1 col-md-8 col-md-offset-2">{{ $errors->first('card') }}</span>
+                        </span>
+                        @endif
+
+                    </div>
+
                 <!--span class="_c2 _lh1 _mb0 _fs18 _p15 _clear _pb0 _pt0 _bt1 _bcg _pt10">
                     @lang('Choose payment method')
                 </span>
@@ -134,9 +138,6 @@
                     <div class="row _tac">
                         <div class="col-xs-12 _tal _ml15 _mt10 _cb">
                             <div ng-if="vm.pm('bnk')">
-                                <p class="_ml5 _mb0">Bank account: GE8721291292103123213</p>
-                                <p class="_ml5 _mb0">Reciever: "Gela LTD"</p>
-                                <p class="_ml5 _mb0">Address: Georgia, Tbilisi, Agmashnebeli st. 21</p>
                             </div>
                             <div ng-if="vm.pm('bit')">
                                 <p class="_ml5 _mb0">We will send you invoice by email to easily pay with bitcoin.</p>
@@ -145,14 +146,16 @@
                     </div>
 
                 </div-->
+                
+                <script src="https://js.braintreegateway.com/web/dropin/1.6.1/js/dropin.min.js"></script>
 
-                <div class="_bg0 _tac _bt1 _bb1 _bcg _fs14 _p10 _pl15 _clear" ng-if="vm.city.shipping">
+              <div class="_bg0 _tac _bt1 _bb1 _bcg _fs14 _p10 _pl15 _clear" ng-if="vm.city.shipping">
 
-                    <div class="col-sm-4">@lang('Total cost') <span class="_fw600 _clear _cb" ng-bind="vm.price() | money"></span></div>
-                    <div class="col-sm-4">@lang('Shipping cost') <span class="_fw600 _clear _cb" ng-bind="vm.city.shipping_price | money"></span></div>
-                    <div class="col-sm-4">@lang('Delivery in')<span class="_fw600 _clear _cb" ng-bind="vm.city.shipping">1-3 days</span></div>
+                <div class="col-sm-4">@lang('Total cost') <span class="_fw600 _clear _cb" ng-bind="vm.price() | money"></span></div>
+                <div class="col-sm-4">@lang('Shipping cost') <span class="_fw600 _clear _cb" ng-bind="vm.city.shipping_price | money"></span></div>
+                <div class="col-sm-4">@lang('Delivery in')<span class="_fw600 _clear _cb" ng-bind="vm.city.shipping">1-3 days</span></div>
 
-                </div>
+            </div>
 
                 <!--div class="_bg0 _tal _bb1 _bcg _fs14 _p10 _pl15 _clear">
 

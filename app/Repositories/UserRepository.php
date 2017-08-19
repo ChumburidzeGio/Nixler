@@ -276,20 +276,20 @@ class UserRepository extends BaseRepository {
             'username', 'name', 'email', 'city_id'
         ]));
 
-        if(array_get($data, 'phone')) {
+        if(array_get($data, 'phone')) 
+        {
             $user->phone = PhoneService::parse(array_get($data, 'phone'), $user->country)->number;
         }
         
-        if($user->phone != $user->getOriginal('phone')) {
+        if($user->phone != $user->getOriginal('phone')) 
+        {
             $user->verified = false;
+
             $code = mt_rand(100000, 999999);
+
             $user->setMeta('phone_vcode', $code);
 
-            if (app()->environment('local')) {
-                app(SystemService::class)->notify(new SendVerificationCode($code));
-            } else {
-                $user->notify(new SendVerificationCode($code));
-            }
+            $user->notify(new SendVerificationCode($code));
         }
 
         if(array_get($data, 'pcode') and $user->phone and array_get($data, 'pcode') == $user->getMeta('phone_vcode')) {
@@ -361,56 +361,6 @@ class UserRepository extends BaseRepository {
             $this->recommendProducts($model);
         });
     }
-
-
-    /**
-     * Refresh analytics data from GA
-     *
-     * @return boolean
-     */
-    public function updateAnalytics()
-    {
-        $metrics = app(AnalyticsService::class)->getBasicAnalyticsForPopularMerchants();
-
-        return $metrics->map(function($metric) {
-            return $this->findByIdAndSetAnalytics(...$metric);
-        });
-    }
-
-
-    /**
-     * Refresh analytics data from GA
-     *
-     * @return boolean
-     */
-    public function findByIdAndSetAnalytics($username, $data)
-    {
-        $user = $this->model->where('username', $username)->first();
-
-        if(!$user) {
-            return false;
-        }
-
-        foreach ($data as $metric => $values) {
-
-            $values->map(function($value, $key) use ($user, $metric) {
-
-                $metric = Metric::firstOrCreate([
-                    'object_id' => $user->id,
-                    'object_type' => get_class($user),
-                    'key' => $metric,
-                    'date' => date('Y-m-d'),
-                    'target' => $key
-                ], [
-                    'value' => $value
-                ]);
-
-            });
-            
-        }
-
-    }
-
 
     /**
      * Search in users

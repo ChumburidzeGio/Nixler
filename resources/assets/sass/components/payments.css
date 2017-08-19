@@ -1,0 +1,34 @@
+#dropin-container .braintree-placeholder {
+	display: none;
+}
+
+#dropin-container .braintree-sheet {
+	border: 0!important;
+}
+
+#dropin-container .braintree-sheet__header .braintree-sheet__text {
+	font-size: 18px !important;
+    margin-left: 4px;
+}
+
+#dropin-container .braintree-sheet__logo--header {
+	display: none;
+}
+
+#dropin-container .braintree-sheet__header {
+	border: 0;
+}
+
+#dropin-container .braintree-dropin {
+	font-family: inherit;
+}
+
+#dropin-container .braintree-form__hosted-field {
+	height: 40px;
+    padding: 0 13px;
+    border-radius: 2px;
+}
+
+#dropin-container .braintree-toggle {
+	display: none;
+}

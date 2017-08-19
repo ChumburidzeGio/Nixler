@@ -194,7 +194,6 @@ return [
          * Package Service Providers...
          */
         Laravel\Tinker\TinkerServiceProvider::class,
-        Spatie\Newsletter\NewsletterServiceProvider::class,
         Plank\Mediable\MediableServiceProvider::class,
         Plank\Metable\MetableServiceProvider::class,
         Overtrue\LaravelFollow\FollowServiceProvider::class,
@@ -217,9 +216,9 @@ return [
         Spatie\DemoMode\DemoModeServiceProvider::class,
         Torann\LaravelMetaTags\MetaTagsServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
-        //Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
         Yab\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
+        BrianFaust\Braintree\BraintreeServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -279,7 +278,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Newsletter' => Spatie\Newsletter\NewsletterFacade::class,
         'MediaUploader' => Plank\Mediable\MediaUploaderFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Module' => Nwidart\Modules\Facades\Module::class,
@@ -289,9 +287,6 @@ return [
         'Linguist'  => Keevitaja\Linguist\Facades\LinguistFacade::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'MetaTag'   => Torann\LaravelMetaTags\Facades\MetaTag::class,
-        'Analytics' => Spatie\Analytics\AnalyticsFacade::class,
-        'Lava' => Khill\Lavacharts\Laravel\LavachartsFacade::class,
-        //'BotMan' => Mpociot\BotMan\Facades\BotMan::class,
     ],
 
 ];

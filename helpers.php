@@ -38,6 +38,8 @@ if (! function_exists('capsule')) {
             'stream' => \App\Capsules\StreamCapsule::class,
             'reco' => \App\Capsules\RecoCapsule::class,
             'collections' => \App\Capsules\CollectionsCapsule::class,
+            'frontend' => \App\Capsules\FrontendCapsule::class,
+            'comments' => \App\Capsules\CommentsCapsule::class,
         ], $name);
 
         return app($capsule);

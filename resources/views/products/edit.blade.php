@@ -340,7 +340,7 @@
 				@lang('My products')
 			</a>
 
-			<a class="_hvr1 _fs13 _clear _lim _hvrl" href="{{ route('settings.orders') }}" target="_bank">
+			<a class="_hvr1 _fs13 _clear _lim _hvrl" href="{{ route('orders.index') }}" target="_bank">
 				<i class="material-icons _mr10 _va5 _fs18 _cbl">shopping_basket</i> 
 				@lang('Orders')
 			</a>

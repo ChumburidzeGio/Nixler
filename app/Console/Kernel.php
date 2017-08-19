@@ -62,12 +62,6 @@ class Kernel extends ConsoleKernel
     public function dailySchedule()
     {
         app(MessengerRepository::class)->updateResponseTimes();
-
-        app(ProductRepository::class)->cleanStorage();
-
-        app(UserRepository::class)->updateAnalytics();
-
-        app(ProductRepository::class)->updateAnalytics();
         
         app(BackupService::class)->cleanOldBackups();
 

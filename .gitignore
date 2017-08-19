@@ -11,3 +11,4 @@ Homestead.yaml
 composer.lock
 npm-debug.log
 .env.dusk.local
+.DS_Store

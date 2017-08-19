@@ -11,7 +11,7 @@
 					<i class="material-icons">info</i>
 					@lang('Account settings')
 				</a>
-				<a class="_lsti {{ request()->is('*/orders') ? 'active' : ''}}" href="{{ route('settings.orders') }}">
+				<a class="_lsti {{ request()->is('orders*') ? 'active' : ''}}" href="{{ route('orders.index') }}">
 					<i class="material-icons">shopping_basket</i>
 					@lang('My orders')
 				</a>
@@ -24,10 +24,10 @@
 					@lang('My products')
 				</a>
 
-				<a class="_lsti {{ request()->is('*/sessions') ? 'active' : ''}}" href="{{ route('settings.sessions') }}">
+				<!--a class="_lsti {{ request()->is('*/sessions') ? 'active' : ''}}" href="{{ route('settings.sessions') }}">
 					<i class="material-icons">important_devices</i>
 					@lang('Sessions')
-				</a>
+				</a-->
 			</div>
 		</div>
 

@@ -5,7 +5,6 @@ namespace App\Repositories;
 use App\Repositories\BaseRepository;
 use App\Entities\ProductCategory;
 use App\Services\RecommService;
-use App\Services\AnalyticsService;
 use App\Services\SystemService;
 use Illuminate\Container\Container as App;
 use App\Entities\Product;
@@ -19,15 +18,11 @@ use App\Entities\ProductTag;
 use App\Entities\Metric;
 use App\Entities\ShippingPrice;
 use App\Entities\Order;
-use App\Events\ProductPublished;
 use App\Events\ProductDisabled;
-use App\Events\ProductDeleted;
 use App\Events\ProductLiked;
 use App\Events\ProductDisliked;
-use App\Events\OrderCreated;
 use Carbon\Carbon;
 use Ayeo\Price\Price;
-use App\Notifications\OrderStatusChanged;
 use Illuminate\Support\Facades\Cache;
 use App\Crawler\Crawler;
 use Auth, DB;
@@ -43,62 +38,6 @@ class ProductRepository extends BaseRepository {
     {
         return Product::class;
     }
-    
-
-    /**
-     * @param $slug string
-     * @param $owner string
-     * @return array
-     */
-    public function findBySlug($slug, $owner_username)
-    {
-        $product = $this->model->where(compact('slug', 'owner_username'))->firstOrFail();
-
-        if(!$product->is_active) {
-            abort_if(auth()->guest() || auth()->user()->cannot('view', $product), 404);
-        }
-
-        $product->load('owner.shippingPrices', 'category');
-
-        $product->owner->shippingPrices->load('location');
-
-        $product->setRelation('media', $product->media('photo')->get()->map(function($item, $key){
-            return [
-                'thumb' => $item->photo('thumb_s'),
-                'full' => $item->photo('full'),
-            ];
-        }));
-
-        $product->setRelation('comments', $product->comments()->latest('id')->paginate());
-
-        $product->tags = ProductTag::where('product_id', $product->id)->get();
-
-        $product->variants = ProductVariant::where('product_id', $product->id)->where('in_stock', '>', 0)->orderBy('price')->get()->map(function($item) use($product) {
-            return [
-                'id' => $item->id,
-                'name' => $item->name.' - '.money($product->currency, $item->price)
-            ];
-        });
-
-        $product->setRelation('similar', $this->similar($product));
-
-        $product->trackActivity('product:viewed');
-
-        $product->comments->transform(function($comment){
-            return [
-                'id' => $comment->id,
-                'avatar' => $comment->author->avatar('comments'),
-                'author' => $comment->author->name,
-                'attachment' => media($comment, 'product', 'comment-attachment', null),
-                'text' => nl2br(str_limit($comment->text, 1000)),
-                'time' => $comment->created_at->format('c'),
-                'can_delete' => auth()->check() && auth()->user()->can('delete', $comment) ? 1 : 0
-            ];
-        });
-
-        return $product;
-    }
-    
 
 
     /**
@@ -177,61 +116,8 @@ class ProductRepository extends BaseRepository {
      *
      * @return \Illuminate\Http\Response
      */
-    public function update(array $attributes, $id)
-    {
-        $user = auth()->user();
-
-        $product = $this->model->where([
-            'id' => $id,
-            'owner_id' => $user->id
-        ])->firstOrFail();
-
-        $this->sortMedia(array_get($attributes, 'media'), $product);
-
-        $this->syncVariants(array_get($attributes, 'variants'), $product);
-
-        $this->syncTags(array_get($attributes, 'tags'), $product);
-
-        $product->fill([
-            'title' => array_get($attributes, 'title'),
-            'description' => array_get($attributes, 'description'),
-            'category_id' => array_get($attributes, 'category'),
-            'buy_link' => array_get($attributes, 'buy_link'),
-            'is_used' => array_get($attributes, 'is_used', 0),
-            'sku' => array_get($attributes, 'sku'),
-        ]);
-
-        if(!$product->has_variants){
-            $product->price = array_get($attributes, 'price');
-            $product->in_stock = array_get($attributes, 'in_stock');
-        }
-
-        $product->save();
-        
-        if(array_get($attributes, 'action') == 'publish' && $user->can('create', $product)) {
-
-            $product = $this->publish($product, $user);
-
-        } else {
-
-            event(new ProductDisabled($product, $user));
-
-        }
-
-        return $product;
-    }
-    
-
-
-    /**
-     * Prepare product for editing
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function publish($product, $user)
     {
-        event(new ProductPublished($product, $user));
-
         $product->markAsActive();
 
         return $product;
@@ -615,27 +501,15 @@ class ProductRepository extends BaseRepository {
      *
      * @return array
      */
-    public function getWithShippingByCity($id, $params)
+    public function getCitiesWithShipping($user)
     {
-        $product = $this->model->findOrFail($id);
+        $prices = $user->shippingPrices;
 
-        $product->load('owner.shippingPrices');
-
-        if(array_get($params, 'variant')){
-
-            $variant = ProductVariant::where('product_id', $product->id)->findOrFail(array_get($params, 'variant'));
-
-            $product->price = $variant->price;
-
-        }
-
-        $prices = $product->owner->shippingPrices;
-
-        $cities = $product->owner->country()->first()->cities;
+        $cities = $user->country()->first()->cities;
 
         $cities->load('translations');
 
-        $cities->transform(function($city) use ($prices) {
+        return $cities->transform(function($city) use ($prices) {
 
             $shipping = $prices->filter(function($item) use ($city) {
                 return ($item->type == 'city' && $item->location_id == $city->id);
@@ -674,98 +548,6 @@ class ProductRepository extends BaseRepository {
             ];
 
         });
-
-        return compact('product', 'cities');
-    }
-
-
-    /**
-     * Store new order
-     *
-     * @param $id integer
-     * @param $quantity int
-     * @param $variant int
-     *
-     * @return Order
-     */
-    public function order($id, $quantity, $variant)
-    {
-        $product = $this->model->findOrFail($id);
-
-        $user = auth()->user();
-
-        $variants_count = ProductVariant::where('product_id', $product->id)->count();
-
-        if($product->has_variants && !$variants_count) {
-            $product->update([
-                'has_variants' => 0
-            ]);
-
-            logger()->error("Incorrect HasVariant attribute on product {$product->id}");
-        }
-
-        if($product->has_variants && $variants_count) {
-
-            $variant = ProductVariant::where('product_id', $product->id)->find($variant);
-
-            $productPrice = Price::buildByGross($variant->price, 0, $product->currency);
-
-        } else {
-            $productPrice = Price::buildByGross($product->price, 0, $product->currency);
-        }
-
-        $subTotal = $productPrice->multiply($quantity);
-
-        $mShippingPrice = $this->getShippingPriceForCity($user->city_id, $product->owner_id);
-
-        $shippingPrice = Price::buildByGross($mShippingPrice->price, 0, $product->currency);
-
-        $total = $productPrice->add($shippingPrice)->getGross();
-
-        $windowFrom = Carbon::now()->addDays($mShippingPrice->window_from);
-
-        $windowTo = Carbon::now()->addDays($mShippingPrice->window_to);
-
-        $order = Order::create([
-            'status' => 'created',
-            'amount' => $total,
-            'currency' => $product->currency,
-            'quantity' => $quantity,
-            'address' => $user->getMeta('address'),
-            'shipping_cost' => $shippingPrice->getGross(),
-            'shipping_window_from' => $windowFrom,
-            'shipping_window_to' => $windowTo,
-            'payment_method' => 'COD',
-            'user_id' => $user->id,
-            'product_id' => $product->id,
-            'product_variant' => $variant ? $variant->name : null,
-            'merchant_id' => $product->owner_id,
-            'city_id' => $user->city_id,
-            'phone' => $user->phone,
-            'title' => $product->title,
-        ]);
-
-        $order->notify(new OrderStatusChanged());
-
-        event(new OrderCreated($order, $user));
-
-        if($product->has_variants) {
-
-            $variant->decrement('in_stock', $quantity);
-
-            $variant->update();
-
-        } else {
-
-            $product->decrement('in_stock', $quantity);
-
-        }
-
-        $product->increment('sales_count', $quantity);
-
-        $product->update();
-
-        return $order;
     }
 
 
@@ -865,64 +647,7 @@ class ProductRepository extends BaseRepository {
         $product = $user->products()->findOrFail($id);
 
         $product->markAsInactive();
-
-        event(new ProductDisabled($product, $user));
-        
     }
-
-
-    /**
-     * Get shippng price for particular city
-     *
-     * @param $city_id int
-     * @param $merchant_id int
-     *
-     * @return float
-     */
-    public function delete($id)
-    {
-        if (app()->runningInConsole()){
-
-            $user = User::find(1);
-            
-            $product = $this->model->findOrFail($id);
-
-        } else {
-
-            $user = auth()->user();
-
-            $product = $user->products()->findOrFail($id);
-
-        }
-
-        event(new ProductDeleted($product, $user));
-
-        $product->comments()->delete();
-        
-        $product->media()->delete();
-
-        $product->meta()->delete();
-
-        $product->activities()->delete();
-
-        $product->sources()->delete();
-
-        $product->delete();
-    }
-
-
-    /**
-     * Get all products by user.
-     *
-     * @return Product
-     */
-    public function indexStock()
-    {
-        $user = auth()->user();
-
-        return $this->model->where('owner_id', $user->id)->latest('id')->paginate(20);
-    }
-
 
     /**
      * Delete all inactive products
@@ -934,47 +659,6 @@ class ProductRepository extends BaseRepository {
         $yesterday = Carbon::now()->subDays(1);
 
         return $this->model->where('is_active', false)->whereNull('slug')->whereNull('media_id')->where('created_at', '<=', $yesterday)->delete();
-    }
-
-
-    /**
-     * Refresh analytics data from GA
-     *
-     * @return boolean
-     */
-    public function updateAnalytics()
-    {
-        $metrics = app(AnalyticsService::class)->getBasicAnalyticsForPopularProducts();
-
-        return $metrics->map(function($metric) {
-            return $this->findByIdAndSetAnalytics(...$metric);
-        });
-    }
-
-
-    /**
-     * Refresh analytics data from GA
-     *
-     * @return boolean
-     */
-    public function findByIdAndSetAnalytics($slug, $username, $data)
-    {
-        $product = $this->model->where('slug', $slug)->where('owner_username', $username)->first();
-
-        if(!$product) {
-            return false;
-        }
-
-        foreach ($data as $key => $value) {
-
-            if($key == 'views') {
-                $product->increment('views_count', $value);
-            }
-            
-        }
-
-        $product->save();
-
     }
 
 }

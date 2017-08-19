@@ -4,29 +4,6 @@
 
 @section('content')
 
-<script type="text/javascript">
-    window.product = <?php echo json_encode([
-        'id' => $product->id,
-        'liked' => $product->isLiked(),
-        'likes_count' => $product->likes_count,
-        'quantities' => [1,2,3,4,5,6,7,8],
-        'variants' => $product->variants,
-        'comments' => $product->comments->items(),
-        'comments_count' => $product->comments->total(),
-        'media' => $product->media
-        ]) ?>;
-    </script>
-
-    @if(app()->environment('production', 'development'))
-    <script>
-    fbq('track', 'ViewContent', <?php echo json_encode([
-        'value' => $product->price,
-        'currency' => $product->currency,
-        'content_ids' => $product->id,
-    ]) ?>);
-    </script>
-    @endif
-
     <div class="container" ng-controller="ShowCtrl as vm" itemscope itemtype="http://schema.org/Product">
 
         <div class="col-md-12 _p0">
@@ -72,7 +49,7 @@
                                     @include('products.show-description')
                                     <div class="_clear _mb10 _pt10">
                                         <span class="_fs12 _ttu _mb10 _clear">
-                                           <span ng-bind="vm.product.comments_count">{{ $product->comments->total() }}</span> @lang('Comments')
+                                           <span ng-bind="vm.product.comments_count">{{ $product->comments_count }}</span> @lang('Comments')
                                        </span>
                                        @include('comments.index')
                                    </div>
