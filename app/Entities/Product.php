@@ -221,7 +221,7 @@ class Product extends Model
 
         event(new ProductPublished($this, $user));
 
-        return auth()->user()->pushInStreams($this->id, 'user:'.auth()->id());
+        return $user->pushInStreams($this->id, 'user:'.$user->id);
     }
 
     public function markAsInactive(){
