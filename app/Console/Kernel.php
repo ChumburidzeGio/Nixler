@@ -49,7 +49,7 @@ class Kernel extends ConsoleKernel
      */
     public function hourlySchedule()
     {
-        app(BackupService::class)->export();
+        //app(BackupService::class)->export();
 
         info('Daily schedule executed succesfully.');
     }
