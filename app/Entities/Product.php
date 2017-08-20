@@ -217,7 +217,7 @@ class Product extends Model
 
         $this->update();
 
-        $user = auth()->user();
+        $user = auth()->check() ? auth()->user() : $this->owner;
 
         event(new ProductPublished($this, $user));
 
@@ -232,7 +232,7 @@ class Product extends Model
 
         $this->owner->streamsRemove($this->id);
 
-        $user = auth()->user();
+        $user = auth()->check() ? auth()->user() : $this->owner;
 
         event(new ProductDisabled($this, $user));
 

@@ -164,10 +164,22 @@ class ProductRepository extends BaseRepository {
         
         $metadata = app(Crawler::class)->get($url);
 
-        if($metadata->isInvalid()) {
+        if($metadata->isInvalid()) 
+        {
+            if($source)
+            {
+                $source->update([
+                    'status' => 'fail'
+                ]);
 
-            return $source ? $this->hide($source->product_id) && false : null;
+                $this->hide($source->product_id);
 
+                return false;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         $this->syncVariants($metadata->getVariants(), $product);
@@ -203,9 +215,16 @@ class ProductRepository extends BaseRepository {
             $product->sources()->create([
                 'product_id' => $product->id,
                 'merchant_id' => $user->id,
-                'source' => $url
+                'source' => $url,
+                'status' => 'success'
             ]);
 
+        }
+        else
+        {
+            $source->update([
+                'status' => 'success'
+            ]);
         }
         
         $product->save();

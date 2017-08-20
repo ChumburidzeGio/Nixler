@@ -9,6 +9,6 @@ class ProductSource extends Model
     public $table = 'product_sources';
     
     protected $fillable  = [
-        'product_id', 'merchant_id', 'source'
+        'product_id', 'merchant_id', 'source', 'status'
     ];
 }

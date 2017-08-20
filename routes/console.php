@@ -17,7 +17,3 @@ use App\Repositories\ProductRepository;
 Artisan::command('countries:download {iso_code}', function ($code) {
     app(LocationRepository::class)->downloadCountry($code);
 });
-
-Artisan::command('crawler:updateAll', function () {
-    $crawler = app(\App\Crawler\Crawler::class)->updateAll($this);
-});

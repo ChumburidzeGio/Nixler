@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \App\Console\Commands\CollectionsDiagnose::class,
         \App\Console\Commands\CrawlSet::class,
+        \App\Console\Commands\CrawlerUpdate::class,
         \App\Console\Commands\Install::class,
         \App\Console\Commands\Update::class,
         \App\Console\Commands\Env::class,
@@ -39,7 +40,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call('\App\Console\Kernel@everyTenMinutesSchedule')->everyTenMinutes();
 
-        $schedule->command('crawler:updateAll')->hourly();
+        $schedule->command('crawler:update')->twiceDaily(1, 13);
     }
 
     /**

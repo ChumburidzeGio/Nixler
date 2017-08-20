@@ -199,29 +199,3 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'management'], function() {
 Route::get('/about', 'BlogController@welcome');
 
 Route::get('/help', 'HelpController@index');
-
-Route::get('/testing', function(){
-
-	$user = factory(App\Entities\User::class)->create();
-
-    $merchant = factory(App\Entities\User::class)->create();
-
-    $products = factory(App\Entities\Product::class, 3)->create([
-        'owner_id' => $merchant->id,
-        'owner_username' => $merchant->username
-    ]);
-
-    $products->each(function($product) {
-
-    	if(rand(0,1)) 
-            {
-                $variants = factory(App\Entities\ProductVariant::class, rand(1, 100))->make([
-                    'product_id' => $product->id
-                ]);
-
-        return $product->setRelation('variants', $variants);
-            }
-    });
-
-      return $products;
-});

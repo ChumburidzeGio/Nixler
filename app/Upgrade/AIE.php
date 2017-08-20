@@ -165,6 +165,14 @@ class AIE
             });
 
         }
+
+        if (!Schema::hasColumn('product_sources', 'status')) {
+
+            Schema::table('product_sources', function (Blueprint $table) {
+                $table->string('status', 50)->default('success');
+            });
+
+        }
         
     }
 
