@@ -39,7 +39,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->call('\App\Console\Kernel@everyTenMinutesSchedule')->everyTenMinutes();
 
-        $schedule->command('crawler:updateAll')->daily();
+        $schedule->command('crawler:updateAll')->hourly();
     }
 
     /**
@@ -49,9 +49,9 @@ class Kernel extends ConsoleKernel
      */
     public function hourlySchedule()
     {
-        //app(BackupService::class)->export();
+        app(BackupService::class)->export();
 
-        info('Daily schedule executed succesfully.');
+        info('Hourly schedule executed succesfully.');
     }
 
     /**

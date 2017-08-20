@@ -25,11 +25,11 @@ class BackupService
 
         $this->dumpMysql($sqlPath);
 
-        $this->zipper->make($path)->add($sqlPath);
+        /*$this->zipper->make($path)->add($sqlPath);
         
         $this->zipper->zip($path)->folder('files')->add(storage_path('app/public'));
 
-        $this->zipper->close();
+        $this->zipper->close();*/
 
         $status = $this->zipper->zip($path)->getStatus();
 
@@ -55,7 +55,7 @@ class BackupService
     	
         $this->restoreMysql($path);
 
-        $directory = storage_path('app/public');
+        /*$directory = storage_path('app/public');
 
         File::makeDirectory($directory, 0711, true, true); 
 
@@ -63,7 +63,7 @@ class BackupService
 
         File::makeDirectory($directory, 0711, true, true); 
 
-        $this->zipper->make($path)->folder('files')->extractTo($directory);
+        $this->zipper->make($path)->folder('files')->extractTo($directory);*/
     }
 
     public function cleanOldBackups()

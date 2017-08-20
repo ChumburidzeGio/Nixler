@@ -105,6 +105,8 @@ class Crawler {
             json_encode(config('crawler.translations.zalando'))
         );
 
+        info('Crawler updated successfully.');
+
     }
 
     private function formatBytes($size, $precision = 2)
