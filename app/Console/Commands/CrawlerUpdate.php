@@ -62,6 +62,8 @@ class CrawlerUpdate extends Command
 
         $this->info("Updated all links for {$secondsUsed} seconds and used {$memoryUsed}");
 
+        info('Crawler update success');
+
         file_put_contents(public_path('crlw/translations.json'), 
             json_encode(config('crawler.translations'))
         );
