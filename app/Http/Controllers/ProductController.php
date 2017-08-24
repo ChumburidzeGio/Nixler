@@ -16,6 +16,7 @@ use App\Repositories\UserRepository;
 use App\Http\Requests\UpdateProduct;
 use App\Http\Requests\ImportProduct;
 use App\Http\Requests\OrderProduct;
+use App\Events\ProductDeleted;
 
 class ProductController extends Controller
 {
