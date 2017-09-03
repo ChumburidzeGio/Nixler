@@ -13,7 +13,7 @@ class SystemService
         app(\App\Notifications\Notifiables\Notifiable::class)->notify($notifcation);
     }
 
-    public function reportException($e) 
+    public function reportException($ex) 
     {
         Bugsnag::notifyException($ex);
     }
