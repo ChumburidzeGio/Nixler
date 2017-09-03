@@ -145,8 +145,8 @@ class UserRepository extends BaseRepository {
     {
         $user = auth()->user();
         
-        $user->products()->pluck('id')->map(function($product){
-            app(ProductRepository::class)->hide($product->id);
+        $user->products()->get()->map(function($product){
+            $product->markAsInactive();
         });
 
         return $user->delete();

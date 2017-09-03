@@ -199,12 +199,8 @@ return [
         Overtrue\LaravelFollow\FollowServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
-        Nwidart\Modules\LaravelModulesServiceProvider::class,
-        TeamTNT\Scout\TNTSearchScoutServiceProvider::class,
         Laravel\Scout\ScoutServiceProvider::class,
         Dimsav\Translatable\TranslatableServiceProvider::class,
-        Prettus\Repository\Providers\RepositoryServiceProvider::class,
-        Dawson\AmazonECS\AmazonECSServiceProvider::class,
         Spatie\CookieConsent\CookieConsentServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
         Torann\GeoIP\GeoIPServiceProvider::class,
@@ -213,12 +209,11 @@ return [
         Silber\Bouncer\BouncerServiceProvider::class,
         Lab404\Impersonate\ImpersonateServiceProvider::class,
         App\Providers\GoogleDriveServiceProvider::class,
-        Spatie\DemoMode\DemoModeServiceProvider::class,
         Torann\LaravelMetaTags\MetaTagsServiceProvider::class,
         Spatie\Analytics\AnalyticsServiceProvider::class,
         Yab\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         //Mpociot\BotMan\BotManServiceProvider::class,
-        BrianFaust\Braintree\BraintreeServiceProvider::class,
+        Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -281,12 +276,13 @@ return [
         'MediaUploader' => Plank\Mediable\MediaUploaderFacade::class,
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Module' => Nwidart\Modules\Facades\Module::class,
-        'Amazon' => Dawson\AmazonECS\AmazonECSFacade::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'GeoIP' => Torann\GeoIP\Facades\GeoIP::class,
         'Linguist'  => Keevitaja\Linguist\Facades\LinguistFacade::class,
         'Bouncer' => Silber\Bouncer\BouncerFacade::class,
         'MetaTag'   => Torann\LaravelMetaTags\Facades\MetaTag::class,
+        'Bugsnag' => Bugsnag\BugsnagLaravel\Facades\Bugsnag::class,
+        
     ],
 
 ];

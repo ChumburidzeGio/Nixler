@@ -43,72 +43,79 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'im'], function() {
 
 });
 
-//Products & Orders
+//Products
 Route::group([], function() {
 
 	Route::match(['get', 'post'], '/', 'StreamController@index')->name('feed');
 
-	Route::get('/@{uid}/{id}', 'ProductController@show')->name('product');
+	Route::get('/@{uid}/{id}', 'Product\Show')->name('product');
 
 	//Product Create/Update
 	Route::group(['middleware' => ['auth']], function() {
 
 		Route::get('/new-product', 'ProductController@create')->name('product.create');
 
-		Route::get('/products/{id}/edit', 'ProductController@edit')->name('product.edit');
+		Route::get('/products/{id}/edit', 'Product\Edit')->name('product.edit');
 
-		Route::post('/products/{id}/photos', 'ProductController@uploadPhoto')->name('product:photos:post');
+		Route::post('/products/{id}', 'Product\Store')->name('product:update');
 
-		Route::post('/products/{id}/photos/{mid}', 'ProductController@removePhoto')->name('product:photos:remove');
+		Route::post('/products/{id}/photos', 'Product\EditMediaUpload')->name('product:photos:post');
 
-		Route::post('/products/{id}', 'ProductController@update')->name('product:update');
+		Route::post('/products/{id}/photos/{mid}', 'Product\EditMediaRemove')->name('product:photos:remove');
 
 		Route::post('/products/{id}/import', 'ProductController@import')->name('product:import');
 
-		Route::delete('/products/{id}', 'ProductController@delete')->name('product:delete');
+		Route::delete('/products/{id}', 'Product\Delete')->name('product:delete');
 
 		Route::post('/products/{id}/status', 'ProductController@changeStatus')->name('product:update:status');
 
 		Route::post('/products/{id}/schedule', 'ProductController@schedule')->name('product:schedule');
 
-		Route::post('/products/{id}/like', 'ProductController@like')->name('product:like');
+		Route::post('/products/{id}/like', 'Product\Like')->name('product:like');
 
 	});
 
 	Route::get('products/{id}/order', 'OrderController@create')->middleware('auth')->name('order');
 
-	Route::post('products/{id}/order', 'OrderController@store')->middleware('auth')->name('order.store');
-
-	Route::post('/orders/{id}/commit', 'ProductController@commitOrder')->name('order.commit');
-
-	Route::get('/orders', 'OrderController@index')->name('orders.index');
-
-	Route::get('/orders/{id}', 'OrderController@show')->name('orders.show');
+	Route::post('products/{id}/order', 'Order\StoreOrder')->middleware('auth')->name('order.store');
 
 	Route::get('/stock', 'ProductController@stock')->name('stock');
 
-	Route::get('/sitemap/products', 'ProductController@sitemap')->name('sitemap.products');
+	Route::get('/sitemap/products', 'Product\Sitemap')->name('sitemap.products');
 
 	Route::get('/p{id}', 'ProductController@shortlink')->name('products.shortlink');
+
+});
+
+//Orders
+Route::group(['middleware' => ['auth'], 'prefix' => '/orders', 'as' => 'orders.'], function() {
+
+	Route::get('/', 'OrderController@index')->name('index');
+
+	Route::get('/payments/cartubank/callback', 'Order\Payment\CartuCallback')->name('payments.cartu.callback');
+
+	Route::get('/{id}', 'OrderController@show')->name('show');
+
+	Route::post('/{id}/commit', 'ProductController@commitOrder')->name('commit');
 
 });
 
 //Collections
 Route::group(['prefix' => 'cl'], function() {
 
-	Route::get('/{id}', 'CollectionsController@show')->name('collections.show')->where('id', '[0-9]+');
+	Route::get('/{id}', 'Collection\Show')->name('collections.show')->where('id', '[0-9]+');
 
-	Route::get('/create', 'CollectionsController@update')->name('collections.create');
+	Route::get('/create', 'Collection\Edit')->name('collections.create');
 
-	Route::get('/update/{id}', 'CollectionsController@update')->name('collections.update');
+	Route::get('/update/{id}', 'Collection\Edit')->name('collections.update');
 
-	Route::post('/store', 'CollectionsController@store')->name('collections.store');
+	Route::post('/store', 'Collection\Store')->name('collections.store');
 
-	Route::post('/delete', 'CollectionsController@delete')->name('collections.delete');
+	Route::post('/delete', 'Collection\Delete')->name('collections.delete');
 
-	Route::get('/', 'CollectionsController@index')->name('collections.index');
+	Route::get('/', 'Collection\Index')->name('collections.index');
 
-	Route::post('/productSearch', 'CollectionsController@productSearch')->name('collections.productSearch');
+	Route::post('/productSearch', 'Collection\EditProductSearch')->name('collections.productSearch');
 
 });
 
@@ -186,16 +193,29 @@ Route::group([], function() {
 });
 
 //Management
-Route::group(['middleware' => ['auth'], 'prefix' => 'management'], function() {
+Route::group(['middleware' => ['auth'], 'prefix' => 'management', 'as' => 'management.'], function() {
 
-	Route::get('users', 'ManagementController@users')->name('management.users');
+	Route::get('users', 'ManagementController@users')->name('users');
 
-	Route::get('products', 'ManagementController@products')->name('management.products');
+	Route::get('products', 'ManagementController@products')->name('products');
 
-	Route::get('orders', 'ManagementController@orders')->name('management.orders');
+	Route::get('orders', 'ManagementController@orders')->name('orders');
+
+	Route::get('articles', 'ManagementController@articles')->name('articles');
+
+	Route::get('calculators', 'ManagementController@calculators')->name('calculators');
 
 });
 
-Route::get('/about', 'BlogController@welcome');
+//Pages
+Route::group(['as' => 'pages.'], function() {
 
-Route::get('/help', 'HelpController@index');
+	Route::get('/about', 'Pages\About')->name('about');
+
+	Route::get('/help', 'Pages\Help')->name('help');
+
+	Route::get('/sell', 'Pages\Sell')->name('sell');
+
+});
+
+Route::get('/sd/{id}', 'Order\Payment\CartuRedirect');

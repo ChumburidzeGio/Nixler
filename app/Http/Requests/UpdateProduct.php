@@ -33,7 +33,6 @@ class UpdateProduct extends FormRequest
             'action' => 'required|in:schedule,publish',
             'media' => 'json',
             'tags' => 'json',
-            'variants' => 'json',
             'category' => 'required|string',
             'in_stock' => 'required|numeric',
             'buy_link' => 'nullable|url',

@@ -62,15 +62,14 @@
                                     @include('products.show-buy')
                                 </div>
 
-
-                                @if($product->similar->count())
+                                @if(count($product->similar->items()))
 
                                 <span class="_fs12 _ttu _mb5 _clear _mt15">
                                     @lang('More products')
                                 </span>
 
                                 <div class="_clear">
-                                    @each('products.similar', $product->similar, 'product')
+                                    @each('products.similar', $product->similar->items(), 'product')
                                 </div>
                                 @endif
 

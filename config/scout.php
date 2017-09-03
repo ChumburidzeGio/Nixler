@@ -65,17 +65,6 @@ return [
         'min_fulltext_search_length' => 4,
         'min_fulltext_search_fallback' => 'LIKE',
         'query_expansion' => false
-    ],
-    'tntsearch' => [
-        'storage'  => storage_path(),
-        'fuzziness' => true,
-        'fuzzy' => [
-            'prefix_length' => 2,
-            'max_expansions' => 50,
-            'distance' => 5
-        ],
-        'asYouType' => false,
-        'searchBoolean' => false
-    ],
+    ]
 
 ];

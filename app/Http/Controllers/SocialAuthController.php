@@ -54,11 +54,15 @@ class SocialAuthController extends Controller
             return [];
         }
 
-        $provider = $this->socialite->driver($provider)->fields(config('services.'.$provider.'.fields'));
+        try
+        {
+            $provider = $this->socialite->driver($provider)->fields(config('services.'.$provider.'.fields'));
 
-        $socialUser = $provider->user();
+            $socialUser = $provider->user();
 
-        $this->repository->facebookProviderCallback($socialUser);
+            $this->repository->facebookProviderCallback($socialUser);
+        }
+        catch(\Exception $e) {}
 
         return redirect()->intended('/');
     }

@@ -11,5 +11,16 @@ class ProductTag extends Model
     protected $fillable = [
     	'user_id', 'product_id', 'name', 'type'
     ];
+    
+    /**
+     * All of the relationships to be touched.
+     *
+     * @var array
+     */
+    protected $touches = ['product'];
 
+    public function product()
+    {   
+        return $this->belongsTo(Product::class);
+    }
 }

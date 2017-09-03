@@ -46,11 +46,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         RequestFacade::macro('isRobot', function () {
-            
-            $CrawlerDetect = new CrawlerDetect;
-
-            return $CrawlerDetect->isCrawler();
-            
+            return app(CrawlerDetect::class)->isCrawler();
         });
         
         Validator::extend('ownpass', function ($attribute, $value, $parameters) {
@@ -85,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        
+        $this->app->alias('bugsnag.multi', \Illuminate\Contracts\Logging\Log::class);
+        $this->app->alias('bugsnag.multi', \Psr\Log\LoggerInterface::class);
     }
 }

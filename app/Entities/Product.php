@@ -134,30 +134,34 @@ class Product extends Model
         return $this->hasOne(User::class,'id', 'owner_id');
     }
     
-    /**
-     * One to one relationship for categories
-     */
-    public function category() {   
+    public function category() 
+    {   
         return $this->hasOne(ProductCategory::class, 'id', 'category_id')->with('translations');
     }
 
-    public function sources() {   
-        return $this->hasMany(ProductSource::class, 'product_id', 'id');
+    public function source() 
+    {   
+        return $this->hasOne(ProductSource::class);
     }
 
-    public function infeed() {   
+    public function infeed() 
+    {   
         return $this->hasMany(Feed::class, 'object_id', 'id');
     }
 
-    public function variants() {   
-        return $this->hasMany(ProductVariant::class, 'product_id', 'id');
+    public function variants() 
+    {   
+        return $this->hasMany(ProductVariant::class);
     }
 
-    /**
-     * Show comments for model
-     */
-    public function comments() {
-        return $this->hasMany(Comment::class, 'target_id', 'id');
+    public function comments() 
+    {
+        return $this->hasMany(Comment::class, 'target_id');
+    }
+
+    public function tags() 
+    {
+        return $this->hasMany(ProductTag::class);
     }
 
     public function setPriceAttribute($value){

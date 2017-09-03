@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use App\Entities\ProductSource;
 use App\Entities\Product;
 use App\Crawler\Crawler;
+use App\Services\UrlService;
 
 class CrawlerUpdate extends Command
 {
@@ -36,21 +37,17 @@ class CrawlerUpdate extends Command
 
         $startMemory = memory_get_usage();
 
-        Product::withoutSyncingToSearch(function () {
+        ProductSource::where('status','success')->chunk(200, function($sources) {
 
-            ProductSource::where('status','success')->chunk(200, function($sources) {
+            $sources->filter(function($item) {
 
-                $sources->filter(function($item) {
+                $source = app(UrlService::class)->parse($item->source)->getRootDomain();
 
-                    $source = app(Crawler::class)->getRootDomain($item->source);
+                return ('zalando.it' == $source);
 
-                    return ('zalando.it' == $source);
+            })->map(function($item){
 
-                })->map(function($item){
-
-                    $this->update($item);
-
-                });
+                $this->update($item);
 
             });
 
@@ -68,10 +65,15 @@ class CrawlerUpdate extends Command
             json_encode(config('crawler.translations'))
         );
     }
-
+    
+    /**
+     * Update the single product
+     *
+     * @return void
+     */
     private function update($item)
     {
-       $this->comment("{$item->product_id}. Updating product from {$item->source}");
+        $this->comment("{$item->product_id}. Updating product from {$item->source}");
 
         $product = Product::find($item->product_id);
 
@@ -82,34 +84,16 @@ class CrawlerUpdate extends Command
             return $item->delete();
         }
 
-        $metadata = app(Crawler::class)->get($item->source);
+        $crawler = app(Crawler::class);
 
-        if($metadata->isInvalid()) 
+        $metadata = $item->params ? $crawler->get($item->source, $item->params) : $crawler->get($item->source);
+        
+        if(!$metadata) 
         {
             return $this->invalidSource($item, $product);
         }
 
-        $repository = app(ProductRepository::class);
-
-        $repository->syncVariants($metadata->getVariants(), $product);
-
-        $repository->syncTags($metadata->getTags(), $product);
-
-        $product->fill([
-            'title' => $metadata->getTitle(),
-            'description' => $metadata->getDescription(),
-            'category_id' => $metadata->getCategory(),
-            'target' => $metadata->getTarget(),
-            'sku' => $metadata->getSKU(),
-        ]);
-
-        if(!$product->has_variants){
-
-            $product->price = $metadata->getPrice();
-
-            $product->original_price = $metadata->getOriginalPrice();
-
-        }
+        app(ProductRepository::class)->fillProductFromCrawler($product, $metadata);
 
         $item->update([
             'status' => 'success'
@@ -128,7 +112,12 @@ class CrawlerUpdate extends Command
                     
         $this->info("{$item->product_id}. Updated product from {$item->source}");
     }
-
+    
+    /**
+     * Send invalid source message to console and mark product as inactive
+     *
+     * @return boolean
+     */
     private function invalidSource($item, $product)
     {
         $this->warn("{$item->product_id}. Invalid source {$item->id}");
@@ -141,7 +130,12 @@ class CrawlerUpdate extends Command
 
         return $product->markAsInactive();
     }
-
+    
+    /**
+     * Transform bytes to KB, MB or GB
+     *
+     * @return string
+     */
     private function formatBytes($size, $precision = 2)
     {
         $base = log($size, 1024);
@@ -150,60 +144,3 @@ class CrawlerUpdate extends Command
         return round(pow(1024, $base - floor($base)), $precision) .' '. $suffixes[floor($base)];
     }
 }
-
-
-/*
-        $linksUpdated = 0;
-
-        $merchants = ProductSource::groupBy('merchant_id')->pluck('merchant_id')->map(function($merchantId) use ($commander, &$linksUpdated) {
-
-            auth()->loginUsingId($merchantId);
-
-            $query = ProductSource::where('merchant_id', $merchantId);
-
-            $page = 1;
-
-            $count = 100;
-
-            do {
-
-                $chunkStartDate = strtotime('now');
-
-                $results = $query->forPage($page, $count)->pluck('source');
-
-                $links = $results->filter(function($link) {
-
-                    return ('zalando.it' == app(Crawler::class)->getRootDomain($link));
-
-                });
-
-                $countResults = $links->count();
-
-                if ($countResults == 0) {
-                    break;
-                }
-
-                $commander->info("Updating {$countResults} links from chunk {$page}");
-
-                Product::withoutSyncingToSearch(function () use ($links, $commander) {
-                    app(Crawler::class)->bulk($links->toArray(), $commander);
-                });
-
-                $secondsUsed = strtotime('now') - $chunkStartDate;
-
-                $commander->comment("Updated {$countResults} links from chunk {$page} for {$secondsUsed} seconds");
-
-                $page++;
-
-                $linksUpdated += $countResults;
-                
-                file_put_contents(public_path('crlw/zalando.json'), 
-                    json_encode(config('crawler.translations.zalando'))
-                );
-
-            } while ($countResults == $count);
-
-        });
-
-        info('Crawler updated successfully.');
-*/

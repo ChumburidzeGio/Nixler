@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Notifications\Notifiable;
+namespace App\Notifications\Notifiables;
 
 use Illuminate\Notifications\Notifiable as NotifiableTrait;
 

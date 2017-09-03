@@ -25,6 +25,7 @@ use Carbon\Carbon;
 use Ayeo\Price\Price;
 use Illuminate\Support\Facades\Cache;
 use App\Crawler\Crawler;
+use App\Crawler\Model as CrawlerModel;
 use Auth, DB;
 
 class ProductRepository extends BaseRepository {
@@ -45,7 +46,7 @@ class ProductRepository extends BaseRepository {
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(array $attributes = [])
+    public function create()
     {
         $user = auth()->user();
 
@@ -65,50 +66,6 @@ class ProductRepository extends BaseRepository {
             'owner_username' => $user->username,
         ]);
     }
-    
-
-
-    /**
-     * Prepare product for editing
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $user = auth()->user();
-
-        $product = $this->model->where([
-            'id' => $id,
-            'owner_id' => $user->id
-        ])->firstOrFail();
-
-        $product->variants = ProductVariant::where('product_id', $product->id)->get();
-
-        $product->tags = ProductTag::where('product_id', $product->id)->get(['name', 'type'])->map(function($item){
-            return ['text' => $item->name, 'type' => $item->type];
-        });
-
-        $product->media = $product->getMedia('photo')->map(function($media){
-            return [
-                'success' => true,
-                'id' => $media->id,
-                'thumb' => url('media/'.$media->id.'/avatar/profile.jpg')
-            ];
-        });
-
-        $categories = ProductCategory::with('translations', 'children.translations')->whereNull('parent_id')->orderBy('order')->get()->map(function($item){
-            return $item->children->map(function($subitem) use ($item){
-                return [
-                    'zone' => $item->name,
-                    'id' => $subitem->id,
-                    'label' => $subitem->name,
-                ];
-            });
-        })->collapse();
-
-        return compact('product', 'categories', 'user');
-    }
-    
 
 
     /**
@@ -123,116 +80,106 @@ class ProductRepository extends BaseRepository {
         return $product;
     }
     
-
-
     /**
      * Import product from url
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function import(string $url, $id = null)
+    public function import($link)
     {
-        $user = auth()->user();
-        
-        $source = ProductSource::where([
-            'merchant_id' => $user->id,
-            'source' => $url
-        ])->first();
+        $patternPath = app(Crawler::class)->findPattern($link);
 
-        if($source) 
+        $pattern = app($patternPath)->parse($link);
+
+        if($pattern->getAvailableParams())
         {
-            $product = $this->model->find($source->product_id);
-
-            if(!$product) 
+            foreach ($pattern->getAvailableParams() as $param) 
             {
-                $source->delete();
+                $model = app(CrawlerModel::class)->setPattern($pattern->withParam($param));
 
-                return null;
+                $this->importFromCrawler($model);
             }
+        }
+        else
+        {
+            $model = (new CrawlerModel)->setPattern($pattern);
+
+            $this->importFromCrawler($model);
+        }
+    }
+    
+    /**
+     * Save crawler model to database
+     *
+     * @return void
+     */
+    public function importFromCrawler($model)
+    {
+        if(!$model)
+        {
+            return null;
+        }
+
+        $source = ProductSource::firstOrNew([
+            'merchant_id' => auth()->id(),
+            'source' => $model->source,
+            'params' => $model->param
+        ]);
+
+        if($source->created_at) 
+        {
+            return null;
         } 
-        else 
-        {
-            if(is_null($id)) 
-            {
-                $product = $this->create();
-            }
-            else 
-            {
-                $product = $this->model->findOrFail($id);
-            } 
-        }
+
+        $product = $this->create();
+
+        $this->fillProductFromCrawler($product, $model);
+
+        $product->save();
+
+        $product->markAsActive();
         
-        $metadata = app(Crawler::class)->get($url);
+        $source->status = 'success';
 
-        if($metadata->isInvalid()) 
+        $source->product_id = $product->id;
+
+        $source->save();
+    }
+    
+    /**
+     * Fill product with data from crawler
+     *
+     * @return void
+     */
+    public function fillProductFromCrawler($product, $metadata)
+    {
+        $this->syncVariants($metadata->variants, $product);
+
+        $this->syncTags($metadata->tags, $product);
+
+        foreach ($metadata->media as $media) 
         {
-            if($source)
-            {
-                $source->update([
-                    'status' => 'fail'
-                ]);
-
-                $this->hide($source->product_id);
-
-                return false;
-            }
-            else
-            {
-                return null;
-            }
+            $product->uploadPhoto($media, 'photo');
         }
 
-        $this->syncVariants($metadata->getVariants(), $product);
-
-        $this->syncTags($metadata->getTags(), $product);
-
-        if(!$source) {
-
-            foreach ($metadata->getMedia() as $src) {
-                $this->uploadMediaForProduct($product->id, $src);
-            }
-
-        }
+        $this->refreshFeaturedMediaForProduct($product);
 
         $product->fill([
-            'title' => $metadata->getTitle(),
-            'description' => $metadata->getDescription(),
-            'category_id' => $metadata->getCategory(),
-            'target' => $metadata->getTarget(),
-            'sku' => $metadata->getSKU(),
+            'title' => $metadata->title,
+            'description' => $metadata->description,
+            'category_id' => $metadata->category,
+            'target' => $metadata->target,
+            'sku' => $metadata->sku,
         ]);
 
         if(!$product->has_variants){
 
-            $product->price = $metadata->getPrice();
+            $product->price = $metadata->price;
 
-            $product->original_price = $metadata->getOriginalPrice();
-
-        }
-
-        if(!$source) {
-
-            $product->sources()->create([
-                'product_id' => $product->id,
-                'merchant_id' => $user->id,
-                'source' => $url,
-                'status' => 'success'
-            ]);
+            $product->original_price = $metadata->originalPrice;
 
         }
-        else
-        {
-            $source->update([
-                'status' => 'success'
-            ]);
-        }
-        
-        $product->save();
-
-        return $product;
     }
-    
-
 
     /**
      * @param $product Product
@@ -249,50 +196,6 @@ class ProductRepository extends BaseRepository {
 
         return $product->save();
     }
-    
-
-
-    /**
-     * @param $id integer
-     * @param $file string|mixed
-     * @param ? $user \App\Entities\User
-     * @return \App\Entities\Media
-     */
-    public function uploadMediaForProduct($id, $file, $user = null)
-    {
-        $user = $user ? : auth()->user();
-
-        $product = $user->products()->findOrFail($id);
-
-        $media = $product->uploadPhoto($file, 'photo');
-
-        $this->refreshFeaturedMediaForProduct($product);
-
-        return $media;
-    }
-    
-
-    /**
-     * @param $product_id integer
-     * @param $media_id integer
-     * @param ? $user \App\Entities\User
-     * @return \App\Entities\Media
-     */
-    public function removeMediaFromProductById($product_id, $media_id, $user = null)
-    {
-        $user = $user ? : auth()->user();
-
-        $product = $user->products()->findOrFail($product_id);
-
-        $media = $product->media()->findOrFail($media_id);
-        
-        $deleted = $media->delete();
-
-        $this->refreshFeaturedMediaForProduct($product);
-
-        return $deleted;
-    }
-    
 
 
     /**
@@ -325,55 +228,6 @@ class ProductRepository extends BaseRepository {
         $this->refreshFeaturedMediaForProduct($product);
     }
 
-
-
-    /**
-     * Tranform text into tokens
-     *
-     * @return array
-     */
-    public function like($id)
-    {
-        $product = $this->model->findOrFail($id);
-
-        $user = auth()->user();
-
-        $liked = $product->toggleActivity('product:liked');
-
-        if($liked) {
-            event(new ProductLiked($product, $user));
-        } else {
-            event(new ProductDisliked($product, $user));
-        }
-
-        $product->likes_count = $product->getActivities('product:liked')->count();
-        
-        $product->save();
-        
-        return $liked;
-    }
-
-
-    /**
-     * Tranform text into tokens
-     *
-     * @return array
-     */
-    public function similar($product)
-    {
-        $hash = md5('similar'.$product->id.auth()->id());
-
-        return Cache::remember($hash, (60 * 24), function () use ($product) {
-
-            $user = auth()->user();
-
-            $ids = capsule('reco')->forProduct($product, $user)->get();
-
-            return $this->model->whereIn('id', $ids)->active()->take(5)->get();
-
-        });
-        
-    }
 
     /**
      * @param $count integer
@@ -650,23 +504,6 @@ class ProductRepository extends BaseRepository {
         return $model;
     }
 
-
-    /**
-     * Get shippng price for particular city
-     *
-     * @param $city_id int
-     * @param $merchant_id int
-     *
-     * @return float
-     */
-    public function hide($id)
-    {
-        $user = auth()->user();
-
-        $product = $user->products()->findOrFail($id);
-
-        $product->markAsInactive();
-    }
 
     /**
      * Delete all inactive products

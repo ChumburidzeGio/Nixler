@@ -35,7 +35,7 @@ if (! function_exists('capsule')) {
     function capsule($name) {
 
     	$capsule = array_get([
-            'stream' => \App\Capsules\StreamCapsule::class,
+            'stream' => \App\Capsules\Stream\Capsule::class,
             'reco' => \App\Capsules\RecoCapsule::class,
             'collections' => \App\Capsules\CollectionsCapsule::class,
             'frontend' => \App\Capsules\FrontendCapsule::class,

@@ -3,7 +3,6 @@
 namespace App\Traits;
 
 use Laravel\Scout\Searchable as ScoutSearchable;
-use TeamTNT\TNTSearch\TNTSearch;
 use DB;
 
 trait Searchable {

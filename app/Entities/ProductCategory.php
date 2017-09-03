@@ -17,7 +17,6 @@ class ProductCategory extends Model
         'parent_id', 'order', 'icon'
     ];
 
-
     /**
      *  Relationships
      */

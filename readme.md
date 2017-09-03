@@ -133,6 +133,24 @@ $similarProducts = capsule('reco')->forProduct($product)->get();
 <div class="_ldr">Loading...</div>
 ```
 
+# Code quality
+
+#### Check php files
+```bash
+vendor/bin/churn run {path}
+```
+
+# Style Guide
+
+#### Names of routes and controllers
+Each Model should have seperate folder in controllers folder, name should following:
+* Index
+* Create
+* Show
+* Edit
+* Save
+* Destroy
+
 # Resources
 
 * [Georgian Technical Dictionary](http://techdict.ge/)

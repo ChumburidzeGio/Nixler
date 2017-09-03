@@ -2,15 +2,15 @@
 
 		<div class="row _mb15" ng-if="vm.stream.items.length">
 
-			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15 _mb10 _crp" ng-repeat="product in vm.stream.items">
+			<div class="col-lg-3 col-sm-4 col-xs-6 _cxxs12 _pb15 _mb10 _crp" ng-repeat="product in vm.stream.items" itemscope itemtype="http://schema.org/Product">
 				<a class="_clear _brds3 _hvrcard _posr" ng-href="@{{ product.url }}">
 
-					<img ng-src="@{{ product.photo }}" class="_db _w100">
+					<img ng-src="@{{ product.photo }}" class="_db _w100" itemprop="image">
 
 					<div class="_pl10 _pr15 _pt10 _pb10">
-						<span class="_cb _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs14" ng-bind="product.title"></span>
+						<span class="_cb _lh1 _mb0 _telipsis _w100 _clear _pr10 _fs14" ng-bind="product.title" itemprop="name"></span>
 						<span class="_cg _clear _fs12  _telipsis _w100 _oh _pr10">
-							<b class="_ci" ng-bind="product.price"></b> · @{{ product.owner }} · <i class="material-icons _fs13 _va2 _cg">favorite</i> @{{ product.likes_count }}
+							<b class="_ci" ng-bind="product.price" itemprop="price"></b> · @{{ product.owner }} · <i class="material-icons _fs13 _va2 _cg">favorite</i> @{{ product.likes_count }}
 						</span>
 					</div>
 

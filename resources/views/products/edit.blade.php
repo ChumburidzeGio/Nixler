@@ -4,20 +4,6 @@
 
 <div class="container" ng-controller="SellCtrl as vm">
 
-	<script>
-		window.product = <?php echo json_encode([
-			'description' => old('description', $product->description),
-			'media' => old('media', $product->media),
-			'variants' => old("variants", $product->variants),
-			'id' => $product->id,
-			'price' => old('price', $product->price),
-			'in_stock' => old('in_stock', $product->in_stock),
-			'tags' => old('tags', $product->tags),
-			'category' => old('category', $product->category_id),
-			'categories' => $categories
-			]); ?>;
-		</script>
-
 		<div class="row">
 
 			<div class="col-sm-8 col-xs-12">
@@ -379,10 +365,10 @@
 				@lang(':amount Likes', ['amount' => $product->likes_count])
 			</a>
 
-		<!--a class="_hvr1 _fs13 _clear _lim">
+		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">comment</i> 
 			@lang(':amount Comments', ['amount' => $product->comments_count])
-		</a-->
+		</a>
 
 		<a class="_hvr1 _fs13 _clear _lim">
 			<i class="material-icons _mr10 _va5 _fs18">remove_red_eye</i> 
@@ -398,6 +384,21 @@
 			<i class="material-icons _mr10 _va5 _fs18">update</i> 
 			@lang('Updated') <span ng-bind="'{{ $product->updated_at }}' | timeAgo"></span>
 		</a>
+
+		@if($product->source)
+		<a class="_hvr1 _fs13 _clear _lim" href="{{ $product->source->source }}" target="_blank">
+			<i class="material-icons _mr10 _va5 _fs18">link</i> 
+			{{ __('Imported from :domain', ['domain' => parse_url($product->source->source, PHP_URL_HOST)]) }} 
+			@if($product->source->params) ({{ $product->source->params }}) @endif
+		</a>
+		@endif
+
+		@if($product->target)
+		<a class="_hvr1 _fs13 _clear _lim">
+			<i class="material-icons _mr10 _va5 _fs18">person_pin_circle</i> 
+			{{  ucfirst($product->target) }}
+		</a>
+		@endif
 
 	</div>
 

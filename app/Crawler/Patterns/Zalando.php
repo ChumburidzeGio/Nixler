@@ -16,36 +16,24 @@ class Zalando extends BasePattern {
 
     private $translations;
 
-    public function parse(Crawler $crawler)
+    protected $shortProductTag = '#catalogItemsListParent .catalogArticlesList_item';
+
+    public function parse($url)
     {
-        parent::parse($crawler);
+        parent::parse($url);
 
         $this->data = $this->parseJson();
 
         $this->translations = json_decode(file_get_contents(resource_path('docs/crawler/zalando.json')), 1);
 
-        return $this;
-    }
-
-    public function detectProductsOnPage()
-    {
-        $products = $this->crawler('#catalogItemsListParent .catalogArticlesList_item');
-
-        if(!$products->count()) return [];
-
-        return array_unique($products->each(function($a)
+        if(!$this->isUK())
         {
-            return $a->filter('a')->link()->getUri();
-        }));
-    }
+            $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q='.$this->getRaw('model.articleInfo.id');
 
-    public function parseEnVersion()
-    {
-        $enUrl = 'https://www.zalando.co.uk/catalog/?qf=1&q='.$this->getRaw('model.articleInfo.id');
+            $this->lcen = $this->lcen ?? app(LC::class)->get($enUrl);
+        }
 
-        $this->lcen = $this->lcen ?? app(LC::class)->get($enUrl);
-
-        return $this->lcen;
+        return $this;
     }
 
     public function isUK() : bool
@@ -80,11 +68,11 @@ class Zalando extends BasePattern {
 
             $isValidProduct = $isValidProduct && 
             
-                $this->parseEnVersion()->getSKU() && 
+                $this->lcen->sku && 
 
-                $this->parseEnVersion()->getRaw('model.articleInfo.active') == true && 
+                $this->lcen->pattern()->getRaw('model.articleInfo.active') == true && 
 
-                $this->parseEnVersion()->getRaw('model.articleInfo.available') == true;
+                $this->lcen->pattern()->getRaw('model.articleInfo.available') == true;
 
         }
 
@@ -94,9 +82,9 @@ class Zalando extends BasePattern {
 
     public function getTitle()
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) 
+        if(!$this->isUK() && $this->lcen) 
         {
-            return $this->lcen->getTitle();
+            return $this->lcen->title;
         }
 
         $name = $this->getRaw('model.articleInfo.name');
@@ -113,9 +101,9 @@ class Zalando extends BasePattern {
 
     public function getDescription()
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) 
+        if(!$this->isUK() && $this->lcen) 
         {
-            $description = array_get($this->lcen->getRaw(), 'model.articleInfo.attributes');
+            $description = $this->lcen->pattern()->getRaw('model.articleInfo.attributes');
         } 
         elseif($this->isProduct() && $this->isUK()) 
         {
@@ -196,9 +184,9 @@ class Zalando extends BasePattern {
 
     public function getCategory()
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) 
+        if(!$this->isUK() && $this->lcen) 
         {
-            return $this->lcen->getCategory();
+            return $this->lcen->category;
         }
 
         $matching = array_get($this->translations, 'silhouetteCodeMatching');
@@ -211,12 +199,12 @@ class Zalando extends BasePattern {
 
     public function getTags() : array
     {
-        if(!$this->isUK() && $this->lcen->isProduct()) 
+        if(!$this->isUK() && $this->lcen) 
         {
-            return $this->lcen->getTags();
+            return $this->lcen->tags;
         }
 
-        if(!$this->isUK() && !$this->lcen->isProduct()) 
+        if(!$this->isUK() && !$this->lcen) 
         {
             return [];
         }
@@ -416,12 +404,17 @@ class Zalando extends BasePattern {
 
     public function getEUSize($size)
     {
+        if($this->isUK())
+        {
+            return $size;
+        }
+
         if($size == 'One Size')
         {
             return 'ერთი ზომა';
         }
 
-        $units = $this->lcen->getRaw('model.articleInfo.units');
+        $units = $this->lcen->pattern()->getRaw('model.articleInfo.units');
 
         foreach ($units as $unit) 
         {

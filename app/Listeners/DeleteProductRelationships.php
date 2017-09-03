@@ -24,6 +24,6 @@ class DeleteProductRelationships
 
         $event->product->activities()->delete();
 
-        $event->product->sources()->delete();
+        $event->product->source()->delete();
     }
 }

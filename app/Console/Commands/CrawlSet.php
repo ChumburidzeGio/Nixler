@@ -4,8 +4,10 @@ namespace App\Console\Commands;
 
 use Goutte\Client;
 use App\Crawler\Crawler;
-use App\Entities\Product;
 use Illuminate\Console\Command;
+use App\Services\SystemService;
+use App\Entities\ProductSource;
+use App\Repositories\ProductRepository;
 
 class CrawlSet extends Command
 {
@@ -40,29 +42,24 @@ class CrawlSet extends Command
              $links[] = $link;
         }
 
-        foreach ($links as $link) {
-            $this->crawl($link);
-        }
-    }
+        array_map(function($link) {
 
-    /**
-     * Execute the console command.
-     *
-     * @return mixed
-     */
-    public function crawl($url)
-    {
-        $commander = $this;
+            $pattern = app(Crawler::class)->findPattern($link);
 
-        $crawler = app(Client::class)->request('GET', $url);
+            $productLinks = app($pattern)->detectProductsOnPage($link);
 
-        $pattern = app(Crawler::class)->findPattern($url);
-        
-        $links = app($pattern)->parse($crawler)->detectProductsOnPage();
-        
-        Product::withoutSyncingToSearch(function () use ($links, $commander) {
-            app(Crawler::class)->bulk($links, $commander);
-        });
+            array_map(function($link) {
+
+                $this->info($link);
+
+                app('db')->transaction(function () use ($link) 
+                {
+                    app(ProductRepository::class)->import($link);
+                });
+
+            }, $productLinks);
+
+        }, $links);
     }
 
 }

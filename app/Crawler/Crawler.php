@@ -4,13 +4,17 @@ namespace App\Crawler;
 
 use Goutte\Client;
 use App\Entities\ProductSource;
-use App\Services\SystemService;
+use App\Services\UrlService;
+use App\Crawler\Model;
 use App\Crawler\BasePattern;
+use App\Repositories\ProductRepository;
 use App\Crawler\Patterns\LuteciaGe;
 use App\Crawler\Patterns\BeGe;
 use App\Crawler\Patterns\DealsGe;
 use App\Crawler\Patterns\Zalando;
-use App\Repositories\ProductRepository;
+use App\Crawler\Patterns\Forever21;
+use App\Crawler\Patterns\Aliexpress;
+use App\Crawler\Patterns\Forever21Controller;
 
 class Crawler {
 
@@ -26,47 +30,30 @@ class Crawler {
      * @param $name string
      * @return App\Entities\City
      */
-    function get($url)
+    function get($url, $param = null)
     {
-        $crawler = $this->client->request('GET', $url);
+        $pattern = app($this->findPattern($url))->parse($url);
 
-        $pattern = app($this->findPattern($url))->parse($crawler);
+        if(!is_null($param))
+        {
+            return app(Model::class)->setPattern($pattern->withParam($param));
+        }
 
-        return $pattern;
-    }
+        if($pattern->getAvailableParams())
+        {
+            $models = [];
 
-    /**
-     * @param $name string
-     * @return App\Entities\City
-     */
-    function bulk($links, $commander)
-    {
-        $repository = app(ProductRepository::class);
-
-        foreach ($links as $key => $link) {
-
-            try {
-
-                $commander->comment($key.'. Crawling '.$link);
-
-                $product = $repository->import($link);
-
-                if($product && $product->category_id) {
-
-                    $product = $repository->publish($product, auth()->user());
-                }
-
-                $commander->info($key.'. '.($product ? 'Success - ' : 'Skipped - ').$link);
-
-            } catch (\Exception $e) {
-
-                app(SystemService::class)->reportException($e);
-
-                $commander->error('Rejected - '.$link." - ".$e->getMessage());
-
+            foreach ($pattern->getAvailableParams() as $param) 
+            {
+                $models[] = app(Model::class)->setPattern($pattern->withParam($param));
             }
 
+            return $models;
         }
+
+        $model = (new Model)->setPattern($pattern);
+
+        return $model;
     }
 
     /**
@@ -75,7 +62,7 @@ class Crawler {
      */
     function findPattern($url)
     {
-        $domain = $this->getRootDomain($url);
+        $domain = app(UrlService::class)->parse($url)->getRootDomain();
 
         $patterns = [
             'lutecia.ge' => LuteciaGe::class,
@@ -83,85 +70,13 @@ class Crawler {
             'deals.ge' => DealsGe::class,
             'zalando.it' => Zalando::class,
             'zalando.co.uk' => Zalando::class,
+            'forever21.com' => Forever21::class,
+            'aliexpress.com' => Aliexpress::class,
         ];
 
         $default = BasePattern::class;
 
         return array_get($patterns, $domain, $default);
-    }
-
-    /**
-     * @param $name string
-     * @return App\Entities\City
-     */
-    function getRootDomain($url)
-    {
-        $domain = array_get(parse_url($url), 'host');
-
-        $original = $domain = strtolower($domain);
-
-        if (filter_var($domain, FILTER_VALIDATE_IP)) { return $domain; }
-
-        $arr = array_slice(array_filter(explode('.', $domain, 4), function($value){
-            return $value !== 'www';
-        }), 0); //rebuild array indexes
-
-            if (count($arr) > 2)
-            {
-                $count = count($arr);
-                $_sub = explode('.', $count === 4 ? $arr[3] : $arr[2]);
-
-            if (count($_sub) === 2) // two level TLD
-            {
-                $removed = array_shift($arr);
-                if ($count === 4) // got a subdomain acting as a domain
-                {
-                    $removed = array_shift($arr);
-                }
-            }
-            elseif (count($_sub) === 1) // one level TLD
-            {
-                $removed = array_shift($arr); //remove the subdomain
-
-                if (strlen($_sub[0]) === 2 && $count === 3) // TLD domain must be 2 letters
-                {
-                    array_unshift($arr, $removed);
-                }
-                else
-                {
-                    // non country TLD according to IANA
-                    $tlds = array(
-                        'aero', 'arpa', 'asia', 'biz', 'cat', 'com', 'coop', 'edu',
-                        'gov', 'info', 'jobs', 'mil', 'mobi', 'museum', 'name', 'net',
-                        'org', 'post', 'pro', 'tel', 'travel', 'xxx',
-                    );
-
-                    if (count($arr) > 2 && in_array($_sub[0], $tlds) !== false) //special TLD don't have a country
-                    {
-                        array_shift($arr);
-                    }
-                }
-            }
-            else // more than 3 levels, something is wrong
-            {
-                for ($i = count($_sub); $i > 1; $i--)
-                {
-                    $removed = array_shift($arr);
-                }
-            }
-        }
-        elseif (count($arr) === 2)
-        {
-            $arr0 = array_shift($arr);
-
-            if (strpos(join('.', $arr), '.') === false
-                && in_array($arr[0], array('localhost','test','invalid')) === false) // not a reserved domain
-            {
-                array_unshift($arr, $arr0);
-            }
-        }
-
-        return join('.', $arr);
     }
 
 }

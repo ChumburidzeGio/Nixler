@@ -17,7 +17,6 @@ class StreamController extends Controller
         parent::__construct();
     }
 
-
     /**
      * Display a listing of the resource.
      * @return Response
@@ -28,7 +27,7 @@ class StreamController extends Controller
 
         if($request->has('query') || $request->has('cat') || $request->has('tag')){
 
-            $capsule = $capsule->search(request('query'));
+            $capsule = $capsule->search(request('query'))->relevant();
 
             if(!$request->has('cat') && !$request->has('tag')){
                 $users = app(UserRepository::class)->search($request->input('query'));
@@ -36,7 +35,7 @@ class StreamController extends Controller
 
         } else {
 
-            $capsule = auth()->check() ? $capsule->recommendedFor(auth()->id()) : $capsule->popular();
+            $capsule = auth()->check() ? $capsule->recommendedFor(auth()->id()) : $capsule->relevant();
 
         }
 

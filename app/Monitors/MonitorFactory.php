@@ -17,7 +17,7 @@ class MonitorFactory
         $monitors = [
             'disk' => DiskUsageMonitor::class,
             'ping' => HttpPingMonitor::class,
-            'ssl' => SSLCertificateMonitor::class,
+            //'ssl' => SSLCertificateMonitor::class,
         ];
 
         if($filter != ['*']) {

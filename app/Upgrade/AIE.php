@@ -173,6 +173,14 @@ class AIE
             });
 
         }
+
+        if (!Schema::hasColumn('product_sources', 'params')) {
+
+            Schema::table('product_sources', function (Blueprint $table) {
+                $table->string('params', 250)->nullable();
+            });
+
+        }
         
     }
 

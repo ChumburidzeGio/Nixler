@@ -1,4 +1,4 @@
-@extends('users.settings.layout')
+@extends('layouts.dashboard')
 
 @section('layout')
 
@@ -141,7 +141,7 @@
 
         @if($order->canUpdate())
         <div class="_mb5 _p15 _ta0 _oh _pl15 _bt1">
-            <form id="logout-form" action="{{ route('order.commit', ['id' => $order->id]) }}" method="POST">
+            <form id="logout-form" action="{{ route('orders.commit', ['id' => $order->id]) }}" method="POST">
                {{ csrf_field() }}
 
                @can('update-status', [$order, 'confirmed'])

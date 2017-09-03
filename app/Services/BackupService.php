@@ -29,19 +29,19 @@ class BackupService
         
         $this->zipper->zip($path)->folder('files')->add(storage_path('app/public'));
 
-        $this->zipper->close();*/
+        $this->zipper->close();
 
-        $status = $this->zipper->zip($path)->getStatus();
+        $status = $this->zipper->zip($path)->getStatus();*/
 
         if (app()->environment('development', 'production')) 
         {
             Storage::disk('google')->put(env('APP_DOMAIN').'-'.pathinfo($sqlPath, PATHINFO_BASENAME), file_get_contents($sqlPath));
         }
 
-        if($status == 'No error')
-        {
+        //if($status == 'No error')
+        //{
             File::delete($sqlPath);
-        }
+        //}
 
         return $path;
     }
@@ -80,7 +80,7 @@ class BackupService
                 return true;
             }
 
-            $oneWeekAgo = strtotime('1 week ago');
+            $oneWeekAgo = strtotime('2 days ago');
 
             if($time < $oneWeekAgo) {
                 return true;

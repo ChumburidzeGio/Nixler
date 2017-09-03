@@ -2,156 +2,61 @@
 
 namespace App\Crawler;
 
+use Goutte\Client;
 use App\Entities\ProductCategory;
 use Symfony\Component\DomCrawler\Crawler;
+use App\Crawler\Traits\HelpersTrait;
+use App\Crawler\Traits\PriceCalculatorTrait;
 
 class BasePattern
 {
-    
+    use PriceCalculatorTrait, HelpersTrait;
+
+    private $source;
+
     private $crawler;
     
+    public $param;
+    
     private $media;
+    
+    private $shortProductTag;
 
-    public function parse(Crawler $crawler)
+    public function parse($url)
     {
-        $this->crawler = $crawler;
+        $this->source = $url;
+
+        $this->crawler = app(Client::class)->request('GET', $url);
 
         return $this;
     }
 
-    /**
-     * Return crawler instance
-     *
-     * @return Crawler
-     */
-    public function crawler($tag = null)
+    public function detectProductsOnPage($url)
     {
-    	if(!is_null($tag)) {
-    		return $this->crawler->filter($tag);
-    	}
+        $this->parse($url);
 
-    	return $this->crawler;
+        $products = $this->crawler($this->shortProductTag);
+
+        dd($products);
+
+        if(!$products->count()) return [];
+
+        return array_unique($products->each(function($a)
+        {
+            return $a->filter('a')->link()->getUri();
+        }));
     }
 
-    /**
-     * Trim the string and strip tags inside
-     */
-    public function clean(string $string) : string
+    public function withParam($param)
     {
-        if(is_array($string)) {
-            return array_filter($string, 'strlen');
-        }
+        $this->param = $param;
 
-        $string = str_ireplace(["<br />","<br>","<br/>", "</p>"], "\n", $string);
-
-        $string = str_replace("&nbsp;", ' ', $string);
-
-    	return trim(strip_tags($string));
+        return $this;
     }
 
-    /**
-     * Parse meta tag
-     */
-    public function getMeta(string $prop) : string
+    public function getSource()
     {
-        $content = $this->crawler('meta[property="og:'.$prop.'"]')->first();
-
-        if(!$content->count()){
-            $content = $this->crawler('meta[name="'.$prop.'"]')->first();
-        }
-
-        if($content->count()) {
-            return $this->clean($content->attr('content'));
-        }
-
-        return null;
-    }
-
-    /**
-     * Find category in list of tags or match category with list of subcats
-     *
-     * @return int|null
-     */
-    public function findCategory(array $haystack, array $needle)
-    { 
-        foreach ($needle as $cat => $value) {
-
-            if(is_string($haystack)) {
-                
-                if(in_array($haystack, $value)) {
-                    return $cat;
-                } else {
-                    continue;
-                }
-
-            }
-            
-            if(!in_array($cat, $haystack)) {
-                continue;
-            }
-
-            if(!is_array($value)) {
-                return $value;
-            }
-
-            foreach ($value as $subcat => $subvalue) {
-                
-                if(in_array($subcat, $haystack)) {
-                    return $subvalue;
-                }
-
-            }
-
-            return array_get($value, 'default');
-        }
-    }
-
-    /**
-     * Parse text from dom element
-     */
-    public function textFrom(string $prop)
-    {
-        $content = $this->crawler($prop)->first();
-
-        if($content->count()) {
-            return $this->clean($content->text());
-        }
-
-        return null;
-    }
-
-    /**
-     * Parse text from the list of dom elements
-     */
-    public function crawleList($el)
-    {
-        return array_values($this->clean($this->crawler($el)->each(function($item) {
-            return $item->text();
-        })));
-    }
-
-    /**
-     * Transform string from html to markdown
-     */
-    public function markdownify(string $html) : string
-    {
-    	$html = preg_replace_callback("/(<([^.]+)>)([^<]+)(<\\/\\2>)/s", function($matches){
-
-            $text = $matches[3];
-
-            if($matches[2] == 'li') {
-                return "* {$text}";
-            }
-
-            if($matches[2] == 'strong') {
-                   return "*{$text}*";
-            }
-
-            return $text;
-
-        }, $html);
-
-        return strip_tags($html);
+        return $this->source;
     }
 
     public function getTitle()
@@ -167,16 +72,6 @@ class BasePattern
     public function getMedia()
     {
     	return [$this->getMeta('image')];
-    }
-
-    public function getVariants()
-    {
-    	return [];
-    }
-
-    public function getCategory()
-    {
-        return null;
     }
 
     public function getCategoryName()
@@ -208,66 +103,32 @@ class BasePattern
     	return null;
     }
 
+    public function getTarget() {}
+
+    public function getSKU() {}
+
+    public function getParam() {}
+
+    public function getCategory() {}
+
+    public function getAvailableParams()
+    {
+        return [];
+    }
+
+    public function getVariants()
+    {
+        return [];
+    }
+
     public function getTags()
     {
-    	$keywords = $this->getMeta('keywords');
-
-    	return $this->clean(explode(',', $keywords));
+        return [];
     }
 
-    public function getTarget()
+    public function isProduct()
     {
-        return null;
+        return true;
     }
 
-    public function getSKU()
-    {
-        return null;
-    }
-
-    /**
-     * Replace special characters in URL
-     */
-    public function parseUrl(string $url, $sep='+') : string
-    {
-        return preg_replace('/[[:space:]]+/', '%20', $url);
-    }
-
-    public function isInvalid()
-    {
-        return (method_exists($this, 'isProduct') && !$this->isProduct());
-    }
-    
-    function toArray()
-    {
-        if($this->isInvalid()) {
-
-            return [
-                'error' => 'Product doesn\'t exist!'
-            ];
-
-        }
-
-        $title = $this->getTitle();
-
-        $description = $this->getDescription();
-
-        $price = $this->getPrice();
-
-        $originalPrice = $this->getOriginalPrice();
-
-        $media = $this->getMedia();
-
-        $varinats = $this->getVariants();
-
-        $category = $this->getCategory();
-
-        $categoryName = $this->getCategoryName();
-
-        $tags = $this->getTags();
-
-        $target = $this->getTarget();
-
-        return compact('title', 'description', 'price', 'originalPrice', 'categoryName', 'category', 'media', 'varinats', 'tags', 'target');
-    }
 }

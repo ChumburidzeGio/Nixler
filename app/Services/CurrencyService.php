@@ -21,7 +21,7 @@ class CurrencyService {
             case 'PLN':
                 return "{$amount} zł";
             default:
-                return "{$currency} {$amount}";
+                return "$amount";
         }
     }
 

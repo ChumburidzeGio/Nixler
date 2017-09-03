@@ -122,6 +122,7 @@ class CreateProductsTables extends Migration
             $table->integer('merchant_id')->unsigned()->index();
             $table->text('source')->nullable();
             $table->string('status', 50)->default('success');
+            $table->string('params', 250)->nullable();
             $table->timestamps();
         });
         

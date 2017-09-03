@@ -231,7 +231,7 @@
     "Add to products SKU (stock-keeping unit)": "SKU (საწყობის ნომერი) პროდუქტებზე",
     "SKU": "",
     "My products": "ჩემი პროდუქტები",
-    "about": "კომპანიაზე",
+    "about": "ჩვენს შესახებ",
     "terms": "წესები",
     "Follow us": "გამოგვიწერეთ",
     "Call us": "დაგვირეკეთ",
@@ -323,5 +323,16 @@
     "Card Number": "ბარათის ნომერი",
     "Expiration Date (MM/YY)": "ვადის გასვლის თარიღი (თთ/წწ)",
     "Transaction rejected, please recheck card details or contact your bank.": "ტრანზაქცია გაუქმებულია, გთხოვთ გადაამოწმოთ ბარათის მონაცემები ან დაუკავშირდეთ თქვენს ბანკს.",
-    "Thank you for purchasing the product!": "მადლობა პროდუქტის შეძენისათვის!"
+    "Thank you for purchasing the product!": "მადლობა პროდუქტის შეძენისათვის!",
+    "Imported from :domain": "დაიმპორტებულია :domain-დან",
+    "Help": "დახმარება",
+    "Sell": "გაყიდვა",
+    "Choose payment method": "აირჩიეთ გადახდის მეთოდი",
+    "Cash on Delivery": "ხელზე მიღებისას",
+    "Product can be returned in 90 days": "პროდუქტის დაბრუნება შესაძლებელია 90 დღის განმავლობაში.",
+    "You will be able to pay with Visa/MasterCard using CartuBanks secure payment system.": "თქვენ გადაიხდით უსაფრთხოდ ქართუ ბანკის საგადახდო სისტემით Visa/MasterCard-ის ბარათებით.",
+    "You will pay with cash on delivery.": "თანხას გადაიხდით ხელზე პროდუქტის მიღების შემდეგ.",
+    "Do you have any questions about your order?": "გაქვთ კითხვები შეკვეთასთან დაკავშირებით?",
+    "Call us on :number": "დაგვიკავშირდეთ ნომერზე :number",
+    "Visa/Mastercard": "ბარათით"
 }

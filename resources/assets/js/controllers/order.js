@@ -2,7 +2,7 @@ angular.module('nx').controller('OrderCtrl', ['$http', '$timeout', '$filter', fu
 {
 		var vm = this;
 		
-		vm.payment_method = 'cod';
+		vm.payment_method = 'crd';
 
 		vm.payload = null;
 
@@ -33,41 +33,6 @@ angular.module('nx').controller('OrderCtrl', ['$http', '$timeout', '$filter', fu
 			return vm.city ? parseFloat(vm.pprice + parseFloat(vm.city.shipping_price)).toFixed(2) : undefined;
 		};
 
-		braintree.dropin.create({
-			authorization: window.nx.payment.authcode,
-			container: '#dropin-container'
-		}, 
-		function (createErr, instance) 
-		{
-			document.querySelector('#dropin-container .braintree-sheet__text').innerHTML = window.nx.payment.headerText;
-			document.querySelector('#dropin-container [data-braintree-id="number-field-group"] .braintree-form__label').innerHTML = window.nx.payment.cardNumber;
-			document.querySelector('#dropin-container [data-braintree-id="expiration-date-field-group"] .braintree-form__label').textContent = window.nx.payment.exDate;
-
-			vm.submit = function(event, form) 
-			{
-				event.preventDefault();
-
-				instance.requestPaymentMethod(function (err, payload) 
-				{
-					if(payload) 
-					{
-						$timeout(function()
-						{
-							vm.payload = payload.nonce;
-							
-							$timeout(function(){ form.commit(); }, 20);
-							
-						});
-
-					}
-				});
-
-			};
-		});
-
-		if(typeof fbq === "function")
-		{
-			fbq('track', 'InitiateCheckout');
-		}
+		nxt('InitiateCheckout');
 
 }]);

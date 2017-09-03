@@ -64,6 +64,8 @@
 <div class="_cw _p5 _pl15 _mt15 _brds3 _fs13 _bgbl">
     @lang('Product is out of stock, please contact owner or check comments for more information.')
 </div>
+@else
+<link itemprop="availability" href="http://schema.org/InStock"/>
 @endif
 
 
@@ -94,7 +96,7 @@
                     </small>
                 </a>
                 <p class="_c4 _fs13 _pt0 _mt0">
-                    <div class="_clear _c2" show-more more="@lang('Read more')" less="@lang('Show less')" height="200" itemprop="description">
+                    <div class="_clear _c2" show-more more="@lang('Read more')" less="@lang('Show less')" height="400" itemprop="description">
                         {!! $product->description_parsed !!}
                     </div>
                 </p>

@@ -74,17 +74,4 @@ class BlogController extends Controller
         return view('articles.show', compact('article'));
     }
 
-
-    /**
-     * Show the application welcome page.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function welcome()
-    {   
-        $qa = json_decode(file_get_contents(resource_path('docs/qa.ka.json')));
-
-        return view('landing.page', compact('qa'));
-    }
-
 }

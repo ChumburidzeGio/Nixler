@@ -1,7 +1,7 @@
 angular.module('nx').controller('SellCtrl', ['$http', '$scope', 'ngDialog', function ($http, $scope, ngDialog) {
 
         var vm = this;
-        var product = window.product;
+        var product = window.nx.product;
 
         vm.description = product.description;
         vm.media = product.media;
