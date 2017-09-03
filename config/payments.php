@@ -6,7 +6,7 @@ return [
 
         'baseUrl' => 'https://e-commerce.cartubank.ge/servlet/Process3DSServlet/3dsproxy_init.jsp?%s',
 
-        'certPath' => '/app/certificates/CartuBankKEY.pem'
+        'certPath' => '/app/certificates/CartuBankKEY.pem',
 
         'countryCode' => 268,
 
@@ -19,7 +19,7 @@ return [
         'merchantId' => '000000008001266-00000001',
 
         // 01 - GEO,  02 - ENG, 03 - RUS, 04 - DEU, 05 - TUR
-        'xDDDSProxyLanguage' => '01'
+        'xDDDSProxyLanguage' => '01',
 
     ]
 
