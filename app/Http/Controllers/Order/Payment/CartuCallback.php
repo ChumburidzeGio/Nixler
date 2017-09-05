@@ -74,14 +74,11 @@ class CartuCallback extends Controller
         {
         	$this->sendResponse($transactionId, $paymentId, 'ACCEPTED');
         }
-        else
-        {
-        	$this->sendResponse($transactionId, $paymentId, 'DECLINED');
-        }
-
+        
+        $this->sendResponse($transactionId, $paymentId, 'DECLINED');
     }
 
-    private function responseToBank($transactionId, $paymentId, $status)
+    private function sendResponse($transactionId, $paymentId, $status)
     {
     	$xmlstr = "<ConfirmResponse>
     			<TransactionId>{$transactionId}</TransactionId>

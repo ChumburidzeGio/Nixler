@@ -5,6 +5,7 @@ namespace App\Crawler\Patterns;
 use Goutte\Client;
 use App\Crawler\BasePattern;
 use GuzzleHttp\Client as GuzzleHttp;
+use App\Crawler\Request;
 
 class Forever21 extends BasePattern {
 
@@ -290,9 +291,7 @@ class Forever21 extends BasePattern {
 
     private function parseJson($url, $options = [])
     {
-        $json = app(GuzzleHttp::class)->request('POST', $url, $options);
-
-        return json_decode($json->getBody(), 1);
+        return app(Request::class)->request('POST', $url, $options, true)->toArray();
     }
 
     private function translate($text)

@@ -49,7 +49,7 @@
     <script src="{{ url('js/app.js') }}"></script>
 
 
-    @if(app()->environment('production', 'development', 'local'))
+    @if(app()->environment('production', 'development'))
         @include('/partials/analytics')
     @endif
 

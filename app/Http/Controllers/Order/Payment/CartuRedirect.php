@@ -34,12 +34,12 @@ class CartuRedirect extends Controller
     {
     	$params = array_merge([
 			'CountryCode' => config('payments.cartu.countryCode'),
-			'CurrencyCode' => $config('payments.cartu.currencyCode'),
+			'CurrencyCode' => config('payments.cartu.currencyCode'),
 			'MerchantName' => config('app.name'),
 			'MerchantURL' => route('orders.payments.cartu.callback'),
-			'MerchantCity' => $config('payments.cartu.merchantCity'),
-			'MerchantID' => $config('payments.cartu.merchantId'),
-			'xDDDSProxy.Language' => $config('payments.cartu.xDDDSProxyLanguage')
+			'MerchantCity' => config('payments.cartu.merchantCity'),
+			'MerchantID' => config('payments.cartu.merchantId'),
+			'xDDDSProxy.Language' => config('payments.cartu.xDDDSProxyLanguage')
     	], $params);
 
     	return http_build_query($params);

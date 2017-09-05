@@ -2,17 +2,21 @@
 
 namespace App\Crawler\Patterns;
 
-use Goutte\Client;
+use App\Crawler\Request;
 use App\Crawler\BasePattern;
-use Symfony\Component\DomCrawler\Crawler;
-use App\Crawler\Crawler as LC;
-use App\Services\LanguageDetectService;
 
 class Aliexpress extends BasePattern {
 
+    public function detectProductsOnPage($url)
+    {
+        //parent::parse($url);
+
+        dd(app(Request::class)->request('POST', $url, [], true)->get());
+    }
+
     public function getTitle()
     {
-
+        return ;
     }
 
     public function getDescription()
