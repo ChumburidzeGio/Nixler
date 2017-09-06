@@ -92,7 +92,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/orders', 'as' => 'orders.'
 
 	Route::get('/', 'OrderController@index')->name('index');
 
-	Route::get('/payments/cartubank/callback', 'Order\Payment\CartuCallback')->name('payments.cartu.callback');
+	Route::match(['get', 'post'], '/payments/cartubank/callback', 'Order\Payment\CartuCallback')->name('payments.cartu.callback');
 
 	Route::get('/{id}', 'OrderController@show')->name('show');
 
