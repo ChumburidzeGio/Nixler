@@ -15,6 +15,7 @@ class CartuCallback extends Controller
      */
     public function __invoke()
     {
+        return null;
     	$path = storage_path(config('payments.cartu.certPath'));
 
 		$fp = fopen($path, "r");
