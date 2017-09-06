@@ -32,13 +32,13 @@ class CartuCallback extends Controller
 
 		if(!openssl_verify($confirmation, $signature, $cert))
 		{
-			die("signature error");
+			//die("signature error");
 		}
 
         info(request()->all());
 
         return [];
-        
+
 		//Move Parameters to Identificators
 		$xml = xml_parser_create('UTF-8');
         
