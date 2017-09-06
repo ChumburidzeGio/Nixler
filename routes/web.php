@@ -92,13 +92,13 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/orders', 'as' => 'orders.'
 
 	Route::get('/', 'OrderController@index')->name('index');
 
-	Route::match(['get', 'post'], '/payments/cartubank/callback', 'Order\Payment\CartuCallback')->name('payments.cartu.callback');
-
 	Route::get('/{id}', 'OrderController@show')->name('show');
 
 	Route::post('/{id}/commit', 'ProductController@commitOrder')->name('commit');
 
 });
+
+Route::match(['get', 'post'], '/orders/payments/cartubank/callback', 'Order\Payment\CartuCallback')->name('orders.payments.cartu.callback');
 
 //Collections
 Route::group(['prefix' => 'cl'], function() {
