@@ -134,7 +134,7 @@ class Capsule {
     {
     	$this->model = $this->model->join('activities as a', function ($join) use ($id) {
     		return $join->on('p.id', '=', 'a.object')->where('a.actor', $id)->where('a.verb', 'product:liked');
-    	})->orderBy('a.id', 'desc');
+    	})->orderBy('a.id', 'desc')->addSelect('a.id');
 
     	return $this;
     }
