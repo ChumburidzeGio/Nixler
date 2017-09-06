@@ -15,6 +15,8 @@ class CartuCallback extends Controller
      */
     public function __invoke()
     {
+        info(request()->all());
+        
         return null;
     	$path = storage_path(config('payments.cartu.certPath'));
 
@@ -33,10 +35,8 @@ class CartuCallback extends Controller
 
 		if(!openssl_verify($confirmation, $signature, $cert))
 		{
-			//die("signature error");
+			die("signature error");
 		}
-
-        info(request()->all());
 
         return [];
 
