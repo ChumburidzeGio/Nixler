@@ -17,7 +17,6 @@ class CartuCallback extends Controller
     {
         info(request()->all());
         
-        return null;
     	$path = storage_path(config('payments.cartu.certPath'));
 
 		$fp = fopen($path, "r");
@@ -37,8 +36,6 @@ class CartuCallback extends Controller
 		{
 			die("signature error");
 		}
-
-        return [];
 
 		//Move Parameters to Identificators
 		$xml = xml_parser_create('UTF-8');
