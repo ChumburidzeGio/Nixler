@@ -49,16 +49,16 @@ class CartuCallback extends Controller
         	switch ($data['tag']) 
         	{
         		case 'STATUS':
-        			$Status = $data['value'];
+        			$status = $data['value'];
         		
         		case 'PAYMENTID':
-        			$PaymentId = $data['value'];
+        			$paymentId = $data['value'];
         		
         		case 'PAYMENTDATE':
         			$PaymentDate = $data['value'];
         		
         		case 'TRANSACTIONID':
-        			$TransactionId = $data['value']; 
+        			$transactionId = $data['value']; 
         		
         		case 'AMOUNT':
         			$Amount = $data['value']; 
@@ -72,7 +72,7 @@ class CartuCallback extends Controller
         	}
         }
         
-        if(in_array($Status, ['C', 'Y']))
+        if(in_array($status, ['C', 'Y']))
         {
         	$this->sendResponse($transactionId, $paymentId, 'ACCEPTED');
         }
