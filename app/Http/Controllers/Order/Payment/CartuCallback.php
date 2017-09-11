@@ -34,7 +34,7 @@ class CartuCallback extends Controller
 
 		if(!openssl_verify($confirmation, $signature, $cert))
 		{
-			die("signature error");
+			return redirect()->intended('/')->with('flash', 'thanks');
 		}
 
 		//Move Parameters to Identificators
@@ -71,12 +71,35 @@ class CartuCallback extends Controller
         		
         	}
         }
+
+        $order = Order::findOrFail($transactionId);
         
         if(in_array($status, ['C', 'Y']))
         {
+            if($status == 'Y')
+            {
+                $order->update([
+                    'payment_status' => 'payed',
+                    'payment_data' => compact('status', 'paymentId', 'PaymentDate', 'transactionId', 'Amount', 'Reason', 'CardType')
+                ]);
+            }
+            
+            elseif($status == 'C')
+            {
+                $order->update([
+                    'payment_status' => 'processing',
+                    'payment_data' => null
+                ]);
+            }
+
         	$this->sendResponse($transactionId, $paymentId, 'ACCEPTED');
         }
         
+        $order->update([
+            'payment_status' => 'unpayed',
+            'payment_data' => null
+        ]);
+
         $this->sendResponse($transactionId, $paymentId, 'DECLINED');
     }
 

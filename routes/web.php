@@ -98,6 +98,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => '/orders', 'as' => 'orders.'
 
 });
 
+Route::get('/orders/{id}/payments/cartubank/callback', 'Order\Payment\CartuRedirect')->name('orders.payments.cartu.redirect');
 Route::match(['get', 'post'], '/orders/payments/cartubank/callback', 'Order\Payment\CartuCallback')->name('orders.payments.cartu.callback');
 
 //Collections
@@ -217,5 +218,3 @@ Route::group(['as' => 'pages.'], function() {
 	Route::get('/sell', 'Pages\Sell')->name('sell');
 
 });
-
-Route::get('/sd/{id}', 'Order\Payment\CartuRedirect');

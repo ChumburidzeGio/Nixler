@@ -64,7 +64,7 @@ class StoreOrder extends Controller
             'shipping_cost' => $shippingPrice->getGross(),
             'shipping_window_from' => $windowFrom,
             'shipping_window_to' => $windowTo,
-            'payment_method' => 'COD',
+            'payment_method' => strtoupper($request->payment_method),
             'user_id' => $user->id,
             'product_id' => $product->id,
             'product_variant' => $variant ? $variant->name : null,
@@ -72,6 +72,7 @@ class StoreOrder extends Controller
             'city_id' => $request->city_id,
             'phone' => $request->phone,
             'title' => $product->title,
+            'payment_status' => 'unpayed',
         ]);
 
         //Payment 
@@ -93,6 +94,13 @@ class StoreOrder extends Controller
         $product->increment('sales_count', $request->quantity);
 
         $product->update();
+
+        if($order->payment_method == 'CRD')
+        {
+            return redirect('orders.payments.cartu.redirect', [
+                'id' => $order->id
+            ]);
+        }
 
         return redirect()->route('orders.show', ['id' => $order->id])->with('flash', 'thanks');
     }

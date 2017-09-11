@@ -14,6 +14,7 @@ use App\Upgrade\AIB;
 use App\Upgrade\AIC;
 use App\Upgrade\AID;
 use App\Upgrade\AIE;
+use App\Upgrade\AIF;
 use Notification, Storage;
 
 class Update extends Command
@@ -118,6 +119,7 @@ class Update extends Command
             '1.93' => AIC::class,
             '1.94' => AID::class,
             '1.95' => AIE::class,
+            '1.96' => AIF::class,
         ]);
     }
 

@@ -105,6 +105,8 @@ class CreateProductsTables extends Migration
             $table->timestamp('shipping_window_from')->nullable();
             $table->timestamp('shipping_window_to')->nullable();
             $table->string('payment_method')->nullable();
+            $table->text('payment_data')->nullable();
+            $table->string('payment_status', 15);
             $table->integer('user_id')->unsigned();
             $table->integer('product_id')->unsigned();
             $table->string('product_variant')->nullable();

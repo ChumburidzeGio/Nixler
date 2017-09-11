@@ -39,6 +39,7 @@ class OrderProduct extends FormRequest
             'phone' => ["phone:{$this->user()->country}", "phone_unique:{$this->user()->country}"],
             'city_id' => 'required|numeric',
             'address' => 'required|string',
+            'payment_method' => 'required|in:cod,crd',
             'quantity' => 'required|numeric',
             'variant' => 'nullable|numeric', //TODO: check variant in database
         ];

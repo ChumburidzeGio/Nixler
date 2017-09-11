@@ -18,11 +18,13 @@ class CartuRedirect extends Controller
     	$order = Order::find($id);
 
 		$params = $this->params([
-			'PurchaseDesc' => ($order->id + 2489),
+			'PurchaseDesc' => $order->id,
 			'PurchaseAmt' => $order->amount,
 		]);
 
 		$url = sprintf(config('payments.cartu.baseUrl'), $params);
+
+        session()->put('url.intended', $order->url());
 
 		return redirect($url);
     }
