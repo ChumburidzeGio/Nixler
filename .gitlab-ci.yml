@@ -1,8 +1,8 @@
-stages:
-  - test
-
 before_script:
   - bash .gitlab-ci.sh
+
+stages:
+  - test
 
 # Services
 services:
