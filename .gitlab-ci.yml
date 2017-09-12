@@ -1,6 +1,9 @@
 stages:
   - test
 
+before_script:
+  - bash .gitlab-ci.sh
+
 # Services
 services:
   - mysql:latest
@@ -32,7 +35,6 @@ test:
 
   script:
     
-    - pecl install php-gd
     - yarn --network-concurrency 1
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
