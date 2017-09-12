@@ -32,7 +32,7 @@ test:
 
   script:
     - apt-get update -yqq
-    - apt-get install php-gd
+    - apt-get install -y php7.1-gd
     - yarn --network-concurrency 1
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
