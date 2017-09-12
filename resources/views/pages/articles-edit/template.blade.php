@@ -89,27 +89,7 @@
 
 		<div class="col-md-4 col-xs-12">
 
-			<div class="_card _z013 _bgw _oh _p0"> 
-
-				<span class="_fs13 _clear _li _bb1 _cb">
-					Markdown support
-				</span>
-				<div class="_p10">
-					Nixler uses Markdown for formatting. Here are the basics.
-					<hr class="_mt5 _mb5">
-					<span class="_cg _clear">Header</span>
-					<code># Material & Care</code>
-					<hr class="_mt5 _mb5">
-					<span class="_cg _clear">Bold</span>
-					<code>*100 day* return policy</code>
-					<hr class="_mt5 _mb5">
-					<span class="_cg _clear">Emphasis</span>
-					<code>Whisk the eggs _vigorously_.</code>
-					<hr class="_mt5 _mb5">
-					<span class="_cg _clear">Highlight</span>
-					<code>`Carefully` crack the eggs.</code>
-				</div>
-			</div>
+			@include('widgets/markdown-help/template')
 
 		</div>
 

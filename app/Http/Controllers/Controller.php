@@ -27,4 +27,14 @@ class Controller extends BaseController
         return MetaTag::set($key, $value);
     }
 
+    /**
+     * Return page view
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function view($name, $params)
+    {
+        return view('pages.{$name}.template', $params);
+    }
+
 }

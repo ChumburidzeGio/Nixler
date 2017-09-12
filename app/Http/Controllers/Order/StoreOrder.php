@@ -97,7 +97,7 @@ class StoreOrder extends Controller
 
         if($order->payment_method == 'CRD')
         {
-            return redirect('orders.payments.cartu.redirect', [
+            return redirect()->route('orders.payments.cartu.redirect', [
                 'id' => $order->id
             ]);
         }

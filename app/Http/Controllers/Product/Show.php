@@ -31,7 +31,7 @@ class Show extends Controller
 
         capsule('frontend')->addMeta($this->getMeta($product));
 
-        return view('products.show', compact('product'));
+        return $this->view('products-show', compact('product'));
     }
     
     /**

@@ -56,6 +56,6 @@ class Edit extends Controller
 
         $collection->items = $items;
 
-        return view('collections.update', compact('collection', 'privacyOptions'));
+        return $this->view('collections-update', compact('collection', 'privacyOptions'));
     }
 }

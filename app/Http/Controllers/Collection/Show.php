@@ -23,6 +23,6 @@ class Show extends Controller
         $this->meta('description', $collection->description);
         $this->meta('type', 'collection');
 
-        return view('collections.show', compact('collection'));
+        return $this->view('collections-show', compact('collection'));
     }
 }

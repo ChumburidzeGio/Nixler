@@ -16,6 +16,6 @@ class Index extends Controller
     {
         $collections = capsule('collections')->get();
 
-        return view('collections.index', compact('collections'));
+        return $this->view('collections-index', compact('collections'));
     }
 }

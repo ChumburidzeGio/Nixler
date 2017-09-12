@@ -33,7 +33,7 @@ class BlogController extends Controller
     {
         $article = $this->repository->findBySlug($slug);
 
-        return view('articles.edit', compact('article'));
+        return $this->view('articles-edit', compact('article'));
     }
 
     /**
@@ -57,21 +57,11 @@ class BlogController extends Controller
     /**
      * @return \Illuminate\Http\Response
      */
-    public function destroy($slug, Request $request)
-    {
-        $article = $this->repository->findBySlug($slug);
-
-        return view('articles.edit', compact('article'));
-    }
-
-    /**
-     * @return \Illuminate\Http\Response
-     */
     public function show($slug)
     {
         $article = $this->repository->findBySlug($slug);
 
-        return view('articles.show', compact('article'));
+        return $this->view('articles-show', compact('article'));
     }
 
 }

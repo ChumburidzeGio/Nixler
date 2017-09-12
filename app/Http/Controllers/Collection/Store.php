@@ -64,7 +64,7 @@ class Store extends Controller
 
         }
 
-        return redirect()->route('collections.update', [
+        return redirect()->route('pages.collections-update.template', [
             'id' => $collection->id
         ]);
     }
