@@ -31,7 +31,7 @@ test:
   image: chilio/laravel-dusk-ci:stable
   script:
   
-    - apt-get install php-gd
+    - docker-php-ext-install gd
     - yarn --network-concurrency 1
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
