@@ -29,9 +29,9 @@ test:
     - mysql:5.7
 
   image: chilio/laravel-dusk-ci:stable
-  
+
   before_script:
-  - docker-php-ext-install gd
+  - apt-get install php7.0-gd
 
   script:
   
