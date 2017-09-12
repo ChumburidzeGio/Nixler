@@ -31,7 +31,7 @@ test:
   image: chilio/laravel-dusk-ci:stable
 
   before_script:
-  - apt-get install php7.0-gd
+  - apt-get install php-gd
 
   script:
   
