@@ -5,6 +5,9 @@ stages:
 services:
   - mysql:latest
 
+script:
+  - pecl install php-gd
+
 # Variables
 variables:
   MYSQL_ROOT_PASSWORD: root
@@ -30,11 +33,8 @@ test:
 
   image: chilio/laravel-dusk-ci:stable
 
-  before_script:
-  - apt-get install php-gd
-
   script:
-  
+    
     - yarn --network-concurrency 1
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
