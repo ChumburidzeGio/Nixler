@@ -13,6 +13,9 @@ variables:
   MYSQL_DATABASE: homestead
   DB_HOST: mysql
 
+before_script:
+- docker-php-ext-install gd
+
 # Speed up builds
 cache:
   key: $CI_BUILD_REF_NAME
@@ -31,7 +34,6 @@ test:
   image: chilio/laravel-dusk-ci:stable
   script:
   
-    - docker-php-ext-install gd
     - yarn --network-concurrency 1
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
