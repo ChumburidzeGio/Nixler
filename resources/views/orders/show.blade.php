@@ -80,6 +80,13 @@
             </li>
 
             <li class="_clear _telipsis">
+                <span class="_cg">@lang('Payment Status')</span>:  
+                <span>
+                    {{ $order->payment_status }}
+                </span>
+            </li>
+
+            <li class="_clear _telipsis">
                 <span class="_cg">@lang('Phone')</span>:  
                 <span>
                     +{{ $order->user->phone }}
