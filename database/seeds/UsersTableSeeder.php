@@ -5,17 +5,9 @@ use Illuminate\Database\Eloquent\Model;
 use Faker\Factory;
 use Faker\Generator;
 use App\Entities\User;
-use App\Repositories\ShippingRepository;
 
 class UsersTableSeeder extends Seeder
 {
-
-    protected $shippingRepository;
-
-    public function __construct(ShippingRepository $repository){
-        $this->shippingRepository = $repository;
-    }
-
     /**
      * Run the database seeds.
      *
@@ -23,17 +15,13 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        //foreach (config('test.locales') as $locale) {
-           
-            $faker = Factory::create('en_US');
+        $faker = Factory::create('en_US');
 
-            for ($i=0; $i < 30; $i++) { 
-                $user = $this->createUser($faker);
-                $this->createRelationships($user);
-                $this->uploadPhotos($user, $faker);
-                print("\nCreated ".$user->name);
-            }
-        //}
+        for ($i=0; $i < 30; $i++) { 
+            $user = $this->createUser($faker);
+            $this->createRelationships($user);
+            $this->uploadPhotos($user, $faker);
+        }
     }
 
 
@@ -83,12 +71,6 @@ class UsersTableSeeder extends Seeder
         $user->currency = array_get($country, 'currency');
         $user->locale = array_get($country, 'locale');
         $user->save();
-
-        $this->shippingRepository->settingsUpdate([
-            'delivery_full' => 1,
-            'has_return' => 1,
-            'policy' => ''
-        ], $user);
 
         return $user;
     }

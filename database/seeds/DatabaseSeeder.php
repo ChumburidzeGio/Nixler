@@ -11,8 +11,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        app()->setLocale(config('app.fallback_locale'));
-        $this->call(UsersTableSeeder::class);
-        $this->call(ProductDatabaseSeeder::class);
+        //app()->setLocale(config('app.fallback_locale'));
+        //$this->call(UsersTableSeeder::class);
+        //$this->call(ProductDatabaseSeeder::class);
     }
 }
