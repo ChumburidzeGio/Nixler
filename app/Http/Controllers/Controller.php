@@ -34,7 +34,7 @@ class Controller extends BaseController
      */
     public function view($name, $params)
     {
-        return view('pages.{$name}.template', $params);
+        return view("pages.{$name}.template", $params);
     }
 
 }

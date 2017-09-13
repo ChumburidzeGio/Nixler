@@ -36,8 +36,8 @@ test:
     - yarn --network-concurrency 1
     - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
     - cp .env.example .env
-    - bower update --allow-root --quiet
-    - npm run dev
+    #- bower update --allow-root --quiet
+    #- npm run dev
     - configure-laravel
     - ./vendor/phpunit/phpunit/phpunit -v --coverage-text --colors --stderr
     - start-nginx-ci-project
