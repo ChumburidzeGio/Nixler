@@ -34,6 +34,8 @@ class CartuCallback extends Controller
 
 		if(!openssl_verify($confirmation, $signature, $cert))
 		{
+            info('Signature problem');
+
 			return redirect()->intended('/')->with('flash', 'thanks');
 		}
 
@@ -105,6 +107,8 @@ class CartuCallback extends Controller
 
     private function sendResponse($transactionId, $paymentId, $status)
     {
+        info('Response '.$status.' on transaction '.$transactionId.' payment '.$paymentId);
+        
     	$xmlstr = "<ConfirmResponse>
     			<TransactionId>{$transactionId}</TransactionId>
     			<PaymentId>{$paymentId}</PaymentId>
