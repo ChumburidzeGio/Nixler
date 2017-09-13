@@ -33,7 +33,7 @@ class Show extends Controller
 
         return $this->view('products-show', compact('product'));
     }
-    
+
     /**
      * Get JS vars for product
      *

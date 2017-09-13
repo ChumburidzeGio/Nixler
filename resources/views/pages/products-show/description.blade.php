@@ -44,7 +44,7 @@
 
 
 <span class="visible-sm visible-xs _mt10"> 
-    @include('products.show-buy')
+    @include('pages.products-show.buy')
 </span>
 
 @can('update', $product)

@@ -46,7 +46,7 @@
 
                             <div class="_pl5 _pr10 _pb10 _posr _pt10 row">
                                 <div class="col-md-8">
-                                    @include('pages.public.products-show.description')
+                                    @include('pages.products-show.description')
                                     <div class="_clear _mb10 _pt10">
                                         <span class="_fs12 _ttu _mb10 _clear">
                                            <span ng-bind="vm.product.comments_count">{{ $product->comments_count }}</span> @lang('Comments')
@@ -59,7 +59,7 @@
                                <div class="col-md-4">
 
                                 <div class="visible-md visible-lg"> 
-                                    @include('pages.public.products-show.buy')
+                                    @include('pages.products-show.buy')
                                 </div>
 
                                 @if(count($product->similar->items()))
@@ -69,7 +69,7 @@
                                 </span>
 
                                 <div class="_clear">
-                                    @each('pages.public.products-show.similar', $product->similar->items(), 'product')
+                                    @each('pages.products-show.similar', $product->similar->items(), 'product')
                                 </div>
                                 @endif
 
