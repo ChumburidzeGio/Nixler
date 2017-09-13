@@ -51,25 +51,25 @@ class CartuCallback extends Controller
         	switch ($data['tag']) 
         	{
         		case 'STATUS':
-        			$status = $data['value'];
+        			$status = $data['value']; break;
         		
         		case 'PAYMENTID':
-        			$paymentId = $data['value'];
+        			$paymentId = $data['value']; break;
         		
         		case 'PAYMENTDATE':
-        			$PaymentDate = $data['value'];
+        			$PaymentDate = $data['value']; break;
         		
         		case 'TRANSACTIONID':
-        			$transactionId = $data['value']; 
+        			$transactionId = $data['value']; break;
         		
         		case 'AMOUNT':
-        			$Amount = $data['value']; 
+        			$Amount = $data['value']; break;
         		
         		case 'REASON':
-        			$Reason = $data['value']; 
+        			$Reason = $data['value']; break;
         		
         		case 'CARDTYPE':
-        			$CardType = $data['value']; 
+        			$CardType = $data['value']; break;
         		
         	}
         }
