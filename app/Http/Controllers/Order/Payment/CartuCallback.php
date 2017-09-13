@@ -74,9 +74,9 @@ class CartuCallback extends Controller
         	}
         }
 
-        $order = Order::findOrFail($transactionId);
-        
-        if(in_array($status, ['C', 'Y']))
+        $order = Order::find($transactionId);
+
+        if($order && in_array($status, ['C', 'Y']))
         {
             if($status == 'Y')
             {
@@ -108,7 +108,7 @@ class CartuCallback extends Controller
     private function sendResponse($transactionId, $paymentId, $status)
     {
         info('Response '.$status.' on transaction '.$transactionId.' payment '.$paymentId);
-        
+
     	$xmlstr = "<ConfirmResponse>
     			<TransactionId>{$transactionId}</TransactionId>
     			<PaymentId>{$paymentId}</PaymentId>
