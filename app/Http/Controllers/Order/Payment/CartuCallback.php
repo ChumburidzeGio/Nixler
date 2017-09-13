@@ -96,11 +96,14 @@ class CartuCallback extends Controller
 
         	$this->sendResponse($transactionId, $paymentId, 'ACCEPTED');
         }
-        
-        $order->update([
-            'payment_status' => 'unpayed',
-            'payment_data' => null
-        ]);
+
+        if($order)
+        {
+            $order->update([
+                'payment_status' => 'unpayed',
+                'payment_data' => null
+            ]);
+        }
 
         $this->sendResponse($transactionId, $paymentId, 'DECLINED');
     }
